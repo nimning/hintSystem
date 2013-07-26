@@ -1,0 +1,31 @@
+\contentsline {section}{\numberline {1}Part 1}{1}{section.1}
+\contentsline {section}{\numberline {2}Answers of student jmc001. 10 attempts lasting 15.4 minutes, ending in sucess}{1}{section.2}
+\contentsline {subsection}{\numberline {2.1}All but last attempt}{1}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}9: 1 15.4 1 1}{2}{subsection.2.2}
+\contentsline {section}{\numberline {3}Part 2}{2}{section.3}
+\contentsline {section}{\numberline {4}Answers of student jmc001. 5 attempts lasting 13.8 minutes, ending in sucess}{2}{section.4}
+\contentsline {subsection}{\numberline {4.1}All but last attempt}{2}{subsection.4.1}
+\contentsline {subsection}{\numberline {4.2}4: 2 22.9 1 1-(1/n)}{2}{subsection.4.2}
+\contentsline {section}{\numberline {5}Part 3}{2}{section.5}
+\contentsline {section}{\numberline {6}Answers of student jmc001. 3 attempts lasting 0.2 minutes, ending in sucess}{2}{section.6}
+\contentsline {subsection}{\numberline {6.1}All but last attempt}{2}{subsection.6.1}
+\contentsline {subsection}{\numberline {6.2}2: 3 28.1 1 1-(2/n)}{3}{subsection.6.2}
+\contentsline {section}{\numberline {7}Part 4}{3}{section.7}
+\contentsline {section}{\numberline {8}Answers of student jmc001. 15 attempts lasting 31.0 minutes, ending in sucess}{3}{section.8}
+\contentsline {subsection}{\numberline {8.1}All but last attempt}{3}{subsection.8.1}
+\contentsline {subsection}{\numberline {8.2}14: 4 65.7 1 1-((k-1)/n)}{3}{subsection.8.2}
+\contentsline {section}{\numberline {9}Part 5}{3}{section.9}
+\contentsline {section}{\numberline {10}Answers of student jmc001. 2 attempts lasting 26.9 minutes, ending in sucess}{3}{section.10}
+\contentsline {subsection}{\numberline {10.1}All but last attempt}{3}{subsection.10.1}
+\contentsline {subsection}{\numberline {10.2}1: 5 38.0 1 n!/n$^n$}{3}{subsection.10.2}
+\contentsline {section}{\numberline {11}Part 6}{3}{section.11}
+\contentsline {section}{\numberline {12}Answers of student jmc001. 3 attempts lasting 2.7 minutes, ending in sucess}{4}{section.12}
+\contentsline {subsection}{\numberline {12.1}All but last attempt}{4}{subsection.12.1}
+\contentsline {subsection}{\numberline {12.2}2: 6 70.4 1 e^(-(k-1)/n)}{4}{subsection.12.2}
+\contentsline {section}{\numberline {13}HINT:}{4}{section.13}
+\contentsline {section}{\numberline {14}HINT:}{4}{section.14}
+\contentsline {section}{\numberline {15}HINT:}{4}{section.15}
+\contentsline {section}{\numberline {16}Part 7}{5}{section.16}
+\contentsline {section}{\numberline {17}Answers of student jmc001. 30 attempts lasting 54.0 minutes, ending in failure}{5}{section.17}
+\contentsline {subsection}{\numberline {17.1}All but last attempt}{5}{subsection.17.1}
+\contentsline {subsection}{\numberline {17.2}29: 7 121.7 0 e$^{\mathrm {[1-((k-1)/n)]*[n!/n^n]}}$}{5}{subsection.17.2}

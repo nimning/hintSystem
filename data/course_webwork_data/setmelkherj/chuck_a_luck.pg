@@ -1,0 +1,39 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "MathObjects.pl",
+  "PGcourse.pl",
+);
+
+Context("Numeric");
+Context()->variables->are(
+      k => ['Real', limits=>[1,10], resolution=>1],
+      n => ['Real', limits=>[1,10], resolution=>1],
+      x => ['Real']
+    );
+
+TEXT(beginproblem);
+$showPartialCorrectAnswers = 1;
+
+######################################################################
+
+BEGIN_PGML
+## Chuck-A-Luck ##
+You are playing a carnival game.  3 die are rolled.  You pay $1 if your number doesn't come up, and are paid $1 for each time the number your chosen number comes up.  
+
+You might guess that the number you chose would come up at least half the time on one of the die.  Then you would get at least a dollar back about half the time, and would lose a dollar in the other case.  
+
+A more thorough analysis reveals the game isn't so fair.  
+- What is your expected *revenue* from just the first dice?  Don't account for the dollar you pay if you lose the game.  [_____]{"1/6"}
+- Using linearity of expectation, what is your expected revenue from all 3 die?  [_______]{"1/2"}
+- What is the probability you will lose and pay $1 in this game?  [______]{"(5/6) ** 3"}?  
+- What is your expected expense (just accounting for the amount you pay, not the amount you win) from this game?  [______]{"(5/6)**3"}
+- What is your expected loss from playing this game (using linearity of expectation and loss = expense - revenue)?  [______]{"(5/6)**3 - 1/2"}
+
+Assuming 6 players bid $10 each on a game, and one game is played every minute (the game just involves rolling 3 die), how much could the house expect to earn per hour from a chuck-a-luck station?  [_______]{"((5/6)**3 - 1/2)*10*6*60"}
+
+END_PGML
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

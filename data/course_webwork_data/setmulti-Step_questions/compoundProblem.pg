@@ -1,0 +1,121 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+  "PGstandard.pl",
+  "compoundProblem.pl",
+  "Parser.pl",
+  "PGunion.pl",
+  "PGcourse.pl",
+);
+
+TEXT(beginproblem);
+BEGIN_PROBLEM();
+
+##############################################
+
+$isProfessor = ($studentLogin eq 'dpvc' || $studentLogin eq 'professor');
+
+#
+#  Start a compound problem.  See the compoundProblem.pl
+#  file for more details about the parameters you
+#  can supply.
+#
+$cp = new compoundProblem(
+  parts => 3,                  # the total number of parts in this problem
+  totalAnswers => 4,           # total answers in all parts combined
+  parserValues => 1,           # make parser objects from student answers
+  allowReset => $isProfessor,  # professors get Reset button for testing
+);
+$part = $cp->part;             # look up the current part
+
+
+##############################################
+#
+#  Part 1
+#
+
+if ($part == 1) {
+
+BEGIN_TEXT
+Part 1:
+$PAR
+{\it Sets} are collections of {\it elements}. We will mostly consider sets of
+numbers, but elements can be most anything.
+
+A {\it set} can be specified by listing its elements within braces, as in
+\begin{align*}
+A=\{1,2,3,4,5,6\} &\ (\mbox{the possible outcomes of the roll of a die}) \\
+B=\{1,2,\ldots\}  &\ (\mbox{the positive integers, commonly denoted
+  $\mathbb{Z}^+$}) \\
+C=\{H,T\} & (\mbox{the possible outcomes of the flip of a coin}) 
+\end{align*}
+We say that $5$ is an element of $A$ and denote it by $5 \in A$. Sets
+are {\em unordered} collections, in other words $\{1,2,3,4,5,6\} =
+\{5,2,1,3,4,6\}$. The number of times an element can appear in a set
+is either 0 or 1, an element cannot appear multiple times in the set
+(for that there is a different construct called {\em bags}).
+END_TEXT
+
+#
+#  Labelled answers are saved for future parts.
+#  (The checker allows any number to be "correct" for
+#   these blanks.)
+#
+NAMED_ANS(
+  a => Real(1)->cmp(checker=>sub {return 1}, ignoreInfinity=>0),
+  b => Real(2)->cmp(checker=>sub {return 1}, ignoreInfinity=>0),
+);
+
+#
+#  the useGrader() method sets the grader for this part.
+#
+$cp->useGrader(~~&std_problem_grader);
+$showPartialCorrectAnswers = 0;
+
+}
+
+##############################################
+#
+#  Part 2
+#
+
+if ($part == 2) {
+
+#
+#  The values of a and b are obtained from the
+#  first part of the problem.
+#
+BEGIN_TEXT
+Part 2:
+$PAR
+\($a + $b\) = \{ans_rule(10)\}
+END_TEXT
+
+ANS(num_cmp($a+$b,mode=>"strict"));
+
+}
+
+##############################################
+#
+#  Part 3
+#
+
+if ($part == 3) {
+
+$f = Formula("$a x + $b")->reduce;
+
+BEGIN_TEXT
+Part: 3:
+$PAR
+Suppose \(f(x) = \{$f->TeX\}\).$BR
+Then \(f(2)\) = \{ans_rule(10)\}.
+END_TEXT
+
+ANS($f->eval(x=>2)->cmp);
+
+}
+
+##############################################
+
+END_PROBLEM();
+ENDDOCUMENT();        # This should be the last executable line in the problem.

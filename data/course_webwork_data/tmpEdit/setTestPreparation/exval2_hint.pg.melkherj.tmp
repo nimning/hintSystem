@@ -1,0 +1,86 @@
+##DESCRIPTION
+## DBsubject('Probability')
+## DBchapter('Theory')
+## DBsection('Expected Value')
+## KEYWORDS('probability')
+## Author('Michael Ratliff')
+## Institution('NAU')
+##ENDDESCRIPTION
+
+# File Created: 6/27/05
+# from pl/setProbability17Expectation/p3.pg
+# Location: Northern Arizona University
+# Course: MAT 119 - Finite Mathematics
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"MathObjects.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGgraphmacros.pl",
+"PGnumericalmacros.pl",
+"PGauxiliaryFunctions.pl"
+);
+
+TEXT(beginproblem());
+Context("Numeric");
+Context()->flags->set(
+  tolerance => 0.001,
+  tolType => "absolute",
+);
+
+$showPartialCorrectAnswers = 1;
+
+$r = 5;
+$g = 6;
+$t = $r+$g;
+$n = 5;
+$lo = (($n-$g)+abs($n-$g))/2;
+$hi = (($n+$r)-abs($n-$r))/2;
+$ans = 0;
+$k = $lo;
+do {$ans = $ans +$k*C($r,$k)*C($g,$n-$k);$k = $k + 1;} until ($k==($hi+1));
+$ans = $ans/C($t,$n);
+
+BEGIN_TEXT
+A box contains $r red and $g green marbles. If $n marbles are drawn without
+replacement, what is the expected number of red marbles?
+
+$BR
+Answer: \{ans_rule(20)\}
+
+END_TEXT
+
+ANS(num_cmp($ans));
+
+$showHint = -1; 
+BEGIN_HINT
+$PAR
+$SOLUTION
+$PAR
+Let \(k\) be the number of red marbles in the $n marble sample. It is easy to see that \(k\) is between $lo and $hi.
+$PAR
+To compute the expected value of \(k\) we need to compute the sum 
+\(
+\sum_{i=$lo}^{$hi} i P(k=i)
+\)
+$PAR
+To compute the probability \(P(k=i)\) we use combinatorics.
+First, the denominator: The number of choices of $n marbles is \(|\Omega|={$r+$g \choose $n}\)
+$PAR
+Now for the enumerator. When we have \(i\) red marbles, we have \($n-i\) green marbles. The number of combinations that have \(i\) red marbles is therefor
+\(|A| {$r \choose i}{$g \choose $n-i}\)
+$PAR 
+Putting it all together we get that the expected number of red marbles is
+\[
+\sum_{i=$lo}^{$hi} i P(k=i) =\sum_{i=$lo}^{$hi} i \frac{{$r \choose i}{$g \choose $n-i}}{{$r+$g \choose $n}} = 
+\frac{\sum_{i=$lo}^{$hi} i {$r \choose i}{$g \choose $n-i}}{{$r+$g \choose $n}}
+\]
+
+END_HINT
+ENDDOCUMENT();       # This should be the last executable line in the problem.
+
+

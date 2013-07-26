@@ -1,0 +1,14 @@
+Data path: /Users/yoavfreund/projects/Webwork.Improvement.Project/Demo_for_utube/data
+
+pickled WebWork log relative path: cse103_original_data/WebWork/pickled_data
+
+Student session data:
+  relative path: student_adaptive_server/hard_parts.json
+  session id: 1
+
+WebWork problem json relative path: student_adaptive_server/parts0_7.json
+
+Server configuration:
+  html file to serve: client.html
+  port: 9000
+

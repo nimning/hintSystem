@@ -1,0 +1,41 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "MathObjects.pl",
+  "PGcourse.pl",
+);
+
+Context("Numeric");
+Context()->flags->set(tolerance=>0.0001,tolType=>'absolute');
+
+TEXT(beginproblem);
+$showPartialCorrectAnswers = 1;
+
+sub C
+{
+    fact($_[0])/(fact($_[1])*fact($_[0]-$_[1]));
+}
+
+$p = 0.6;
+$pt = 1-$p;
+$n = 20;
+$ans0 = (1-$pt)**$n;
+$ans1 = C($n,1)*($pt**1)*((1-$pt)**($n-1));
+$ans2 = C($n,2)*($pt**2)*((1-$pt)**($n-2));
+$ans3 = C($n,3)*($pt**3)*((1-$pt)**($n-3));
+$sd = sqrt($n*$pt*(1-$pt));
+$k = abs($n*$pt-3)/$sd;
+
+######################################################################
+
+BEGIN_PGML
+
+## Tail of normal distributions ##
+
+The 
+
+END_PGML
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

@@ -1,0 +1,89 @@
+## DESCRIPTION
+## Calculus
+## ENDDESCRIPTION
+
+## KEYWORDS('discrete', 'permutation')
+## Tagged by YL
+
+## DBsubject('Discrete Mathematics')
+## DBchapter('Combinatorics')
+## DBsection('Counting')
+## Date('')
+## Author('')
+## Institution('ASU')
+## TitleText1('')
+## EditionText1('')
+## AuthorText1('')
+## Section1('')
+## Problem1('')
+
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"MathObjects.pl",
+"AnswerFormatHelp.pl",
+"answerHints.pl"
+);
+
+TEXT(beginproblem());
+Context("Numeric");
+# When formulas are to be expressed as strings, express them as TeX strings.
+Context()->texStrings;
+#Keep the Formulas as is for the display (do not reduce to a single number)
+Context()->flags->set(
+     reduceConstants => 0,
+     reduceConstantFunctions => 0,
+   );
+
+$a=random(2,4,1);
+$n=Formula("26!/(26-$a)!");
+$b=random(5,9,1);
+$b2=Formula("$b+2");
+$c=Formula("($b+1)*(26!/(26-$a)!)+1");
+$cr=$c->eval();
+$d=Formula("($b-1)*(26!/(26-$a)!)+1");
+
+BEGIN_TEXT
+Consider a list of $a-letter "words" printed on a paper. The letters cannot be repeated. $BR$BR
+(a) What is the size of the set of allowed words? $BR$BR
+
+There are 26 letters in the English alphabet, therefor there are 26 possibilities for the first letter. Once this first letter has been chosen, there remain 25 possibilities for the second letter, 24 possibilities for the third letter etc. To compute the number of possibilities for an $a-letter word take the product \(26*25*\cdots*(26-$a+1)\)
+
+Type in the answer: \{ ans_rule(15) \} $BR$BR
+END_TEXT
+
+BEGIN_TEXT
+$BR$BR
+(b) At least how many of these "words" should be printed to be sure of having 
+at least $b identical "words" on the list?  $BR$BR
+Answer = \{ ans_rule(15) \}
+$BR$BR
+After $showHint incorrect tries you will be able to see a hint.
+END_TEXT
+BEGIN_HINT
+Recall the "Pigeon Hole" principle. If the number of different words is \(n\) then in order to ensure that at least one of the words appears at least \(k\) times you need to print \((k-1)n+1\) words. Now, if you can set \(k\) and \(n\) to the correct values, you'll have the answer. 
+END_HINT
+
+BEGIN_TEXT
+$BR$BR
+(c) At least how many identical "words" are printed if there are \($c\) "words" on the list?  $BR$BR
+Answer = \{ ans_rule(15) \}
+$BR$BR
+After $showHint incorrect tries you will be able to see a hint.
+END_TEXT
+BEGIN_HINT
+In this case you have to use the pigeon hole formula in the reverse direction. Find the value of \(k\) that will be satisfied if you have \($c\) words.
+END_HINT
+
+ANS($n->cmp());
+ANS($d->cmp());
+ANS($b2->cmp());
+
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.;

@@ -1,0 +1,65 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "MathObjects.pl",
+  "PGcourse.pl",
+);
+
+Context("Numeric");
+Context()->flags->set(tolerance=>0.0001,tolType=>'absolute');
+
+TEXT(beginproblem);
+$showPartialCorrectAnswers = 1;
+
+sub C
+{
+    fact($_[0])/(fact($_[1])*fact($_[0]-$_[1]));
+}
+
+$p = 0.6;
+$pt = 1-$p;
+$n = 20;
+$ans0 = (1-$pt)**$n;
+$ans1 = C($n,1)*($pt**1)*((1-$pt)**($n-1));
+$ans2 = C($n,2)*($pt**2)*((1-$pt)**($n-2));
+$ans3 = C($n,3)*($pt**3)*((1-$pt)**($n-3));
+$sd = sqrt($n*$pt*(1-$pt));
+$k = abs($n*$pt-3)/$sd;
+
+######################################################################
+
+BEGIN_PGML
+
+## Binomial Distribution ##
+
+Suppose a coin with bias P(H)=[$p] is tossed [$n] times, what is the probability that there is at most 3 tails ?
+
+
+Pr(0 tails) =[$ans0]
+
+Pr(1 tail) = [____________]{$ans1}
+
+Pr(2 tails) = [____________]{$ans2}
+
+Pr(3 tails) = [____________]{$ans3}
+
+Pr(at most 3 tails) = [________]{$ans0 + $ans1 + $ans2 + $ans3}
+
+---
+
+We know that for a random variable that follows binomial distribution [`binomial(n,p)`], its mean is [`np`], its variance is [`np(1 − p)`], and thus standard deviation [`\sqrt{np(1 − p)}`].
+
+Among the [$n] tosses, let X be the number of tails, what is the mean of X ? [_________]{"$n*$pt"}; what is the standard deviation of [`X`] ? [____________]{sqrt($n*$pt*(1-$pt))}
+
+Recall that  Chebyshev's inequality says:
+[``\textbf{Pr} \left(|X - np| > k\sqrt{np(1 − p)} \right) \le 1/k^2``]
+
+The condition that [`X`] is at most 3 corresponds to which values of [`k`]? [____]{$k}.
+
+Thus we have an upper bound for Pr(at most 3 tails): [___________]{1/($k**2)}. Notice that it is a very loose bound.
+
+END_PGML
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

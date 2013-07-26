@@ -1,0 +1,18 @@
+Problem 2 states:
+
+&quot;Then, we calculate the number of hands that have exactly 4 face cards.
+
+The total number of face cards is 12 (Jack, Queen or King of all four suits). To choose 4 from them we have...&quot;
+
+
+What is the meaning of 'them'? Does it mean to choose 4 from the 12 face cards or from the 52 cards? 
+#homework3 #problem2
+Problem 2 states:
+
+&quot;Then, we calculate the number of hands that have exactly 4 face cards.
+
+The total number of face cards is 12 (Jack, Queen or King of all four suits). To choose 4 from them we have...&quot;
+
+
+What is the meaning of 'them'? Does it mean to choose 4 from the 12 face cards or from the 52 cards? 
+#homework3 #problem2

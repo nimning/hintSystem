@@ -1,0 +1,58 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "MathObjects.pl",
+  "parserRadioButtons.pl",
+  "compoundProblem.pl",
+  "Parser.pl",
+  "PGunion.pl",
+  "PGcourse.pl",
+  "PGchoicemacros.pl",
+);
+
+TEXT(beginproblem);
+BEGIN_PROBLEM();
+
+##############################################
+
+$isProfessor = ($studentLogin eq 'yoav.freund' || $studentLogin eq 'professor');
+Context("Interval");
+$showPartialCorrectAnswers = 1; # show student the correct part of their answer.
+
+@A_elements=NchooseK(10,4);
+$A=Set("{".join(",",@A_elements)."}");
+
+$B_interval=Interval("(3,8)");
+$B=Set("{4,5,6,7}"); #Set("{x for x \in $B_interval}");
+
+@C_elements=NchooseK(10,4);
+$C=Set("{".join(",",@C_elements)."}");
+
+@Universe_elements=NchooseK(10,10);
+$Universe=Set("{".join(",",@Universe_elements)."}");
+
+BEGIN_PGML
+
+Let the outcome space be [`[$Universe]`], and define subsets of this outcome space [`A = [$A]`], [`B = [$B_interval]`], and [`C = [$C]`].  Evaluate the following sets:
+
+o [`A \cup B`]?  [_______________]{Union($A,$B)}
+o [`A \cap B`]?  [_______________]{$A->intersect($B)}
+o [`B \cup C`]?  [_______________]{Union($B,$C)}
+o [`B \cap C`]?  [_______________]{$B->intersect($C)}
+o [`(A \cap B) \cup C`]? [_______________]{Union($A->intersect($B),$C)}
+o [`A \cap (B \cup C)`]? [_______________]{$A->intersect(Union($B,$C))}
+o [`(A \cap B) \cap C`]? [_______________]{$A->intersect($B)->intersect($C)}
+o [`A \cap (B \cap C)`]? [_______________]{$A->intersect($B)->intersect($C)}
+o [`(A \cup B) \cup C`]? [_______________]{Union($A,$B,$C)}
+o [`A \cup (B \cup C)`]? [_______________]{Union($A,$B,$C)}
+
+Notice a trend in your answers.  You must take care to the order of operations through parenthesis when mixing the union and intersection operations in an expression.  When an expression uses just the union operation or just the intersection operation, you don't need to.  
+
+END_PGML
+
+##############################################
+
+END_PROBLEM();
+ENDDOCUMENT();        # This should be the last executable line in the problem.

@@ -1,0 +1,45 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "MathObjects.pl",
+  "parserRadioButtons.pl",
+  "compoundProblem.pl",
+  "Parser.pl",
+  "PGunion.pl",
+  "PGcourse.pl",
+  "PGchoicemacros.pl",
+);
+
+TEXT(beginproblem);
+BEGIN_PROBLEM();
+
+##############################################
+
+$isProfessor = ($studentLogin eq 'yoav.freund' || $studentLogin eq 'professor');
+Context("Interval");
+$showPartialCorrectAnswers = 1; # show student the correct part of their answer.
+
+$Outcomes=Set("{1,2,3,4,5,6,7,8,9,10,11,12}");
+$Div2=Set("{2,4,6,8,10,12}");
+$Div3=Set("{3,6,9,12}");
+$Div6=Set("{6,12}");
+
+BEGIN_PGML
+## Cards ##
+What is the probability a uniformly randomly chosen card from a standard deck of 52 cards is a king?  
+[_________]{1/13}
+
+END_PGML
+
+BEGIN_PGML_SOLUTION
+The outcome space here is [`\Omega = `]{the set of 52 cards in a standard deck}.  The size (cardinality) of this set is 52.  
+The event we are concerned with is [`E = `]{the set of kings in a standard deck}.  The size of this set is 4.  
+Since we assumed an outcome was chosen uniformly randomly, the probability a king is chosen is [`4/52 = 1/13`].  
+END_PGML_SOLUTION
+
+##############################################
+
+END_PROBLEM();
+ENDDOCUMENT();        # This should be the last executable line in the problem.

@@ -1,0 +1,44 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+ "PGstandard.pl",
+  "PGML.pl",
+  "MathObjects.pl",
+  "PGcourse.pl",
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+####################################
+
+# Variables and functions here, for example
+
+#sub comb
+#{
+#	fact($_[0])/(fact($_[1])*fact($_[0]-$_[1]));
+#}
+
+#$nHearts = random(1,4,1);
+
+####################################
+
+BEGIN_PGML
+
+## Title ##
+
+# Questions here
+
+END_PGML
+
+####################################
+
+BEGIN_PGML_SOLUTION
+
+### SOLUTION ###
+
+# Solutions here
+
+END_PGML_SOLUTION
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

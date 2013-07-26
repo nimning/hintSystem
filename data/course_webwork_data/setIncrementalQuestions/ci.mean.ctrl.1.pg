@@ -1,0 +1,86 @@
+##KEYWORDS confidence interval, population mean, control
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PGstandard.pl",
+  "package.pl",
+  "Parser.pl",
+  "PGunion.pl",
+  "PGcourse.pl",
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGnumericalmacros.pl",
+"PGstatisticsmacros.pl"
+);
+
+TEXT(beginproblem);
+BEGIN_PROBLEM();
+$showPartialCorrectAnswers = 1;
+$ybar = 0;
+$s = 0;
+
+for ($i=0;$i<7;$i++){
+	$y[$i] = random(80,120,1);
+	$ybar = $ybar + $y[$i];
+}
+$ybar = $ybar/7;
+
+for ($i=0;$i<7;$i++){
+	$s = $s + ($y[$i] - $ybar)*($y[$i] - $ybar);
+}
+$s = sqrt($s/6);
+
+$delta = 2.4469 * $s / sqrt(7);
+$a = floor(($ybar - $delta)*100)/100;
+$b = floor(($ybar + $delta)*100)/100;
+
+
+$cmc = new_multiple_choice();
+$cmc->qa(
+	 "What can the project team conclude about how the average time spent by all WPI students on a 1/3 unit seven week undergraduate course compares with the 119 hour guideline?", 
+	"The confidence interval lies entirely below the WPI expectation, therefore the project team can conclude with 95% confidence that the average level of work expended is below the WPI expectation."
+);
+$cmc->extra("The confidence interval lies entirely below the WPI expectation, therefore the project team cannot conclude with 95% confidence that the average level of work expended is below the WPI expectation.",
+"Since 80 is not in the confidence interval, no one at WPI spends more than 80 hours.",
+"We are almost sure all students at WPI spend more than 65 hours per term.");
+
+
+BEGIN_TEXT
+$PAR
+WPI sets an expectation of 17 hours work per week for a 1/3 unit seven week undergraduate course, which
+equals 119 hours per term. To see if reality meets expectations, a WPI project team took a random sample of
+7 1/3 unit courses and from each course, randomly selected one student volunteer to follow during the term.
+Each selected student agreed to keep track of the hours spent on coursework for that course. The totals for
+the term are below:
+$PAR
+
+\[ \begin{array}{cccccccc}
+$y[0] & $y[1] & $y[2] & $y[3] & $y[4] & $y[5] & $y[6] \cr
+\end{array} \]
+
+$PAR
+The project team was interested in determining how the average time spent by all WPI students on a 1/3 unit seven week undergraduate course compares with the 119 hour guideline.
+$PAR
+$PAR Construct the 95% confident interval for the mean of studying hours per term.
+$PAR
+\{ans_rule(10)\} \( \leq \mu \leq \) \{ans_rule(10)\}  
+$BR
+
+
+
+
+
+
+END_TEXT
+BEGIN_HINT
+THis is just a test hint.
+END_HINT
+ANS(num_cmp($ybar-$delta, tol=>.01, tolType=>"absolute"));
+ANS(num_cmp($ybar+$delta, tol=>.01, tolType=>"absolute"));
+
+
+
+ENDDOCUMENT();       # This should be the last executable line in the problem.

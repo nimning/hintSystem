@@ -1,0 +1,69 @@
+##KEYWORDS confidence interval, population proportion, pretest
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PGstandard.pl",
+  "package.pl",
+  "Parser.pl",
+  "PGunion.pl",
+  "PGcourse.pl",
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGnumericalmacros.pl",
+"PGstatisticsmacros.pl"
+);
+
+TEXT(beginproblem);
+BEGIN_PROBLEM();
+
+$showPartialCorrectAnswers = 1;
+$n=10;
+$x=random(4,5,1);
+$pbar=($x/$n);
+$w=10-$x;
+$h=$n*$pbar;
+$q=(10*$pbar+0.5*1.96*1.96)/(10+1.96*1.96);
+
+$delta = sqrt(($q*(1-$q))/10)*1.96;
+
+$a = $q - $delta;
+if ($a<0)
+{
+	$a=0;
+}
+$b = $q + $delta;
+
+
+$cmc = new_multiple_choice();
+$cmc->qa(
+	"Which of the following can the organization conclude?", 
+	"Since 0.5 is contained in the confidence interval, they can be 95% confident that half people in USA like Stuart."
+);
+$cmc->extra("We are 95% confident that more than 95% people in USA like Stuart.",
+"Since 0.1 is not contained in the confidence interval,we are 95% confident that only 10% people in USA don't like Stuart.",
+"We need more information to make a conclusion.");
+
+
+BEGIN_TEXT
+$PAR
+Noted television personality Stuart Smalley claims: "I'm good enough,I'm smart enough,and gosh darn it, people like me." 
+To ascertain whether the last part of the statement is true, a national polling organization asked 10 individuals randomly 
+sampled from the American public, "Gosh darn it, do you like Stuart?" Of the 10 sampled, $x said they liked him and $w said they didn't. $PAR
+$PAR Using a 95% approximate score confidence interval, estimate the proportion of the population that likes Stuart. 
+$PAR
+\{ans_rule(10)\} \( \leq p \leq \) \{ans_rule(10)\}  
+$BR
+
+
+
+
+END_TEXT
+ANS(num_cmp($a, tol=>.01, tolType=>"absolute"));
+ANS(num_cmp($b, tol=>.01, tolType=>"absolute"));
+
+
+
+ENDDOCUMENT();       # This should be the last executable line in the problem.

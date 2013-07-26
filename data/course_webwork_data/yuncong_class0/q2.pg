@@ -1,0 +1,40 @@
+DOCUMENT();
+
+loadMacros(
+    "PGstandard.pl",
+    "PGML.pl",
+    "MathObjects.pl",
+    "PGcourse.pl",
+);
+
+TEXT(beginproblem);
+$showPartialCorrectAnswers=1;
+
+#################################
+
+BEGIN_PGML
+
+### Union, Intersection, and Complements for Sets of Countries ###
+Suppose A = {'China','France','Egypt','US'}, B = {x | x is a country in Asia}, C = {x | x is a country not in Europe}. In the answer, use {0,1,2,3} to represent the four countries:
+
+	a. what is the set [`A \cap B`]? The intersection of two sets is the set of elements in both A and B. The set of countries in A that are also in Asia is [_______]{Set(0)}
+
+	b. what is the set [`A \cap C^c`]. The complement of C is the entire outcome space excluding the elements in C. The outcome space here is the set of all countries, and excluding all countries in C, namely non-European countries, we know [`C^c`] means all European countries. Then we take its intersection with A, we get [________]{Set(1)}
+
+	c. what is the set [`A \cap (B \cup C)`]. The union of two sets is the set formed by all the elements in both sets. [`B \cup C`] means all countries that are in Asia OR not in Europe. Note that all countries in Asia are not in Europe, which means each element in B is in C, so [`B \subset C`]. In this case, [`B \cup C = C`]. The intersection of this set with A is therefore [_________________]{Set(0,2,3)}
+
+END_PGML
+
+BEGIN_PGML_SOLUTION
+
+#### Solution ####
+a. [`A \cap B = \{0\}`]
+b. [`A \cap C^c = \{1\}`]
+c. [`A \cap (B \cup C) = \{0,2,3\}`]
+
+END_PGML_SOLUTION
+
+#################################
+
+ENDDOCUMENT();
+

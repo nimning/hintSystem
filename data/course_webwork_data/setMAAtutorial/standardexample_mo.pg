@@ -1,0 +1,101 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+   "PGstandard.pl",
+   "MathObjects.pl",
+    "PGunion.pl",   # calls in some extra macros -- in this case Title() used for formatting only.
+    "source.pl",
+    "PGcourse.pl",
+);
+
+$showPartialCorrectAnswers = 1;
+
+Context("Numeric");
+
+TEXT(beginproblem());
+
+Title("Standard Example");
+####################################################
+#
+# Set up section
+#
+
+Context()->strings-> add(hello=>{}, goodbye=>{});
+
+######################
+#Setup  a question requiring a word as an answer
+######################
+
+$str = 'world';       #alternative strings for use in the question
+#$str = "Dolly";
+
+$hello = String("Hello");     # correct answer
+
+######################
+# Setup a question requiring a numberical answer
+######################
+
+$a = Real(3);
+$b = Real(5);
+#$a=Real(random(1,9,1));        #uncomment these lines and comment the previous ones
+#$b=Real(random(2,9,1)) ;       #to generate a "random" or algorithmic version of the problem
+
+$sum = $a + $b;                     # sum is automatically a Real object
+
+######################
+# Setup a question requiring a function or formula as an answer -- here is where
+# the power of MathObjects starts to shine
+######################
+
+$f = Formula("x^$b");
+$fp = $f->D;                     # the derivative of $f.
+
+####################################################
+#
+# Text section
+#
+
+Context()->texStrings;
+BEGIN_TEXT
+Complete the sentence: $BR 
+\{ $hello->ans_rule \}  $str;
+$PAR
+
+Enter the sum of these two numbers: $BR
+ \($a + $b = \) \{$sum->ans_rule(10) \}
+$PAR
+
+Enter the derivative of \[ $f \] $BR
+\(f '(x) = \) \{ $f->ans_rule(40) \}
+$PAR
+END_TEXT
+Context()->normalStrings;
+
+####################################################
+#
+# Answer section
+#
+
+ANS($hello->cmp);
+ANS($sum->cmp);
+ANS($fp->cmp);
+
+
+
+
+####################################################
+#
+# Hint section 
+# Hints should be used cautiously
+#
+
+
+####################################################
+#
+# Solution section
+#Solutions are not required but they are  appreciated.
+# 
+
+
+ENDDOCUMENT();
+ 

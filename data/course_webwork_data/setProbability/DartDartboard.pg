@@ -1,0 +1,45 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "MathObjects.pl",
+  "PGcourse.pl",
+);
+
+TEXT(beginproblem);
+$showPartialCorrectAnswers = 1;
+
+sub comb
+{
+	fact($_[0])/(fact($_[1])*fact($_[0]-$_[1]));
+}
+
+$radius = random(11,19,1);
+
+######################################################################
+
+BEGIN_PGML
+
+You can enter the value [`\pi`] by typing 'pi'.  
+What is [`\pi`]?  [________]{"pi"}
+
+## Darts on a Dart Board ##
+
+Throw a dart at a dartboard. Suppose that your dartboard has radius [$radius] and is centered at the origin. Its bullseye has radius 1. You throw a dart at it, which lands at a random location (all positions on the board are equally likely). 
+
+This differs from earlier examples in that the sample space is infinite and continuous. It is the set of all possible locations of the dart: any point in the circle. We can represent any such point by its [`(x,y)`] coordinates: [`\Omega = \{(x,y): x^2 + y^2 \leq [$radius]^2\}`] 
+
+The probability of picking a point uniformly randomly from a continuous region [`\Omega`], and landing in a region [`A \subseteq \Omega`] is <area of A>/<area of [`\Omega`]>.  
+
+What is the area of the dartboard?  Equivalently, what is [`|\Omega|`]?  [________]{"pi*$radius^2"}
+
+What is the area of the bullseye?   [________]{"pi"}
+
+What is the probability of hitting the bullseye?   [________]{"1/$radius^2"}
+
+END_PGML
+
+######################################################################
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

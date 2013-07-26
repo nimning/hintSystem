@@ -1,0 +1,19 @@
+## Probability of Poker Hands ##
+
+A hand in Texas Hold'em consists of 5 cards from a deck of 52 cards. A hand may fall into one of the following categories. We are going to compute the probability of each category.
+
+First, the number of all possible hands is [_____]{comb(52,5)}.
+
+### Pair: exactly one pair of equal rank cards ###
+
+1. The number of possibilities for the ranks of the pair is [______]{13}.
+
+2. The number of possibilities for the suits of the pair is [_____]{comb(4,2)}.
+
+3. The three other cards have three ranks different from the pair, the number of possibilities for their ranks is [_____]{comb(12,3)}
+
+4. And they can have any suit, thus the number of possibilities of their suites is [______]{4**3}.
+
+5. Thus the number of hands with exactly one pair is [______]{13*comb(4,2)*comb(12,3)*(4**3)}
+
+6. The ratio of this number to the number of all hands [______]{13*comb(4,2)*comb(12,3)*(4**3)/comb(52,5)}

@@ -1,0 +1,50 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "MathObjects.pl",
+  "parserRadioButtons.pl",
+  "compoundProblem.pl",
+  "Parser.pl",
+  "PGunion.pl",
+  "PGcourse.pl",
+  "PGchoicemacros.pl",
+);
+
+TEXT(beginproblem);
+BEGIN_PROBLEM();
+
+##############################################
+
+$isProfessor = ($studentLogin eq 'yoav.freund' || $studentLogin eq 'professor');
+Context("Interval");
+$showPartialCorrectAnswers = 1; # show student the correct part of their answer.
+
+@A_elements=NchooseK(30,3);
+$A=Set("{".join(",",@A_elements)."}");
+
+$B_interval=Interval("(10,13)");
+$B=Set("{11,12}"); #Set("{x for x \in $B_interval}");
+
+@C_elements=NchooseK(30,3);
+$C=Set("{".join(",",@C_elements)."}");
+
+@Universe_elements=NchooseK(30,30);
+$Universe=Set("{".join(",",@Universe_elements)."}");
+
+BEGIN_PGML
+
+Let the outcome space be [`\{0,1,...29\}`], and define subsets of this outcome space [`A = [$A]`], [`B = [$B_interval]`], and [`C = [$C]`].  Evaluate the following sets:
+
+[`((A \cup B)^c \cap C^c \cap (B \cup C)^c \cap B^c)^c`] [_______________]{Union($A,$B,$C)}
+[`A \cup (B^c \cap C^c)^c \cup C`] [_______________]{Union($A,$B,$C)}
+
+Hint: this problem is not laborious.  There are simple solutions to both parts.  
+
+END_PGML
+
+##############################################
+
+END_PROBLEM();
+ENDDOCUMENT();        # This should be the last executable line in the problem.

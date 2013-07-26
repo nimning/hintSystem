@@ -1,0 +1,3864 @@
+[
+    [
+        {
+            "hide": [],
+            "timedelta": 1036,
+            "show": [
+                0,
+                1,
+                2,
+                3,
+                4
+            ],
+            "expr": "1098240/2598960",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [
+                2,
+                3,
+                4
+            ],
+            "timedelta": 30,
+            "show": [
+                "0-0"
+            ],
+            "expr": "No",
+            "part": "0-0",
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 30,
+            "show": [
+                "0-1"
+            ],
+            "expr": "Yes",
+            "part": "0-1",
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 30,
+            "show": [
+                "0-2"
+            ],
+            "expr": 13,
+            "part": "0-2",
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 60,
+            "show": [
+                0,
+                1,
+                2,
+                3
+            ],
+            "expr": 13,
+            "part": 1,
+            "correct": true
+        }
+    ],
+    [
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [
+                0,
+                1,
+                2,
+                3,
+                4
+            ],
+            "expr": "52!/(5!*47!)",
+            "part": 0,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "13",
+            "part": 1,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "6",
+            "part": 2,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 82,
+            "show": [],
+            "expr": "11*10*9",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 30,
+            "show": [
+                "2-0"
+            ],
+            "expr": 11,
+            "part": "2-0",
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 30,
+            "show": [
+                "2-0"
+            ],
+            "expr": 12,
+            "part": "2-0",
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 30,
+            "show": [
+                "2-1"
+            ],
+            "expr": "No",
+            "part": "2-1",
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 30,
+            "show": [
+                "2-2"
+            ],
+            "expr": "Yes",
+            "part": "2-2",
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 30,
+            "show": [],
+            "expr": "12*11*10",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 30,
+            "show": [
+                "2-3"
+            ],
+            "expr": "3!",
+            "part": "2-3",
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 30,
+            "show": [
+                "2-4"
+            ],
+            "expr": "3!",
+            "part": "2-4",
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 30,
+            "show": [],
+            "expr": "12*11*10/3!",
+            "part": 3,
+            "correct": true
+        }
+    ],
+    [
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [
+                0,
+                1,
+                2,
+                3,
+                4
+            ],
+            "expr": "12*11*10/3!",
+            "part": 3,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "13",
+            "part": 1,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "4!/3!(4-3)!",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 30,
+            "show": [
+                "3-0"
+            ],
+            "expr": "Yes",
+            "part": "3-0",
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 30,
+            "show": [
+                "3-1"
+            ],
+            "expr": 4,
+            "part": "3-1",
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 30,
+            "show": [
+                "3-2"
+            ],
+            "expr": "4^2",
+            "part": "3-2",
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "4^3",
+            "part": 4,
+            "correct": true
+        }
+    ],
+    [
+        {
+            "hide": [],
+            "timedelta": 109,
+            "show": [
+                0,
+                1,
+                2
+            ],
+            "expr": "9^5",
+            "part": 0,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 12,
+            "show": [],
+            "expr": "5^9",
+            "part": 0,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 38,
+            "show": [],
+            "expr": "52^5",
+            "part": 0,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 26,
+            "show": [],
+            "expr": "52!/47!",
+            "part": 0,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 133,
+            "show": [],
+            "expr": "2598960",
+            "part": 0,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 214,
+            "show": [],
+            "expr": "4!/3!",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "52!/(47!5!)",
+            "part": 0,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 120,
+            "show": [],
+            "expr": "4^4",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 25,
+            "show": [],
+            "expr": "4",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 114,
+            "show": [],
+            "expr": "13!/(8!5!)",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 17,
+            "show": [],
+            "expr": "12!/(7!5!)",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 14,
+            "show": [],
+            "expr": "12!/5!",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 6,
+            "show": [],
+            "expr": "13!/5!",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 434,
+            "show": [],
+            "expr": "1098240",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 440,
+            "show": [],
+            "expr": "15!/(4!11!)",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 18,
+            "show": [],
+            "expr": "4",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 60,
+            "show": [],
+            "expr": "5^4",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 803,
+            "show": [],
+            "expr": "15!/(5!10!)",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 66,
+            "show": [],
+            "expr": "5*4",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 27,
+            "show": [],
+            "expr": "5!/4!",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 20,
+            "show": [],
+            "expr": "13!/(5!8!)",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 101,
+            "show": [],
+            "expr": "4^3",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 18,
+            "show": [],
+            "expr": "13!/(4!9!)",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 77,
+            "show": [],
+            "expr": "13!/4!",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 197,
+            "show": [],
+            "expr": "17!/(5!12!)",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 17,
+            "show": [],
+            "expr": "17!/(5!13!)",
+            "part": 1,
+            "correct": false
+        }
+    ],
+    [
+        {
+            "hide": [],
+            "timedelta": 91,
+            "show": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+            ],
+            "expr": "12!/(5!7!)",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 26,
+            "show": [],
+            "expr": "4!",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 24,
+            "show": [],
+            "expr": "4!+4",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 31,
+            "show": [],
+            "expr": "4!-4",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 200,
+            "show": [],
+            "expr": "18",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 116,
+            "show": [],
+            "expr": "4!",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 128,
+            "show": [],
+            "expr": "35",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 66,
+            "show": [],
+            "expr": "36",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 67,
+            "show": [],
+            "expr": "38",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 19,
+            "show": [],
+            "expr": "4^4",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 142,
+            "show": [],
+            "expr": "37",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 84,
+            "show": [],
+            "expr": "4^5",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 42,
+            "show": [],
+            "expr": "5!",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 91,
+            "show": [],
+            "expr": "41",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 41,
+            "show": [],
+            "expr": "42",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 7,
+            "show": [],
+            "expr": "43",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 6,
+            "show": [],
+            "expr": "44",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 8,
+            "show": [],
+            "expr": "45",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 112,
+            "show": [],
+            "expr": "4!(2!2!)",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 29,
+            "show": [],
+            "expr": "4^3",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 163,
+            "show": [],
+            "expr": "13!/5!",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "(4!/3!)^3",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 21,
+            "show": [],
+            "expr": "52!/(47!5!)",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 110,
+            "show": [],
+            "expr": "13!/(2!11!)",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 26,
+            "show": [],
+            "expr": "13!/(4!9!)",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 7,
+            "show": [],
+            "expr": "13!/(5!8!)",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 7,
+            "show": [],
+            "expr": "13!/(6!7!)",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 10,
+            "show": [],
+            "expr": "13!/(3!10!)",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 6,
+            "show": [],
+            "expr": "13!/(2!11!)",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 8,
+            "show": [],
+            "expr": "13!/(1!12!)",
+            "part": 1,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 50,
+            "show": [],
+            "expr": "13!/(12!)",
+            "part": 1,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 55,
+            "show": [],
+            "expr": "13",
+            "part": 1,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "4",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 8,
+            "show": [],
+            "expr": "3!",
+            "part": 2,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 34,
+            "show": [],
+            "expr": "3*13",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 16,
+            "show": [],
+            "expr": "3",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 7,
+            "show": [],
+            "expr": "3*12",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 11,
+            "show": [],
+            "expr": "12*11*10",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 44,
+            "show": [],
+            "expr": "13*12*11",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 34,
+            "show": [],
+            "expr": "12!/(3!9!)",
+            "part": 3,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 80,
+            "show": [],
+            "expr": "12!/(3!9!) * 4",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 21,
+            "show": [],
+            "expr": "12!/(3!9!) * 3!",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 25,
+            "show": [],
+            "expr": "3!",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 12,
+            "show": [],
+            "expr": "4",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 6,
+            "show": [],
+            "expr": "4!",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 62,
+            "show": [],
+            "expr": "1098240",
+            "part": 5,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 40,
+            "show": [],
+            "expr": "64",
+            "part": 4,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 35,
+            "show": [],
+            "expr": "4^3",
+            "part": 4,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 47,
+            "show": [],
+            "expr": "13 * 3! * 12!/(3!9!) * 4^3",
+            "part": 5,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 11,
+            "show": [],
+            "expr": "(13 * 3! * 12!/(3!9!) * 4^3) / 52!/(47!5!)",
+            "part": 6,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 63,
+            "show": [],
+            "expr": "(13 * 3! * 12!/(3!9!) * 4^3) / (52!/(47!5!))",
+            "part": 6,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 1181,
+            "show": [],
+            "expr": "4!/(2!2!)",
+            "part": 2,
+            "correct": true
+        }
+    ],
+    [
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+            ],
+            "expr": "13",
+            "part": 1,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "52!/(47!*5)",
+            "part": 0,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "(4!/(2!*2!))",
+            "part": 2,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "(12!/(3!*9!)) * 4",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "(4!/(2!*2!)) * (12!/(3!*9!)) / 52!/(47!*5)",
+            "part": 6,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "(4!/(2!*2!)) * (12!/(3!*9!))",
+            "part": 5,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 50,
+            "show": [],
+            "expr": "52!/(47!*5!)",
+            "part": 0,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "(4!/(2!*2!)) * ((12!/(3!*9!)) * 4) / 52!/(47!*5!)",
+            "part": 6,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "(4!/(2!*2!)) * ((12!/(3!*9!))*4)",
+            "part": 5,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 93,
+            "show": [],
+            "expr": "(12!/(3!*9!)) * 3",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "(4!/(2!*2!)) * ((12!/(3!*9!)) * 3) / (52!/(47!*5!))",
+            "part": 6,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "(4!/(2!*2!)) * ((12!/(3!*9!))*3)",
+            "part": 5,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 1073,
+            "show": [],
+            "expr": "6!/(3!*3!)",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 164,
+            "show": [],
+            "expr": "3!",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 72,
+            "show": [],
+            "expr": "",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 620,
+            "show": [],
+            "expr": "(12!/(3!*9!)) * 4^3",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "",
+            "part": 5,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 395,
+            "show": [],
+            "expr": "",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 258,
+            "show": [],
+            "expr": "(52!/(47!*5!))",
+            "part": 0,
+            "correct": true
+        }
+    ],
+    [
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+            ],
+            "expr": "13",
+            "part": 1,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 525,
+            "show": [],
+            "expr": "3",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "1",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "2,598,960",
+            "part": 0,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "((13!/12!)*(12!/(3!(9!)))/2598960",
+            "part": 6,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "12",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "(13!/12!)*(12!/(3!(9!))",
+            "part": 5,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 57,
+            "show": [],
+            "expr": "4",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "2598960",
+            "part": 0,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "",
+            "part": 6,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "",
+            "part": 5,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 148,
+            "show": [],
+            "expr": "3*3",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "4*4",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "12*12",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 176,
+            "show": [],
+            "expr": "",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "4!",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 242,
+            "show": [],
+            "expr": "4",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 68,
+            "show": [],
+            "expr": "13*4",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 92,
+            "show": [],
+            "expr": "2",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 107,
+            "show": [],
+            "expr": "8",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 50,
+            "show": [],
+            "expr": "13*4",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 57,
+            "show": [],
+            "expr": "6",
+            "part": 2,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 680,
+            "show": [],
+            "expr": "3",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "(12*3*6*13)/2598960",
+            "part": 6,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "12",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "12*3*6*13",
+            "part": 5,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 615,
+            "show": [],
+            "expr": "",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "",
+            "part": 6,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "12*3",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "",
+            "part": 5,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 22,
+            "show": [],
+            "expr": "12!/(3!(9!))",
+            "part": 3,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 57,
+            "show": [],
+            "expr": "4!/3!",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 151,
+            "show": [],
+            "expr": "6",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 41,
+            "show": [],
+            "expr": "4^3",
+            "part": 4,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 45,
+            "show": [],
+            "expr": "(13*6*(12!/(3!(9!)))*4^3)/2598960",
+            "part": 6,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "13*6*(12!/(3!(9!)))*4^3",
+            "part": 5,
+            "correct": true
+        }
+    ],
+    [
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+            ],
+            "expr": "(52!/(4!48!)*3)/(52!/(5!(52-5)!))",
+            "part": 6,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "(13!/(5!8!))*4",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "4",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "(52!/(3!49!))*49",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 31,
+            "show": [],
+            "expr": "(13!/(5!8!))*4",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 131,
+            "show": [],
+            "expr": "",
+            "part": 5,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "",
+            "part": 6,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "4*13!/(5!8!)",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 189,
+            "show": [],
+            "expr": "(52!/(5!(52-5)!))/4",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 261,
+            "show": [],
+            "expr": "4!/4",
+            "part": 2,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 303,
+            "show": [],
+            "expr": "(4!/4)*((50!/(3!47!)/4))",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "13*(50!/(3!47!))",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 19,
+            "show": [],
+            "expr": "(50!/(3!47!))",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 300,
+            "show": [],
+            "expr": "",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "50!/(3!47!)",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 41,
+            "show": [],
+            "expr": "12!/(3!9!)",
+            "part": 3,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 847,
+            "show": [],
+            "expr": "13*6*220*20",
+            "part": 5,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "343200/(52!/(5!(52-5)!))",
+            "part": 6,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "6!/(3!3!)",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 852,
+            "show": [],
+            "expr": "",
+            "part": 5,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "",
+            "part": 6,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 913,
+            "show": [],
+            "expr": "4!",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 25,
+            "show": [],
+            "expr": "4^3",
+            "part": 4,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 508,
+            "show": [],
+            "expr": "13*6*220*64",
+            "part": 5,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "(13*6*220*64)/(52!/(5!(52-5)!))",
+            "part": 6,
+            "correct": true
+        }
+    ],
+    [
+        {
+            "hide": [],
+            "timedelta": 144,
+            "show": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+            ],
+            "expr": "13!/(5!8!)",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 125,
+            "show": [],
+            "expr": "13!/(5!(8!))",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 215,
+            "show": [],
+            "expr": "13!/(2!(11!))",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 70,
+            "show": [],
+            "expr": "13*6",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 243,
+            "show": [],
+            "expr": "1,098,240",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 17,
+            "show": [],
+            "expr": "1098240",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 190,
+            "show": [],
+            "expr": "",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 88,
+            "show": [],
+            "expr": "13C1*4C2*64",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 28,
+            "show": [],
+            "expr": "13*12*64",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 50,
+            "show": [],
+            "expr": "13!",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 26,
+            "show": [],
+            "expr": "52!/(13!(39)!)",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 255,
+            "show": [],
+            "expr": "",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "4",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "1098240/2598960",
+            "part": 6,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "1098240",
+            "part": 5,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 525,
+            "show": [],
+            "expr": "13*6",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 198,
+            "show": [],
+            "expr": "(13!)*(12)",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 73,
+            "show": [],
+            "expr": "13!",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 17,
+            "show": [],
+            "expr": "13^13",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 80,
+            "show": [],
+            "expr": "52!/(4!(48!))",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "",
+            "part": 2,
+            "correct": false
+        }
+    ],
+    [
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+            ],
+            "expr": "26",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 61,
+            "show": [],
+            "expr": "5^52",
+            "part": 0,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 12,
+            "show": [],
+            "expr": "52^5",
+            "part": 0,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 345,
+            "show": [],
+            "expr": "40+624+3744+5108+10200+54912+123552+1098240+1302540",
+            "part": 0,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 146,
+            "show": [],
+            "expr": "52!/((5!)(52-5)!)",
+            "part": 0,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 163,
+            "show": [],
+            "expr": "13",
+            "part": 1,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 50,
+            "show": [],
+            "expr": "2^4",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 74,
+            "show": [],
+            "expr": "4!/((2!)(4-2)!)",
+            "part": 2,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 122,
+            "show": [],
+            "expr": "50!/((3!)(50-3)!)",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 51,
+            "show": [],
+            "expr": "48!/((3!)(48-3)!)",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 70,
+            "show": [],
+            "expr": "48!/(48-3)!",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 32,
+            "show": [],
+            "expr": "52!/(52-3)!",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 174,
+            "show": [],
+            "expr": "17296",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 21,
+            "show": [],
+            "expr": "110592",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 25,
+            "show": [],
+            "expr": "19600",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 94,
+            "show": [],
+            "expr": "39!/((3!)(39-3)!)",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 22,
+            "show": [],
+            "expr": "36!/((3!)(36-3)!)",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 115,
+            "show": [],
+            "expr": "48!/45!",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 623,
+            "show": [],
+            "expr": "19600",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 578,
+            "show": [],
+            "expr": "(48 + 3 - 1)!/((48!)(3-1)!)",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 316,
+            "show": [],
+            "expr": "12!/((3!)(12-3)!)",
+            "part": 3,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 61,
+            "show": [],
+            "expr": "48!/((3!)(48-3)!)",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 60,
+            "show": [],
+            "expr": "4!/((3!)(4-3)!)",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 67,
+            "show": [],
+            "expr": "52/4",
+            "part": 5,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 15,
+            "show": [],
+            "expr": "52/2",
+            "part": 5,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 93,
+            "show": [],
+            "expr": "4^3",
+            "part": 4,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 75,
+            "show": [],
+            "expr": "1098240",
+            "part": 5,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 127,
+            "show": [],
+            "expr": "(12!/((3!)(12-3)!))*(4^3)",
+            "part": 5,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 47,
+            "show": [],
+            "expr": "13 * (2!/((3!)(12-3)!))",
+            "part": 5,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 37,
+            "show": [],
+            "expr": "13 * (12!/((3!)(12-3)!))",
+            "part": 5,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 387,
+            "show": [],
+            "expr": "13*6*220*4^3",
+            "part": 5,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 39,
+            "show": [],
+            "expr": "(13*6*220*4^3)/(52!/((5!)(52-5)!))",
+            "part": 6,
+            "correct": true
+        }
+    ],
+    [
+        {
+            "hide": [],
+            "timedelta": 585,
+            "show": [
+                0,
+                1,
+                2,
+                3,
+                4
+            ],
+            "expr": "2^13",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "4^13",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 73,
+            "show": [],
+            "expr": "13^2",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 339,
+            "show": [],
+            "expr": "13",
+            "part": 1,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 1102,
+            "show": [],
+            "expr": "12*11*10",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 30,
+            "show": [
+                "2-0"
+            ],
+            "expr": 12,
+            "part": "2-0",
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 30,
+            "show": [
+                "2-1"
+            ],
+            "expr": "Yes",
+            "part": "2-1",
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 30,
+            "show": [
+                "2-2"
+            ],
+            "expr": "No",
+            "part": "2-2",
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 30,
+            "show": [],
+            "expr": "12*11*10",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 30,
+            "show": [
+                "2-3"
+            ],
+            "expr": "3!",
+            "part": "2-3",
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 30,
+            "show": [
+                "2-4"
+            ],
+            "expr": "3!",
+            "part": "2-4",
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 30,
+            "show": [],
+            "expr": "12*11*10/3!",
+            "part": 3,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "4^3",
+            "part": 4,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "4",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 224,
+            "show": [],
+            "expr": "4^2",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 121,
+            "show": [],
+            "expr": "6",
+            "part": 2,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 210,
+            "show": [],
+            "expr": "12+11+10",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 26,
+            "show": [],
+            "expr": "13*12*11",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 870,
+            "show": [],
+            "expr": "10+9+8+7+6+5+4+3+2+1",
+            "part": 3,
+            "correct": false
+        }
+    ],
+    [
+        {
+            "hide": [],
+            "timedelta": 239,
+            "show": [
+                0,
+                1,
+                2
+            ],
+            "expr": "54!/(2!(52!))",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 189,
+            "show": [],
+            "expr": "53!/(2!(52!))",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 89,
+            "show": [],
+            "expr": "(16*16)/2",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 262,
+            "show": [],
+            "expr": "5!/(2!(3!))",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 151,
+            "show": [],
+            "expr": "13(5!/(2!(3!)))",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 23,
+            "show": [],
+            "expr": "12",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 47,
+            "show": [],
+            "expr": "24",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 170,
+            "show": [],
+            "expr": "5",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 549,
+            "show": [],
+            "expr": "24",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 265,
+            "show": [],
+            "expr": "24*13",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 20,
+            "show": [],
+            "expr": "24*13*13",
+            "part": 2,
+            "correct": false
+        }
+    ],
+    [
+        {
+            "hide": [],
+            "timedelta": 463,
+            "show": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+            ],
+            "expr": "4^3",
+            "part": 4,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 660,
+            "show": [],
+            "expr": "((52*3)/2)((48*44*38)/3!)",
+            "part": 5,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 811,
+            "show": [],
+            "expr": "3744",
+            "part": 5,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 61,
+            "show": [],
+            "expr": "31680",
+            "part": 5,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 310,
+            "show": [],
+            "expr": "1098240",
+            "part": 5,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 153,
+            "show": [],
+            "expr": "1098240/2598960",
+            "part": 6,
+            "correct": true
+        }
+    ],
+    [
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [
+                0,
+                1,
+                2
+            ],
+            "expr": "52!/(5!(47)!)",
+            "part": 0,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "4!",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 198,
+            "show": [],
+            "expr": "13!/(6!(7)!)",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 143,
+            "show": [],
+            "expr": "13!/(2!(11)!)",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 166,
+            "show": [],
+            "expr": "13!",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "4!",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 602,
+            "show": [],
+            "expr": "13*6",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "4*6",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 317,
+            "show": [],
+            "expr": "13*6*220*4^3",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 97,
+            "show": [],
+            "expr": "13!6!",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 247,
+            "show": [],
+            "expr": "13^6",
+            "part": 1,
+            "correct": false
+        }
+    ],
+    [
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+            ],
+            "expr": "52!/(5!47!)",
+            "part": 0,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 86,
+            "show": [],
+            "expr": "13!/(2!11!)",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 125,
+            "show": [],
+            "expr": "(13!/(2!11!))*(4!/1!3!)",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 12,
+            "show": [],
+            "expr": "(13!/(2!11!))*(4!/(1!3!))",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 82,
+            "show": [],
+            "expr": "(13!/(2!11!))*4",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 130,
+            "show": [],
+            "expr": "39!/(2!/37!)",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 125,
+            "show": [],
+            "expr": "",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "13!/(2!(11!))",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 93,
+            "show": [],
+            "expr": "52!/(2!50!)",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 56,
+            "show": [],
+            "expr": "7462",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 68,
+            "show": [],
+            "expr": "52!/(2!50!)",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 78,
+            "show": [],
+            "expr": "13!/(3!10!)",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 60,
+            "show": [],
+            "expr": "2^4",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 23,
+            "show": [],
+            "expr": "2^13",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 7,
+            "show": [],
+            "expr": "13^2",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 217,
+            "show": [],
+            "expr": "4*(13!/(2!11!))",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "4*(13!/(2!11!))",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "4*(13!/(2!11!))",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "4*(13!/(2!11!))",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "4*(13!/(2!11!))",
+            "part": 6,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "4*(13!/(2!11!))",
+            "part": 5,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 87,
+            "show": [],
+            "expr": "13!/1!12!",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "",
+            "part": 6,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "",
+            "part": 5,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 20,
+            "show": [],
+            "expr": "13!/(1!12!)",
+            "part": 1,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "13!/(1!12!)",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "13!/(1!12!)",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "13!/(1!12!)",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "13!/(1!12!)",
+            "part": 6,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "13!/(1!12!)",
+            "part": 5,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 53,
+            "show": [],
+            "expr": "4!/(2!2!)",
+            "part": 2,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "",
+            "part": 6,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "",
+            "part": 5,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 18,
+            "show": [],
+            "expr": "11!/(1!10!)",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 20,
+            "show": [],
+            "expr": "",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "11!/(1!10!)",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 83,
+            "show": [],
+            "expr": "12!/(3!9!)",
+            "part": 3,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "4!/(1!3!)",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 87,
+            "show": [],
+            "expr": "4*(12!/(3!9!))",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 105,
+            "show": [],
+            "expr": "3!/(1!2!)",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 42,
+            "show": [],
+            "expr": "3!/(3!0!)",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 117,
+            "show": [],
+            "expr": "",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 360,
+            "show": [],
+            "expr": "4*(12!/(3!9!))",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 29,
+            "show": [],
+            "expr": "4!/(1!3!)",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 22,
+            "show": [],
+            "expr": "4!/(1!3!)*(12!/(3!9!))",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 47,
+            "show": [],
+            "expr": "",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "(13!/(1!12!))*(12!/(3!9!))*(4!/(2!2!))/(52!/(5!47!))",
+            "part": 6,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "13!/(1!12!)*12!/(3!9!)*4!/(2!2!)",
+            "part": 5,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 14,
+            "show": [],
+            "expr": "(13!/(1!12!))*(12!/(3!9!))/(52!/(5!47!))",
+            "part": 6,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 80,
+            "show": [],
+            "expr": "",
+            "part": 6,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "",
+            "part": 5,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 814,
+            "show": [],
+            "expr": "4!/(4!0!)",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 45,
+            "show": [],
+            "expr": "(4!/(1!3!))^3",
+            "part": 4,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 218,
+            "show": [],
+            "expr": "(13!/(1!12!))*(4!/(2!2!))*((4!/(1!3!))^3)/(52!/(5!47!))",
+            "part": 6,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "(13!/(1!12!))*(4!/(2!2!))*((4!/(1!3!))^3)",
+            "part": 5,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 106,
+            "show": [],
+            "expr": "(13!/(1!12!))*(4!/(2!2!))*((4!/(1!3!))^3)*(12!/(3!9!))/(52!/(5!47!))",
+            "part": 6,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "(13!/(1!12!))*(4!/(2!2!))*((4!/(1!3!))^3)*(12!/(3!9!))",
+            "part": 5,
+            "correct": true
+        }
+    ],
+    [
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+            ],
+            "expr": "4*((13!)/2!(13-2)!)",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "",
+            "part": 5,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "",
+            "part": 6,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 51,
+            "show": [],
+            "expr": "13*12",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 15,
+            "show": [],
+            "expr": "13!",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 138,
+            "show": [],
+            "expr": "1,098,240",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 22,
+            "show": [],
+            "expr": "1098240",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 84,
+            "show": [],
+            "expr": "13*6",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 39,
+            "show": [],
+            "expr": "(13!)/(2!(13-2)!)",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 17,
+            "show": [],
+            "expr": "4*(13!)/(2!(13-2)!)",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 50,
+            "show": [],
+            "expr": "13*16",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 41,
+            "show": [],
+            "expr": "26",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 28,
+            "show": [],
+            "expr": "13*4",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 586,
+            "show": [],
+            "expr": "",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 412,
+            "show": [],
+            "expr": "1098240",
+            "part": 5,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "1098240/2598960",
+            "part": 6,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 493,
+            "show": [],
+            "expr": "14080",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 56,
+            "show": [],
+            "expr": "78",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 53,
+            "show": [],
+            "expr": "13",
+            "part": 1,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 159,
+            "show": [],
+            "expr": "4",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 36,
+            "show": [],
+            "expr": "12",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 62,
+            "show": [],
+            "expr": "6",
+            "part": 2,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 247,
+            "show": [],
+            "expr": "(11!)/(3!(11-3)!)",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 124,
+            "show": [],
+            "expr": "(12!)/(3!(12-3)!)",
+            "part": 3,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 72,
+            "show": [],
+            "expr": "4*(12!)/(3!(12-3)!)",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 125,
+            "show": [],
+            "expr": "4*((12!)/(3!(12-3)!))",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 47,
+            "show": [],
+            "expr": "",
+            "part": 4,
+            "correct": false
+        }
+    ],
+    [
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+            ],
+            "expr": "6*12",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 11,
+            "show": [],
+            "expr": "6*13",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 94,
+            "show": [],
+            "expr": "52*3*48*47*46",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 181,
+            "show": [],
+            "expr": "6*13",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 412,
+            "show": [],
+            "expr": "6*13*220*64",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 747,
+            "show": [],
+            "expr": "13*220*4^3*6",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 184,
+            "show": [],
+            "expr": "13",
+            "part": 1,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 56,
+            "show": [],
+            "expr": "4",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 11,
+            "show": [],
+            "expr": "6",
+            "part": 2,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 65,
+            "show": [],
+            "expr": "1",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 70,
+            "show": [],
+            "expr": "48*44*40",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 296,
+            "show": [],
+            "expr": "13*220*4^3*6",
+            "part": 5,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "(13*220*4^3*6)/(52!/(5!*47!))",
+            "part": 6,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 229,
+            "show": [],
+            "expr": "14!/(12!*2!)",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 143,
+            "show": [],
+            "expr": "15!/(3!*(12!))",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 47,
+            "show": [],
+            "expr": "(13*12*11)/3!",
+            "part": 3,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 597,
+            "show": [],
+            "expr": "(12*11*10)/3!",
+            "part": 3,
+            "correct": true
+        }
+    ],
+    [
+        {
+            "hide": [],
+            "timedelta": 11,
+            "show": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+            ],
+            "expr": "4+(4!/2!(4-2)!)*(4!/1!(4-1)!))",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 5,
+            "show": [],
+            "expr": "4+(4!/2!(4-2)!)*(4!/1!(4-1)!)",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 330,
+            "show": [],
+            "expr": "(12!/(3!(12-3)!))*(4!/(3!(4-3)!))",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 1171,
+            "show": [],
+            "expr": "4!/(3!(4-3)!)",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 41,
+            "show": [],
+            "expr": "4!/(1!(4-1)!)",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 12,
+            "show": [],
+            "expr": "(4!/(1!(4-1)!))*3",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 1140,
+            "show": [],
+            "expr": "13!/(1!(13-1)!)",
+            "part": 1,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "(13!/(1!(13-1)!))* (4!/(2!(4-2)!)) * (12!/(3!(12-3)!)) * (4!/(1!(4-1)!))^3",
+            "part": 5,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 36,
+            "show": [],
+            "expr": "((13!/(1!(13-1)!))* (4!/(2!(4-2)!)) * (12!/(3!(12-3)!)) * (4!/(1!(4-1)!))^3) / (52!/(5!(52-5)!))",
+            "part": 6,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 49,
+            "show": [],
+            "expr": "(12!/(3!(12-3)!)) * (4!/(1!(4-1)!))^3",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 8,
+            "show": [],
+            "expr": "(4!/(1!(4-1)!))^3",
+            "part": 4,
+            "correct": true
+        }
+    ],
+    [
+        {
+            "hide": [],
+            "timedelta": 9,
+            "show": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+            ],
+            "expr": "52!/5!",
+            "part": 0,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 522,
+            "show": [],
+            "expr": "15!/(3!(15-3)!)",
+            "part": 1,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "52!/(5!(52-5)!)",
+            "part": 0,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 462,
+            "show": [],
+            "expr": "6!/(3!(6-3)!)",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "4!/2!",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "13",
+            "part": 1,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "12!/(3!(12-3)!)",
+            "part": 3,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 24,
+            "show": [],
+            "expr": "6!/(3!)",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "4!/(2!(4-2)!)",
+            "part": 2,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 1117,
+            "show": [],
+            "expr": "4^3",
+            "part": 4,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "52!/(5!(52-5)!)",
+            "part": 6,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "52!/(5!(52-5)!)-12!/(3!(12-3)!)*4^3",
+            "part": 5,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 448,
+            "show": [],
+            "expr": "13*4!/(2!(4-2)!)*4^3*12!/(3!(12-3)!)/52!/(5!(52-5)!)",
+            "part": 6,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "13*4!/(2!(4-2)!)*4^3*12!/(3!(12-3)!)",
+            "part": 5,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 200,
+            "show": [],
+            "expr": "(13*4!/(2!(4-2)!)*4^3*12!/(3!(12-3)!))/52!/(5!(52-5)!)",
+            "part": 6,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 22,
+            "show": [],
+            "expr": "(13*4!/(2!(4-2)!)*4^3*12!/(3!(12-3)!))/(52!/(5!(52-5)!))",
+            "part": 6,
+            "correct": true
+        }
+    ],
+    [
+        {
+            "hide": [],
+            "timedelta": 623,
+            "show": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5
+            ],
+            "expr": "(52 C 5)",
+            "part": 0,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 7,
+            "show": [],
+            "expr": "52!/(5!(52-5)!)",
+            "part": 0,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 79,
+            "show": [],
+            "expr": "13",
+            "part": 1,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "4",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 47,
+            "show": [],
+            "expr": "4^2",
+            "part": 2,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 25,
+            "show": [],
+            "expr": "4!/(2!(4-2)!)",
+            "part": 2,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 197,
+            "show": [],
+            "expr": "12!/(3!(12-3)!)",
+            "part": 3,
+            "correct": true
+        },
+        {
+            "hide": [],
+            "timedelta": 259,
+            "show": [],
+            "expr": "(12!/(3!(12-3)!))*4",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 90,
+            "show": [],
+            "expr": "(12!/(3!(12-3)!))",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 283,
+            "show": [],
+            "expr": "(13!/(1!(13-3)!))*(12!/(3!(12-3)!))",
+            "part": 5,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 13,
+            "show": [],
+            "expr": "(13!/(1!(13-1)!))*(12!/(3!(12-3)!))",
+            "part": 5,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 255,
+            "show": [],
+            "expr": "",
+            "part": 5,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 0,
+            "show": [],
+            "expr": "6",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 47,
+            "show": [],
+            "expr": "(12!/(3!(12-3)!))*4^3",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 11,
+            "show": [],
+            "expr": "(12!/(3!(12-3)!))*4*4*4",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 27,
+            "show": [],
+            "expr": "4!/(3!(4-3)!)",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 6,
+            "show": [],
+            "expr": "78",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 67,
+            "show": [],
+            "expr": "(12!/(3!(12-3)!))*(4!/(3!(4-3)!))",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 138,
+            "show": [],
+            "expr": "78",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 338,
+            "show": [],
+            "expr": "(12!/(3!(12-3)!) )*6",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 16,
+            "show": [],
+            "expr": "(12!/(3!(12-3)!) )*4",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 14,
+            "show": [],
+            "expr": "(12!/(3!(12-3)!) )/4",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 231,
+            "show": [],
+            "expr": "12!/(3!(12-3)!)",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 69,
+            "show": [],
+            "expr": "6!/(3!(6-3)!)",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 10,
+            "show": [],
+            "expr": "6!/(4!(6-4)!)",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 151,
+            "show": [],
+            "expr": "4!/(3!(4-3)!)",
+            "part": 4,
+            "correct": false
+        },
+        {
+            "hide": [],
+            "timedelta": 99,
+            "show": [],
+            "expr": "64/3",
+            "part": 4,
+            "correct": false
+        }
+    ]
+]

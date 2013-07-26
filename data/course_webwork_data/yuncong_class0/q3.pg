@@ -1,0 +1,70 @@
+DOCUMENT();
+
+loadMacros(
+    "PGstandard.pl",
+    "PGML.pl",
+    "MathObjects.pl",
+    "PGcourse.pl",
+);
+
+TEXT(beginproblem);
+$showPartialCorrectAnswers=1;
+
+#################################
+
+$context=Context("Interval");
+$b = random(3,5,1);
+$c = random(6,8,1);
+$O = Set(join(",",(1..29)));
+@AA = map 2 * $_, 1..int($O->length/2);
+@BB = map $b * $_, 1..int($O->length/$b);
+@CC = map $c * $_, 1..int($O->length/$c);
+$A = Set(join(",",@AA));
+$B = Set(join(",",@BB));
+$C = Set(join(",",@CC));
+$Ac = $O-$A;
+$Bc = $O-$B;
+$Cc = $O-$C;
+$AcBC = $Ac->intersect($B)->intersect($C);
+$BcAC = $Bc->intersect($A)->intersect($C);
+$CcAB = $Cc->intersect($A)->intersect($B);
+
+
+BEGIN_PGML
+
+3. The sample space [`\Omega`] is the set of all positive integers less than 30. Let A,B,C be events defined on [`\Omega`]:
+          
+          A: the sample is an even number
+
+          B: the sample is a multiple of [$b] (*copy* this value here [__]{$b})
+
+          C: the sample is a multiple of [$c] (*copy* this value here [__]{$c})
+
+Write the set of outcomes corresponding to the following combinations of events:
+
+a. All three events occur: [________________]{$A->intersect($B)->intersect($C)}
+
+b. A and C occur, but not B [_____________________]{$BcAC}
+
+c. Exactly two of the events occur [_____________________]{$AcBC + $BcAC + $CcAB}
+
+
+END_PGML
+
+BEGIN_PGML_SOLUTION
+
+*SOLUTION:*
+The outcome space of [`A`] is [$A].
+
+a. The outcome space for all three events occuring, is [`A \cap B \cap C =`] [$A->intersect($B)->intersect($C)].
+
+b. The outcome space for event A and C occurring is [`A \cap C = `] [$A->intersect($C)]. The outcome space for B not occurring is the complement of B, [`B^c =`] [$Bc]. The intersection of these two sets is the outcome space for event b, which is [`A \cap C \cap B^c =`] [$BcAC]
+
+c. If exactly two of the events occur, there are three cases: (1) A and B, but not C. From the previous question we know in this case the outcome space is [`C^c \cap A \cap B =`] [$CcAB]. (2) B and C, but not A. In this case the outcome space is [$AcBC]. (3) A and C, but not B. In this case, the outcome space is [$BcAC]. For event c, the outcome space is the union of that of all three cases, which is [$AcBC + $BcAC + $CcAB]
+
+END_PGML_SOLUTION
+
+#################################
+
+ENDDOCUMENT();
+

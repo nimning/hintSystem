@@ -1,0 +1,37 @@
+DOCUMENT();
+
+loadMacros(
+    "PGstandard.pl",
+    "PGML.pl",
+    "MathObjects.pl",
+    "PGcourse.pl",
+);
+
+TEXT(beginproblem);
+$showPartialCorrectAnswers=1;
+
+#################################
+
+$context=Context("Interval");
+$min = random(1,13,1);
+$max = random($min,13,1);
+$n = $max-$min + 1;
+
+BEGIN_PGML
+
+2. What is the probability of drawing a card whose value is between and including [$min] (*copy* this value here [__]{$min}) and [$max]  (*copy* this value here [__]{$max}), from a standard card deck (excluding jokers)? 
+
+A standard card deck (excluding jokers) has 52 cards, so the outcome space [`\Omega`] is the set of all 52 cards. The event [`A`] of drawing a card whose value is between and including [$min] and [$max] corresponds to the set of [$n*4] such cards, [$n] card in each suit. As all cards are equally likely to be drawn, the probability of this event is calculated as [`\frac{|A|}{|\Omega|} =`] [_____]{$n/52}
+
+END_PGML
+
+BEGIN_PGML_SOLUTION
+
+*SOLUTION:* The size of outcome space is 52, and the size of [`A`] is [$n], so the probability of event [`A`] is [`[$n]/52`].
+
+END_PGML_SOLUTION
+
+#################################
+
+ENDDOCUMENT();
+

@@ -1,0 +1,61 @@
+##DESCRIPTION
+##   Statistics: Hypothesis Testing
+##ENDDESCRIPTION
+
+##KEYWORDS('Statistics', 'Hypothesis Testing')
+##Tagged by up2p
+
+##DBsubject('Statistics')
+##DBchapter('Hypothesis Testing')
+##DBsection('Elements of a Statistical Test')
+##Date('')
+##Author('')
+##Institution('ASU')
+##TitleText1('')
+##EditionText1('')
+##AuthorText1('')
+##Section1('')
+##Problem1('')
+
+#
+# First comes some stuff that appears at the beginning of every problem
+#
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"PGasu.pl"
+);
+
+TEXT(beginproblem());
+
+$showPartialCorrectAnswers = 0;
+
+BEGIN_TEXT
+
+$PAR
+* Note that $BITALIC frequency$EITALIC in this context means the count, not the ratio. $PAR
+
+Suppose the population contains members that belong to several categories, say gender (2 categories, male/female). We sample a number of persons, say 100, from this population, and observe the frequencies of each category. Suppose the outcome is 44 men and 56 women. We call these the $BBOLD observed frequencies$EBOLD. On the other hand, we have some natural expectation regarding these frequencies: we expect to have 50 men and 50 women from a sampling of 100 persons. In this case, the belief that men and women have the same proportion in the population is the $BBOLD"null hypothesis"$EBOLD. Based on this null hypothesis, we have $BBOLD expected frequencies$EBOLD of 50 for men and 50 for women.$PAR
+
+A \(\chi^2\) or $BBOLD chi-square test$EBOLD checks whether our natural belief (i.e. the "null hypothesis") should be rejected, given the sample we have. In other words, it checks how good the observed frequencies of each category $BITALIC fits$EITALIC the expected frequencies.
+
+
+$BR$BR
+(a) Are the $BBOLD observed$EBOLD frequencies random variables?  Answer yes or no.$BR
+answer: \{ans_rule(10) \} $PAR
+(b) Are the $BBOLD expected$EBOLD frequencies random variables?  Answer yes or no. $BR
+answer: \{ans_rule(10) \} $PAR
+
+END_TEXT
+
+ANS(str_cmp("yes"));
+ANS(str_cmp("no"));
+
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

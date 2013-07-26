@@ -1,0 +1,53 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "MathObjects.pl",
+  "PGcourse.pl",
+);
+
+TEXT(beginproblem);
+$showPartialCorrectAnswers = 1;
+
+######################################################################
+Context("Numeric");
+
+$R1=random(8,15,1);
+$R2=random(2,$R1-2,1);
+$F=fact($R1)/(fact($R2)*fact($R1-$R2));
+
+TEXT(PGML::Format2(<<'END_PGML'));
+
+#### Choosing candies ####
+
+This is a slightly more challenging combinatorial problem. 
+
+You walk into a candy store and notice that there are five types of candy. Your mother allows you to pick exactly three pieces of candy, of whichever type(s)
+you want. How many ways are there to do this?
+
+You can represent the outcome by 5-tuple [`(n_1, n_2, \ldots, n_5)`] in
+which [`n_i`] is the number of pieces of the [`i`] h type of candy. How
+many such tuples are there, subject to [`n_1 + n_2 + \cdots + n_5 = 3`] 
+To answer the question, we'll represent each tuple in a different
+format, as a sequence of length 7 containing three stars and four
+bars. For instance, the sequence [`|\,**\,|\,|\,|\,*`] denotes [`(0,2,0,0,1)`] (two candies of type 2 and one candy of type 5): the
+number of candies of type [`i`] is the number of stars between the [`(i-1)`] t and [`i`] h bars.
+ 
+So we have rephrased the question thus: how many sequences are there
+with four bars and three stars? Well, this is a sequence of size 7,
+and we must pick three of the seven positions at which to place
+stars. The number of such choices is [`{7 \choose 3} = 35`] 
+
+*PROBLEM:*
+Suppose balls come in [$R1] colors and that you are to pick out [$R2] balls. How many different color combinations are possible?
+
+o *Copy* the number of balls here [___]{$R2}
+o *Copy* the number of colors here [___]{$R1}
+o The number of color combinations is [______]{"(($R2+$R1-1)!)/(($R2)!*($R1-1)!)"}
+
+END_PGML
+
+######################################################################
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

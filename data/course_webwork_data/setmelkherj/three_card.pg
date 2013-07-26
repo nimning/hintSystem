@@ -1,0 +1,59 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "MathObjects.pl",
+  "PGcourse.pl",
+);
+
+Context("Numeric");
+Context()->variables->are(
+      k => ['Real', limits=>[1,10], resolution=>1],
+      n => ['Real', limits=>[1,10], resolution=>1],
+      x => ['Real']
+    );
+
+TEXT(beginproblem);
+$showPartialCorrectAnswers = 1;
+
+######################################################################
+
+BEGIN_PGML
+You are asked by some guy on the street to play a game.  
+
+On a table, there are 3 cards in a hat.  
+- One has a spade on one side and a diamond on the other
+- The second has spades on both sides
+- The third has diamonds on both sides
+
+You randomly pick a card from the hat and place it on the table.  If the back of the card has a different suit than the front, you win $1.  Otherwise, you lose $1.  Should you play the game?  
+
+## First Analysis ##
+
+We will represent the cards you could draw as SD, SS, DD, representing "a card with one side spade, the other diamond", ...
+
+Let's say you draw a card from the hat and place in on the table.  A diamond is facing up.  What is the probability the opposite side is a spade?  
+
+It's impossible that you drew the SS card.  Since there are 2 cards remaining (SD and DD), one of which has an opposite side of spades, you have a 50/50 chance of winning.  
+
+The same argument applies if you picked a card and a spade were showing face-up.  
+
+Is this argument correct?  Is the game fair?  (no=0,yes=1)?  [______]{0}
+
+## Second Analysis ##
+Here is an alternative, more rigorous probabilistic analysis: 
+- Recall that you randomly select a card from the hat, and face a random side of the card up.  This gives an even probability of any face of the 3 cards facing up, giving a [_______]{"1/2"} probability of a diamond facing up.  
+- Out of these 3 possible sides of the cards that are diamonds, [__]{2} of the opposite sides are also diamonds.  What is the probability the opposite side is a spade?  [_____]{"1/3"} 
+- important to note here:  the DD card should be counted *twice* in the analysis, since there is a uniform probability of each side of the DD card facing up, and both sides are diamonds.  
+- The same argument applies to a spade facing up.  
+- Reviewing: let [`F \in \{S,D\}`] be the outcome space for the front of a card, [`B \in \{S,D\}`] the outcome space for the back of a card, and [`F \times B`] be the outcome space for one iteration of this game.  
+- [`P(F=S) = `][______]{"1/2"}
+- [`P(B=S) = `][______]{"1/2"}
+- [`P(B=S | F=D) = `][______]{"1/3"}
+- [`P(B=D | F=S) = `][______]{"1/3"}
+- [`P(B \neq F) = P(B=S,F=D) + P(B=D,F=S) = `][______]{"1/3"}
+
+END_PGML
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

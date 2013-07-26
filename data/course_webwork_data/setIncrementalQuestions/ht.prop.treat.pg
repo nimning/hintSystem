@@ -1,0 +1,693 @@
+##KEYWORDS confidence interval, population proportion, treatment
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+  "PGstandard.pl",
+  "package.pl",
+  "Parser.pl",
+  "PGunion.pl",
+  "PGcourse.pl",
+
+  "PGbasicmacros.pl",
+  "PGchoicemacros.pl",
+  "PGanswermacros.pl",
+"PGnumericalmacros.pl",
+"PGstatisticsmacros.pl"
+);
+
+TEXT(beginproblem);
+BEGIN_PROBLEM();
+##############################################
+
+$isProfessor = ($studentLogin eq 'dpvc' || $studentLogin eq 'professor');
+
+#
+#  Start a compound problem.  See the compoundProblem.pl
+#  file for more details about the parameters you
+#  can supply.
+#
+$cp = new compoundProblem(
+  parts => 11,                  # the total number of parts in this problem
+  weights => [100,100,10,10,10,10,10,10,1,1,0],
+  #totalAnswers => 6,           # total answers in all parts combined
+  parserValues => 1,           # make parser objects from student answers
+  allowReset => 0, #$isProfessor,  # professors get Reset button for testing
+  nextStyle => "Button",
+);
+$part = $cp->part;             # look up the current part
+$ne=100;
+$xe=random(50,52,1);
+$pbare=($xe/$ne);
+$we=100-$xe;
+$ze=($xe-50-0.5)/sqrt(25);
+$pe=uprob($ze);
+
+
+$n=200;
+$pbar=random(0.09,0.11,0.02);
+$h=$n*$pbar;
+$zl=($h-20+.5)/sqrt(200*0.09);
+$zu=($h-20-.5)/sqrt(200*0.09);
+$pminus =1- uprob ($zl);
+$pplus = uprob ($zu);
+if ($pminus<$pplus) {$p=2*$pminus;} else {$p=2*$pplus;} 
+
+$a = $q - $delta;
+if ($a<0)
+{
+	$a=0;
+}
+$b = $q + $delta;
+$no=1000;
+$xo=random(923,926,1);
+$pbaro=($xo/$no);
+$wo=1000-$xo;
+$ho=$no*$pbaro;
+$zo=($xo-900-0.5)/sqrt(1000*0.09);
+$po=uprob($zo);
+
+
+
+##############################################
+#
+#  Part 1
+#
+
+if ($part == 1) {
+$newProblemSeed = random(0,1000*$part,1);
+$PG_random_generator->srand($newProblemSeed);
+
+
+BEGIN_TEXT
+$BBOLD The link to the distribution claculator: $EBOLD
+  \{ htmlLink("http://www.tutor-homework.com/statistics_tables/statistics_tables.html#normal",
+  "http://www.tutor-homework.com/statistics_tables/statistics_tables.html#normal") \}.
+$BBOLD You need it at for all problems. Right click it and open it in a new tab.$EBOLD
+$BR
+
+$BBOLD Pretest question 1 $EBOLD
+
+$PAR
+Noted television personality Stuart Smalley claims: "I'm good enough,I'm smart enough,and gosh darn it, people like me." 
+To ascertain whether the last part of the statement is true, a national polling organization asked 100 individuals randomly 
+sampled from the American public, "Gosh darn it, do you like Stuart?" Of the 100 sampled, $xe said they liked him and $we said they didn't. $PAR
+$PAR
+The national polling organization expects the proportion of people like Stuart in America to be greater than 0.5,so he wants to test the hypotheses:
+$BR
+\(H_0: p = 0.5, \) \(  H_a: p> 0.5\) 
+ where p stands for the proportion of people like Stuart in America.
+$PAR
+Compute the p-value for a large sample hypothesis test.
+p = \{ans_rule(10)\}  
+$BR
+
+
+
+
+END_TEXT
+ANS(num_cmp($pe, tol=>.01, tolType=>"absolute"));
+}
+
+
+
+##############################################
+#
+#  Part 2
+#
+
+if ($part == 2) {
+$newProblemSeed = random(0,1000*$part,1);
+$PG_random_generator->srand($newProblemSeed);
+$aa = floor(($pe)*10000)/10000;
+
+$cmc = new_multiple_choice();
+$cmc->qa(
+	"If the p-value is $aa, what conclusion can the national polling organization make about the null hypothesis at the 0.05 level?", 
+	"Since the p-value is greater than 0.05, they cannot reject the null hypothesis."
+);
+$cmc->extra("Since the p-value is less than 0.05, they can reject the null hypothesis.",
+"Since the p-value is less than 0.05, they cannot reject the null hypothesis.",
+"They cannot get the precise p-value, so no conclusion can be made.");
+
+
+BEGIN_TEXT
+$BBOLD Pretest question 2$EBOLD
+
+$PAR
+Noted television personality Stuart Smalley claims: "I'm good enough,I'm smart enough,and gosh darn it, people like me." 
+To ascertain whether the last part of the statement is true, a national polling organization asked 100 individuals randomly 
+sampled from the American public, "Gosh darn it, do you like Stuart?" Of the 100 sampled, $xe said they liked him and $we said they didn't. $PAR
+$PAR
+The national polling organization expects the proportion of people like Stuart in America to be greater than 0.5,so he wants to test the hypotheses:
+$BR
+\(H_0: p = 0.5, \) \(  H_a: p> 0.5\)  
+ where p stands for the proportion of people like Stuart in America.
+
+$PAR
+\{$cmc -> print_q \}
+\{$cmc -> print_a \}
+
+
+
+
+END_TEXT
+ANS(radio_cmp($cmc->correct_ans));
+}
+
+##############################################
+#
+#  Part 3
+#
+
+if ($part == 3) {
+$newProblemSeed = random(0,1000*$part,1);
+$PG_random_generator->srand($newProblemSeed);
+$cmc = new_multiple_choice();
+$cmc->qa(
+	"The Scientific Hypothesis is the hypothesized outcome of the experiment or study. In this problem, the Scientific Hypothesis is:", 
+	"The proportion of defective diamonds in the shipment differs from the historical value of 10%."
+);
+$cmc->extra("The proportion of defective diamonds in the sample differs from the historical value of 10%.",
+"The proportion of defective diamonds in the shipment is greater than the historical value of 10%.",
+"The proportion of defective diamonds in the shipment is smaller than the historical value of 10%.");
+
+
+BEGIN_TEXT
+$BBOLD question 1 $EBOLD
+
+
+$PAR
+Historically, a producer of high-quality jewelry has found that 10% of the
+top-grade diamonds it buys have serious defects after cutting and
+polishing.
+To monitor quality, a diamond company inspects a random sample of 200
+recently processed diamonds from the latest shipment. They find that $h
+have serious defects. Based on these results, the head of the quality
+division wants to obtain a single number estimate of the proportion of
+defective diamonds in the shipment. He also wants to know whether the proportion of defective diamonds in the shipment is differerent from the historical value of 10% .
+$PAR
+
+$BBOLD 1. The Scientific Goal: $EBOLD
+$PAR
+\{$cmc -> print_q \}
+\{$cmc -> print_a \}
+
+END_TEXT
+
+ANS(radio_cmp($cmc->correct_ans));
+
+}
+
+
+##############################################
+#
+#  Part 4
+#
+
+if ($part == 4) {
+$newProblemSeed = random(0,1000*$part,1);
+$PG_random_generator->srand($newProblemSeed);
+$cmc = new_multiple_choice();
+$cmc->qa(
+	"The Statistical Model is the distribution of the population of measurements that are being taken. What are the measurements in this problem, and what is the Statistical Model?", 
+	"The number of defective diamonds in the sample; \(b(10,p)\)"
+);
+$cmc->extra("The proportion of perfect diamonds in the sample; \(b(10,p)\)",
+"The proportion of defective diamonds in the sample;\(N(n,p)\)",
+"The proportion of defective diamonds in the sample;\(N(\sigma,\sigma^2)\)");
+
+BEGIN_TEXT
+$BBOLD question 2 $EBOLD
+
+
+$PAR
+Historically, a producer of high-quality jewelry has found that 10% of the
+top-grade diamonds it buys have serious defects after cutting and
+polishing.
+To monitor quality, a diamond company inspects a random sample of 200
+recently processed diamonds from the latest shipment. They find that $h
+have serious defects. Based on these results, the head of the quality
+division wants to obtain a single number estimate of the proportion of
+defective diamonds in the shipment. He also wants to know whether the proportion of defective diamonds in the shipment is differerent from the historical value of 10% .
+
+$PAR
+
+$BBOLD 1. The Scientific Hypothesis: $EBOLD
+$PAR
+The Scientific Hypothesis is the hypothesized outcome of the experiment or study. In this problem, the Scientific Hypothesis is: $BR
+$BBOLD The proportion of defective diamonds in the shipment differs from the historical value of 10%. $EBOLD $BR
+
+$PAR
+$BBOLD 2. The Statistical Model: $EBOLD
+$PAR
+\{$cmc -> print_q \}
+\{$cmc -> print_a \}
+
+END_TEXT
+
+ANS(radio_cmp($cmc->correct_ans));
+
+}
+
+##############################################
+#
+#  Part 5
+#
+
+if ($part == 5) {
+$newProblemSeed = random(0,1000*$part,1);
+$PG_random_generator->srand($newProblemSeed);
+$cmc = new_multiple_choice();
+$cmc->qa(
+	"What is the Statistical Hypotheses for this problem? ", 
+	"\(H_0:p=0.1,\) \(H_a:p\neq 0.1\)
+ 
+ where p stands for the proportion of defective diamonds in the shipment."
+);
+
+$cmc->extra("\(H_0: p = 0.1, \) \(  H_a: p >0.1\) 
+ where p stands for the proportion of defective diamonds in the shipment.", "\(H_0: p = 0.1, \) \(  H_a: p <0.1\) 
+ where p stands for the proportion of defective diamonds in the shipment.");
+$cmc->makeLast("\(H_0:p=0.1,\) \(H_a:p\neq 0.1\)
+ where p stands for the proportion of defective diamonds in the sample.");
+
+BEGIN_TEXT
+$BBOLD question 3 $EBOLD
+
+$PAR
+Historically, a producer of high-quality jewelry has found that 10% of the
+top-grade diamonds it buys have serious defects after cutting and
+polishing.
+To monitor quality, a diamond company inspects a random sample of 200 recently processed diamonds from the latest shipment. They find that $h
+have serious defects. Based on these results, the head of the quality
+division wants to obtain a single number estimate of the proportion of
+defective diamonds in the shipment. He also wants to know whether the proportion of defective diamonds in the shipment is differerent from the historical value of 10% .
+$PAR
+
+
+$BBOLD 1. The Scientific Hypothesis: $EBOLD
+$PAR
+The Scientific Hypothesis is the hypothesized outcome of the experiment or study. In this problem, the Scientific Hypothesis is: $BR
+$BBOLD The proportion of defective diamonds in the shipment differs from the historical value of 10%.  $EBOLD $BR
+
+$PAR
+$BBOLD 2. The Statistical Model: $EBOLD
+$PAR
+The Statistical Model is the distribution of the population of measurements that are being taken. In this problem, the Statistical Model is: $BR
+$BBOLD The number of defective diamonds in the sample; \(b(10,p)\) $EBOLD
+$BR
+
+
+
+$PAR
+$BBOLD 3. The Statistical Hypotheses: $EBOLD
+$PAR
+\{$cmc -> print_q \}
+\{$cmc -> print_a \}
+
+END_TEXT
+
+ANS(radio_cmp($cmc->correct_ans));
+
+}
+
+
+
+##############################################
+#
+#  Part 6
+#
+
+if ($part == 6) {
+$ybar2 = floor(100*$ybar)/100;
+
+
+BEGIN_TEXT
+$BBOLD question 4 $EBOLD
+
+$PAR
+Historically, a producer of high-quality jewelry has found that 10% of the
+top-grade diamonds it buys have serious defects after cutting and
+polishing.
+To monitor quality, a diamond company inspects a random sample of 200 recently processed diamonds from the latest shipment. They find that $h
+have serious defects. Based on these results, the head of the quality
+division wants to obtain a single number estimate of the proportion of
+defective diamonds in the shipment. He also wants to know whether the proportion of defective diamonds in the shipment is differerent from the historical value of 10% .
+$PAR
+
+
+$BBOLD 1. The Scientific Hypothesis: $EBOLD
+$PAR
+The Scientific Hypothesis is the hypothesized outcome of the experiment or study. In this problem, the Scientific Hypothesis is: $BR
+$BBOLD The proportion of defective diamonds in the shipment differs from the historical value of 10%. $EBOLD $BR
+
+$PAR
+$BBOLD 2. The Statistical Model: $EBOLD
+$PAR
+The Statistical Model is the distribution of the population of measurements that are being taken. In this problem, the Statistical Model is: $BR
+$BBOLD The number of defective diamonds in the sample; \(b(10,p)\) $EBOLD
+$BR
+
+
+$PAR
+$BBOLD 3. The Statistical Hypotheses: $EBOLD
+$PAR$BBOLD \(H_0:p=0.1,\) \(H_a:p\neq 0.1\)
+where p stands for the proportion of defective diamonds in the shipment. $EBOLD $BR
+
+$PAR
+$BBOLD 4.1 Point Estimate: $EBOLD
+$PAR
+Obtain a single number estimate of the population proportion.
+$PAR
+\(\hat{p}\) = \{ans_rule(10)\}
+END_TEXT
+
+ANS(num_cmp($pbar, tol=>.01, tolType=>"absolute"));
+
+}
+
+##############################################
+#
+#  Part 7
+#
+
+if ($part == 7) {
+$w = floor($q*10000)/10000;
+
+$cp->{hint} = 1;
+
+
+if ($cp->{status}->{hint} == 0) {
+BEGIN_TEXT
+
+$PAR
+$BBOLD question 5 $EBOLD
+
+Historically, a producer of high-quality jewelry has found that 10% of the
+top-grade diamonds it buys have serious defects after cutting and
+polishing.
+To monitor quality, a diamond company inspects a random sample of 200 recently processed diamonds from the latest shipment. They find that $h
+have serious defects. Based on these results, the head of the quality
+division wants to obtain a single number estimate of the proportion of
+defective diamonds in the shipment. He also wants to know whether the proportion of defective diamonds in the shipment is differerent from the historical value of 10% .
+$PAR
+
+
+$BBOLD 1. The Scientific Hypothesis: $EBOLD
+$PAR
+The Scientific Hypothesis is the hypothesized outcome of the experiment or study. In this problem, the Scientific Hypothesis is: $BR
+$BBOLD The proportion of defective diamonds in the shipment differs from the historical value of 10%. $EBOLD $BR
+
+$PAR
+$BBOLD 2. The Statistical Model: $EBOLD
+$PAR
+The Statistical Model is the distribution of the population of measurements that are being taken. In this problem, the Statistical Model is: $BR
+$BBOLD The number of defective diamonds in the sample; \(b(10,p)\) $EBOLD
+$BR
+
+
+$PAR
+$BBOLD 3. The Statistical Hypotheses: $EBOLD
+$PAR$BBOLD \(H_0:p=0.1,\) \(H_a:p\neq 0.1\)
+ 
+ where p stands for the proportion of defective diamonds in the shipment. $EBOLD $BR
+
+$PAR
+$BBOLD 4.1 Point Estimate: $EBOLD
+$PAR
+Obtain a single number estimate of the population proportion:$BBOLD 
+\(\hat{p}\) = $pbar $BR $EBOLD
+
+$PAR
+$BBOLD 4.2 The p-value: $EBOLD
+$PAR
+Obtain the p-value for the Statistical Hypotheses above:
+$BR
+p-value=\{ans_rule(10)\}.
+
+
+END_TEXT
+
+ANS(num_cmp($p,  tol=>.01, tolType=>"absolute"));
+
+}
+
+if ($cp->{status}->{hint} == 1) {
+BEGIN_TEXT
+$BBOLD question 5$EBOLD
+
+$PAR
+Historically, a producer of high-quality jewelry has found that 10% of the
+top-grade diamonds it buys have serious defects after cutting and
+polishing.
+To monitor quality, a diamond company inspects a random sample of 200 recently processed diamonds from the latest shipment. They find that $h
+have serious defects. Based on these results, the head of the quality
+division wants to obtain a single number estimate of the proportion of
+defective diamonds in the shipment. He also wants to know whether the proportion of defective diamonds in the shipment is differerent from the historical value of 10% .
+$PAR
+
+
+$BBOLD 1. The Scientific Hypothesis: $EBOLD
+$PAR
+The Scientific Hypothesis is the hypothesized outcome of the experiment or study. In this problem, the Scientific Hypothesis is: $BR
+$BBOLD The proportion of defective diamonds in the shipment differs from the historical value of 10%. $EBOLD $BR
+
+$PAR
+$BBOLD 2. The Statistical Model: $EBOLD
+$PAR
+The Statistical Model is the distribution of the population of measurements that are being taken. In this problem, the Statistical Model is: $BR
+$BBOLD The number of defective diamonds in the sample; \(b(10,p)\) $EBOLD
+$BR
+
+
+$PAR
+$BBOLD 3. The Statistical Hypotheses: $EBOLD
+$PAR$BBOLD \(H_0:p=0.1,\) \(H_a:p\neq 0.1\)
+ where p stands for the proportion of defective diamonds in the shipment. $EBOLD $BR
+
+$PAR
+$BBOLD 4.1 Point Estimate: $EBOLD
+$PAR
+Obtain a single number estimate of the population proportion:$BBOLD 
+\(\hat{p}\) = $pbar $BR $EBOLD
+
+$PAR
+$BBOLD 4.2 The p-value: $EBOLD
+$PAR
+Obtain the p-value for the Statistical Hypotheses above:
+$BR
+p-value=\{ans_rule(10)\}.
+
+
+$BR
+$PAR
+$BBOLD HINT: $EBOLD
+$PAR
+
+The following is an example problem which is similar to the above problem you are working on. You can look at the solution of the following example and it will help you to solve the original problem. $BR
+$BR
+To monitor product quality, the quality control unit of a manufacturing company randomly selects 200 products and 11 of them are defective. 
+The head of the quality wants to know whether the proportion of the products in the sample differs from 0.05. $BR 
+He constructs the statistical hypotheses:
+ \(H_0:p=0.05,\) \(H_a:p\neq 0.05\)
+ where p stands for the proportion of defective products in the population.
+Compute the p-value and intepret the result at the level of 0.05.$BR
+We have the sample size n=200,\(y^*\)=11 and \(p_0\)=0.05, then
+ $BR \( Z_{u}^{*}=\frac{y^*-n p_0-0.5}{\sqrt{np_0(1-p_0)}}=\frac{11-0.05*200-0.5}{\sqrt{200*0.05*(1-0.05)}}=0.0162\)
+$BR
+\(p_{+}=\Pr(N(0,1)\geq Z_{u}^{*})=\Pr(N(0,1)\geq 0.0162)=0.4935\)$BR
+ $BR \( Z_{i}^{*}=\frac{y^*-n p_0+0.5}{\sqrt{np_0(1-p_0)}}=\frac{11-0.05*200+0.5}{\sqrt{200*0.05*(1-0.05)}}=0.48666\)
+$BR
+\(p_{-}=\Pr(N(0,1)\geq Z_{u}^{*})=\Pr(N(0,1)\leq 0.48666)=0.6868\)$BR
+Since \(p\pm=2min(0.4935,0.6868)=0.987\)
+$BR
+Since the p-value is 0.987>0.05, the head of the quality cannot reject the null hypothesis.
+END_TEXT
+
+
+ANS(num_cmp($p,  tol=>.01, tolType=>"absolute"));
+
+}
+}
+
+
+
+##############################################
+#
+#  Part 8
+#
+
+if ($part == 8) {
+$w = floor($q*10000)/10000;
+$cc = floor(($p)*10000)/10000;
+
+$newProblemSeed = random(0,1000*$part,1);
+$PG_random_generator->srand($newProblemSeed);
+$cmc = new_multiple_choice();
+$cmc->qa(
+	"If the p-value is $cc, what conclusion can the head of the quality make about the null hypothesis at the 0.05 level?", 
+	"Since the p-value is greater than 0.05, he cannot reject the null hypothesis.",
+);
+$cmc->extra("Since the p-value is less than 0.05, he can reject the null hypothesis.",
+"Since the p-value is less than 0.05, he cannot reject the null hypothesis.",
+"he cannot get the precise p-value, so no conclusion can be made.");
+
+BEGIN_TEXT
+$BBOLD  question 6$EBOLD
+
+$PAR
+Historically, a producer of high-quality jewelry has found that 10% of the
+top-grade diamonds it buys have serious defects after cutting and
+polishing.
+To monitor quality, a diamond company inspects a random sample of 200 recently processed diamonds from the latest shipment. They find that $h
+have serious defects. Based on these results, the head of the quality
+division wants to obtain a single number estimate of the proportion of
+defective diamonds in the shipment. He also wants to know whether the proportion of defective diamonds in the shipment is differerent from the historical value of 10% .
+$PAR
+
+
+$BBOLD 1. The Scientific Hypothesis: $EBOLD
+$PAR
+The Scientific Hypothesis is the hypothesized outcome of the experiment or study. In this problem, the Scientific Hypothesis is: $BR
+$BBOLD The proportion of defective diamonds in the shipment differs from the historical value of 10%. $EBOLD $BR
+
+$PAR
+$BBOLD 2. The Statistical Model: $EBOLD
+$PAR
+The Statistical Model is the distribution of the population of measurements that are being taken. In this problem, the Statistical Model is: $BR
+$BBOLD The number of defective diamonds in the sample; \(b(10,p)\) $EBOLD
+$BR
+
+
+$PAR
+$BBOLD 3. The Statistical Hypotheses: $EBOLD
+$PAR$BBOLD \(H_0:p=0.1,\) \(H_a:p\neq 0.1\)
+ where p stands for the proportion of defective diamonds in the shipment. $EBOLD $BR
+
+$PAR
+$BBOLD 4.1 Point Estimates: $EBOLD
+$PAR
+Obtain a single number estimate of the population proportion:$BBOLD 
+\(\hat{p}\) = $pbar $BR $EBOLD
+
+$PAR
+$BBOLD 4.2 The p-value: $EBOLD
+$PAR $BR$BBOLD
+
+p-value=$p. $BR$EBOLD
+
+$PAR
+
+$PAR
+$BBOLD 5. Results and Interpretation: $EBOLD
+$PAR
+\{$cmc -> print_q \}
+\{$cmc -> print_a \}
+
+END_TEXT
+
+ANS(radio_cmp($cmc->correct_ans));
+}
+
+##############################################
+#
+#  Part 9
+#
+
+if ($part == 9) {
+$newProblemSeed = random(0,1000*$part,1);
+$PG_random_generator->srand($newProblemSeed);
+
+
+
+BEGIN_TEXT
+$BBOLD Posttest question 1 $EBOLD
+$PAR
+
+$PAR
+A local Boston magazine wants to know whether most people in Boston support Boston Celtics rather than other teams. They randomly asked 1000 people living in Boston,
+"Which NBA team is your favorite?"$xo of 1000 said they supported Boston Celtics, and $wo of 1000 people said they liked other teams.
+$PAR
+$PAR
+The editors of the magazine are interested in whether the proportion of people support Boston Celtics in sample is greater than 0.9,so he wants to test the hypotheses:$PAR
+$BR
+\(H_0: p = 0.9, \) \(  H_a: p> 0.9\) 
+where p stands for the proportion of people support Boston Celtics in sample.
+$PAR
+Compute the p-value for a large sample hypothesis test.
+p = \{ans_rule(10)\}  
+$BR
+
+END_TEXT
+ANS(num_cmp($po, tol=>.001, tolType=>"absolute"));
+
+
+}
+
+##############################################
+#
+#  Part 10
+#
+
+if ($part == 10) {
+$newProblemSeed = random(0,1000*$part,1);
+$PG_random_generator->srand($newProblemSeed);
+$bb = floor(($po)*10000)/10000;
+$cmc = new_multiple_choice();
+$cmc->qa(
+	"If the p-value is $bb, what conclusion can the ediotrs of the magazine make about the null hypothesis at the 0.05 level?", 
+	"Since the p-value is less than 0.05, they can reject the null hypothesis."
+);
+$cmc->extra("Since the p-value is greater than 0.05, they can reject the null hypothesis.",
+"Since the p-value is less than 0.05, they cannot reject the null hypothesis.",
+"They cannot get the precise p-value, so no conclusion can be made.");
+
+
+
+BEGIN_TEXT
+$BBOLD Posttest question 2 $EBOLD
+$PAR
+
+$PAR
+A local Boston magazine wants to know whether most people in Boston support Boston Celtics rather than other teams. They randomly asked 1000 people living in Boston,
+"Which NBA team is your favorite?"$xo of 1000 said they supported Boston Celtics, and $wo of 1000 people said they liked other teams.
+$PAR
+$PAR
+The editors of the magazine are interested in whether the proportion of people support Boston Celtics in sample is greater than 0.9,so he wants to test the hypotheses:$PAR
+$BR
+\(H_0: p = 0.9, \) \(  H_a: p> 0.9\) 
+ where p stands for the proportion of people support Boston Celtics in sample.
+$PAR
+
+$PAR
+\{$cmc -> print_q \}
+\{$cmc -> print_a \}
+
+
+
+
+END_TEXT
+ANS(radio_cmp($cmc->correct_ans));
+
+
+}
+
+##############################################
+#
+#  Part 11
+#
+
+if ($part == 11) {
+
+BEGIN_TEXT
+
+END_TEXT
+
+}
+
+##############################################
+
+END_PROBLEM();
+ENDDOCUMENT();        # This should be the last executable line in the problem.

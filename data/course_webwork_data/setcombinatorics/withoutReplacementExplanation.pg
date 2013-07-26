@@ -1,0 +1,74 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "MathObjects.pl",
+  "PGcourse.pl",
+);
+
+TEXT(beginproblem);
+$showPartialCorrectAnswers = 1;
+
+
+Context("Numeric");
+$n=random(10,20,1);
+$ans = Formula("$n*($n-1)*($n-2)");
+######################################################################
+
+TEXT(PGML::Format2(<<'END_PGML'));
+## Permutations and combinations ##
+
+Armed with the concepts of *sets*, *tuples* and set *size* we can now tackle
+some more interesting combinatorial questions.
+
+#### Sampling with and without replacement when the order matters ####
+
+Suppose there are four children---Alice, Bill, Christie, and Doug---at an animal
+shelter, checking out the current pool of [`n`] dogs. Each child writes down the 
+name of the dog he or she likes most. How many possible outcomes are there?
+
+We can represent each outcome as a 4-tuple (Alice's choice, Bill's choice,
+Christie's choice, Doug's choice) in which each entry is the name of a dog. 
+So the number of outcomes is [`n^4`] 
+
+Now suppose that these same children are actually picking out dogs. First Alice 
+chooses a dog to adopt, then Bill chooses a dog to adopt, and so on. How many 
+outcomes are there now?
+
+In this situation, Alice has [`n`] choices, but Bill has only [`n-1`] choices,
+Christie has [`n-2`] choices, and Doug has [`n-3`] choices. So there are [`n(n-1)(n-2)(n-3)`] possible outcomes.
+
+The first situation is called _sampling with replacement_: the
+outcomes are tuples in which the same element (dog) can occur more
+than once. The number of such [`k`] tuples, chosen from [`n`] elements, is [`n^k`]  In the example, [`k=4`]  The second situation is _sampling
+  without replacement_: the outcomes are tuples in which no element
+can be repeated. The number of such [`k`] tuples, chosen from [`n`] elements, is [`n(n-1)(n-2) \cdots (n-k+1)`]  
+
+Here's a related question: how many ways are there to order (shuffle)
+a deck of 52 cards?  (Each such ordering is called a _permutation_
+of the cards.) Well, the result is a 52-tuple, drawn from a set of
+size 52, in which no card is repeated. Therefore, the number of
+permutations is [`52 \cdot 51 \cdot 50 \cdots 1`]  which is called [`52 `]     _factorial_ and denoted as [`52!`]  More generally, the number of permutations of [`n`] elements is [`n`] factorial or [`n!`] 
+
+To Rcap, how many ways are there to order 10 elements? [_____]{"10!"} (you can use expressions such as 3*2 and 7! in your answer).
+
+Coming back to sampling [`k`] out of [`n`] elements without replacement,
+we can write it succinctly as 
+[``
+n(n-1)(n-2) \cdots (n-k+1) = \frac{n!}{(n-k)!}
+``]
+
+*Question:*
+Suppose you have a deck with [$n] different cards. (*Copy* the number
+of cards here [__]{$n}) How many ways are there to choose 3 cards out
+of this deck? (the order of the 3 picked out cards _does_ matter)
+o [_____________]{"$n!/($n-3)!"} (Note: You don't have to perform the
+calculation, you can instead use the notation for factorial [`n!`] in
+your answer).
+
+END_PGML
+
+######################################################################
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

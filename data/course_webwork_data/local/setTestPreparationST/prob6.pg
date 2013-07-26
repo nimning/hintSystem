@@ -1,0 +1,114 @@
+##DESCRIPTION
+##KEYWORDS('')
+##
+## tsch tagged and PAID on 3-22-2004 
+
+## DBsubject('Statistics')
+## DBchapter('Hypothesis Testing')
+## DBsection('Elements of a Statistical Test')
+## Date('6/3/2002')
+## Author('')
+## Institution('')
+## TitleText1('Mathematical Statistics')
+## EditionText1('6')
+## AuthorText1('Wackerly, Mendenhall, Scheaffer')
+## Section1('10.2')
+## Problem1('4')
+
+
+##ENDDESCRIPTION
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGnumericalmacros.pl",
+"PGstatisticsmacros.pl",
+"PGauxiliaryFunctions.pl"
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 0;
+$mc1 = new_multiple_choice();
+$mc1->qa('A patient was diagnosed with a disease when really the patient does not have the disease. If the null hypothesis is that the patient is healthy, what kind of error is this?',
+	'False positive (Type I error)'
+);
+$mc1->extra(
+	'False negative (Type II error)'
+);
+
+
+$mc2 = new_multiple_choice();
+$mc2->qa('Type II error (false negative) is:',
+	'Not rejecting null hypothesis when it is false'
+);
+$mc2->extra(
+	'Deciding null hypothesis is false when it is true',
+	'Deciding alternative hypothesis is false when it is true',
+	'Deciding alternative hypothesis is true when it is true'
+);
+
+$mc3 = new_multiple_choice();
+$mc3->qa('Increasing \(\alpha\) will: ',
+	'Increase probability of Type I error, decrease probability of type II error'
+);
+$mc3->extra(
+	'Increase probability of Type II error, decrease probability of type I error',
+	'Decrease both.',
+	'Increase both.'
+);
+
+
+
+BEGIN_TEXT
+
+$PAR
+
+$PAR
+\{ $mc2->print_q() \}
+$BR
+\{ $mc2->print_a() \}
+$PAR
+\{ $mc1->print_q() \}
+$BR
+\{ $mc1->print_a() \}
+$PAR
+\{ $mc3->print_q() \}
+$BR
+\{ $mc3->print_a() \}
+
+$PAR
+
+END_TEXT
+ANS(radio_cmp($mc2->correct_ans));
+ANS(radio_cmp($mc1->correct_ans));
+ANS(radio_cmp($mc3->correct_ans));
+
+$showHint = -1;
+BEGIN_HINT
+$HR
+$SOLUTION
+$PAR
+1. Type II error (false negative) is "Not rejecting null hypothesis when it is false". 
+$PAR
+The other answers are incorrect because: $PAR
+'Deciding null hypothesis is false when it is true' - Is a type I error,
+$PAR
+'Deciding alternative hypothesis is false when it is true' - the alternative hypothesis cannot be falsified. Only the null hypothesis can be falsified.
+$PAR
+'Deciding alternative hypothesis is true when it is true' - This is clearly not a mistake.
+$PAR
+$PAR
+2. This is a type I error because the null hypothesis is rejected while it is true. A type II error would be diagnosing a sick patient as healthy.
+$PAR
+3. Correct answer: 'Increasing \(\alpha\) will increase probability of Type I error, decrease probability of type II error'. To understand this recall that lincreasing the value of the parameter \(\alpha\) given to a statistical test puts a less stringent condition on the test. The test will reject the null hypothesis for a larger set of experimental outcomes. Thus increasing \(\alpha\) will increase the probability of type I error. It will decrease the probability of a type II error for a similar reason (just done in reverse).
+$PAR
+$PAR
+
+END_HINT
+
+
+ENDDOCUMENT();       # This should be the last executable line in the problem.

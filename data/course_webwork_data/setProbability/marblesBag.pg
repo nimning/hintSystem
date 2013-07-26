@@ -1,0 +1,58 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "MathObjects.pl",
+  "parserRadioButtons.pl",
+  "compoundProblem.pl",
+  "Parser.pl",
+  "PGunion.pl",
+  "PGcourse.pl",
+  "PGchoicemacros.pl",
+);
+
+TEXT(beginproblem);
+BEGIN_PROBLEM();
+
+##############################################
+
+$isProfessor = ($studentLogin eq 'yoav.freund' || $studentLogin eq 'professor');
+Context("Interval");
+$showPartialCorrectAnswers = 1; # show student the correct part of their answer.
+
+$marbles=random(10,15,1);	   # number of marbles
+$red_marbles=random(3,5,1);	   # number of red marbles
+$blue_marbles=random(2,4,1);	   # number of blue marbles
+$green_marbles=$marbles-$red_marbles-$blue_marbles;	   # number of red marbles
+
+BEGIN_PGML
+
+## Red, Blue, Green Marbles in a Bag ##
+
+You have a bag of [$marbles] marbles.  [$red_marbles] are red, [$blue_marbles] blue, and [$green_marbles] green.  
+
+o  *Copy* the number of red marbles here: [___]{$red_marbles}
+o  *Copy* the number of blue marbles here: [___]{$blue_marbles}
+o  *Copy* the number of green marbles here: [___]{$green_marbles}
+
+o  [$red_marbles] marbles are chosen from the bag.  What is the probability all these marbles are red?  [_______]{"$red_marbles!*($marbles-$red_marbles)!/$marbles!"}
+o  Two marbles are chosen from the bag.  What is the probability these marbles are the same color?  [__________________________________________________________________]{"( $red_marbles!/(2!*($red_marbles-2)!) + $blue_marbles!/(2!*($blue_marbles-2)!) + $green_marbles!/(2!*($green_marbles-2)!) )/ ($marbles!/(2!*($marbles-2)!))"}
+
+
+END_PGML
+
+BEGIN_PGML_SOLUTION
+## Solution ##
+Line the marbles up in the bag.  Choosing marbles from the bag is equivalent to marking the locations of [$red_marbles] marbles in the line.  There are [`{[$marbles] \choose [$red_marbles]}`] ways to mark the locations of the chosen marbles, and exactly 1 among these choices will mark every red marble.  Thus [`1/{[$marbles] \choose [$red_marbles]}`].  
+
+Again, line the marbles up in the bag.  Choosing marbles from the bag is equivalent to marking the locations of 2 marbles in the line.  There are [`{[$marbles] \choose 2}`] ways to mark 2 locations.  In what ways can we mark 2 locations that have the two marbles of the same color?  We can mark 2 red locations, 2 blue, or two green locations.  The number of each of these types of marks is [`{[$red_marbles] \choose 2}`], [`{[$blue_marbles] \choose 2}`], and [`{[$green_marbles] \choose 2}`] respectively.  
+
+Thus we get [`({[$red_marbles] \choose 2}`] + [`{[$blue_marbles] \choose 2}`] + [`{[$green_marbles] \choose 2})/{[$marbles] \choose 2}`]
+END_PGML_SOLUTION
+
+
+##############################################
+
+END_PROBLEM();
+ENDDOCUMENT();        # This should be the last executable line in the problem.

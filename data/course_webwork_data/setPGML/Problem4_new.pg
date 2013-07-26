@@ -1,0 +1,56 @@
+# DESCRIPTION
+# A simple sample problem that asks students to 
+# differentiate a trigonometric function.
+# WeBWorK problem written by Gavin LaRose
+# <glarose(at)umich(dot)edu>
+# and modified by Mike Gage   gage(at)math(dot)rochester(dot)edu
+# ENDDESCRIPTION
+
+## DBsubject('WeBWorK')
+## DBchapter('Demos')
+## DBsection('Problem')
+## KEYWORDS('')
+## TitleText1('')
+## EditionText1('')
+## AuthorText1('')
+## Section1('')
+## Problem1('')
+## Author('Gavin LaRose')
+## Institution('UMich')
+
+DOCUMENT();
+loadMacros(
+"PGstandard.pl",
+"PGML.pl",
+"MathObjects.pl",
+"PGcourse.pl",
+);
+
+# make sure we're in the context we want
+Context("Numeric");
+$showPartialCorrectAnswers = 1;
+$f = Formula("cos^2(x)+sin^2(x)");
+
+TEXT(beginproblem());
+#TEXT(PGML::Format2(<<'END_PGML'));
+BEGIN_PGML
+The number twelve is [_______]{12}  
+Type the  formula [`1+\frac{x}{2}`] [__________]{"1+x/2"}
+
+Twelve is [______]{Real(12)}  
+2 mod 10 is [______]{Real(2)->with(period=>10)}
+[`[$f]`] is equal to [_______]{Real(1)}
+Twelve is [______]{num_cmp(12)}
+
+The number 12 is [____]{answer=>12,width=>10}
+END_PGML
+
+BEGIN_PGML_SOLUTION
+*SOLUTION*
+
+You can use PGML in your solution if you use the structure
+above.  There is currently no short cut.
+END_PGML_SOLUTION
+
+ENDDOCUMENT();
+    

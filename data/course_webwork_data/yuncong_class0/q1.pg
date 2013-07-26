@@ -1,0 +1,43 @@
+DOCUMENT();
+
+loadMacros(
+    "PGstandard.pl",
+    "PGML.pl",
+    "MathObjects.pl",
+    "PGcourse.pl",
+);
+
+TEXT(beginproblem);
+$showPartialCorrectAnswers = 1;
+
+#################################
+$context = Context("Interval");
+$min = random(1,5,1);
+$max = random(5,10,1);
+@R = ($min..$max);
+$oneDraw = Set(join(",",@R));
+@a = ();
+foreach $i(@R) {
+    foreach $j(@R) {
+        push(@a, ($i+$j))
+    }
+}
+$S = Set(join(",",@a));
+
+BEGIN_PGML
+
+Consider the sum of the outcomes of two draws from two card decks that each has values from [$min] (*copy* this value here [__]{$min}) to [$max] (*copy* this value here [__]{$max}). What is the outcome space?
+
+Remember the outcome space is the set of all possible outcomes of our experiment. Since one card draw can be any of [$oneDraw], the outcome space of the sum of two draws includes all possible results obtained by summing up two independent draws from [$oneDraw]. The outcome space of the sum is therefore,  [__________________________________________________]{$S}
+
+END_PGML
+
+BEGIN_PGML_SOLUTION
+
+*SOLUTION:* The outcome space is [$S].
+
+END_PGML_SOLUTION
+
+#################################
+
+ENDDOCUMENT();

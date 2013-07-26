@@ -1,0 +1,969 @@
+##KEYWORDS confidence interval, population mean, treatment
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+  "PGstandard.pl",
+  "package.pl",
+  "Parser.pl",
+  "PGunion.pl",
+  "PGcourse.pl",
+
+  "PGbasicmacros.pl",
+  "PGchoicemacros.pl",
+  "PGanswermacros.pl",
+"PGnumericalmacros.pl",
+"PGstatisticsmacros.pl"
+);
+
+TEXT(beginproblem);
+BEGIN_PROBLEM();
+
+##############################################
+
+$isProfessor = ($studentLogin eq 'dpvc' || $studentLogin eq 'professor');
+
+#
+#  Start a compound problem.  See the compoundProblem.pl
+#  file for more details about the parameters you
+#  can supply.
+#
+$cp = new compoundProblem(
+  parts => 11,                  # the total number of parts in this problem
+  weights => [100,100,10,10,10,10,10,10,1,1,0],
+  #totalAnswers => 10,           # total answers in all parts combined
+  parserValues => 1,           # make parser objects from student answers
+  allowReset => 0,#$isProfessor,  # professors get Reset button for testing
+  nextStyle => "Button",
+);
+$part = $cp->part;             # look up the current part
+$ybare = 0;
+$se = 0;
+
+$ye[0] = random(44975,44979,1);
+$ye[1] = random(44000,44002,1);
+$ye[2] = random(45774,45779,1);
+$ye[3] =random(45000,45002,1);
+
+for ($i=0;$i<4;$i++){
+	$ybare = $ybare + $ye[$i];
+}
+$ybare = $ybare/4;
+
+for ($i=0;$i<4;$i++){
+	$se = $se + ($ye[$i] - $ybare)*($ye[$i] - $ybare);
+}
+$se = sqrt($se/3);
+
+$deltae = $se / sqrt(4);
+$te=($ybare-44000)/$deltae;
+$pe=tprob(3,$te);
+
+$ybar = 0;
+$s = 0;
+	$y[0] = random(98,100,1);
+$y[1] = random(119,120,1);
+$y[2] = random(105,106,1);
+$y[3] = random(112,114,1);
+$y[4] = random(95,96,1);
+$y[5] = random(120,121,1);
+$y[6] = random(105,106,1);
+
+$ybar = ($y[0]+$y[1]+$y[2]+$y[3]+$y[4]+$y[5]+$y[6])/7;
+
+for ($i=0;$i<7;$i++){
+	$s = $s + ($y[$i] - $ybar)*($y[$i] - $ybar);
+}
+$s = sqrt($s/6);
+
+$delta =  $s / sqrt(7);
+$t=($ybar-119)/$delta;
+$p=1-tprob(6,$t);
+
+$ybaro = 0;
+$so = 0;
+
+	$yo[0] = random(98,100,1);
+$yo[1] = random(119,120,1);
+$yo[2] = random(125,127,1);
+$yo[3] = random(112,114,1);
+$yo[4] = random(115,116,1);
+$yo[5] = random(120,121,1);
+$yo[6] = random(119,121,1);
+
+$ybaro = ($yo[0]+$yo[1]+$yo[2]+$yo[3]+$yo[4]+$yo[5]+$yo[6])/7;
+for ($i=0;$i<7;$i++){
+	$so = $so + ($yo[$i] - $ybaro)*($yo[$i] - $ybaro);
+}
+$so = sqrt($so/6);
+$deltao = $so / sqrt(7);
+$to=($ybaro-120)/$deltao;
+$po=1-tprob(6,$to);
+
+
+
+##############################################
+#
+#  Part 1
+#
+
+if ($part == 1) {
+$newProblemSeed = random(0,1000*$part,1);
+$PG_random_generator->srand($newProblemSeed);
+
+BEGIN_TEXT
+$BBOLD The link to the distribution claculator: $EBOLD
+  \{ htmlLink("http://www.tutor-homework.com/statistics_tables/statistics_tables.html#t ","http://www.tutor-homework.com/statistics_tables/statistics_tables.html#t ") \}.
+$BBOLD You need it at for all problems. Right click it and open it in a new tab.$EBOLD
+$BR
+
+$BBOLD Pretest question 1 $EBOLD
+$PAR
+The breaking strengths of four large metal pins used in building construction randomly 
+
+chosen from a large production lot are (in psi).
+$PAR
+\[ \begin{array}{cccc}
+$ye[0] & $ye[1] & $ye[2] & $ye[3] \cr
+\end{array} \]
+
+$PAR
+The head of the quality unit expects the mean breaking strength of pins to be greater 
+
+than 44000,so he wants to test the hypotheses:
+$BR
+\(H_0: \mu = 44000, \) \(  H_a: \mu > 44000\) 
+ where \(\mu\) is the mean strength of the pins in the lot.
+$PAR
+Compute the p-value for this hypotheses test.
+p = \{ans_rule(10)\}  
+$BR
+
+
+
+
+END_TEXT
+ANS(num_cmp($pe, tol=>.01, tolType=>"absolute"));
+}
+
+
+##############################################
+#
+#  Part 2
+#
+
+if ($part == 2) {
+$newProblemSeed = random(0,1000*$part,1);
+$PG_random_generator->srand($newProblemSeed);
+$dd = floor(($pe)*10000)/10000;
+
+$cmc = new_multiple_choice();
+$cmc->qa(
+	"If the p-value is $dd, what conclusion can the head of the quality make about 
+
+the null hypothesis at the 0.05 level?", 
+	"Since the p-value is less than 0.05, he can reject the null hypothesis."
+);
+$cmc->extra("Since the p-value is greater than 0.05, he cannot reject the null 
+
+hypothesis.",
+"Since the p-value is less than 0.05, he cannot reject the null hypothesis.",
+"He cannot get the precise p-value,no conclusion can be made.");
+
+BEGIN_TEXT
+$BBOLD Pretest question 2 $EBOLD
+$PAR
+The breaking strengths of four large metal pins used in building construction randomly 
+
+chosen from a large production lot are (in psi).
+$PAR
+\[ \begin{array}{cccc}
+$ye[0] & $ye[1] & $ye[2] & $ye[3] \cr
+\end{array} \]
+
+$PAR
+The head of the quality unit expects the mean breaking strength of pins to be greater 
+
+than 44000,so he wants to test the hypotheses:
+$BR
+\(H_0: \mu = 44000, \) \(  H_a: \mu > 44000\) where \(\mu\) is the mean strength of the 
+
+pins in the lot.
+$PAR
+
+$PAR
+\{$cmc -> print_q \}
+\{$cmc -> print_a \}
+
+END_TEXT
+
+ANS(radio_cmp($cmc->correct_ans));
+
+}
+
+
+##############################################
+#
+#  Part 3
+#
+
+if ($part == 3) {
+$newProblemSeed = random(0,1000*$part,1);
+$PG_random_generator->srand($newProblemSeed);
+$cmc = new_multiple_choice();
+$cmc->qa(
+	"The Scientific Hypothesis is the hypothesized outcome of the experiment or 
+
+study. In this problem, the Scientific Hypothesis is:", 
+	"The average time spent by all WPI students on a 1/3 unit seven week 
+
+undergraduate course is lower than the 119 hour guideline."
+);
+$cmc->extra("The maximun time spent by WPI students on a 1/3 unit seven week 
+
+undergraduate course is greater than the 119 hour guideline.",
+"The average time spent by all WPI students on a 1/3 unit seven week undergraduate 
+
+course is equal to the 119 hour guideline.",
+"The maximun time spent by all WPI students on a 1/3 unit seven week undergraduate 
+
+course is equal than the 119 hour guideline.");
+
+
+BEGIN_TEXT
+$BBOLD question 1 $EBOLD
+
+
+$PAR
+WPI sets an expectation of 17 hours work per week for a 1/3 unit seven week 
+
+undergraduate course, which
+equals 119 hours per term. To see if reality meets expectations, a WPI project team 
+
+took a random sample of
+7 1/3 unit courses and from each course, randomly selected one student volunteer to 
+
+follow during the term.
+Each selected student agreed to keep track of the hours spent on coursework for that 
+
+course. The totals for
+the term are below:
+$PAR
+
+\[ \begin{array}{cccccccc}
+$y[0] & $y[1] & $y[2] & $y[3] & $y[4] & $y[5] & $y[6] \cr
+\end{array} \]
+
+$PAR
+The project team was interested in determining whether the average time spent by all 
+
+WPI students on a 1/3 unit seven week undergraduate course is lower than the 119 hour 
+
+guideline.
+$PAR
+
+$BBOLD 1. The Scientific Hypothesis: $EBOLD
+$PAR
+\{$cmc -> print_q \}
+\{$cmc -> print_a \}
+
+END_TEXT
+
+ANS(radio_cmp($cmc->correct_ans));
+
+}
+
+
+##############################################
+#
+#  Part 4
+#
+
+if ($part == 4) {
+$newProblemSeed = random(0,1000*$part,1);
+$PG_random_generator->srand($newProblemSeed);
+$cmc = new_multiple_choice();
+$cmc->qa(
+	"The Statistical Model is the distribution of the population of measurements 
+
+that are being taken. What are the measurements in this problem, and what is the 
+
+Statistical Model?", 
+	"The hours WPI students spend on 1/3 unit seven week undergraduate courses per 
+
+term; \(N(\mu,\sigma^2)\)"
+);
+$cmc->extra("The hours WPI students spend on 1/3 unit seven week undergraduate courses 
+
+per week; \(N(\mu,\sigma^2)\)",
+"The hours WPI students spend on 1/3 unit seven week undergraduate courses; \(N(\sigma,\sigma^2)\)",
+"The hours WPI students spend on 1/3 unit seven week undergraduate courses; \(b(n,p)\)");
+
+BEGIN_TEXT
+$BBOLD question 2 $EBOLD
+
+$PAR
+WPI sets an expectation of 17 hours work per week for a 1/3 unit seven week 
+
+undergraduate course, which
+equals 119 hours per term. To see if reality meets expectations, a WPI project team 
+
+took a random sample of
+7 1/3 unit courses and from each course, randomly selected one student volunteer to 
+
+follow during the term.
+Each selected student agreed to keep track of the hours spent on coursework for that 
+
+course. The totals for
+the term are below:
+$PAR
+
+\[ \begin{array}{cccccccc}
+$y[0] & $y[1] & $y[2] & $y[3] & $y[4] & $y[5] & $y[6] \cr
+\end{array} \]
+
+$PAR
+The project team was interested in determining whether the average time spent by all 
+
+WPI students on a 1/3 unit seven week undergraduate course is lower than the 119 hour 
+
+guideline.
+$PAR
+
+$BBOLD 1. The Scientific Hypothesis: $EBOLD
+$PAR
+The Scientific Hypothesis is the hypothesized outcome of the experiment or study. In 
+
+this problem, the Scientific Hypothesis is: $BR
+$BBOLD The average time spent by all WPI students on a 1/3 unit seven week 
+
+undergraduate course is lower than the 119 hour guideline. $EBOLD $BR
+
+$PAR
+$BBOLD 2. The Statistical Model: $EBOLD
+$PAR
+\{$cmc -> print_q \}
+\{$cmc -> print_a \}
+
+END_TEXT
+
+ANS(radio_cmp($cmc->correct_ans));
+
+}
+
+##############################################
+#
+#  Part 5
+#
+
+if ($part == 5) {
+$newProblemSeed = random(0,1000*$part,1);
+$PG_random_generator->srand($newProblemSeed);
+$cmc = new_multiple_choice();
+$cmc->qa(
+	"What is the Statistical Hypotheses for this problem? ", 
+	"\(H_0: \mu = 119, \) \(  H_a: \mu  < 119\) where \(\mu\) is the average time 
+
+spent by all WPI students on a 1/3 unit seven week undergraduate course."
+);
+
+$cmc->extra("\(H_0: \mu = 119, \) \(  H_a: \mu  > 119\) where \(\mu\) is the average 
+
+time spent by all WPI students on a 1/3 unit seven week undergraduate course.", "\(H_0: 
+
+\mu \le 119, \) \(  H_a: \mu  > 119\) where \(\mu\) is the minimum time spent by all 
+
+WPI students on a 1/3 unit seven week undergraduate course.");
+$cmc->makeLast("\(H_0: \mu = 119, \) \(  H_a: \mu  > 119\) where \(\mu\) is the maximum 
+
+time spent by all WPI students on a 1/3 unit seven week undergraduate course.");
+
+BEGIN_TEXT
+$BBOLD question 3 $EBOLD
+
+$PAR
+WPI sets an expectation of 17 hours work per week for a 1/3 unit seven week 
+
+undergraduate course, which
+equals 119 hours per term. To see if reality meets expectations, a WPI project team 
+
+took a random sample of
+7 1/3 unit courses and from each course, randomly selected one student volunteer to 
+
+follow during the term.
+Each selected student agreed to keep track of the hours spent on coursework for that 
+
+course. The totals for
+the term are below:
+$PAR
+
+\[ \begin{array}{cccccccc}
+$y[0] & $y[1] & $y[2] & $y[3] & $y[4] & $y[5] & $y[6] \cr
+\end{array} \]
+
+$PAR
+The project team was interested in determining whether the average time spent by all 
+
+WPI students on a 1/3 unit seven week undergraduate course is lower than the 119 hour 
+
+guideline.
+$PAR
+
+$BBOLD 1. The Scientific Hypothesis: $EBOLD
+$PAR
+The Scientific Hypothesis is the hypothesized outcome of the experiment or study. In 
+
+this problem, the Scientific Hypothesis is: $BR
+$BBOLD The average time spent by all WPI students on a 1/3 unit seven week 
+
+undergraduate course is lower than the 119 hour guideline. $EBOLD $BR
+
+$PAR
+$BBOLD 2. The Statistical Model: $EBOLD
+$PAR
+The Statistical Model is the distribution of the population of measurements that are 
+
+being taken. In this problem, the Statistical Model is: $BR
+$BBOLD The hours WPI students spend on 1/3 unit seven week undergraduate courses per 
+
+term; \(N(\mu,\sigma^2)\)$EBOLD
+$BR
+
+$PAR
+$BBOLD 3. The Statistical Hypotheses: $EBOLD
+$PAR
+\{$cmc -> print_q \}
+\{$cmc -> print_a \}
+
+END_TEXT
+
+ANS(radio_cmp($cmc->correct_ans));
+
+}
+
+
+
+
+##############################################
+#
+#  Part 6
+#
+
+if ($part == 6) {
+$ybar2 = floor(100*$ybar)/100;
+
+BEGIN_TEXT
+$BBOLD question 4 $EBOLD
+
+$PAR
+WPI sets an expectation of 17 hours work per week for a 1/3 unit seven week 
+
+undergraduate course, which
+equals 119 hours per term. To see if reality meets expectations, a WPI project team 
+
+took a random sample of
+7 1/3 unit courses and from each course, randomly selected one student volunteer to 
+
+follow during the term.
+Each selected student agreed to keep track of the hours spent on coursework for that 
+
+course. The totals for
+the term are below:
+$PAR
+
+\[ \begin{array}{cccccccc}
+$y[0] & $y[1] & $y[2] & $y[3] & $y[4] & $y[5] & $y[6] \cr
+\end{array} \]
+
+$PAR
+The project team was interested in determining whether the average time spent by all 
+
+WPI students on a 1/3 unit seven week undergraduate course is lower than the 119 hour 
+
+guideline.
+$PAR
+
+$BBOLD 1. The Scientific Hypothesis: $EBOLD
+$PAR
+The Scientific Hypothesis is the hypothesized outcome of the experiment or study. In 
+
+this problem, the Scientific Hypothesis is: $BR
+$BBOLD The average time spent by all WPI students on a 1/3 unit seven week 
+
+undergraduate course is lower than the 119 hour guideline. $EBOLD $BR
+
+$PAR
+$BBOLD 2. The Statistical Model: $EBOLD
+$PAR
+The Statistical Model is the distribution of the population of measurements that are 
+
+being taken. In this problem, the Statistical Model is: $BR
+$BBOLD The hours WPI students spend on 1/3 unit seven week undergraduate courses per 
+
+term; \(N(\mu,\sigma^2)\)$EBOLD
+$BR
+
+$PAR
+$BBOLD 3. The Statistical Hypotheses: $EBOLD
+$PAR$BBOLD \(H_0: \mu = 119, \) \(  H_a: \mu  <119\) where \(\mu\) is the average time 
+
+spent by all WPI students on a 1/3 unit seven week undergraduate course. $EBOLD $BR
+
+$PAR
+$BBOLD 4.1 The Test Statistic: $EBOLD
+$PAR
+Obtain a single number estimate of the average number of hours per term spent by WPI 
+
+students for a 1/3 unit seven week undergraduate course.
+$PAR
+\(\bar{y}\) = \{ans_rule(10)\}
+END_TEXT
+
+ANS(num_cmp($ybar, tol=>.01, tolType=>"absolute"));
+
+}
+
+##############################################
+#
+#  Part 7
+#
+
+if ($part == 7) {
+$cp->{hint} = 1;
+$ybar2 = floor(100*$ybar)/100;
+
+if ($cp->{status}->{hint} == 0) {
+BEGIN_TEXT
+$BBOLD question 5 $EBOLD
+
+$PAR
+WPI sets an expectation of 17 hours work per week for a 1/3 unit seven week 
+
+undergraduate course, which
+equals 119 hours per term. To see if reality meets expectations, a WPI project team 
+
+took a random sample of
+7 1/3 unit courses and from each course, randomly selected one student volunteer to 
+
+follow during the term.
+Each selected student agreed to keep track of the hours spent on coursework for that 
+
+course. The totals for
+the term are below:
+$PAR
+
+\[ \begin{array}{cccccccc}
+$y[0] & $y[1] & $y[2] & $y[3] & $y[4] & $y[5] & $y[6] \cr
+\end{array} \]
+
+$PAR
+The project team was interested in determining whether the average time spent by all 
+
+WPI students on a 1/3 unit seven week undergraduate course is lower than the 119 hour 
+
+guideline.
+$PAR
+
+$BBOLD 1. The Scientific Hypothesis: $EBOLD
+$PAR
+The Scientific Hypothesis is the hypothesized outcome of the experiment or study. In 
+
+this problem, the Scientific Hypothesis is: $BR
+$BBOLD The average time spent by all WPI students on a 1/3 unit seven week 
+
+undergraduate course is lower than the 119 hour guideline. $EBOLD $BR
+
+$PAR
+$BBOLD 2. The Statistical Model: $EBOLD
+$PAR
+The Statistical Model is the distribution of the population of measurements that are 
+
+being taken. In this problem, the Statistical Model is: $BR
+$BBOLD The hours WPI students spend on 1/3 unit seven week undergraduate courses per 
+
+term; \(N(\mu,\sigma^2)\)$EBOLD
+$BR
+$PAR
+$BBOLD 3. The Statistical Hypotheses: $EBOLD
+$PAR$BBOLD \(H_0: \mu = 119, \) \(  H_a: \mu  <119\) where \(\mu\) is the average time 
+
+spent by all WPI students on a 1/3 unit seven week undergraduate course. $EBOLD $BR
+
+$PAR
+$BBOLD 4.1 The Test Statistic: $EBOLD
+$PAR
+The single number estimate of the average number of hours per term spent by WPI 
+
+students for a 1/3 unit seven week undergraduate course is: $PAR $BBOLD
+\(\bar{y}\) = $ybar2 $EBOLD $BR
+$PAR
+$BBOLD 4.2 The p-value: $EBOLD
+$PAR
+Obtain the p-value for the Statistical Hypotheses above:
+$BR
+p-value=\{ans_rule(10)\}.
+
+
+END_TEXT
+
+ANS(num_cmp($p,  tol=>.01, tolType=>"absolute"));
+
+}
+
+if ($cp->{status}->{hint} == 1) {
+BEGIN_TEXT
+$BBOLD question 5 $EBOLD
+$PAR
+WPI sets an expectation of 17 hours work per week for a 1/3 unit seven week 
+
+undergraduate course, which
+equals 119 hours per term. To see if reality meets expectations, a WPI project team 
+
+took a random sample of
+7 1/3 unit courses and from each course, randomly selected one student volunteer to 
+
+follow during the term.
+Each selected student agreed to keep track of the hours spent on coursework for that 
+
+course. The totals for
+the term are below:
+$PAR
+
+\[ \begin{array}{cccccccc}
+$y[0] & $y[1] & $y[2] & $y[3] & $y[4] & $y[5] & $y[6] \cr
+\end{array} \]
+
+$PAR
+The project team was interested in determining whether the average time spent by all 
+
+WPI students on a 1/3 unit seven week undergraduate course is lower than the 119 hour 
+
+guideline.
+$PAR
+
+$BBOLD 1. The Scientific Hypothesis: $EBOLD
+$PAR
+The Scientific Hypothesis is the hypothesized outcome of the experiment or study. In 
+
+this problem, the Scientific Hypothesis is: $BR
+$BBOLD The average time spent by all WPI students on a 1/3 unit seven week 
+
+undergraduate course is lower than the 119 hour guideline. $EBOLD $BR
+
+$PAR
+$BBOLD 2. The Statistical Model: $EBOLD
+$PAR
+The Statistical Model is the distribution of the population of measurements that are 
+
+being taken. In this problem, the Statistical Model is: $BR
+$BBOLD The hours WPI students spend on 1/3 unit seven week undergraduate courses per 
+
+term; \(N(\mu,\sigma^2)\)$EBOLD
+$BR
+
+$PAR
+$BBOLD 3. The Statistical Hypotheses: $EBOLD
+$PAR$BBOLD \(H_0: \mu = 119, \) \(  H_a: \mu  <119\) where \(\mu\) is the average time 
+
+spent by all WPI students on a 1/3 unit seven week undergraduate course. $EBOLD $BR
+
+$PAR
+$BBOLD 4.1 The Test Statistic: $EBOLD
+$PAR
+The single number estimate of the average number of hours per term spent by WPI 
+
+students for a 1/3 unit seven week undergraduate course is: $PAR $BBOLD
+\(\bar{y}\) = $ybar2 $EBOLD $BR
+$PAR
+$BBOLD 4.2 The p-value: $EBOLD
+$PAR
+Obtain the p-value for the Statistical Hypotheses above:
+$BR
+p-value=\{ans_rule(10)\}.
+
+$BR
+$PAR
+$BBOLD HINT: $EBOLD
+$PAR
+The following is an example problem which is similar to the above problem you are 
+
+working on. You can look at the solution of the following example and it will help you 
+
+to solve the original problem. $BR
+$BR
+A soccer club wants to know whether players average more than 75 training hours per 
+
+month. The coach randomly selected four players and recorded their training hours every 
+
+day for a month. Suppose the resulting data are 80,70,65,80. The coach was interested 
+
+in determining whether the average training time spent by players per month is lower 
+
+than the 75 hours.$BR 
+$BR 
+$PAR
+$BBOLD  The Statistical Hypotheses: $EBOLD
+$PAR \(H_0: \mu = 75, \) \(  H_a: \mu  <75\) where \(\mu\) stands for the average 
+
+training time spent by players per month.  $BR
+
+$BR
+Compute the p-value and interpret the result at 0.05 level.
+$BR
+First, we find the sample mean $BR $BR \( \bar{y} = \frac{y_1+y_2+y_3+y_4}{n} = \frac{80+70+65+80}{4} = 73.75\) $BR
+and the sample standard deviation, $BR $BR
+\( s = \sqrt{\frac{(y_1 - \bar{y})^2 + (y_2 - \bar{y})^2 + (y_3 - \bar{y})^2 + (y_4 - \bar{y})^2}{n-1}} \\ 
+= \sqrt{\frac{(80 - 73.75)^2 + (70 - 73.75)^2 + (65 - 73.75)^2 + (80 - 73.75)^2}{3}} \\
+= 7.5 \) $BR $BR
+Next, we find the observed value of the standardized test statistic \(t^*\). Since the 
+
+sample size is \(n = 4\), \(t^*=\frac{\bar{y}-\mu}{s/\sqrt{n}}=\frac{73.75-75}{7.5/\sqrt{4}}=-0.333\)$BR
+So the p-value is then computed as $BR $BR
+ \(\Pr(t_{n-1}\leq t^*)=\Pr(t_{3}\leq -0.333)=0.3804\) $BR
+Since p-value =0.3804>0.05, the coach cannot reject null hypothesis.
+END_TEXT
+
+ANS(num_cmp($p,  tol=>.01, tolType=>"absolute"));
+
+}
+}
+
+
+##############################################
+#
+#  Part 8
+#
+
+if ($part == 8) {
+$a = floor(($ybar - $delta)*100)/100;
+$b = floor(($ybar + $delta)*100)/100;
+$ybar2 = floor(100*$ybar)/100;
+$ee = floor(($p)*10000)/10000;
+
+
+$newProblemSeed = random(0,1000*$part,1);
+$PG_random_generator->srand($newProblemSeed);
+$cmc = new_multiple_choice();
+$cmc->qa(
+	"If the p-value is $ee, what conclusion can the project team make about the 
+
+null hypothesis at the 0.05 level?", 
+	"Since the p-value is less than 0.05, they can reject the null hypothesis."
+);
+$cmc->extra("Since the p-value is greater than 0.05, they cannot reject the null 
+
+hypothesis.",
+"Since the p-value is less than 0.05, they cannot reject the null hypothesis.",
+"They cannot get the precise p-value,no conclusion can be made.");
+
+BEGIN_TEXT
+$BBOLD question 6 $EBOLD
+
+$PAR
+
+WPI sets an expectation of 17 hours work per week for a 1/3 unit seven week 
+
+undergraduate course, which
+equals 119 hours per term. To see if reality meets expectations, a WPI project team 
+
+took a random sample of
+7 1/3 unit courses and from each course, randomly selected one student volunteer to 
+
+follow during the term.
+Each selected student agreed to keep track of the hours spent on coursework for that 
+
+course. The totals for
+the term are below:
+$PAR
+
+\[ \begin{array}{cccccccc}
+$y[0] & $y[1] & $y[2] & $y[3] & $y[4] & $y[5] & $y[6] \cr
+\end{array} \]
+
+$PAR
+The project team was interested in determining whether the average time spent by all 
+
+WPI students on a 1/3 unit seven week undergraduate course is lower than the 119 hour 
+
+guideline.
+$PAR
+
+$BBOLD 1. The Scientific Hypothesis: $EBOLD
+$PAR
+The Scientific Hypothesis is the hypothesized outcome of the experiment or study. In 
+
+this problem, the Scientific Hypothesis is: $BR
+$BBOLD The average time spent by all WPI students on a 1/3 unit seven week 
+
+undergraduate course is lower than the 119 hour guideline. $EBOLD $BR
+
+$PAR
+$BBOLD 2. The Statistical Model: $EBOLD
+$PAR
+The Statistical Model is the distribution of the population of measurements that are 
+
+being taken. In this problem, the Statistical Model is: $BR
+$BBOLD The hours WPI students spend on 1/3 unit seven week undergraduate courses per 
+
+term; \(N(\mu,\sigma^2)\)$EBOLD
+$BR
+
+$PAR
+$BBOLD 3. The Statistical Hypotheses: $EBOLD
+$PAR$BBOLD \(H_0: \mu = 119, \) \(  H_a: \mu  <119\) where \(\mu\) is the average time 
+
+spent by all WPI students on a 1/3 unit seven week undergraduate course. $EBOLD $BR
+$BBOLD 4.1 The Test Statistic: $EBOLD
+$PAR
+The single number estimate of the average number of hours per term spent by WPI 
+
+students for a 1/3 unit seven week undergraduate course is: $PAR $BBOLD
+\(\bar{y}\) = $ybar2 $EBOLD $BR
+
+$PAR
+$BBOLD 4.2 The p-value: $EBOLD
+$PAR $BR$BBOLD
+
+p-value=$p. $BR$EBOLD
+
+$PAR
+
+$PAR
+$BBOLD 5. Results and Interpretation: $EBOLD
+$PAR
+\{$cmc -> print_q \}
+\{$cmc -> print_a \}
+
+END_TEXT
+
+ANS(radio_cmp($cmc->correct_ans));
+}
+
+##############################################
+#
+#  Part 9
+#
+
+if ($part == 9) {
+
+
+$newProblemSeed = random(0,1000*$part,1);
+BEGIN_TEXT
+$BBOLD Posttest question 1 $EBOLD
+
+It has
+been hypothesized that individuals suffering from Alzheimer's disease
+may spend less than the normal amount of time per night in the deeper stages of sleep. 
+To test this hypothesis
+researchers measured the time, in minutes, spent in stage IV sleep (the deepest level 
+
+of sleep)
+for a sample of seven Alzheimer's patients (data below). In
+healthy individuals, the average time spent in stage IV sleep is 120
+minutes per night. The data are:
+
+\[ \begin{array}{cccccccc}
+$yo[0] & $yo[1] & $yo[2] & $yo[3] & $yo[4] & $yo[5] & $yo[6] \cr
+\end{array} \]
+
+$PAR
+The researchers are interested in whether the mean of time spent in stage IV sleep of 
+
+Alzeheimer's patients is lower than 120 minutes,so he wants to test the hypotheses:$PAR
+$BR
+\(H_0: \mu = 120, \) \(  H_a: \mu  <120\)where \(\mu\) is the mean of time spent in 
+
+stage IV sleep of Alzeheimer's patients.
+$PAR
+Compute the p-value for this hypothesis test.
+p = \{ans_rule(10)\}  
+$BR
+
+
+
+
+END_TEXT
+ANS(num_cmp($po, tol=>.01, tolType=>"absolute"));
+
+}
+
+##############################################
+#
+#  Part 10
+#
+
+if ($part == 10) {
+$gg = floor(($po)*10000)/10000;
+
+
+$newProblemSeed = random(0,1000*$part,1);
+$cmc = new_multiple_choice();
+$cmc->qa(
+	"If the p-value is $gg, what conclusion can the researchers make about the null 
+
+hypothesis at the 0.05 level?", 
+	"Since the p-value is greater than 0.05, they cannot reject the null 
+
+hypothesis."
+);
+$cmc->extra("Since the p-value is less than 0.05, they can reject the null 
+
+hypothesis.",
+"Since the p-value is less than 0.05, they cannot reject the null hypothesis.",
+"They cannot get the precise p-value,no conclusion can be made.");
+
+BEGIN_TEXT
+$BBOLD Posttest question 2 $EBOLD
+
+It has
+been hypothesized that individuals suffering from Alzheimer's disease
+may spend less than the normal amount of time per night in the deeper stages of sleep. 
+To test this hypothesis
+researchers measured the time, in minutes, spent in stage IV sleep (the deepest level 
+
+of sleep)
+for a sample of seven Alzheimer's patients (data below).  $PAR
+
+\[ \begin{array}{cccccccc}
+$yo[0] & $yo[1] & $yo[2] & $yo[3] & $yo[4] & $yo[5] & $yo[6] \cr
+\end{array} \]
+$PAR
+The researchers are interested in whether the mean of time spent in stage IV sleep of 
+
+Alzeheimer's patients is lower than 120 minutes,so he wants to test the hypotheses:$PAR
+$BR
+\(H_0: \mu = 120, \) \(  H_a: \mu  <120\) where \(\mu\)is the mean of time spent in 
+
+stage IV sleep of Alzeheimer's patients.
+$BR 
+$PAR
+\{$cmc -> print_q \}
+\{$cmc -> print_a \}
+
+
+
+
+END_TEXT
+ANS(radio_cmp($cmc->correct_ans));
+}
+##############################################
+#
+#  Part 11
+#
+
+if ($part == 11) {
+
+BEGIN_TEXT
+
+END_TEXT
+
+}
+
+##############################################
+
+END_PROBLEM();
+ENDDOCUMENT();        # This should be the last executable line in the problem.
+
+END_PROBLEM();
+ENDDOCUMENT();        # This should be the last executable line in the problem.

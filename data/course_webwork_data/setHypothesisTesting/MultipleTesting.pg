@@ -1,0 +1,91 @@
+# DESCRIPTION
+# A simple sample problem that asks students to 
+# differentiate a trigonometric function.
+# WeBWorK problem written by Gavin LaRose
+# <glarose(at)umich(dot)edu>
+# and modified by Mike Gage   gage(at)math(dot)rochester(dot)edu
+# ENDDESCRIPTION
+
+## DBsubject('WeBWorK')
+## DBchapter('Demos')
+## DBsection('Problem')
+## KEYWORDS('')
+## TitleText1('')
+## EditionText1('')
+## AuthorText1('')
+## Section1('')
+## Problem1('')
+## Author('Gavin LaRose')
+## Institution('UMich')
+
+DOCUMENT();
+loadMacros(
+"PGstandard.pl",
+"PGML.pl",
+"MathObjects.pl",
+"PGcourse.pl",
+);
+
+# make sure we're in the context we want
+Context("Numeric");
+$showPartialCorrectAnswers = 1;
+Context()->variables->add(k => "Real");
+$alpha=random(0,0.1,0.001);
+
+TEXT(beginproblem());
+#TEXT(PGML::Format2(<<'END_PGML'));
+BEGIN_PGML
+
+*Performing multiple Tests on the same dataset*
+
+Suppose we compare 1000 diabetes patients to 2000 patients with no
+diabetes.  We compare the two groups on [`k`] different properties
+(body-mass-index, blood pressure, number of cigarettes per day, number
+of alcoholic drinks per day etc.). We use a two sample t-test for each
+property in order to reject the null hypothesis which is that the two
+populations have the same mean for the property. We use a significance
+level of [`\alpha=[$alpha]`]. Suppose that the only property for which
+the null hypothesis is rejected is "blood-pressure". What is the
+significance that we can attach to this finding?
+
+On its face, it seems like testing for one property should not change
+the significance of testing for another property. However, making
+multiple tests, using the same dataset, has a big impact on the
+significance of a single outcome. 
+
+Recall what is an outcome in this context: a signal outcome 
+[`\omega \in \Omega`] is a set of 3000
+patients, 1000 of them with diabetes and 2000 of them without. The
+null hypothesis states that the distribution of the two sets is equal
+on every one of the [`k`] properties. Rejecting the null hypothesis on
+one of the properties with significance value [`\alpha`] means that
+there exists a set of outcomes, whose probability is at most
+[`\alpha`], on which the test makes a type I error. Let's call the event (remember the definition of events?) which is the set
+of outcomes that causes a type I error on property [`i`] the [`i`]th
+error event and denote it by [`E_i`].
+
+The event that at least _one_ of the [`k`] tests caused out of the
+events [`E_1,E_2,\ldots,E_k`] set of outcomes such as that there is an
+error of type I on at least one property is the union of all of the
+error sets [`E=\bigcup_{i=1}^{k} E_i`].  What is the least upper bound
+we can put on the probability (under the null hypothesis) of [`E`] ?
+
+Observe that we know nothing about the relationships between [`E_i`]
+and [`E_j`] for [`i\neq j`]. It might be that the common case is that
+a a sample that causes an error for one property also causes an error
+on another property or it might be that each "bad" sample causes an
+error in just one property while correctly failing to reject the rest. As it turns out this last situation is the one which will create [`E`] with the largest probability. This is an application of the union bound:   
+[`` P(E) = P \left(\bigcup_{i=1}^{k} E_i \right) \leq \sum_{i=1}^k P(E_i) ``]
+
+Based on this what is the significance value we can associate with rejection of 
+one out of the [`k`] null hypotheses is [_______]{"$alpha*k"}
+ 
+*Reference*: http://en.wikipedia.org/wiki/Multiple_comparisons
+
+END_PGML
+
+BEGIN_HINT
+Your answer has to depend on the number of properties \(k\).
+END_HINT
+
+ENDDOCUMENT();

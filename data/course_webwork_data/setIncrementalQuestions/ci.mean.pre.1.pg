@@ -1,0 +1,75 @@
+##KEYWORDS confidence interval, population mean, pretest
+
+##ENDDESCRIPTION
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PGstandard.pl",
+  "package.pl",
+  "Parser.pl",
+  "PGunion.pl",
+  "PGcourse.pl",
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGnumericalmacros.pl",
+"PGstatisticsmacros.pl"
+);
+
+TEXT(beginproblem);
+BEGIN_PROBLEM();
+
+$showPartialCorrectAnswers = 1;
+$ybar = 0;
+$s = 0;
+
+for ($i=0;$i<4;$i++){
+	$y[$i] = random(40000,42000,1);
+	$ybar = $ybar + $y[$i];
+}
+$ybar = $ybar/4;
+
+for ($i=0;$i<4;$i++){
+	$s = $s + ($y[$i] - $ybar)*($y[$i] - $ybar);
+}
+$s = sqrt($s/3);
+
+$delta = 3.1824* $s / sqrt(4);
+
+$cmc = new_multiple_choice();
+$cmc->qa(
+	"If the head of the quality unit expects the mean breaking strength of pins to be at least 42500, what can he conclude?", 
+	"Since the confidence interval lies entirely below the expectation of 42500, he is 95% confident that the 
+mean breaking strength of those pins doesn't meet the expectation."
+);
+$cmc->extra("Since 42500 is contained in the confidence interval, he is 95% confident that the mean breaking strength of those 
+pins meets the expectation.",
+"Since the confidence interval lies entirely below the expectation of 42500, he is 95% confident that the breaking strength 
+of those pins meets the expectation.",
+"We are sure that all pins don't meet the expectation.");
+
+BEGIN_TEXT
+The breaking strengths of four large metal pins used in building construction randomly chosen from a large production lot are (in psi).
+$PAR
+\[ \begin{array}{cccc}
+$y[0] & $y[1] & $y[2] & $y[3] \cr
+\end{array} \]
+
+$PAR
+The head of the quality unit wants a 95% confidence interval for the mean strength of the pins in the lot.
+$PAR
+\{ans_rule(10)\} \( \leq \mu \leq \) \{ans_rule(10)\}  
+$BR
+
+
+
+
+END_TEXT
+ANS(num_cmp($ybar-$delta, tol=>1, tolType=>"absolute"));
+ANS(num_cmp($ybar+$delta, tol=>1, tolType=>"absolute"));
+
+
+
+ENDDOCUMENT();       # This should be the last executable line in the problem.

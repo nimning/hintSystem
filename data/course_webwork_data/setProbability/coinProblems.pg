@@ -1,0 +1,54 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "MathObjects.pl",
+  "parserRadioButtons.pl",
+  "compoundProblem.pl",
+  "Parser.pl",
+  "PGunion.pl",
+  "PGcourse.pl",
+  "PGchoicemacros.pl",
+);
+
+TEXT(beginproblem);
+BEGIN_PROBLEM();
+
+##############################################
+
+$isProfessor = ($studentLogin eq 'yoav.freund' || $studentLogin eq 'professor');
+Context("Interval");
+$showPartialCorrectAnswers = 1; # show student the correct part of their answer.
+
+
+$coins=random(9,11,1); # number of tosses of the dice
+$coins_1_heads=
+
+BEGIN_PGML
+
+## Tossing a coin ##
+A fair coin is tossed [$coins] times.
+o  There is a natural outcome space for the experiment of tossing coins in sequence, where the probability of each outcome is equally likely.  What is the size of this outcome space? [______]{"2^$coins"}
+o  What is the size of the event set for getting exactly [$coins-1] heads?  [______]{"$coins!/($coins-1)!"}
+o  What is the probability of getting exactly [$coins-1] heads? [_________]{"($coins!/($coins-1)!)/2^$coins"}
+o  What is the probability of getting at most [$coins-1] heads? [________]{"1-1/2^$coins"}
+o  What is the probability of getting exactly 6 heads?  [______________]{"($coins!/(6!($coins-6)!))/2^$coins"}
+
+
+END_PGML
+
+BEGIN_PGML_SOLUTION
+## Solution ##
+We work in the outcome space [`\Omega=\{H,T\}^{[$coins]}`].  The event "exactly [$coins-1] heads" is the set of all sequences of heads and tails that have exactly [$coins-1] heads. The number of outcomes in this event set is [`{[$coins] \choose [$coins-1]}`]: number of unique permutations of [$coins-1] heads and 1 tails.  Thus the probability of getting exactly [$coins-1] heads is [`{[$coins] \choose [$coins-1]}/2^{[$coins]}`], since [`|\Omega| = 2^{[$coins]}`].  
+
+The probability of the event E = "getting at most [$coins-1] heads" can be more easily computed using the complement.  There is only once case where more than [$coins-1] coins are heads: all tails.  Thus [`P(E^c) = 1/|\Omega| = 1/2^{[$coins]}`].  Thus [`P(E) = 1 - 1/2^{[$coins]}`].  
+
+Computing the probability of getting exactly 6 heads is directly analogous to computing the probability of exactly 9 heads.  
+END_PGML_SOLUTION
+
+
+##############################################
+
+END_PROBLEM();
+ENDDOCUMENT();        # This should be the last executable line in the problem.

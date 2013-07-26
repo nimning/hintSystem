@@ -1,0 +1,223 @@
+    DOCUMENT();        # This should be the first executable line in the problem.
+
+    loadMacros(
+    "PG.pl",
+    "PGbasicmacros.pl",
+    "PGchoicemacros.pl",
+    "PGanswermacros.pl",
+    "PGgraphmacros.pl",
+    "PGmatrixmacros.pl",
+    "PGnumericalmacros.pl",
+    "PGauxiliaryFunctions.pl",
+    "PGmorematrixmacros.pl",
+    "PGstandard.pl",
+    "compoundProblem.pl",
+    "Parser.pl",
+    "PGunion.pl",
+    "PGcourse.pl",
+    "source.pl",
+    );
+
+    TEXT(beginproblem);
+    BEGIN_PROBLEM();
+
+    ##############################################
+
+    $isProfessor = ($studentLogin eq 'dpvc' || $studentLogin eq 'professor');
+
+    #
+    #  Start a compound problem.  See the compoundProblem.pl
+    #  file for more details about the parameters you
+    #  can supply.
+    #
+    $cp = new compoundProblem(
+      parts => 4,                  # the total number of parts in this problem
+      weights => [1,1,2,0],
+      totalAnswers => 24,           # total answers in all parts combined
+      parserValues => 1,           # make parser objects from student answers
+      nextStyle => "Button",
+      allowReset => $isProfessor,  # professors get Reset button for testing
+    );
+    $part = $cp->part;             # look up the current part
+
+    #For this lab the x values are fixed but the y values are randomized
+    $x1=1;
+    $x2=-1;
+    $x3=2;
+    $x4=0;
+    $y1=random(-1,1,2)*random(0,50,1)/10;
+    $y2=random(-1,1,2)*random(0,50,1)/10;
+    $y3=random(-1,1,2)*random(0,50,1)/10;
+    $y4=random(-1,1,2)*random(0,50,1)/10;
+
+    #We start with the overdetermined system ax=y, from plugging the x and y values #into the equation of a line. From this we find the normal equations Mz=b,
+    #where M=a'*a and b=a'*y  (a' means a transpose) . We solve the normal equations
+    #for z, which gives the coefficients for the equation of the line. 
+    $a= new Matrix(4,2);
+    $y= new Matrix(4,1);
+    $a_t = new Matrix(2,4);
+    $a11 = 1;
+    $a21 = 1;
+    $a31 = 1;
+    $a41 = 1;
+    $a12 = $x1;
+    $a22 = $x2;
+    $a32 = $x3;
+    $a42 = $x4;
+    $a->assign(1,1, $a11 );
+    $a->assign(2,1, $a21 );
+    $a->assign(3,1, $a31 );
+    $a->assign(4,1, $a41 );
+    $a->assign(1,2, $a12 );
+    $a->assign(2,2, $a22 );
+    $a->assign(3,2, $a32 );
+    $a->assign(4,2, $a42 );
+    $y->assign(1,1, $y1 );
+    $y->assign(2,1, $y2 );
+    $y->assign(3,1, $y3 );
+    $y->assign(4,1, $y4 );
+    $a_t->transpose($a);
+    $m = $a_t->multiply($a);
+    $b = $a_t->multiply($y);
+    $m_lr = $m->decompose_LR();
+    $m_det = $m_lr->det_LR();
+    $m_inv = $m_lr->invert_LR();
+    $ans = $m_inv->multiply($b);
+    $r1 = $ans->element(1,1);
+    $r2 = $ans->element(2,1);
+    $line = "$r2*x + $r1";
+
+    #students then calculate the norm of the vector b-az for the least squares #solution z to measure the error. 
+    $approx = $a->multiply($ans);
+    $err = $approx - $y;
+    $length = sqrt( $err->scalar_product($err) );
+
+
+    ##############################################
+    #
+    #  Part 1
+    #
+
+    if ($part == 1) {
+
+    BEGIN_TEXT
+    $BR INTRODUCTION TO LEAST SQUARES
+    $BR
+    Part 1:
+    $PAR
+    Suppose we have a collection of data points \( (x_1,y_1), (x_2,y_2), ...
+    (x_n,y_n) \) and we want to find the line \( y = a_{0} + a_{1}x \)
+     that “best” fits through these points. If the line contained all of these points (an unlikely occurrence for 
+    \( n \geq 3 \) ) we would have a solution to the system of equations Az=y where $BR
+    \{mbox(  '\(A = \)' , display_matrix( [[1, '\(x_1\)' ],['\( \vdots \)',
+    '\( \vdots \)'],[1,'\(x_n\)']] ) , 
+      '\(y = \)' , display_matrix( [['\(y_1\)' ],['\( \vdots \)'],['\(y_n\)']] ) ,
+      '\(z = \)' , display_matrix( [['\(a_{0}\)'],['\(a_{1}\)']]) ) \}
+    where this system is obtained by just plugging each point into the equation of the line. 
+    Now what do we mean by “best fit”? Since the system we’re considering is overdetermined it’s unlikely it will have a solution. So instead we would like to find an approximate solution (we’ll call it \( \bar{z} \) ) for which Az  is as close to y as possible, i.e. we want to minimize  \( \| y-Az \| \)  over all possible vectors z, with \( \bar{z} \) being the vector that attains the minimum. Now the vector Az  is a linear combination of the columns of A (i.e. it is in the column space of the matrix A).  So we are really looking to find the element of the column space of A that is closest to the vector y. But that’s just the projection of y onto the column space of A. So the vector y-Az should be orthogonal to the column space of A. This is the same as saying that y-Az  is orthogonal to each of the columns of A. So if the columns of A are \( a_{1}\) and \( a_{2} \) then we must have 
+    \( a_{1} \cdot ( y - A \bar{z} ) = a_{2} \cdot ( y - A \bar{z} ) =0 \). This can be written in matrix form as \( A^{T} ( y - A \bar{z} ) = 0 \) or
+    \( A^{T} y = A^{T} A \bar{z} \) . This last equation is called the normal equations for the system Az=y. In this exercise we will set \( M = A^{T}A \)
+    and \( b = A^{T}y \). Notice that we started with an overdetermined system but the normal equations \( M \bar{z} = b \) are a square system. 
+    $BR Let's try this on an example. Suppose we have a set of points
+     ($x1,$y1),($x2,$y2),($x3,$y3),($x4,$y4) and we would like to find the least squares line that best fits these points. What is the matrix A? What is the vector y? Make sure both are entered in Matlab for the next part of the lab.
+    \{mbox('\(A=\)',answer_matrix(4,2,4),'\(y=\)',answer_matrix(4,1,4))\}
+
+
+    END_TEXT
+
+    ANS num_cmp(ra_flatten_matrix($a));
+    ANS num_cmp(ra_flatten_matrix($y));
+
+
+    #
+    #  the useGrader() method sets the grader for this part.
+    #
+    $cp->useGrader(~~&std_problem_grader);
+    $showPartialCorrectAnswers = 0;
+
+    }
+
+    ##############################################
+    #
+    #  Part 2
+    #
+
+    if ($part == 2) {
+
+    BEGIN_TEXT
+    Part 2:
+    $PAR
+
+    Determine the matrices M and b for the normal equations \(M \bar{z} = b \) where \( M = A^{T}A \) and \( b = A^{T}y \). 
+    \{mbox('\(M=\)',answer_matrix(2,2,4),'\(b=\)',answer_matrix(2,1,4))\}
+
+    END_TEXT
+
+    ANS num_cmp(ra_flatten_matrix($m));
+    ANS num_cmp(ra_flatten_matrix($b));
+
+    }
+
+    ##############################################
+    #
+    #  Part 3
+    #
+
+    if ($part == 3) {
+
+
+    BEGIN_TEXT
+    Part 3:
+    $PAR
+    Now give the equation of the least squares line to fit these points. 
+    $BR y= \{ans_rule(48) \}
+    $BR We can compute the norm \( \| y-A\bar{z} \| \) (remember, this is what we were trying to minimize) and this gives us some measure of the error in our line in approximating these points. Calculate this error. In Matlab the command norm(r) calculates the norm of a vector r. 
+    $BR \( \| y-A\bar{z} \| \) = \{ans_rule(48) \}
+    $BR Note: If you're getting an error here it might be because you're rounding
+    too much - make sure you do the calculation in MATLAB so you won't lose accuracy.
+
+    END_TEXT
+
+    ANS(fun_cmp($line));
+    ANS(num_cmp($length));
+
+    }
+
+    #part 4 just gives instructions for the hard copy of the graph that students #have to turn in.
+    if ($part == 4) {
+
+
+    BEGIN_TEXT
+    Part 4:
+    $PAR
+
+    $BR $BR Now finally let's graph the original points and the least squares line.
+    Turn in a hard copy of the picture, and make sure you visually check the graph
+    to make sure it seems reasonable (does the line seem "closest" to all the points
+    )? To produce the graph in MATLAB you'll have to use the commands below. Before
+    you start, make sure that the original x and y values are stored in vectors 
+    named x and y, and make sure your solution to the normal equations is stored
+    in a vector named z. 
+    $BR t=-1:0.1:2;
+    $BR for i=0:1
+    $BR s(i+1)=z(2-i);                                
+    $BR end                                        
+    $BR a=polyval(s,t);
+    $BR plot(x,y,’x’,t,a)
+    $BR The first line creates a vector t, with values ranging from -1 to 2 in increments of 0.1. This is what MATLAB will use as the independent variable in graphing the line (you'd have to adjust this if your smallest or largest x values were different). The next three lines are a loop - in your z vector the first entry is the 
+    constant coefficient, and the second entry is the coefficient for the x term
+    in the line. But when you use the MATLAB command polyval, it expects the 
+    coefficients of the polynomial to go from highest power to lowest. So this 
+    little loop switches the order of the coefficients, and stores this in a vector
+    named s. Then the polyval command creates a vector a with the y values corresponding to all of the t values that lie on the line. Finally the plot command draws the line, and also plots the original points with x's to mark them. 
+
+    END_TEXT
+
+
+    }
+
+    ##############################################
+
+    END_PROBLEM();
+    ENDDOCUMENT();        # This should be the last executable line in the problem.
+

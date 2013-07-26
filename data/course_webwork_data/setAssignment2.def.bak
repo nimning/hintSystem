@@ -1,0 +1,30 @@
+openDate          = 10/01/2012 at 04:00pm PDT
+dueDate           = 10/03/2012 at 01:00pm PDT
+answerDate        = 10/03/2012 at 01:00pm PDT
+paperHeaderFile   = defaultHeader
+screenHeaderFile  = defaultHeader
+problemList       = 
+setCombinatorics/Tuples.pg, 1, -1 
+setCombinatorics/withoutReplacementExplanation.pg, 1, -1 
+setCombinatorics/SamplingWithoutReplacement.pg
+setCombinatorics/BinomialCoeffExplanation.pg, 1, -1 
+setCombinatorics/Cards1.pg, 1, -1 
+setCombinatorics/ChoosingCandies.pg, 1, -1 
+setCombinatorics/ClassSize.pg, 1, -1 
+setCombinatorics/DiscreteProb1.pg, 1, -1 
+setCombinatorics/Envelopes1.pg, 1, -1 
+setCombinatorics/InfiniteSets.pg, 1, -1 
+setCombinatorics/PigeonHole.pg, 1, -1 
+setCombinatorics/sw10_1_15.pg, 1, -1 
+setCombinatorics/BasicSets1.pg, 1, -1 
+setCombinatorics/BasicSets2.pg, 1, -1 
+setCombinatorics/BasicSets3.pg, 1, -1 
+setCombinatorics/UniformDist1.pg, 1, -1 
+setCombinatorics/UniformDist2.pg, 1, -1 
+setCombinatorics/UniformDist3.pg, 1, -1 
+yuncong_class0/q1.pg, 1, -1 
+yuncong_class0/q3.pg, 1, -1 
+yuncong_class0/q5.pg, 1, -1 
+yuncong_class0/q6.pg, 1, -1 
+
+

@@ -1,0 +1,128 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "MathObjects.pl",
+  "PGcourse.pl",
+);
+
+Context("Numeric");
+Context()->variables->are(
+      k => ['Real', limits=>[1,10], resolution=>1],
+      n => ['Real', limits=>[1,10], resolution=>1],
+      x => ['Real']
+    );
+
+TEXT(beginproblem);
+$showPartialCorrectAnswers = 1;
+
+$k=random(5,20,1);
+
+######################################################################
+
+BEGIN_PGML
+
+## Sorting in expected linear time ##
+Suppose we want to sort an array of numbers [`S[1\cdots n]`] that we expect to be
+distributed uniformly in some range [`[\min,\max]`]. Here's a _bucket sort_ approach:
+
+1. Divide [`[\min,\max]`] into [`n`] equal-sized intervals. These are the _buckets_ 
+[`B_1, B_2, \ldots, B_n`].
+2. Now scan array [`S`] from left to right, putting each element [`S[i]`] in its
+appropriate bucket.
+3. Return [`\mbox{sort}(B_1) \circ \mbox{sort}(B_2) \circ \cdots \circ \mbox{sort}(B_n)`],
+where ``sort'' is a standard sorting algorithm (say mergesort).
+
+Notice that there is no randomization in the algorithm. However, we can talk about
+the expected running time if the elements of [`S`] are generated from a uniform 
+distribution over [`[\min,\max]`]. In that case, each element is equally likely to 
+fall into any of the buckets [`B_i`].
+
+Assuming we use a standard sorting procedure for each bucket. Suppose there are [`n`] elements in a certain bucket, what is the running time for sorting these [`n`] elements ? [__________]{n*log(n)}
+
+Let [`N_i`] be the number of array elements that fall into [`B_i`], we get a total running time of:
+
+[$BCENTER]*
+[`` T = N_1 \log N_1 + N_2 \log N_2 + \cdots + N_n \log N_n \ \leq \ 
+N_1^2 + N_2^2 + \cdots + N_n^2 .``]
+[$ECENTER]*
+
+What is [`\mathbb{E}(N_i^2)`]? The easiest way to compute this is to write [`N_i`] as a sum:
+
+[$BCENTER]*
+[`` N_i = X_1 + X_2 + \cdots + X_n``]
+[$ECENTER]*
+
+where [`X_j`] is 1 if the array element [`S[j]`] falls into bin [`i`], and 0 otherwise.
+Notice that [`X_j^2 = X_j`], and that [`X_j`] is independent of [`X_{j'}`] whenever [`j \neq j'`].
+
+Therefore,
+
+[$BCENTER]*
+
+[`\mathbb{E}(X_j) = `][_______]{1/n}
+
+[`\mathbb{E}(X_j^2) = `][________]{1/n}
+
+[`\mathbb{E}(X_jX_j') = \mathbb{E}(X_j) \mathbb{E}(X_{j'}) = `][__________]{1/n**2},  if [`j \neq j'`]
+
+[$ECENTER]*
+
+
+By linearity of expectations,
+
+[$BCENTER]*
+[`` \begin{eqnarray*}
+\mathbb{E}(N_i^2) 
+& = & \mathbb{E} \left( (X_1 + \cdots + X_n)^2 \right) \\
+& = & \mathbb{E} \left( \sum_j X_j^2 + \sum_{j \neq j'} X_j X_{j'} \right) \\
+& = & \sum_j \mathbb{E}(X_j^2) + \sum_{j \neq j'} \mathbb{E}(X_j X_{j'}) \\
+\end{eqnarray*}``]
+
+       = [_____________]{"n*1/n+n(n-1)/(n*n)"} [`\le 2`]
+[$ECENTER]*
+
+So the expected running time of the sorting algorithm, once again invoking linearity, is
+
+[$BCENTER]*
+[`` \mathbb{E}(T) 
+\ \leq \ \mathbb{E}(N_1^2) + \mathbb{E}(N_2^2) + \cdots + \mathbb{E}(N_n^2) 
+\ \leq ``][_______]{2n}
+[$ECENTER]*
+
+It is linear!
+
+END_PGML
+
+BEGIN_PGML_SOLUTION
+-------------
+## SOLUTION: ##
+
+Standard sorting algorithm like MergeSort takes [`n\log(n)`] time.
+
+[$BCENTER]*
+[`` \begin{eqnarray*}
+\mathbb{E}(X_j)  &  = & \frac{1}{n} \\
+\mathbb{E}(X_j^2) & = & \frac{1}{n} \\
+\mathbb{E}(X_jX_j') & = & \mathbb{E}(X_j) \mathbb{E}(X_{j'}) \ \ = \ \ \frac{1}{n^2} \; \mbox{if $j \neq j'$}
+\end{eqnarray*}``]
+[$ECENTER]*
+
+By linearity of expectation, we then have
+
+[$BCENTER]*
+[`` \begin{eqnarray*}
+\mathbb{E}(N_i^2) 
+& = & \mathbb{E} \left( (X_1 + \cdots + X_n)^2 \right) \\
+& = & \mathbb{E} \left( \sum_j X_j^2 + \sum_{j \neq j'} X_j X_{j'} \right) \\
+& = & \sum_j \mathbb{E}(X_j^2) + \sum_{j \neq j'} \mathbb{E}(X_j X_{j'}) \\
+& = & n \cdot \frac{1}{n} + n(n-1) \frac{1}{n^2} \ \ \leq \ \ 2.
+\end{eqnarray*}``]
+[$ECENTER]*
+
+END_PGML_SOLUTION
+
+
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

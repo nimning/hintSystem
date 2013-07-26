@@ -1,0 +1,71 @@
+##KEYWORDS confidence interval, population proportion, posttest
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PGstandard.pl",
+  "package.pl",
+  "Parser.pl",
+  "PGunion.pl",
+  "PGcourse.pl",
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGnumericalmacros.pl",
+"PGstatisticsmacros.pl"
+);
+
+TEXT(beginproblem);
+BEGIN_PROBLEM();
+
+$showPartialCorrectAnswers = 1;
+$n=10;
+$x=random(8,9,1);
+$pbar=($x/$n);
+$w=10-$x;
+$h=$n*$pbar;
+$q=(10*$pbar+0.5*1.96*1.96)/(10+1.96*1.96);
+
+$delta = sqrt(($q*(1-$q))/10)*1.96;
+
+$a = $q - $delta;
+if ($a<0)
+{
+	$a=0;
+}
+$b = $q + $delta;
+if ($b>1)
+{
+       
+       $b=1;
+}
+
+$cmc = new_multiple_choice();
+$cmc->qa(
+	"Which of the following can the magazine conclude?", 
+	"Since 0.5 lies below our confidence interval, so we are 95% confident that more than half people in Boston support Boston Celtics. "
+);
+$cmc->extra("Since 0.5 lies below our confidence interval, so we are 95% confident that only half people in Boston support Boston Celtics.",
+"We are 95% confident that 95% people in Boston support Boston Celtics. ",
+"We cannot conclude anything since the sample size is small compare to the population of people in Boston.");
+
+
+BEGIN_TEXT
+$PAR
+A local Boston magazine wants to know whether most people in Boston support Boston Celtics rather than other teams. They randomly asked 10 people living in Boston,
+"Which NBA team is your favorite?"$x of 10 said they supported Boston Celtics, and $w of 10 people said they liked other teams.
+$PAR
+$PAR Use a 95% approximate score  confidence interval to estimate the proportion of the population that likes Boston Celtics.
+$PAR
+\{ans_rule(10)\} \( \leq p \leq \) \{ans_rule(10)\}  
+$BR
+
+
+END_TEXT
+ANS(num_cmp($a, tol=>.01, tolType=>"absolute"));
+ANS(num_cmp($b, tol=>.01, tolType=>"absolute"));
+
+
+
+ENDDOCUMENT();       # This should be the last executable line in the problem.

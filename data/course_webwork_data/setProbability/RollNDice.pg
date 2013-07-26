@@ -1,0 +1,47 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "MathObjects.pl",
+  "parserRadioButtons.pl",
+  "compoundProblem.pl",
+  "Parser.pl",
+  "PGunion.pl",
+  "PGcourse.pl",
+  "PGchoicemacros.pl",
+);
+
+TEXT(beginproblem);
+BEGIN_PROBLEM();
+
+$n=random(7,9,1);
+
+BEGIN_PGML
+
+[$n] 6-sided dice are rolled.  
+
+# What is the probability of getting [$n] rolls of 5?
+
+# The sample space when 1 dice is rolled, representing a dice roll by the side facing up, is [`\Omega = `] [_______]{"{1,2,3,4,5,6}"}
+
+# The size of this sample space is [`|\Omega| = `] [_______]{"6"}
+
+# The number of dice rolls is [`n = `] [_____]{"$n"}
+
+# The number of outcomes where all 5's are rolled is [_______]{"1"}
+
+# The probability of getting all 5's is [_________]{"1/6^{$n}"}
+
+END_PGML
+
+BEGIN_PGML_SOLUTION
+## Solution ##
+Hi There
+END_PGML_SOLUTION
+
+
+##############################################
+
+END_PROBLEM();
+ENDDOCUMENT();        # This should be the last executable line in the problem.

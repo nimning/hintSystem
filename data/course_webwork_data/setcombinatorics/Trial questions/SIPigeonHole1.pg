@@ -1,0 +1,117 @@
+##KEYWORDS confidence interval, population proportion, treatment
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+  "compoundProblem.pl",
+  "PGstandard.pl",
+  "PGunion.pl",
+  "PGcourse.pl",
+  "PGbasicmacros.pl",
+  "PGchoicemacros.pl",
+  "PGanswermacros.pl"
+);
+
+TEXT(beginproblem);
+BEGIN_PROBLEM();
+
+##############################################
+
+$isProfessor = ($studentLogin eq 'yoav.freund' || $studentLogin eq 'professor');
+
+#
+#  Start a compound problem.  See the compoundProblem.pl
+#  file for more details about the parameters you
+#  can supply.
+#
+$cp = new compoundProblem(
+  parts => 3,                  # the total number of parts in this problem
+  totalAnswers => 3,           # total answers in all parts combined
+  parserValues => 1,           # make parser objects from student answers
+  allowReset => $isProfessor,  # professors get Reset button for testing
+  nextStyle => "Button",
+);
+$part = $cp->part;             # look up the current part
+
+$showHint = 1;		       # the number of tries before a hint is given.
+$s1 = $showHint+1;
+##############################################
+Context("Numeric");
+# When formulas are to be expressed as strings, express them as TeX strings.
+Context()->texStrings;
+#Keep the Formulas as is for the display (do not reduce to a single number)
+Context()->flags->set(
+     reduceConstants => 0,
+     reduceConstantFunctions => 0,
+   );
+
+$a=random(2,6,1);
+$n=Formula("26!/(26-$a)!");
+$b=random(5,9,1);
+$b2=Formula("$b+2");
+$c=Formula("($b+1)*(26!/(26-$a)!)+1");
+$cr=$c->eval();
+$d=Formula("($b-1)*(26!/(26-$a)!)+1");
+
+##############################################
+#
+#  Part 1
+#
+
+if ($part == 1) {
+BEGIN_TEXT
+Consider a list of randomly generated $a-letter "words" printed on a paper. The letters cannot be repeated. The allowed letters are the 26 letters of the english alphabet.$BR$BR
+(a) What is the size of the set of allowed words? $BR$BR
+Answer = \{ ans_rule(15) \} $BR$BR
+After $s1 incorrect tries you will be able to see a hint.
+$BR$BR
+END_TEXT
+BEGIN_HINT
+This problem is equivalent to that of choosing $a elements out of 26, and preserving the order. Thus we have 26 possibilities for the first letter, 25 possibilities for the second letter (because the first letter has already been used) down to (26-$a+1) possibilities for the $a'th letter. Multiplying these possibilities we get the result.
+END_HINT
+ANS($n->cmp());
+}
+
+##############################################
+#
+#  Part 2
+#
+
+if ($part == 2) {
+BEGIN_TEXT
+$BR$BR
+(b) At least how many of these "words" should be printed to be sure of having 
+at least $b identical "words" on the list?  $BR$BR
+Answer = \{ ans_rule(15) \}
+$BR$BR
+After $showHint incorrect tries you will be able to see a hint.
+END_TEXT
+BEGIN_HINT
+Recall the "Pigeon Hole" principle. If the number of different words is \(n\) then in order to ensure that at least one of the words appears at least \(k\) times you need to print \((k-1)n+1\) words. Now, if you can set \(k\) and \(n\) to the correct values, you'll have the answer. 
+END_HINT
+ANS($d->cmp());
+}
+
+##############################################
+#
+#  Part 3
+#
+
+if ($part == 3) {
+BEGIN_TEXT
+$BR$BR
+(c) At least how many identical "words" are printed if there are \($c\) "words" on the list?  $BR$BR
+Answer = \{ ans_rule(15) \}
+$BR$BR
+After $showHint incorrect tries you will be able to see a hint.
+END_TEXT
+BEGIN_HINT
+In this case you have to use the pigeon hole formula in the reverse direction. Find the value of \(k\) that will be satisfied if you have \($c\) words.
+END_HINT
+ANS($b2->cmp());
+}
+
+##############################################
+
+END_PROBLEM();
+ENDDOCUMENT();        # This should be the last executable line in the problem.

@@ -1,0 +1,100 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGML.pl",
+"MathObjects.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGgraphmacros.pl",
+"PGnumericalmacros.pl",
+"PGstatisticsmacros.pl",
+"contextArbitraryString.pl",
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+package my::Function::numeric;
+our @ISA = ('Parser::Function::numeric');
+
+sub Q {
+   shift; my $x = shift;
+   return main::normal_prob($x, 'infty', mean=>0, deviation=>1);
+}
+
+sub Phi {
+   shift; my $x = shift;
+   return main::normal_prob('-infty', $x, mean=>0, deviation=>1);
+}
+
+sub erf {
+   shift; my $x = shift;
+   $phi = main::normal_prob('-infty', $x*sqrt(2), mean=>0, deviation=>1);
+   $a = 2*$phi-1;
+   return $a;
+}
+
+package main;
+
+Context("Numeric");
+Context()->flags->set(reduceConstants=>0);
+Context()->functions->add(
+erf =>{class=>"my::Function::numeric", nocomplex=>1},
+Q =>{class=>"my::Function::numeric", nocomplex=>1}, 
+Phi =>{class=>"my::Function::numeric", nocomplex=>1}
+);
+Context()->flags->set(tolerance=>0.001);
+
+Context()->variables->are(
+      n => ['Real', limits=>[1,100], resolution=>1],
+      k => ['Real', limits=>[1,100], resolution=>1],
+      p => ['Real', limits=>[0,1], resolution=>0.01],
+    );
+
+Context()->strings->add(
+     decreasing=>{},
+     increasing=>{},
+);
+
+$n = random(20,30,1);
+$nc = random(4,6,1);
+$p = 1/$nc;
+$mean = $n*$p;
+$low = int($mean + 4);
+$high = int($mean + 8);
+$corr = random($low, $high, 1);
+
+$dev = sqrt( $n / $nc * (1-1/ $nc));
+$ans = Compute("Q(($corr-$mean)/$dev)");
+
+BEGIN_PGML
+
+In the last assignment we met the monkey who took multiple-choice tests by random guessing. We know the number of questions the monkey guesses correctly follows a binomial distribution, and we have computed the exact probability of a tail of this distribution, by summing up all cases in the tail.
+
+In this question, we assume the number of questions is large enough so that by central limit theorem we can use a normal distribution to approximate the binomial distribution. This makes computing the probability of a certain part of the distribution much easier. 
+
+Suppose the monkey is taking a multiple-choice test that consists of [$n] questions each with [$nc] possible answers, let us estimate the probability that it gets at least [$corr] questions correct, using an approximated normal distribution.
+---
+Suppose X is the number of correct answers.
+
+What is the mean of X ? [_______]{"$n*$p"}
+
+What is the standard deviation of X ? [_______]{"sqrt($n*$p*(1-$p))"}
+
+What is the z-score of [`X=[$corr]`]? [___________]{"($corr-$mean)/$dev"}
+
+What is the estimated probability that [`X \ge [$corr]`] ? [_____________]{$ans}
+
+END_PGML
+
+$showHint = -1;
+BEGIN_HINT
+$HR
+$SOLUTION
+
+END_HINT
+
+
+ENDDOCUMENT();       # This should be the last executable line in the problem.

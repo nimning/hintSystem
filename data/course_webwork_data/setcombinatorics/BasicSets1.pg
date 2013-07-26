@@ -1,0 +1,75 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "MathObjects.pl",
+  "parserRadioButtons.pl",
+  "compoundProblem.pl",
+  "Parser.pl",
+  "PGunion.pl",
+  "PGcourse.pl",
+  "PGchoicemacros.pl",
+);
+
+TEXT(beginproblem);
+BEGIN_PROBLEM();
+
+##############################################
+
+$isProfessor = ($studentLogin eq 'yoav.freund' || $studentLogin eq 'professor');
+Context("Interval");
+$showPartialCorrectAnswers = 1; # show student the correct part of their answer.
+
+@A_elements=NchooseK(10,8);
+$A=Set("{".join(",",@A_elements)."}");
+
+@B_elements=NchooseK(10,6);
+$B=Set("{".join(",",@B_elements)."}");
+
+@C_elements=NchooseK(10,7);
+$C=Set("{".join(",",@C_elements)."}");
+
+@Universe_elements=NchooseK(10,10);
+$Universe=Set("{".join(",",@Universe_elements)."}");
+
+$Ac=Set($Universe-$A);
+$Bc=Set($Universe-$B);
+$Cc=Set($Universe-$C);
+
+BEGIN_PGML
+
+### More Practice with Set Union, Intersection, Complement ###
+Let the outcome space be [`\{0,1,...9\}`], and define subsets of this outcome space [`A = [$A]`], [`B = [$B]`], and [`C = [$C]`].  Evaluate the following sets:
+
+o [`A^c`]?  [_________]{$Ac}
+o [`B^c`]?  [_________]{$Bc}
+o [`C^c`]?  [_________]{$Cc}
+o [`A^c \cup B^c`]? [__________]{Union($Ac,$Bc)}
+o [`A^c \cup B^c \cup C^c`]? [__________]{Union($Ac,$Bc,$Cc)}
+o [`(A^c \cup B^c \cup C^c)^c`]? [__________]{$Universe-Union($Ac,$Bc,$Cc)}
+
+Then evaluate the following sets:
+o [`A \cap B`]? [__________]{$A->intersect($B)}
+o [`A \cap B \cap C`]? [__________]{$A->intersect($B)->intersect($C)}
+
+### De Morgan's Law for Sets ###
+Notice something?  [`(A^c \cup B^c \cup C^c)^c = A \cap B \cap C`]!  
+
+This is not a coincidence.  There is a more general underlying fact that holds for sets, and an analogous version for boolean logic.  
+For any sets [`S_1,S_2,...S_n`], [`(S_1^c \cup S_2^c \cup ...S_n^c)^c = S_1 \cap S_2 ...S_n`]
+
+Likewise, [`(S_1^c \cap S_2^c \cap ...S_n^c)^c = S_1 \cup S_2 ...S_n`]
+
+END_PGML
+
+BEGIN_PGML_SOLUTION
+#### Solution ####
+o [`A^c \cup B^c \cup C^c`] can be computed by [`(A^c \cup B^c) \cup C^c`], where [`A^c \cup B^c`] had already been computed above
+o [`(A^c \cup B^c \cup C^c)^c`] can be computed by taking the complement of [`A^c \cup B^c \cup C^c`], which had already been computed previously.  This complement is just [`\{0,1,...9\}-(A^c \cup B^c \cup C^c)`]
+END_PGML_SOLUTION
+
+##############################################
+
+END_PROBLEM();
+ENDDOCUMENT();        # This should be the last executable line in the problem.

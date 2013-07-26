@@ -1,0 +1,418 @@
+##KEYWORDS confidence interval, population mean, treatment
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+  "PGstandard.pl",
+  "package.pl",
+  "Parser.pl",
+  "PGunion.pl",
+  "PGcourse.pl",
+
+  "PGbasicmacros.pl",
+  "PGchoicemacros.pl",
+  "PGanswermacros.pl",
+"PGnumericalmacros.pl",
+"PGstatisticsmacros.pl"
+);
+
+TEXT(beginproblem);
+BEGIN_PROBLEM();
+
+##############################################
+
+$isProfessor = ($studentLogin eq 'dpvc' || $studentLogin eq 'professor');
+
+#
+#  Start a compound problem.  See the compoundProblem.pl
+#  file for more details about the parameters you
+#  can supply.
+#
+$cp = new compoundProblem(
+  parts => 6,                  # the total number of parts in this problem
+  weights => [100,100,60,1,1,0],
+#  totalAnswers => 6,           # total answers in all parts combined
+  parserValues => 1,           # make parser objects from student answers
+  allowReset => 0,#$isProfessor,  # professors get Reset button for testing
+  nextStyle => "Button",
+);
+$part = $cp->part;             # look up the current part
+$ybare = 0;
+$se = 0;
+
+$ye[0] = random(44975,44979,1);
+$ye[1] = random(44000,44002,1);
+$ye[2] = random(45774,45779,1);
+$ye[3] =random(45000,45002,1);
+
+for ($i=0;$i<4;$i++){
+	$ybare = $ybare + $ye[$i];
+}
+$ybare = $ybare/4;
+
+for ($i=0;$i<4;$i++){
+	$se = $se + ($ye[$i] - $ybare)*($ye[$i] - $ybare);
+}
+$se = sqrt($se/3);
+
+$deltae = $se / sqrt(4);
+$te=($ybare-44000)/$deltae;
+$pe=tprob(3,$te);
+
+$ybar = 0;
+$s = 0;
+$y[0] = random(98,100,1);
+$y[1] = random(119,120,1);
+$y[2] = random(105,106,1);
+$y[3] = random(112,114,1);
+$y[4] = random(95,96,1);
+$y[5] = random(120,121,1);
+$y[6] = random(105,106,1);
+
+$ybar = ($y[0]+$y[1]+$y[2]+$y[3]+$y[4]+$y[5]+$y[6])/7;
+
+for ($i=0;$i<7;$i++){
+	$s = $s + ($y[$i] - $ybar)*($y[$i] - $ybar);
+}
+$s = sqrt($s/6);
+
+$delta =  $s / sqrt(7);
+$t=($ybar-119)/$delta;
+$p=1-tprob(6,$t);
+
+$ybaro = 0;
+$so = 0;
+
+$yo[0] = random(98,100,1);
+$yo[1] = random(119,120,1);
+$yo[2] = random(125,127,1);
+$yo[3] = random(112,114,1);
+$yo[4] = random(115,116,1);
+$yo[5] = random(120,121,1);
+$yo[6] = random(119,121,1);
+$ybaro = ($yo[0]+$yo[1]+$yo[2]+$yo[3]+$yo[4]+$yo[5]+$yo[6])/7;
+
+for ($i=0;$i<7;$i++){
+	$so = $so + ($yo[$i] - $ybaro)*($yo[$i] - $ybaro);
+}
+$so = sqrt($so/6);
+$deltao = $so / sqrt(7);
+$to=($ybaro-120)/$deltao;
+$po=1-tprob(6,$to);
+
+##############################################
+#
+#  Part 1
+#
+
+if ($part == 1) {
+$newProblemSeed = random(0,1000*$part,1);
+$PG_random_generator->srand($newProblemSeed);
+
+BEGIN_TEXT
+$BBOLD The link to the distribution claculator: $EBOLD
+  \{ htmlLink("http://www.tutor-homework.com/statistics_tables/statistics_tables.html#t ","http://www.tutor-homework.com/statistics_tables/statistics_tables.html#t ") \}.
+$BBOLD You need it at for all problems. Right click it and open it in a new tab.$EBOLD
+$BR
+
+$BBOLD Pretest question 1 $EBOLD
+
+The breaking strengths of four large metal pins used in building construction randomly chosen from a large production lot are (in psi).
+$PAR
+\[ \begin{array}{cccc}
+$ye[0] & $ye[1] & $ye[2] & $ye[3] \cr
+\end{array} \]
+
+$PAR
+The head of the quality unit expects the mean breaking strength of pins to be greater than 44000, so he wants to test the hypotheses:
+$BR
+\(H_0: \mu = 44000 \) \(  H_a: \mu  >44000\), 
+ where \(\mu\) is the mean strength of the pins in the lot.
+$PAR
+Compute the p-value for this hypotheses test.
+p = \{ans_rule(10)\}  
+$BR
+
+
+END_TEXT
+ANS(num_cmp($pe, tol=>.01, tolType=>"absolute"));
+}
+
+##############################################
+#
+#  Part 2
+#
+
+if ($part == 2) {
+$newProblemSeed = random(0,1000*$part,1);
+$PG_random_generator->srand($newProblemSeed);
+$aa = floor(($pe)*10000)/10000;
+
+$cmc = new_multiple_choice();
+$cmc->qa(
+	"If the p-value is $aa, what conclusion can the head of the quality make about the null hypothesis at the 0.05 level?", 
+	"Since the p-value is less than 0.05, he can reject the null hypothesis."
+);
+$cmc->extra("Since the p-value is greater than 0.05, he cannot reject the null hypothesis.",
+"Since the p-value is less than 0.05, he cannot reject the null hypothesis.",
+"He cannot get the precise p-value,no conclusion can be made.");
+
+BEGIN_TEXT
+$BBOLD Pretest question 2 $EBOLD
+
+The breaking strengths of four large metal pins used in building construction randomly chosen from a large production lot are (in psi).
+$PAR
+\[ \begin{array}{cccc}
+$ye[0] & $ye[1] & $ye[2] & $ye[3] \cr
+\end{array} \]
+
+$PAR
+The head of the quality unit expects the mean breaking strength of pins to be greater than 44000,so he wants to test the hypotheses:
+$BR
+\(H_0: \mu = 44000, \) \(  H_a: \mu >44000 \)
+ where \(\mu\) is the mean strength of the pins in the lot.
+$PAR
+
+$PAR
+\{$cmc -> print_q \}
+\{$cmc -> print_a \}
+
+END_TEXT
+
+ANS(radio_cmp($cmc->correct_ans));
+
+}
+
+
+##############################################
+#
+#  Part 3
+#
+
+if ($part == 3) {
+$newProblemSeed = random(0,1000*$part,1);
+$PG_random_generator->srand($newProblemSeed);
+
+
+
+$cmc = new_multiple_choice();
+$cmc->qa(
+	"The Scientific Hypothesis is the hypothesized outcome of the experiment or study. In this problem, the Scientific Hypothesis is:", 
+	"The average time spent by all WPI students on a 1/3 unit seven week undergraduate course is lower than the 119 hour guideline."
+);
+$cmc->extra("The maximun time spent by WPI students on a 1/3 unit seven week undergraduate course is greater than the 119 hour guideline.",
+"The average time spent by all WPI students on a 1/3 unit seven week undergraduate course is equal to the 119 hour guideline.",
+"The maximun time spent by all WPI students on a 1/3 unit seven week undergraduate course is equal than the 119 hour guideline.");
+
+
+
+
+$cme = new_multiple_choice();
+$cme->qa(
+	"The Statistical Model is the distribution of the population of measurements that are being taken. What are the measurements in this problem, and what is the Statistical Model?", 
+	"The hours WPI students spend on 1/3 unit seven week undergraduate courses per term; \(N(\mu,\sigma^2)\)"
+);
+$cme->extra("The hours WPI students spend on 1/3 unit seven week undergraduate courses per week; \(N(\mu,\sigma^2)\)",
+"The hours WPI students spend on 1/3 unit seven week undergraduate courses; \(N(\sigma,\sigma^2)\)",
+"The hours WPI students spend on 1/3 unit seven week undergraduate courses; \(b(n,p)\)");
+
+
+
+$cmd = new_multiple_choice();
+$cmd->qa(
+	" What is the Statistical Hypotheses for this problem? ", 
+	"\(H_0: \mu = 119, \) \(  H_a: \mu < 119 \)
+ where \(\mu\) is the average time spent by all WPI students on a 1/3 unit seven week undergraduate course."
+);
+$cmd->extra("\(H_0: \mu = 119, \) \(  H_a: \mu >119 \)
+ where \(\mu\) is the average time spent by all WPI students on a 1/3 unit seven week undergraduate course.", "\(H_0: \mu =119, \) \(  H_a: \mu < 119 \)
+where \(\mu\) is the minimum time spent by all WPI students on a 1/3 unit seven week undergraduate course.");
+$cmd->makeLast("\(H_0: \mu =119, \) \(  H_a: \mu < 119 \)
+ where \(\mu\) is the maximum time spent by all WPI students on a 1/3 unit seven week undergraduate course.");
+
+
+
+$cmh = new_multiple_choice();
+$cmh->qa(
+	"Suppose the project team select another sample, and find a p-value of 0.016. What conclusion can they make about the null hypothesis at the 0.05 level?", 
+	"Since the p-value is less than 0.05, they can reject the null hypothesis."
+);
+$cmh->extra("Since the p-value is greater than 0.05, they cannot reject the null hypothesis.", "Since the p-value is less than 0.05, they cannot reject the null hypothesis.");
+$cmh->makeLast("They cannot get the precise p-value,no conclusion can be made.");
+
+
+
+
+BEGIN_TEXT
+$BBOLD problem $EBOLD
+
+$PAR
+WPI sets an expectation of 17 hours work per week for a 1/3 unit seven week undergraduate course, which
+equals 119 hours per term. To see if reality meets expectations, a WPI project team took a random sample of
+7 1/3 unit courses and from each course, randomly selected one student volunteer to follow during the term.
+Each selected student agreed to keep track of the hours spent on coursework for that course. The totals for
+the term are below:
+$PAR
+
+\[ \begin{array}{cccccccc}
+$y[0] & $y[1] & $y[2] & $y[3] & $y[4] & $y[5] & $y[6] \cr
+\end{array} \]
+
+$PAR
+The project team was interested in determining whether the average time spent by all WPI students on a 1/3 unit seven week undergraduate course is lower than the 119 hour guideline.
+$PAR
+
+$BBOLD 1. The Scientific Hypothesis: $EBOLD
+$PAR
+\{$cmc -> print_q \}
+\{$cmc -> print_a \}
+$PAR
+$BBOLD 2. The Statistical Model: $EBOLD
+$PAR
+\{$cme -> print_q \}
+\{$cme -> print_a \}
+$PAR
+$PAR
+$BBOLD 3. The Statistical Hypotheses: $EBOLD
+$PAR
+\{$cmd -> print_q \}
+\{$cmd -> print_a \}
+$BBOLD 4.1 The Test Statistic: $EBOLD
+$PAR
+Obtain a single number estimate of the average number of hours per term spent by WPI students for a 1/3 unit seven week undergraduate course.
+$PAR
+\(\bar{y}\) = \{ans_rule(10)\}
+$PAR
+$BBOLD 4.2 The p-value: $EBOLD
+$PAR
+Obtain the p-value for the Statistical Hypotheses above:
+$BR
+p-value=\{ans_rule(10)\}.
+$PAR
+$BBOLD 5. Results and Interpretation: $EBOLD
+$PAR
+\{$cmh -> print_q \}
+\{$cmh -> print_a \}
+
+
+END_TEXT
+
+ANS(radio_cmp($cmc->correct_ans));
+ANS(radio_cmp($cme->correct_ans));
+ANS(radio_cmp($cmd->correct_ans));
+ANS(num_cmp($ybar, tol=>.01, tolType=>"absolute"));
+ANS(num_cmp($p, tol=>.01, tolType=>"absolute"));
+
+ANS(radio_cmp($cmh->correct_ans));
+
+}
+
+
+
+##############################################
+#
+#  Part 4
+#
+
+if ($part == 4) {
+
+
+$newProblemSeed = random(0,1000*$part,1);
+BEGIN_TEXT
+$BBOLD Posttest question 1 $EBOLD
+
+It has
+been hypothesized that individuals suffering from Alzheimer's disease
+may spend less than the normal amount of time per night in the deeper stages of sleep. 
+To test this hypothesis
+researchers measured the time, in minutes, spent in stage IV sleep (the deepest level of sleep)
+for a sample of seven Alzheimer's patients (data below). In
+healthy individuals, the average time spent in stage IV sleep is 120
+minutes per night. The data are:
+
+\[ \begin{array}{cccccccc}
+$yo[0] & $yo[1] & $yo[2] & $yo[3] & $yo[4] & $yo[5] & $yo[6] \cr
+\end{array} \]
+
+$PAR
+The researchers are interested in whether the mean of time spent in stage IV sleep of Alzeheimer's patients is lower than 120 minutes,so he wants to test the hypotheses:$PAR
+$BR
+\(H_0: \mu = 120, \) \(  H_a: \mu < 120 \)
+ where \(\mu\) is the mean of time spent in stage IV sleep of Alzeheimer's patients.
+$PAR
+Compute the p-value for this hypotheses test.
+p = \{ans_rule(10)\}  
+$BR
+
+
+END_TEXT
+ANS(num_cmp($po, tol=>.01, tolType=>"absolute"));
+
+}
+
+##############################################
+#
+#  Part 5
+#
+
+if ($part == 5) {
+$dd = floor(($po)*10000)/10000;
+
+
+$newProblemSeed = random(0,1000*$part,1);
+$cmc = new_multiple_choice();
+$cmc->qa(
+	"If the p-value is $dd, what conclusion can the researchers make about the null hypothesis at the 0.05 level?", 
+	"Since the p-value is greater than 0.05, they cannot reject the null hypothesis."
+);
+$cmc->extra("Since the p-value is less than 0.05, they can reject the null hypothesis.",
+"Since the p-value is less than 0.05, they cannot reject the null hypothesis.",
+"They cannot get the precise p-value,no conclusion can be made.");
+
+BEGIN_TEXT
+$BBOLD Posttest question 2 $EBOLD
+
+It has
+been hypothesized that individuals suffering from Alzheimer's disease
+may spend less than the normal amount of time per night in the deeper stages of sleep. 
+To test this hypothesis
+researchers measured the time, in minutes, spent in stage IV sleep (the deepest level of sleep)
+for a sample of seven Alzheimer's patients (data below).  $PAR
+
+\[ \begin{array}{cccccccc}
+$yo[0] & $yo[1] & $yo[2] & $yo[3] & $yo[4] & $yo[5] & $yo[6] \cr
+\end{array} \]
+$PAR
+The researchers are interested in whether the mean of time spent in stage IV sleep of Alzeheimer's patients is lower than 120 minutes,so he wants to test the hypotheses:$PAR
+$BR
+\(H_0: \mu = 120, \) \(  H_a: \mu < 120 \)
+ where \(\mu\) is the mean of time spent in stage IV sleep of Alzeheimer's patients.
+$BR 
+$PAR
+\{$cmc -> print_q \}
+\{$cmc -> print_a \}
+
+
+
+
+END_TEXT
+ANS(radio_cmp($cmc->correct_ans));
+}
+##############################################
+#
+#  Part 6
+#
+
+if ($part == 6) {
+
+BEGIN_TEXT
+
+END_TEXT
+
+}
+
+##############################################
+
+END_PROBLEM();
+ENDDOCUMENT();        # This should be the last executable line in the problem.

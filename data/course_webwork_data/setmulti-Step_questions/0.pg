@@ -1,0 +1,262 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "MathObjects.pl",
+  "parserRadioButtons.pl",
+  "compoundProblem.pl",
+  "Parser.pl",
+  "PGunion.pl",
+  "PGcourse.pl",
+  "PGchoicemacros.pl",
+);
+
+TEXT(beginproblem);
+BEGIN_PROBLEM();
+
+##############################################
+
+$isProfessor = ($studentLogin eq 'yoav.freund' || $studentLogin eq 'professor');
+
+#
+#  Start a compound problem.  See the compoundProblem.pl
+#  file for more details about the parameters you
+#  can supply.
+#
+$cp = new compoundProblem(
+  parts => 2,                  # the total number of parts in this problem
+  totalAnswers => 4,           # total answers in all parts combined
+  parserValues => 1,           # make parser objects from student answers
+  allowReset => $isProfessor,  # professors get Reset button for testing
+  nextStyle => 'Button',
+  nextVisible => 'ifCorrect',
+);
+$part = $cp->part;             # look up the current part
+
+Context("Interval");
+$showPartialCorrectAnswers = 0; # Don't show student correct answers until they answer correctly.
+
+##############################################
+#
+#  Part 1
+#
+
+if ($part == 1) {
+
+$S=Set(3,5,7,9);
+
+TEXT(PGML::Format2(<<'END_PGML'))
+
+
+#### Tuples, and products of sets ####
+
+Suppose we toss a coin three times. We can represent the outcome by a 3-tuple like [`(H,H,T)`] (where [`H`] means heads and [`T`] means tails). The set of all
+such tuples is
+[`` 
+\{(H,H,H), (H,H,T), (H,T,H), (H,T,T), (T,H,H), (T,H,T), (T,T,H), (T,T,T)\}.
+``]
+It can also be written as [`\{H,T\} \times \{H,T\} \times \{H,T\}`]  or even more simply, [`\{H,T\}^3`] 
+
+More generally, if [`S_1, S_2, \ldots, S_k`] are sets, then  [`S_1 \times S_2 \times \cdots \times S_k`] is the set of all [`k`] tuples in which
+the first entry is from [`S_1`]  the second entry is from [`S_2`]  and so on. For
+instance,
+
+[``
+\mathbb{R}^2 = \mathbb{R} \times \mathbb{R} =\{\mbox{all points in the plane}\} 
+``]
+
+[``
+\mathbb{R}^d = \{\mbox{all points in $d$ dimensional space}\} .
+``]
+
+Note that, unlike sets, _order_ is significant in tuples. Also
+note that the same element can appear multiple times in a tuple, but
+not in a set.
+
+We are often also interested in sets of tuples that cannot be expressed as 
+products of individual sets. For instance, the points in the unit circle in [`\mathbb{R}^2`] are
+[`` \{(x,y): x^2 + y^2 \leq 1 \},``]
+a subset of [`\mathbb{R}^2`] that cannot be written as a product [`S_1 \times S_2`] 
+
+#### The size of a set ####
+
+The _size_ of a set [`A`] is the number of elements in it and is denoted
+by [`|A|`]  Thus [`|\{H,T\}|=2`],  [`|\emptyset|=0`] and [`|\mathbb{Z}^+|=\infty`] 
+
+When [`S`] is of the form  [`S_1 \times \cdots \times S_k`]  then [`|S| = |S_1| \cdot |S_2| \cdots |S_k|`] 
+
+To see an example of this notation, suppose there is a group of [`n`] concert-goers, each of whom is selecting a band T-shirt. The available
+colors are red, yellow, and black. How many possible outcomes are
+there? Well, let [`C = \{\mbox{red}, \mbox{yellow}, \mbox{black}\}`] be
+the set of possible colors, and represent each outcome as an [`n`] tuple
+in which the [`i`] h entry is the color of the [`i`] h person's T-shirt.
+Then the possible outcomes are [`C^n`]  a set of size [`|C|^n = 3^n`] 
+
+
+
+
+END_PGML
+
+#
+#  the useGrader() method sets the grader for this part.
+#
+# $cp->useGrader(~~&std_problem_grader);
+
+}
+
+##############################################
+#
+#  Part 2
+#
+
+if ($part == 2) {
+
+TEXT(PGML::Format2(<<'END_PGML'))
+
+## Permutations and combinations ##
+
+Armed with the concepts of sets, tuples and set size we can now tackle
+some more interesting combinatorial questions.
+
+#### Sampling with and without replacement when the order matters ####
+
+Suppose there are four children---Alice, Bill, Christie, and Doug---at an animal
+shelter, checking out the current pool of [`n`] dogs. Each child writes down the 
+name of the dog he or she likes most. How many possible outcomes are there?
+
+We can represent each outcome as a 4-tuple (Alice's choice, Bill's choice,
+Christie's choice, Doug's choice) in which each entry is the name of a dog. 
+So the number of outcomes is [`n^4`] 
+
+Now suppose that these same children are actually picking out dogs. First Alice 
+chooses a dog to adopt, then Bill chooses a dog to adopt, and so on. How many 
+outcomes are there now?
+
+In this situation, Alice has [`n`] choices, but Bill has only [`n-1`] choices,
+Christie has [`n-2`] choices, and Doug has [`n-3`] choices. So there are [`n(n-1)(n-2)(n-3)`] possible outcomes.\\
+
+The first situation is called _sampling with replacement_: the
+outcomes are tuples in which the same element (dog) can occur more
+than once. The number of such [`k`] tuples, chosen from [`n`] elements, is [`n^k`]  In the example, [`k=4`]  The second situation is _sampling
+  without replacement_: the outcomes are tuples in which no element
+can be repeated. The number of such [`k`] tuples, chosen from [`n`] elements, is [`n(n-1)(n-2) \cdots (n-k+1)`]  \\
+
+Here's a related question: how many ways are there to order (shuffle)
+a deck of 52 cards?  (Each such ordering is called a _permutation_
+of the cards.) Well, the result is a 52-tuple, drawn from a set of
+size 52, in which no card is repeated. Therefore, the number of
+permutations is [`52 \cdot 51 \cdot 50 \cdots 1`]  which is called [`52`] _factorial_ and denoted as [`52!`]  More generally, the number of
+permutations of [`n`] elements is [`n`] factorial or [`n!`] 
+
+Coming back to sampling [`k`] out of [`n`] elements without replacement,
+we can write it succinctly as 
+[``
+n(n-1)(n-2) \cdots (n-k+1) = \frac{n!}{(n-k)!}
+``]
+
+#### When the order doesn't matter ####
+
+Snow White is off to pick strawberries and asks three of the dwarfs (chosen 
+from the seven: Dopey, Grumpy, Doc, Happy, Bashful, Sneezy, Sleepy) to join 
+her. How many possible groups are there?
+
+In this case, it is misleading to represent an outcome as a 3-tuple, because, 
+for instance, [`\mbox{(Dopey, Sleepy, Doc)}`] is a different 3-tuple from [`\mbox{(Sleepy, Dopey, Doc)}`] but they represent the same group. So if we count
+tuples, we would be _over-counting_. Instead, we ought to represent an 
+outcome as a set, [` \{\mbox{Dopey, Doc, Sleepy}\}`] 
+
+So the question becomes: how many different subsets of three dwarfs are there?
+In general, a set of size [`n`] has 
+[``{n \choose k} \ = \ \frac{n!}{k! (n-k)!} ``] 
+subsets of size [`k`]  So in our example, the answer is [`{7 \choose 3} = 35`] 
+\\
+
+Let's step back and derive the main result: how many subsets of size [`k`] does a
+set of [`n`] elements have? We can choose the subset in the following manner: first
+pick one element from the set, then a second (different) element, then a third 
+(different) element, and so on until we have [`k`] distinct elements. This yields 
+a [`k`] tuple (first choice, second choice, etc), and as we saw above (sampling
+without replacement when the order matters) the number of possible such tuples 
+is [`n(n-1) \cdots (n-k+1)`]  However, we have over-counted because each subset of 
+size [`k`] appears multiple times amongst these [`k`] tuples. To be precise, each 
+subset corresponds to exactly [`k!`] tuples, depending on the order in which the  [`k`] elements of the subset are chosen. Thus the number of subsets of size [`k`] is
+[`` \frac{n(n-1)\cdots (n-k+1)}{k!} \ = \ \frac{n!}{k!(n-k)!} .``]
+\\
+
+A second example: how many strings in [`\{0,1\}^{10}`] contain exactly
+_four_ 1s?  Well, we need to choose four positions of the ten
+possibilities in which to place the 1s; that is, we choose a subset of
+size four from [`\{1,2,\ldots,10\}`]   The number of ways to do this is [`{10 \choose 4} = 210`] 
+\\
+
+Let's finish with a more challenging example. You walk into a candy
+store and notice that there are five types of candy. Your mother
+allows you to pick exactly three pieces of candy, of whichever type(s)
+you want. How many ways are there to do this?
+
+You can represent the outcome by 5-tuple [`(n_1, n_2, \ldots, n_5)`] in
+which [`n_i`] is the number of pieces of the [`i`] h type of candy. How
+many such tuples are there, subject to [`n_1 + n_2 + \cdots + n_5 = 3`] 
+To answer the question, we'll represent each tuple in a different
+format, as a sequence of length 7 containing three stars and four
+bars. For instance, the sequence [`|\,**\,|\,|\,|\,*`] denotes [`(0,2,0,0,1)`] (two candies of type 2 and one candy of type 5): the
+number of candies of type [`i`] is the number of stars between the [`(i-1)`] t and [`i`] h bars.
+ 
+So we have rephrased the question thus: how many sequences are there
+with four bars and three stars? Well, this is a sequence of size 7,
+and we must pick three of the seven positions at which to place
+stars. The number of such choices is [`{7 \choose 3} = 35`] 
+
+## Arithmetic and geometric series ##
+
+The simplest _arithmetic series_ is [`1,2,3,\ldots`]  The sum of the first  [`n`] elements of this series is
+[`` 1 + 2 + \cdots + n \ = \ \frac{n(n+1)}{2} .``]
+
+Why? suppose that write the sum twice, first going up from [`1`] to [`n`] and then and then going down from [`n`] down to [`1`] 
+[`` \left(1 + 2 + \cdots + (n-1) + n\right) + 
+\left(n + (n-1) + \cdots + 2 + 1\right) ``]
+We can rearrange the sum into a sum of [`n`] pairs, the first of which
+sums the first element in each list, the second sums the second
+elements in each list etc:
+[`` (1+n) + (2+(n-1)) + (3+(n-2)) + \cdots + (n+1) ``]
+It is easy to see that each pair sums to [`n+1`] and that there are [`n`] pairs, which gives a total of [`n(n+1)`]  Recalling that we summed two
+copies of the original sum we get [`n(n+1)/2`] 
+
+A more general arithmetic series is [`a, a+s, a+2s, \ldots`] (where [`a,s`] are some numbers). The sum of the first [`n`] elements of this series is
+[`` a + (a+s) + \cdots + (a + (n-1)s)
+\ = \ 
+an + s(1 + \cdots + (n-1))
+\ = \ 
+an + \frac{sn(n-1)}{2}.
+``]
+\\
+
+One of the most common _geometric series_ is [`1, 2, 4, 8, \ldots`]  the sum
+of the first [`n`] elements of this series is
+[`` 1 + 2 + \cdots + 2^{n-1} \ = \ 2^n - 1 .``]
+Another common series is [`1, \frac{1}{2}, \frac{1}{4}, \ldots`] 
+in which the first [`n`] terms sum to [`2 - (1/2^{n-1})`] 
+
+More generally, a geometric series is of the form [`a, ar, ar^2, ar^3, \ldots`] (where [`a,r`] are some numbers), and its first [`n`] terms sum to
+[`` a + ar + \cdots + ar^{n-1} 
+\ = \ 
+\frac{a(r^n-1)}{r-1}
+\ = \ 
+\frac{a(1-r^n)}{1-r}.``]
+The first form is more useful when [`r > 1`]  while the second is more useful when [`r< 1`] 
+
+In the case where [`|r| < 1`]  we can sum the entire series (with infinitely many terms) 
+to get [`a/(1-r)`] 
+
+END_PGML
+}
+
+##############################################
+
+END_PROBLEM();
+ENDDOCUMENT();        # This should be the last executable line in the problem.
+
+
+
+

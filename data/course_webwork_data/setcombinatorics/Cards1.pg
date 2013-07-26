@@ -1,0 +1,40 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "MathObjects.pl",
+  "PGcourse.pl",
+);
+
+TEXT(beginproblem);
+$showPartialCorrectAnswers = 1;
+
+######################################################################
+Context("Numeric");
+
+$R1=random(8,15,1);
+$R2=random(2,$R1-2,1);
+$F=fact($R1)/(fact($R2)*fact($R1-$R2));
+
+TEXT(PGML::Format2(<<'END_PGML'));
+
+A standard deck of playing cards has 52 cards. Each card has a "rank" which is one of:
+{Ace,2,3,4,5,6,7,8,9,10,Jack,Queen,King} and a suit which is one of {Diamond,Heart,Spade,Club}.
+Taking the product of the number of ranks [`13`] and the number of suits [`4`] we get [`52`] which is the number of cards.
+
+Suppose we pick a single card uniformly at random.
+o What is the probability that it is a King? [__________]{Formula("4/52")} (hint: how many kings in a deck? How many cards in a Deck?)
+o What is the probability that it is a Spade? [__________]{Formula("13/52")}
+o What is the probability that it is the King of Spades? [__________]{Formula("1/52")}
+
+END_PGML
+BEGIN_PGML_SOLUTION
+o There are 4 king cards in a deck of cards (the same holds true for any other rank), therefor the probability of picking a kind is [`4/52 = 1/13`]
+o There are 13 cards in each of the four suites, therefor the probability of getting a card from any given suite (A spade in this case) is [`13/52 = 1/4`]
+o There is exactly one king of spades in a deck of cards. Therefor the probability of getting it is [`1/52`].
+o Note that [`1/13 * 1/4 = 1/52`]
+END_PGML_SOLUTION
+######################################################################
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

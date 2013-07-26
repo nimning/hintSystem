@@ -1,0 +1,69 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+   "PGstandard.pl",
+   "MathObjects.pl",
+#    "source.pl",
+#    "PGcourse.pl",
+);
+
+$showPartialCorrectAnswers = 1;
+
+Context()->strings->add(hello =>{},goodbye=>{});  # allows only these strings to be entered without
+                                                                                 # alerting student to a mistake
+$ans = String("Hello");                    # generates the correct answer
+
+TEXT(beginproblem());
+
+####################################################
+#
+# Set up section
+#
+
+
+####################################################
+#
+# Text section
+#
+
+Context()->texStrings;
+BEGIN_TEXT
+Complete the sentence: $PAR
+\{$ans->ans_rule() \}  world!
+
+END_TEXT
+Context()->normalStrings;
+
+####################################################
+#
+# Answer section
+#
+
+ANS($ans->cmp);
+
+####################################################
+#
+# Solution section
+# 
+####################################################
+#
+# Hint section
+# 
+
+HINT(EV3(<<'END_HINT'));
+$HINT
+Try Hello or goodbye.
+END_HINT
+
+SOLUTION(EV3(<<'END_SOLUTION'));
+$SOL
+Good-bye world is too pessimistic! :-) 
+$PAR
+  Solutions are not required but they are 
+appreciated.
+
+END_SOLUTION
+
+
+ENDDOCUMENT(); 
+   

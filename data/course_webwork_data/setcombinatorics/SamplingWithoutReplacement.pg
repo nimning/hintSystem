@@ -1,0 +1,63 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "MathObjects.pl",
+  "PGcourse.pl",
+);
+
+TEXT(beginproblem);
+$showPartialCorrectAnswers = 1;
+
+######################################################################
+Context("Numeric");
+
+$R1=random(8,15,1);
+$R2=random(2,$R1-2,1);
+$F=fact($R1)/(fact($R2)*fact($R1-$R2));
+
+TEXT(PGML::Format2(<<'END_PGML'));
+
+#### Sampling without replacement when the order doesn't matter ####
+
+Snow White is off to pick strawberries and asks three of the dwarfs; chosen 
+from the seven: [`\{\mbox{Dopey, Grumpy, Doc, Happy, Bashful, Sneezy, Sleepy}\}`] to join her. How many possible groups are there?
+
+In this case, it is misleading to represent an outcome as a 3-tuple, because, 
+for instance, [`\mbox{(Dopey, Sleepy, Doc)}`] is a different 3-tuple from [`\mbox{(Sleepy, Dopey, Doc)}`] but they represent the same group. So if we count
+*tuples*, we would be _over-counting_. Instead, we ought to represent an 
+outcome as a *set* such as [` \{\mbox{Dopey, Doc, Sleepy}\}`], in which the order of elements is ignored.
+
+So the question becomes: how many different subsets of three dwarfs are there?
+
+The number of subsets of size [`k`] in a set of size [`n`] 
+is called "n choose k" and is denoted [`{n \choose k}`]. The formula for n choose k is:
+
+[``{n \choose k} \ = \ \frac{n!}{k! (n-k)!} ``] 
+
+Let's step back and derive this formula.
+
+We can choose the tuples of size [`k`] in the following manner: first
+pick one element from the set, then a second (different) element, then a third 
+(different) element, and so on until we have [`k`] distinct elements. This yields a [`k`] tuple (first choice, second choice, etc), and as we saw above (sampling without replacement when the order matters) the number of possible such tuples is [`n!/(n-k-1)!`]. 
+
+However, we have over-counted because each subset of 
+size [`k`] appears multiple times amongst these [`k`] tuples. To be precise, each 
+subset corresponds to exactly [`k!`] tuples, depending on the order in which the  [`k`] elements of the subset are chosen. Thus the number of subsets of size [`k`] is [`` \frac{n(n-1)\cdots (n-k+1)}{k!} \ = \ \frac{n!}{k!(n-k)!} .``]
+
+A second example: how many strings in [`\{0,1\}^{10}`] contain exactly
+_four_ 1s?  Well, we need to choose four positions of the ten
+possibilities in which to place the 1s; that is, we choose a subset of
+size four from [`\{1,2,\ldots,10\}`]   The number of ways to do this is [`{10 \choose 4} = 210`] 
+
+Suppose we have [$R1] bins, numbered 1,...,[$R1] and that we have [$R1] balls,
+[$R2] of them white and [$R1-$R2] of them black.
+
+How many white/black patterns can one make by placing the balls in the bins? [________]{$F}
+
+END_PGML
+
+######################################################################
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

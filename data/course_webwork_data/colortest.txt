@@ -1,0 +1,35 @@
+*(Part 1/3)*
+
+##Mathematical Preliminaries##
+
+Probability theory is about sets. In the first lesson you encountered
+the set of possible outcomes of flipping two coins which contains four
+elements. If we use [`H`] to denote "Heads" and [`T`] to denote
+"Tails" then the set of possible outcomes, also known as the 
+_outcome space_ contains four elements: [`\{(H,H),(H,T),(T,H),(T,T)\}`]. We say
+that the outcome space is the set of four _tuples_ . As the
+concepts of "set" and "tuple" will be used many times throughout
+the course, we take some pains to define these concepts and the
+associated notation, in a somewhat formal mathematical way.
+
+#### Sets ####
+*Sets* are collections of _elements_ . 
+We will mostly consider sets of numbers, but elements can be most anything.
+
+A set can be specified by listing its elements between braces, as in
+
+o The possible outcomes of the roll of a six sided die: [`A= \{1,2,3,4,5,6\}`]
+o The positive integers: [`\mathbb{Z}^+= \{1,2,\ldots\}`]
+o The possible outcomes of the flip of a coin: [`C= \{ H,T \}`]
+
+We say that [`5`] is an element of [`A`] and denote it by [`5 \in A`]. Sets
+are _unordered_ collections, in other words [`\{1,2,3,4,5,6\} =
+\{5,2,1,3,4,6\}`]. The number of times an element can appear in a set
+is either 0 or 1, *an element  cannot appear multiple times 
+in the set*. For that there is a different construct called *bags* which we shall not use in this course.
+
+Write the set of odd numbers that are larger than 2 and smaller than 10 ? (Separate the elements using Commas and surround the list with braces as in the examples above.)
+
+Answer = [7m[31m[  1][0m[32m{Set(3,5,7,9)}[0m
+
+====================================================================

@@ -1,0 +1,51 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "MathObjects.pl",
+  "PGcourse.pl",
+);
+
+TEXT(beginproblem);
+$showPartialCorrectAnswers = 1;
+
+sub comb
+{
+	fact($_[0])/(fact($_[1])*fact($_[0]-$_[1]));
+}
+
+$ans8 = 40/comb(52,5);
+$ans8Real = Real("$ans8");
+$ans9 = 4/comb(52,5);
+$ans9Real = Real("$ans9");
+
+
+######################################################################
+
+BEGIN_PGML
+## Rolling N Dice ##
+
+A Six-Sided Die (d6) has six faces, numbered 1, 2, 3, 4, 5, and 6.  We are going to do some computation about the sum of rolling different numbers of these dice and adding the faces that turn up.
+
+First, the number of all possible results from rolling one die is [___________________________________________]{6}.
+
+The number of total results from rolling five dice is [___________________________________________]{7776}.
+
+The number of total results from rolling seven dice is [___________________________________________]{279936}.
+
+The total number of sets (f, s, t, fo) that sum to 5 is [___________________________________________]{4}.
+
+Therefore, the probability of rolling a sum of 5 while rolling four dice is [___________________________________________]{4/7776}.
+
+The total number of sets (f, s, t, fo, fi, si, se) that sum to 41 is
+[___________________________________________]{7}.
+
+Therefore, the probability of rolling a sum of 41 while rolling seven dice is
+[___________________________________________]{41/279936}.
+
+END_PGML
+
+######################################################################
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

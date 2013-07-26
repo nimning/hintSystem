@@ -1,0 +1,98 @@
+* Part   1
+
+## Probability of having an empty bin ##
+
+Suppose there are [`m`] balls and [`n`] bins. What is the chance that there is an empty bin if [`m = n`] ?
+
+Intuitively, one would expect this to be pretty close to 1 (that is, pretty much certain), because the complementary event -- no empty bins -- would occur only if every single bin received exactly one ball. Let's analyze this latter probability. The event whose probability we want to upper bound is the event that no two balls land in the same bin.
+
+[``A=\left\{ (b_1,b_2,\ldots,b_n) | \forall 1\leq i<j \leq n, b_i \neq b_j \right\}``]
+
+The probability that the first ball does not cause any bin to have more than one ball is *[  1]{1}*
+* Answers of student jmc001. 10 attempts lasting 15.4 minutes, ending in sucess
+  1	15.4	1	1
+
+* Part   2
+.
+
+Without loss of generality, let us assume the first ball is placed in the first bin. Then we place the second ball. In order to ensure every bin has only one ball, we cannot place the second ball in the first bin because it already has the first ball. This leaves us with the other [`n-1`] bins to put the second ball in. The probability that the second ball avoids the first bin is *[  2]{(1-1/n)}*
+* Answers of student jmc001.  5 attempts lasting 13.8 minutes, ending in sucess
+  2	22.9	1	1-(1/n)
+
+* Part   3
+.
+
+Again, without loss of generality, we assume the second ball is placed in the second bin. For the third ball, it can not be placed in the first or the second bin. The probability that the third ball avoids these two bins is 
+
+*(A)* *[  3]{(1-2/n)}*
+* Answers of student jmc001.  3 attempts lasting 0.2 minutes, ending in sucess
+  3	28.1	1	1-(2/n)
+
+* Part   4
+.
+
+More generally, the probability that the placement of the [`k`] th ball does not cause any bin to have more than one ball is 
+
+*(B)* *[  4]{(1-(k-1)/n)}*
+* Answers of student jmc001. 15 attempts lasting 31.0 minutes, ending in sucess
+  4	65.7	1	1-((k-1)/n)
+
+* Part   5
+.
+
+Together, after placing all [`m=n`] balls, the probability that each bin has exactly one ball is 
+
+*(C)* *[  5]{n!/n^n}*
+* Answers of student jmc001.  2 attempts lasting 26.9 minutes, ending in sucess
+  5	38.0	1	n!/n^n
+
+* Part   6
+ (write the answer in [`n`] only).
+
+This probability is miniscule. To show this, we need to upper bound *(C)*.
+
+We start by upper bounding *(B)*.  Recall the inequality [`1+x \leq e^x`]. Plugging [`-\frac{k-1}{n}`] in for [`x`], gives us an upper bound on *(B)*
+that is 
+
+*(D)* *[  6]{Formula("e^(-(k-1)/n)")}*
+* Answers of student jmc001.  3 attempts lasting 2.7 minutes, ending in sucess
+  6	70.4	1	e^(-(k-1)/n)
+
+* Part   7
+.
+
+We now want to derive an upper bound on *(C)* which is the probability that each of the [`n`] balls is placed in a different bin. To do this we take the product [`\prod_{k=1}^n \exp(-(k-1)/n)`] simplifying this expression gives
+
+[`P(A) \leq `] *[  7]{Formula("e^(-(n-1)/2)")}*
+* Answers of student jmc001. 30 attempts lasting 54.0 minutes, ending in failure
+  7	67.7	0	n!/n^n
+  7	70.4	0	e^(-(k/n))
+  7	70.7	0	e^(-(k!/n^n))
+  7	70.8	0	e^(k!/n^n)
+  7	72.5	0	e^(k^n)
+  7	73.7	0	e^(n!/n^n)
+  7	76.2	0	e^(n!/k!(n-k)!)
+  7	76.4	0	e^(n!/(k!(n-k!))
+  7	76.5	0	e^(n!/(k!(n-k!)))
+  7	81.4	0	1/k^(k/2)
+  7	81.7	0	k^(k/2)
+  7	82.4	0	1/ek^k
+  7	82.7	0	1/(e(k^k))
+  7	83.6	0	(1-(1/n))^n-k
+  7	83.8	0	(1-(1/n))^(n-k)
+  7	84.4	0	1/n^k
+  7	84.5	0	1/n^2
+  7	87.1	0	[e^(-(k-1)/n)]*(n!/n^n)
+  7	87.6	0	[e^(-(k-1)/n)]*[1-((k-1)/n)]
+  7	88.8	0	[e^(-(k-1)/n)]*e^k
+  7	94.1	0	(-(k-1)/n)*[n!/n^n]
+  7	94.4	0	e^{(-(k-1)/n)*[n!/n^n]}
+  7	99.1	0	[e^(n!/n^n)]*[e^(-(k-1)/n)]
+  7	110.2	0	[(ne/k)^k]*(1/n)^k
+  7	111.3	0	[(e/k)^k]*1/(1-(e/k))
+  7	111.6	0	[(e/k)^k]*[1/(1-(e/k))]
+  7	113.7	0	e^(-[m(m-1)]/2n)
+  7	121.3	0	[1-((k-1)/n)]*[n!/n^n]
+  7	121.5	0	e^[1-((k-1)/n)]*[n!/n^n]
+  7	121.7	0	e^{[1-((k-1)/n)]*[n!/n^n]}
+

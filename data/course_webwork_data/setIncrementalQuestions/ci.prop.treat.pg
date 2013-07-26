@@ -1,0 +1,504 @@
+##KEYWORDS confidence interval, population proportion, treatment
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+  "PGstandard.pl",
+  "package.pl",
+  "Parser.pl",
+  "PGunion.pl",
+  "PGcourse.pl",
+
+  "PGbasicmacros.pl",
+  "PGchoicemacros.pl",
+  "PGanswermacros.pl"
+);
+
+TEXT(beginproblem);
+BEGIN_PROBLEM();
+
+##############################################
+
+$isProfessor = ($studentLogin eq 'dpvc' || $studentLogin eq 'professor');
+
+#
+#  Start a compound problem.  See the compoundProblem.pl
+#  file for more details about the parameters you
+#  can supply.
+#
+$cp = new compoundProblem(
+  parts => 6,                  # the total number of parts in this problem
+  totalAnswers => 6,           # total answers in all parts combined
+  parserValues => 1,           # make parser objects from student answers
+  allowReset => 1, #$isProfessor,  # professors get Reset button for testing
+  nextStyle => "Button",
+);
+$part = $cp->part;             # look up the current part
+
+
+$n=10;
+$pbar=random(0.1,0.2,0.1);
+$h=$n*$pbar;
+$q=(10*$pbar+0.5*1.96*1.96)/(10+1.96*1.96);
+$delta = sqrt($q*(1-$q)/10)*1.96;
+
+$a = $q - $delta;
+if ($a<0)
+{
+	$a=0;
+}
+$b = $q + $delta;
+
+$showHint=1;
+
+##############################################
+#
+#  Part 1
+#
+
+if ($part == 1) {
+$newProblemSeed = random(0,1000*$part,1);
+$PG_random_generator->srand($newProblemSeed);
+$cmc = new_multiple_choice();
+$cmc->qa(
+	"The Scientific Goal is the reason for doing the experiment or study. In this problem, the Scientific Goal is:", 
+	"Estimate the proportion of defective diamonds in the shipment."
+);
+$cmc->extra("Estimate the mean weight of the diamonds that don't meet the company's expectation.",
+"Estimate the proportion of defective diamonds in the sample.",
+"Estimate the proportion of the perfect diamonds in the sample.");
+
+
+BEGIN_TEXT
+
+
+$PAR
+Historically, a producer of high-quality jewelry has found that 10% of the
+top-grade diamonds it buys have serious defects after cutting and
+polishing.
+To monitor quality, a diamond company inspects a random sample of 10
+recently processed diamonds from the latest shipment. They find that $h
+have serious defects. Based on these results, the head of the quality
+division wants to obtain a single number estimate of the proportion of
+defective diamonds in the shipment. He also wants to find a range of
+values he is 95% confident will contain this proportion.
+$PAR
+
+$BBOLD 1. The Scientific Goal: $EBOLD
+$PAR
+\{$cmc -> print_q \}
+\{$cmc -> print_a \}
+$BR
+There are hints here!
+$BR
+END_TEXT
+BEGIN_HINT
+$BR$BR
+test hint 1
+$BR$BR
+END_HINT
+ANS(radio_cmp($cmc->correct_ans));
+
+}
+
+
+##############################################
+#
+#  Part 2
+#
+
+if ($part == 2) {
+$newProblemSeed = random(0,1000*$part,1);
+$PG_random_generator->srand($newProblemSeed);
+$cmc = new_multiple_choice();
+$cmc->qa(
+	"The Statistical Model is the distribution of the population of measurements that are being taken. What are the measurements in this problem, and what is the Statistical Model?", 
+	"The number of defective diamonds in the sample; \(b(10,p)\)"
+);
+$cmc->extra("The proportion of perfect diamonds in the sample; \(b(10,p)\)",
+"The proportion of defective diamonds in the sample;\(N(n,p)\)",
+"The proportion of defective diamonds in the sample;\(N(\sigma,\sigma^2)\)");
+
+BEGIN_TEXT
+
+
+$PAR
+Historically, a producer of high-quality jewelry has found that 10% of the
+top-grade diamonds it buys have serious defects after cutting and
+polishing.
+To monitor quality, a diamond company inspects a random sample of 10
+recently processed diamonds from the latest shipment. They find that $h
+have serious defects. Based on these results, the head of the quality
+division wants to obtain a single number estimate of the proportion of
+defective diamonds in the shipment. He also wants to find a range of
+values he is 95% confident will contain this proportion.
+$PAR
+
+$BBOLD 1. The Scientific Goal: $EBOLD
+$PAR
+The Scientific Goal is the reason for doing the experiment or study. In this problem, the Scientific Goal is: $BR
+$BBOLD Estimate the proportion of defective diamonds in the shipment. $EBOLD $BR
+
+$PAR
+$BBOLD 2. The Statistical Model: $EBOLD
+$PAR
+\{$cmc -> print_q \}
+\{$cmc -> print_a \}
+
+END_TEXT
+BEGIN_HINT
+testhint 2
+END_HINT
+
+ANS(radio_cmp($cmc->correct_ans));
+
+}
+
+##############################################
+#
+#  Part 3
+#
+
+if ($part == 3) {
+$newProblemSeed = random(0,1000*$part,1);
+$PG_random_generator->srand($newProblemSeed);
+$cmc = new_multiple_choice();
+$cmc->qa(
+	"At this point we examine how to achieve the Scientific Goal in terms of the statistical model. In this problem, the Scientific Goal is to estimate the proportion of defective diamonds in the shipment. This suggests that the model parameter we want to estimate is: ",	"the population proportion"
+);
+
+$cmc->extra("the population mean", "the variance");
+$cmc->makeLast("something else");
+
+BEGIN_TEXT
+$PAR
+Historically, a producer of high-quality jewelry has found that 10% of the
+top-grade diamonds it buys have serious defects after cutting and
+polishing.
+To monitor quality, a diamond company inspects a random sample of 10
+recently processed diamonds from the latest shipment. They find that $h
+have serious defects. Based on these results, the head of the quality
+division wants to obtain a single number estimate of the proportion of
+defective diamonds in the shipment. He also wants to find a range of
+values he is 95% confident will contain this proportion.
+$PAR
+
+
+$BBOLD 1. The Scientific Goal: $EBOLD
+$PAR
+The Scientific Goal is the reason for doing the experiment or study. In this problem, the Scientific Goal is: $BR
+$BBOLD Estimate the proportion of defective diamonds in the shipment. $EBOLD $BR
+
+$PAR
+$BBOLD 2. The Statistical Model: $EBOLD
+$PAR
+The Statistical Model is the distribution of the population of measurements that are being taken. In this problem, the Statistical Model is: $BR
+$BBOLD The number of defective diamonds in the sample; \(b(10,p)\) $EBOLD
+$BR
+
+
+$PAR
+$BBOLD 3. The Model Parameter to Be Estimated: $EBOLD
+$PAR
+\{$cmc -> print_q \}
+\{$cmc -> print_a \}
+
+END_TEXT
+BEGIN_HINT
+testhint 3
+END_HINT
+
+ANS(radio_cmp($cmc->correct_ans));
+
+}
+
+
+
+##############################################
+#
+#  Part 4
+#
+
+if ($part == 4) {
+$ybar2 = floor(100*$ybar)/100;
+
+
+BEGIN_TEXT
+
+$PAR
+Historically, a producer of high-quality jewelry has found that 10% of the
+top-grade diamonds it buys have serious defects after cutting and
+polishing.
+To monitor quality, a diamond company inspects a random sample of 10
+recently processed diamonds from the latest shipment. They find that $h
+have serious defects. Based on these results, the head of the quality
+division wants to obtain a single number estimate of the proportion of
+defective diamonds in the shipment. He also wants to find a range of
+values he is 95% confident will contain this proportion.
+$PAR
+
+
+$BBOLD 1. The Scientific Goal: $EBOLD
+$PAR
+The Scientific Goal is the reason for doing the experiment or study. In this problem, the Scientific Goal is: $BR
+$BBOLD Estimate the proportion of defective diamonds in the shipment. $EBOLD $BR
+
+$PAR
+$BBOLD 2. The Statistical Model: $EBOLD
+$PAR
+The Statistical Model is the distribution of the population of measurements that are being taken. In this problem, the Statistical Model is: $BR
+$BBOLD The number of defective diamonds in the sample; \(b(10,p)\) $EBOLD
+$BR
+
+$PAR
+$BBOLD 3. The Model Parameter to Be Estimated: $EBOLD
+$PAR
+At this point we examine how to achieve the Scientific Goal in terms of the statistical model. 
+In this problem,to achieve the Scientific Goal, the company wants to find out the proportion of defective diamonds and compares it with the historical value of 10%. 
+This suggests means that the model parameter we want to estimate is: $BBOLD the population proportion, p. $EBOLD $BR
+
+$PAR
+$BBOLD 4.1 Point Estimate: $EBOLD
+$PAR
+Obtain a single number estimate of the population proportion.
+$PAR
+\(p\) = \{ans_rule(10)\}
+END_TEXT
+
+ANS(num_cmp($pbar, tol=>.001, tolType=>"absolute"));
+
+}
+
+##############################################
+#
+#  Part 5
+#
+
+if ($part == 5) {
+$w = floor($q*10000)/10000;
+
+$cp->{hint} = 1;
+
+
+if ($cp->{status}->{hint} == 0) {
+BEGIN_TEXT
+
+$PAR
+Historically, a producer of high-quality jewelry has found that 10% of the
+top-grade diamonds it buys have serious defects after cutting and
+polishing.
+To monitor quality, a diamond company inspects a random sample of 10
+recently processed diamonds from the latest shipment. They find that $h
+have serious defects. Based on these results, the head of the quality
+division wants to obtain a single number estimate of the proportion of
+defective diamonds in the shipment. He also wants to find a range of
+values he is 95% confident will contain this proportion.
+$PAR
+
+$BBOLD 1. The Scientific Goal: $EBOLD
+$PAR
+The Scientific Goal is the reason for doing the experiment or study. In this problem, the Scientific Goal is: $BR
+$BBOLD Estimate the proportion of defective diamonds in the shipment. $EBOLD $BR
+
+$PAR
+$BBOLD 2. The Statistical Model: $EBOLD
+$PAR
+The Statistical Model is the distribution of the population of measurements that are being taken. In this problem, the Statistical Model is: $BR
+$BBOLD The number of defective diamonds in the sample; \(b(10,p)\) $EBOLD
+$BR
+
+$PAR
+$BBOLD 3. The Model Parameter to Be Estimated: $EBOLD
+$PAR
+At this point we examine how to achieve the Scientific Goal in terms of the statistical model. 
+In this problem,to achieve the Scientific Goal, the company wants to find out the proportion of defective diamonds and compares it with the historical value of 10%. 
+This suggests means that the model parameter we want to estimate is: $BBOLD the population proportion, p. $EBOLD $BR
+
+$PAR
+$BBOLD 4.1 Point Estimate: $EBOLD
+$PAR
+Obtain a single number estimate of the population proportion:$BBOLD 
+\(p\) = $pbar $BR $EBOLD
+
+$PAR
+$BBOLD 4.2 Interval Estimates: $EBOLD
+$PAR
+Estimate this same quantity using a 95% approximate score confidence interval.
+$PAR
+
+\{ans_rule(10)\} \( \leq p \leq \) \{ans_rule(10)\}  
+
+END_TEXT
+
+ANS(num_cmp($a,  tol=>.0001, tolType=>"absolute"));
+ANS(num_cmp($b,  tol=>.01, tolType=>"absolute"));
+}
+
+if ($cp->{status}->{hint} == 1) {
+BEGIN_TEXT
+$PAR
+Historically, a producer of high-quality jewelry has found that 10% of the
+top-grade diamonds it buys have serious defects after cutting and
+polishing.
+To monitor quality, a diamond company inspects a random sample of 10
+recently processed diamonds from the latest shipment. They find that $h
+have serious defects. Based on these results, the head of the quality
+division wants to obtain a single number estimate of the proportion of
+defective diamonds in the shipment. He also wants to find a range of
+values he is 95% confident will contain this proportion.
+$PAR
+
+$BBOLD 1. The Scientific Goal: $EBOLD
+$PAR
+The Scientific Goal is the reason for doing the experiment or study. In this problem, the Scientific Goal is: $BR
+$BBOLD Estimate the proportion of defective diamonds in the shipment. $EBOLD $BR
+
+$PAR
+$BBOLD 2. The Statistical Model: $EBOLD
+$PAR
+The Statistical Model is the distribution of the population of measurements that are being taken. In this problem, the Statistical Model is: $BR
+$BBOLD The number of defective diamonds in the sample; \(b(10,p)\) $EBOLD
+$BR
+
+$PAR
+$BBOLD 3. The Model Parameter to Be Estimated: $EBOLD
+$PAR
+At this point we examine how to achieve the Scientific Goal in terms of the statistical model. 
+In this problem,to achieve the Scientific Goal, the company wants to find out the proportion of defective diamonds and compares it with the historical value of 10% . 
+This suggests means that the model parameter we want to estimate is: $BBOLD the population proportion, p. $EBOLD $BR
+
+$PAR
+$BBOLD 4.1 Point Estimate: $EBOLD
+$PAR
+Obtain a single number estimate of the population proportion:$BBOLD 
+\(p\) = $pbar $BR $EBOLD
+
+$PAR
+$BBOLD 4.2 Interval Estimates: $EBOLD
+$PAR
+Estimate this same quantity using a 95% approximate score confidence interval.
+$PAR
+
+\{ans_rule(10)\} \( \leq p \leq \) \{ans_rule(10)\}  
+
+
+$BR
+$PAR
+$BBOLD HINT: $EBOLD
+$PAR
+
+The following is an example problem which is similar to the above problem you are working on. You can look at the solution of the following example and it will help you to solve the original problem. $BR
+$BR
+To monitor product quality, the quality control unit of a manufacturing company randomly selects 20 products and 1 of them is defective. 
+Construct a 95% approximate score confidence interval for the population proportion of defective products. $BR $BR
+The point estimate is \( \hat{p}=\frac{1}{20}=0.05\) $BR $BR
+To construct the confidence interval, we first find the adjusted sample proportion. Since the confidence level is \(L = 0.95\),  $BR $BR
+\( \~{p} = \frac{y+0.5(z_{(1+L)/2})^2}{n+(z_{(1+L)/2})^2} =\frac{1+0.5(1.96^2)}{20+1.96^2}=0.1225 \) $BR $BR
+
+The confidence interval is then computed as $BR $BR
+\( \displaystyle (\~{p}-z_{(1+L)/2}\*\sqrt{\frac{\~{p}(1-\~{p})}{n}}, \~{p}+z_{(1+L)/2}\*\sqrt{\frac{\~{p}(1-\~{p})}{n}})\\ = (0.1225-1.96\*\sqrt{\frac{0.1225(1-0.1225)}{20}},0.1225+1.96\*\sqrt{\frac{0.1225(1-0.1225)}{20}})\\=(-0.0211, 0.2661)\) $BR $BR
+Since the population proportion is always nonnegative, the confidence interval is \((0,0.2661)\).
+END_TEXT
+
+ANS(num_cmp($a,  tol=>.0001, tolType=>"absolute"));
+ANS(num_cmp($b,  tol=>.01, tolType=>"absolute"));
+}
+}
+
+
+
+##############################################
+#
+#  Part 
+#
+
+if ($part == 6) {
+$w = floor($q*10000)/10000;
+
+$aa = floor(($a)*10000)/10000;
+$bb = floor(($b)*10000)/10000;
+
+
+$newProblemSeed = random(0,1000*$part,1);
+$PG_random_generator->srand($newProblemSeed);
+$cmc = new_multiple_choice();
+$cmc->qa(
+        "If the company expects the proportion of defective diamonds in all its
+shipments to be equal to the historical value of 0.10, and the 95%
+confidence interval for the proportion of defective diamonds in the
+shipment is ($aa, $bb), what can the company conclude about the
+proportion of defective diamonds in the latest shipment?",
+
+        "Based on this interval, the company cannot conclude that the
+proportion of defective diamonds in the shipment differs from the
+historical value.
+."
+);
+$cmc->extra("Based on this interval, the company can conclude that the proportion
+of defective diamonds in the shipment equals the historical value.",
+"Based on this interval, the company can conclude that the proportion
+of defective diamonds in the shipment is below the historical value.",
+"Based on this interval, the company can conclude that the proportion
+of defective diamonds in the shipment is above the historical value.");
+
+BEGIN_TEXT
+
+$PAR
+Historically, a producer of high-quality jewelry has found that 10% of the
+top-grade diamonds it buys have serious defects after cutting and
+polishing.
+To monitor quality, a diamond company inspects a random sample of 10
+recently processed diamonds from the latest shipment. They find that $h
+have serious defects. Based on these results, the head of the quality
+division wants to obtain a single number estimate of the proportion of
+defective diamonds in the shipment. He also wants to find a range of
+values he is 95% confident will contain this proportion.
+$PAR
+
+$BBOLD 1. The Scientific Goal: $EBOLD
+$PAR
+The Scientific Goal is the reason for doing the experiment or study. In this problem, the Scientific Goal is: $BR
+$BBOLD Estimate the proportion of defective diamonds in the shipment. $EBOLD $BR
+
+$PAR
+$BBOLD 2. The Statistical Model: $EBOLD
+$PAR
+The Statistical Model is the distribution of the population of measurements that are being taken. In this problem, the Statistical Model is: $BR
+$BBOLD The number of defective diamonds in the sample; \(b(10,p)\) $EBOLD
+$BR
+
+$PAR
+$BBOLD 3. The Model Parameter to Be Estimated: $EBOLD
+$PAR
+At this point we examine how to achieve the Scientific Goal in terms of the statistical model. 
+In this problem,to achieve the Scientific Goal, the company wants to find out the proportion of defective diamonds and compares it with the historical value of 10%. 
+This suggests means that the model parameter we want to estimate is: $BBOLD the population proportion, p. $EBOLD $BR
+
+$PAR
+$BBOLD 4.1 Point Estimates: $EBOLD
+$PAR
+Obtain a single number estimate of the population proportion:$BBOLD 
+\(p\) = $pbar $BR $EBOLD
+
+$PAR
+$BBOLD 4.2 Interval Estimates: $EBOLD
+$PAR
+The 95% confidence interval is: $BR $BBOLD
+($aa, $bb) $BR $EBOLD
+$PAR
+
+$PAR
+$BBOLD 5. Results and Interpretation: $EBOLD
+$PAR
+\{$cmc -> print_q \}
+\{$cmc -> print_a \}
+
+END_TEXT
+
+ANS(radio_cmp($cmc->correct_ans));
+}
+
+##############################################
+
+END_PROBLEM();
+ENDDOCUMENT();        # This should be the last executable line in the problem.

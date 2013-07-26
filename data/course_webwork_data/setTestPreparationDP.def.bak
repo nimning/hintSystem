@@ -1,0 +1,24 @@
+
+openDate          = 10/01/2012 at 11:02am PDT
+dueDate           = 12/14/2013 at 03:00pm PST
+answerDate        = 12/14/2013 at 03:00pm PST
+paperHeaderFile   = defaultHeader
+screenHeaderFile  = setTestPreparation/setHeader.pg
+problemList       = 
+local/setTestPreparation/stat212-HW05-15_hint.pg, 1, 1 
+setTestPreparation/stat212-HW05-14_hint.pg, 1, 1 
+setTestPreparation/stat212-HW05-13_hint.pg, 1, 1 
+setTestPreparation/stat212-HW05-01_hint.pg, 1, 1 
+setTestPreparation/stat212-HW05-16_hint.pg, 1, 1 
+setTestPreparation/stat212-HW05-02_hint.pg, 1, 1 
+setTestPreparation/stat212-HW05-03_hint.pg, 1, 1 
+setTestPreparation/stat212-HW05-04_hint.pg, 1, 1 
+setTestPreparation/stat212-HW03-20_hint.pg, 1, 1 
+setTestPreparation/stat212-HW03-17_hint.pg, 1, 1 
+setTestPreparation/stat212-HW03-08_hint.pg, 1, 1 
+setTestPreparation/stat212-HW03-19_hint.pg, 1, 1 
+setTestPreparation/p1_hint.pg, 1, 1 
+setTestPreparation/dueck5_2_1_hint.pg, 1, 1 
+setTestPreparation/ur_pb_7_1_hint.pg, 1, 1 
+setTestPreparation/cond7_hint.pg, 1, 1 
+

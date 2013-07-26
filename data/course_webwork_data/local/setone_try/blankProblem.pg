@@ -1,0 +1,34 @@
+DOCUMENT();      
+
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "MathObjects.pl",
+  "PGcourse.pl",
+);
+
+# Print problem number and point value (weight) for the problem
+TEXT(beginproblem());
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 1;
+
+BEGIN_PGML
+
+[______]{pi}.
+
+END_PGML
+
+$showHint = 1;
+BEGIN_HINT
+$HINT
+END_HINT
+
+BEGIN_PGML_SOLUTION
+
+The answer is [`\pi`].
+
+END_PGML_SOLUTION
+
+
+ENDDOCUMENT();

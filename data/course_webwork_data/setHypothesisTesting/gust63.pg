@@ -1,0 +1,53 @@
+##DESCRIPTION
+##   Statistics: Hypothesis Testing
+##ENDDESCRIPTION
+
+##KEYWORDS('Statistics', 'Hypothesis Testing')
+##Tagged by up2p
+
+##DBsubject('Statistics')
+##DBchapter('Hypothesis Testing')
+##DBsection('Elements of a Statistical Test')
+##Date('')
+##Author('')
+##Institution('ASU')
+##TitleText1('')
+##EditionText1('')
+##AuthorText1('')
+##Section1('')
+##Problem1('')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGgraphmacros.pl",
+"PGnumericalmacros.pl",
+"PGstatisticsmacros.pl"
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+
+BEGIN_TEXT
+
+$PAR
+In this problem, we consider a $BBOLD paired t-test$EBOLD (defined in 8.6.2 in "Notes on hypothesis testing and central limit theorem" on moodle). The setting is that two normal random variables \(X\) and \(Y\) are sampled. We pair each of the samples from the first variable with each of the samples from the second variable, and we check the "null hypothesis" that the two elements in each pair have the same mean, i.e. \(\mu_X = \mu_Y\), against the alternative hypothesis that \(\mu_X \neq \mu_Y\). Now create a new random variable \(D\) by taking the difference between the two elements in each pair. The "null hypothesis" can therefore be defined as \(\mu_D = 0\), and the alternative hypothesis \(\mu_D \neq 0\). Note that if the two variables are normally distributed, their difference is also normally distributed, so \(D\) is a Normal variable. We then calculate the confidence interval for the mean of \(D\) .
+
+$PAR
+1.  Suppose that for a given data set of \(D\), a 95 $PERCENT confidence interval is calculated to be (-3.45,1.78).  If you were to perform a hypothesis test at the 5 $PERCENT significance level to test the null hypothesis, would you reject it?  Answer "yes", "no", or "can't tell".  $BR \{ans_rule(15)\} $PAR
+
+2.  Suppose that for a given data set of \(D\), a 99 $PERCENT confidence interval is calculated to be (-10.77,-2.35).  If you were to perform a hypothesis test at the 1 $PERCENT significance level to test the null hypothesis, would you reject it?  Answer "yes", "no", or "can't tell".  $BR \{ans_rule(15)\} $PAR
+
+3.  Suppose that for a given data set of \(D\), a 97 $PERCENT confidence interval is calculated to be (25.6,41.1).  If you were to perform a hypothesis test at the 3 $PERCENT significance level to test the null hypothesis, would you reject it?  Answer "yes", "no", or "can't tell".  $BR \{ans_rule(15)\} $PAR
+
+END_TEXT
+ANS(str_cmp("no"));
+ANS(str_cmp("yes"));
+ANS(str_cmp("yes"));
+
+ENDDOCUMENT();       # This should be the last executable line in the problem.

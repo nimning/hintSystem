@@ -1,0 +1,16 @@
+
+openDate          = 10/01/2012 at 11:02am PDT
+dueDate           = 12/14/2013 at 03:00pm PST
+answerDate        = 12/14/2013 at 03:00pm PST
+paperHeaderFile   = defaultHeader
+screenHeaderFile  = defaultHeader
+problemList       = 
+setTestPreparation/cond15_hint.pg, 1, 1 
+setTestPreparation/cond14_hint.pg, 1, 1 
+setTestPreparation/Bayes2_hint.pg, 1, 1 
+setTestPreparation/Bayes7_hint.pg, 1, 1 
+setTestPreparation/stat212-HW05-02_hint.pg, 1, 1 
+setTestPreparation/ur_pb_7_2_hint.pg, 1, 1 
+setTestPreparationST/prob5.pg, 1, 1 
+setAssignment18/RandAlgs_2_2.pg, 1, -1 
+

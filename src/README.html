@@ -1,0 +1,27 @@
+<h1>Student Adaptive Server</h1>
+<h2>Installation</h2>
+<p>You should have two folders: the source and data folders.  These are two distinct git repositories and directories to allow for separate versioning of source and data.<br />
+Add the following to your .profile, .bashrc, or some script that is run on terminal startup:</p>
+<pre><code>PYTHONPATH=$PYTHONPATH:&lt;path to source root&gt;
+</code></pre>
+<p>Change the value of <code>"Data path"</code> in <code>&lt;source root&gt;/config.yaml</code> to the root directory where you extracted the webwork/student adaptive server data. </p>
+<h2>Rendering HTML and Running</h2>
+<pre><code>cd &lt;source root&gt;/student_adaptive_server
+./render.py; ./server.py
+</code></pre>
+<p><em>Note</em>: You'll probably realize when running <code>./render.py; ./server.py</code> that you're missing some python packages.  These include ply, numpy/scipy, scikit-learn, and nltk.  Install them.  </p>
+<h2>Important Source and Data Files</h2>
+<p>The source files you probably care about when making modifications to the student server are in <code>&lt;source root&gt;/student_adaptive_server</code>.  These files are:</p>
+<ul>
+<li><code>client_template.html</code>: The html file to send to the client, without a body. </li>
+<li><code>client.js</code>: The client logic</li>
+<li><code>render_html.py</code>: A script that takes <code>client_template.html</code> as a base, <code>.../parts0_7.json</code> for problem data, and generates client.html to be served up </li>
+<li><code>server.py</code>: The server.  It initially sends client.html, then allows communication with the client through POST requests</li>
+</ul>
+<p>The data files you probably care about modifying are in <code>&lt;data root&gt;/student_adaptive_server</code>:</p>
+<ul>
+<li><code>parts0_7.json</code> Problem and hint text, answers, expression clusters, and problem part dependency information.  </li>
+<li><code>hard_parts.json</code> An array of sessions where students struggled.  Each session is an array of student attempts, each attempt a dictionary describing how long the student took, what expression the student entered, whether the student was correct, and other info.  </li>
+<li><code>hard_parts_with_hints.json</code> How we imagine the student sessions in <code>hard_parts.json</code> would go if the students were given hints.  </li>
+</ul>
+<p>Also take a look at <code>config.yaml</code>, which provides a number of parameters to render.py and server.py</p>

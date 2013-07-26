@@ -1,0 +1,83 @@
+##KEYWORDS confidence interval, population mean, posttest
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PGstandard.pl",
+  "package.pl",
+  "Parser.pl",
+  "PGunion.pl",
+  "PGcourse.pl",
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGnumericalmacros.pl",
+"PGstatisticsmacros.pl"
+);
+
+TEXT(beginproblem);
+BEGIN_PROBLEM();
+
+$showPartialCorrectAnswers = 1;
+$ybar = 0;
+$s = 0;
+
+for ($i=0;$i<7;$i++){
+	$y[$i] = random(40,60,1);
+	$ybar = $ybar + $y[$i];
+}
+$ybar = $ybar/7;
+
+for ($i=0;$i<7;$i++){
+	$s = $s + ($y[$i] - $ybar)*($y[$i] - $ybar);
+}
+$s = sqrt($s/6);
+$delta = 2.4469* $s / sqrt(7);
+
+
+$cmc = new_multiple_choice();
+$cmc->qa(
+	"Which following can the researcher conclude?", 
+	"Since 120 is above the confidence interval, they can be 95% confident that the mean time Alzheimer's patients spend 
+in stage IV sleep is less than the normal average."
+);
+$cmc->extra("Since 120 is contained in the confidence interval, they can be 95% confident that on average Alzheimer's patients spend 120 minutes
+in stage IV sleep.",
+"Since 50 is contained in the confidence interval, they can be 95% confident that no Alzheimer's patients spend less than 50 minutes in stage IV sleep",
+"They cannot conclude anything since the sample size is smaller than 10.");
+
+
+BEGIN_TEXT
+
+It has
+been hypothesized that individuals suffering from Alzheimer's disease
+may spend less than the normal amount of time per night in the deeper stages of sleep. 
+To test this hypothesis
+researchers measured the time, in minutes, spent in stage IV sleep (the deepest level of sleep)
+for a sample of seven Alzheimer's patients (data below). In
+healthy individuals, the average time spent in stage IV sleep is 120
+minutes per night.  Using these data, compute a
+95 percent confidence interval for the mean time spent in stage IV sleep for Alzheimer's patients. $PAR
+
+\[ \begin{array}{cccccccc}
+$y[0] & $y[1] & $y[2] & $y[3] & $y[4] & $y[5] & $y[6] \cr
+\end{array} \]
+
+$PAR
+Construct a 95% confidence interval for the mean time of stage IV sleep.
+$PAR
+\{ans_rule(10)\} \( \leq \mu \leq \) \{ans_rule(10)\}  
+$BR
+
+
+
+
+
+END_TEXT
+ANS(num_cmp($ybar-$delta, tol=>.1, tolType=>"absolute"));
+ANS(num_cmp($ybar+$delta, tol=>.1, tolType=>"absolute"));
+
+
+
+ENDDOCUMENT();       # This should be the last executable line in the problem.

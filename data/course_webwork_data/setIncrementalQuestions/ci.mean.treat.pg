@@ -1,0 +1,500 @@
+##KEYWORDS confidence interval, population mean, treatment
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+  "PGstandard.pl",
+  "package.pl",
+  "Parser.pl",
+  "PGunion.pl",
+  "PGcourse.pl",
+
+  "PGbasicmacros.pl",
+  "PGchoicemacros.pl",
+  "PGanswermacros.pl"
+);
+
+TEXT(beginproblem);
+BEGIN_PROBLEM();
+
+##############################################
+
+$isProfessor = ($studentLogin eq 'dpvc' || $studentLogin eq 'professor');
+
+#
+#  Start a compound problem.  See the compoundProblem.pl
+#  file for more details about the parameters you
+#  can supply.
+#
+$cp = new compoundProblem(
+  parts => 6,                  # the total number of parts in this problem
+  totalAnswers => 6,           # total answers in all parts combined
+  parserValues => 1,           # make parser objects from student answers
+  allowReset => 1,#$isProfessor,  # professors get Reset button for testing
+  nextStyle => "Button",
+);
+$part = $cp->part;             # look up the current part
+
+$ybar = 0;
+$s = 0;
+
+for ($i=0;$i<7;$i++){
+	$y[$i] = random(80,120,1);
+	$ybar = $ybar + $y[$i];
+}
+$ybar = $ybar/7;
+
+for ($i=0;$i<7;$i++){
+	$s = $s + ($y[$i] - $ybar)*($y[$i] - $ybar);
+}
+$s = sqrt($s/6);
+
+$delta = 2.4469 * $s / sqrt(7);
+
+
+
+##############################################
+#
+#  Part 1
+#
+
+if ($part == 1) {
+$newProblemSeed = random(0,1000*$part,1);
+$PG_random_generator->srand($newProblemSeed);
+$cmc = new_multiple_choice();
+$cmc->qa(
+	"The Scientific Goal is the reason for doing the experiment or study. In this problem, the Scientific Goal is:", 
+	"Determining how the average time spent by all WPI students on a 1/3 unit seven week undergraduate course compares with the 119 hour guideline."
+);
+$cmc->extra("Estimating the minimum hours per term spent by WPI students.on a 1/3 unit seven week undergraduate course  and  comparing with the WPI expectation. ",
+"Estimating the average hours per term spent by WPI students on a 1/3 unit seven week undergraduate course",
+"Finding out which WPI courses are the most work.");
+
+
+BEGIN_TEXT
+
+
+$PAR
+WPI sets an expectation of 17 hours work per week for a 1/3 unit seven week undergraduate course, which
+equals 119 hours per term. To see if reality meets expectations, a WPI project team took a random sample of
+7 1/3 unit courses and from each course, randomly selected one student volunteer to follow during the term.
+Each selected student agreed to keep track of the hours spent on coursework for that course. The totals for
+the term are below:
+$PAR
+
+\[ \begin{array}{cccccccc}
+$y[0] & $y[1] & $y[2] & $y[3] & $y[4] & $y[5] & $y[6] \cr
+\end{array} \]
+
+$PAR
+The project team was interested in determining how the average time spent by all WPI students on a 1/3 unit seven week undergraduate course compares with the 119 hour guideline.
+$PAR
+
+$BBOLD 1. The Scientific Goal: $EBOLD
+$PAR
+\{$cmc -> print_q \}
+\{$cmc -> print_a \}
+
+END_TEXT
+
+ANS(radio_cmp($cmc->correct_ans));
+
+}
+
+
+##############################################
+#
+#  Part 2
+#
+
+if ($part == 2) {
+$newProblemSeed = random(0,1000*$part,1);
+$PG_random_generator->srand($newProblemSeed);
+$cmc = new_multiple_choice();
+$cmc->qa(
+	"The Statistical Model is the distribution of the population of measurements that are being taken. What are the measurements in this problem, and what is the Statistical Model?", 
+	"The hours WPI students spend on 1/3 unit seven week undergraduate courses per term; \(N(\mu,\sigma^2)\)"
+);
+$cmc->extra("The hours WPI students spend on 1/3 unit seven week undergraduate courses per week; \(N(\mu,\sigma^2)\)",
+"The hours WPI students spend on 1/3 unit seven week undergraduate courses; \(N(\sigma,\sigma^2)\)",
+"The hours WPI students spend on 1/3 unit seven week undergraduate courses; \(b(n,p)\)");
+
+BEGIN_TEXT
+
+$PAR
+WPI sets an expectation of 17 hours work per week for a 1/3 unit seven week undergraduate course, which
+equals 119 hours per term. To see if reality meets expectations, a WPI project team took a random sample of
+7 1/3 unit courses and from each course, randomly selected one student volunteer to follow during the term.
+Each selected student agreed to keep track of the hours spent on coursework for that course. The totals for
+the term are below:
+$PAR
+
+\[ \begin{array}{cccccccc}
+$y[0] & $y[1] & $y[2] & $y[3] & $y[4] & $y[5] & $y[6] \cr
+\end{array} \]
+
+$PAR
+The project team was interested in determining how the average time spent by all WPI students on a 1/3 unit seven week undergraduate course compares with the 119 hour guideline.
+$PAR
+
+$BBOLD 1. The Scientific Goal: $EBOLD
+$PAR
+The Scientific Goal is the reason for doing the experiment or study. In this problem, the Scientific Goal is: $BR
+$BBOLD Determining how the average time spent by all WPI students on a 1/3 unit seven week undergraduate course compares with the 119 hour guideline. $EBOLD $BR
+
+$PAR
+$BBOLD 2. The Statistical Model: $EBOLD
+$PAR
+\{$cmc -> print_q \}
+\{$cmc -> print_a \}
+
+END_TEXT
+
+ANS(radio_cmp($cmc->correct_ans));
+
+}
+
+##############################################
+#
+#  Part 3
+#
+
+if ($part == 3) {
+$newProblemSeed = random(0,1000*$part,1);
+$PG_random_generator->srand($newProblemSeed);
+$cmc = new_multiple_choice();
+$cmc->qa(
+	"At this point we examine how to achieve the Scientific Goal in terms of the statistical model. In this problem, the Scientific Goal is to find how many hours, on average, WPI students spend per term on coursework. This suggests that the model parameter we want to estimate is: ", 
+	"the population mean"
+);
+
+$cmc->extra("the population proportion", "the variance");
+$cmc->makeLast("something else");
+
+BEGIN_TEXT
+
+$PAR
+WPI sets an expectation of 17 hours work per week for a 1/3 unit seven week undergraduate course, which
+equals 119 hours per term. To see if reality meets expectations, a WPI project team took a random sample of
+7 1/3 unit courses and from each course, randomly selected one student volunteer to follow during the term.
+Each selected student agreed to keep track of the hours spent on coursework for that course. The totals for
+the term are below:
+$PAR
+
+\[ \begin{array}{cccccccc}
+$y[0] & $y[1] & $y[2] & $y[3] & $y[4] & $y[5] & $y[6] \cr
+\end{array} \]
+
+$PAR
+The project team was interested in determining how the average time spent by all WPI students on a 1/3 unit seven week undergraduate course compares with the 119 hour guideline.
+$PAR
+
+$BBOLD 1. The Scientific Goal: $EBOLD
+$PAR
+The Scientific Goal is the reason for doing the experiment or study. In this problem, the Scientific Goal is: $BR
+$BBOLD Determining how the average time spent by all WPI students on a 1/3 unit seven week undergraduate course compares with the 119 hour guideline. $EBOLD $BR
+
+$PAR
+$BBOLD 2. The Statistical Model: $EBOLD
+$PAR
+The Statistical Model is the distribution of the population of measurements that are being taken. In this problem, the Statistical Model is: $BR
+$BBOLD The hours WPI students spend on 1/3 unit seven week undergraduate courses per term; \(N(\mu,\sigma^2)\)$EBOLD
+$BR
+
+$PAR
+$BBOLD 3. The Model Parameter to Be Estimated: $EBOLD
+$PAR
+\{$cmc -> print_q \}
+\{$cmc -> print_a \}
+
+END_TEXT
+
+ANS(radio_cmp($cmc->correct_ans));
+
+}
+
+
+
+
+##############################################
+#
+#  Part 4
+#
+
+if ($part == 4) {
+$ybar2 = floor(100*$ybar)/100;
+
+
+BEGIN_TEXT
+
+$PAR
+WPI sets an expectation of 17 hours work per week for a 1/3 unit seven week undergraduate course, which
+equals 119 hours per term. To see if reality meets expectations, a WPI project team took a random sample of
+7 1/3 unit courses and from each course, randomly selected one student volunteer to follow during the term.
+Each selected student agreed to keep track of the hours spent on coursework for that course. The totals for
+the term are below:
+$PAR
+
+\[ \begin{array}{cccccccc}
+$y[0] & $y[1] & $y[2] & $y[3] & $y[4] & $y[5] & $y[6] \cr
+\end{array} \]
+
+$PAR
+The project team was interested in determining how the average time spent by all WPI students on a 1/3 unit seven week undergraduate course compares with the 119 hour guideline.
+$PAR
+
+$BBOLD 1. The Scientific Goal: $EBOLD
+$PAR
+The Scientific Goal is the reason for doing the experiment or study. In this problem, the Scientific Goal is: $BR
+$BBOLD Determining how the average time spent by all WPI students on a 1/3 unit seven week undergraduate course compares with the 119 hour guideline. $EBOLD $BR
+
+$PAR
+$BBOLD 2. The Statistical Model: $EBOLD
+$PAR
+The Statistical Model is the distribution of the population of measurements that are being taken. In this problem, the Statistical Model is: $BR
+$BBOLD The hours WPI students spend on 1/3 unit seven week undergraduate courses per term; \(N(\mu,\sigma^2)\)$EBOLD
+$BR
+
+$PAR
+$BBOLD 3. The Model Parameter to Be Estimated: $EBOLD
+$PAR
+At this point we examine how to achieve the Scientific Goal in terms of the statistical model. In this problem,To achieve the Scientific Goal, the project team needs to estimate  the average time spent by all WPI students on a 1/3 unit seven week undergraduate courses to find how many hours, on average, WPI students spend per term on coursework. This suggests means that the model parameter we want to estimate is: $BBOLD the Population Mean. $EBOLD $BR
+
+$PAR
+$BBOLD 4.1 Point Estimates: $EBOLD
+$PAR
+Obtain a single number estimate of the average number of hours per term spent by WPI students for a 1/3 unit seven week undergraduate course.
+$PAR
+\(\bar{y}\) = \{ans_rule(10)\}
+END_TEXT
+
+ANS(num_cmp($ybar, tol=>.01, tolType=>"absolute"));
+
+}
+
+##############################################
+#
+#  Part 5
+#
+
+if ($part == 5) {
+$cp->{hint} = 1;
+$ybar2 = floor(100*$ybar)/100;
+
+if ($cp->{status}->{hint} == 0) {
+BEGIN_TEXT
+
+$PAR
+WPI sets an expectation of 17 hours work per week for a 1/3 unit seven week undergraduate course, which
+equals 119 hours per term. To see if reality meets expectations, a WPI project team took a random sample of
+7 1/3 unit courses and from each course, randomly selected one student volunteer to follow during the term.
+Each selected student agreed to keep track of the hours spent on coursework for that course. The totals for
+the term are below:
+$PAR
+
+\[ \begin{array}{cccccccc}
+$y[0] & $y[1] & $y[2] & $y[3] & $y[4] & $y[5] & $y[6] \cr
+\end{array} \]
+
+$PAR
+The project team was interested in determining how the average time spent by all WPI students on a 1/3 unit seven week undergraduate course compares with the 119 hour guideline.
+$PAR
+
+$BBOLD 1. The Scientific Goal: $EBOLD
+$PAR
+The Scientific Goal is the reason for doing the experiment or study. In this problem, the Scientific Goal is: $BR
+$BBOLD Determining how the average time spent by all WPI students on a 1/3 unit seven week undergraduate course compares with the 119 hour guideline. $EBOLD $BR
+
+$PAR
+$BBOLD 2. The Statistical Model: $EBOLD
+$PAR
+The Statistical Model is the distribution of the population of measurements that are being taken. In this problem, the Statistical Model is: $BR
+$BBOLD The hours WPI students spend on 1/3 unit seven week undergraduate courses per term; \(N(\mu,\sigma^2)\)$EBOLD
+$BR
+
+$PAR
+$BBOLD 3. The Model Parameter to Be Estimated: $EBOLD
+$PAR
+At this point we examine how to achieve the Scientific Goal in terms of the statistical model. In this problem,To achieve the Scientific Goal, the project team needs to estimate  the average time spent by all WPI students on a 1/3 unit seven week undergraduate courses to find how many hours, on average, WPI students spend per term on coursework. This suggests means that the model parameter we want to estimate is: $BBOLD the Population Mean. $EBOLD $BR
+
+$PAR
+$BBOLD 4.1 Point Estimates: $EBOLD
+$PAR
+The single number estimate of the average number of hours per term spent by WPI students for a 1/3 unit seven week undergraduate course is: $PAR $BBOLD
+\(\bar{y}\) = $ybar2 $EBOLD $BR
+$PAR
+$BBOLD 4.2 Interval Estimates: $EBOLD
+$PAR
+Estimate this same quantity using a 95% confidence interval.
+$PAR
+
+\{ans_rule(10)\} \( \leq \mu \leq \) \{ans_rule(10)\}  
+
+END_TEXT
+
+ANS(num_cmp($ybar-$delta,  tol=>.01, tolType=>"absolute"));
+ANS(num_cmp($ybar+$delta,  tol=>.01, tolType=>"absolute"));
+}
+
+if ($cp->{status}->{hint} == 1) {
+BEGIN_TEXT
+
+$PAR
+WPI sets an expectation of 17 hours work per week for a 1/3 unit seven week undergraduate course, which
+equals 119 hours per term. To see if reality meets expectations, a WPI project team took a random sample of
+7 1/3 unit courses and from each course, randomly selected one student volunteer to follow during the term.
+Each selected student agreed to keep track of the hours spent on coursework for that course. The totals for
+the term are below:
+$PAR
+
+\[ \begin{array}{cccccccc}
+$y[0] & $y[1] & $y[2] & $y[3] & $y[4] & $y[5] & $y[6] \cr
+\end{array} \]
+
+$PAR
+The project team was interested in determining how the average time spent by all WPI students on a 1/3 unit seven week undergraduate course compares with the 119 hour guideline.
+$PAR
+
+$BBOLD 1. The Scientific Goal: $EBOLD
+$PAR
+The Scientific Goal is the reason for doing the experiment or study. In this problem, the Scientific Goal is: $BR
+$BBOLD Determining how the average time spent by all WPI students on a 1/3 unit seven week undergraduate course compares with the 119 hour guideline. $EBOLD $BR
+
+$PAR
+$BBOLD 2. The Statistical Model: $EBOLD
+$PAR
+The Statistical Model is the distribution of the population of measurements that are being taken. In this problem, the Statistical Model is: $BR
+$BBOLD The hours WPI students spend on 1/3 unit seven week undergraduate courses per term; \(N(\mu,\sigma^2)\)$EBOLD
+$BR
+
+$PAR
+$BBOLD 3. The Model Parameter to Be Estimated: $EBOLD
+$PAR
+At this point we examine how to achieve the Scientific Goal in terms of the statistical model. In this problem,To achieve the Scientific Goal, the project team needs to estimate  the average time spent by all WPI students on a 1/3 unit seven week undergraduate courses to find how many hours, on average, WPI students spend per term on coursework. This suggests means that the model parameter we want to estimate is: $BBOLD the Population Mean. $EBOLD $BR
+
+$PAR
+$BBOLD 4.1 Point Estimates: $EBOLD
+$PAR
+The single number estimate of the average number of hours per term spent by WPI students for a 1/3 unit seven week undergraduate course is: $PAR $BBOLD
+\(\bar{y}\) = $ybar2 $EBOLD $BR
+$PAR
+$BBOLD 4.2 Interval Estimates: $EBOLD
+$PAR
+Estimate this same quantity using a 95% confidence interval.
+$PAR
+
+\{ans_rule(10)\} \( \leq \mu \leq \) \{ans_rule(10)\}  
+
+
+$BR
+$PAR
+$BBOLD HINT: $EBOLD
+$PAR
+The following is an example problem which is similar to the above problem you are working on. You can look at the solution of the following example and it will help you to solve the original problem. $BR
+$BR
+A soccer club wants to know whether players average more than 75 training hours per month. The coach randomly selected four players and recorded their training hours every day for a month. Suppose the resulting data are 80,70,65,80. In the following, we will construct a 95% confidence interval for the mean. $BR $BR
+First, we find the sample mean $BR $BR \( \displaystyle \bar{y} = \frac{y_1+y_2+y_3+y_4}{n} = \frac{80+70+65+80}{4} = 73.75\) $BR
+and the sample standard deviation, $BR $BR
+\( s = \sqrt{\frac{(y_1 - \bar{y})^2 + (y_2 - \bar{y})^2 + (y_3 - \bar{y})^2 + (y_4 - \bar{y})^2}{n-1}} \\ 
+= \sqrt{\frac{(80 - 73.75)^2 + (70 - 73.75)^2 + (65 - 73.75)^2 + (80 - 73.75)^2}{3}} \\
+= 7.5 \) $BR $BR
+Next, we find the appropriate quantile of the t distribution. Since the sample size is \(n = 4\) and the confidence level is \(L = 0.95\), the desired quantile is \(t_{n-1, (1+L)/2} = t_{3, 0.975} = 3.1824 \) $BR
+The confidence interval is then computed as $BR $BR
+\( \displaystyle (\bar{y}-\(t_{n-1, (1+L)/2}\*\frac{s}{\sqrt{n}}, \bar{y}+\(t_{n-1, (1+L)/2}\*\frac{s}{\sqrt{n}}) \\
+= (73.75-3.1824\cdot\frac{7.5}{\sqrt{4}}, 73.75+3.1824\cdot\frac{7.5}{\sqrt{4}}) \\
+=(61.82, 85.68)\) $BR
+END_TEXT
+
+ANS(num_cmp($ybar-$delta,  tol=>.01, tolType=>"absolute"));
+ANS(num_cmp($ybar+$delta,  tol=>.01, tolType=>"absolute"));
+}
+}
+
+
+##############################################
+#
+#  Part 6
+#
+
+if ($part == 6) {
+$a = floor(($ybar - $delta)*100)/100;
+$b = floor(($ybar + $delta)*100)/100;
+$ybar2 = floor(100*$ybar)/100;
+
+
+$newProblemSeed = random(0,1000*$part,1);
+$PG_random_generator->srand($newProblemSeed);
+$cmc = new_multiple_choice();
+$cmc->qa(
+	"The 95% confidence interval is ($a, $b). What can the project team conclude about how the average time spent by all WPI students on a 1/3 unit seven week undergraduate course compares with the 119 hour guideline?", 
+	"The interval ($a, $b) lies entirely below the WPI expectation, therefore the project team can conclude with 95% confidence that the average level of work expended is below the WPI expectation."
+);
+$cmc->extra("The interval ($a, $b) lies entirely below the WPI expectation, therefore the project team cannot conclude with 95% confidence that the average level of work expended is below the WPI expectation.",
+"Since 80 is not in the confidence interval, no one at WPI spends more than 80 hours.",
+"The project team is almost sure all students at WPI spend more than 65 hours per term.");
+
+BEGIN_TEXT
+
+$PAR
+WPI sets an expectation of 17 hours work per week for a 1/3 unit seven week undergraduate course, which
+equals 119 hours per term. To see if reality meets expectations, a WPI project team took a random sample of
+7 1/3 unit courses and from each course, randomly selected one student volunteer to follow during the term.
+Each selected student agreed to keep track of the hours spent on coursework for that course. The totals for
+the term are below:
+$PAR
+
+\[ \begin{array}{cccccccc}
+$y[0] & $y[1] & $y[2] & $y[3] & $y[4] & $y[5] & $y[6] \cr
+\end{array} \]
+
+$PAR
+The project team was interested in determining how the average time spent by all WPI students on a 1/3 unit seven week undergraduate course compares with the 119 hour guideline.
+$PAR
+
+$BBOLD 1. The Scientific Goal: $EBOLD
+$PAR
+The Scientific Goal is the reason for doing the experiment or study. In this problem, the Scientific Goal is: $BR
+$BBOLD Determining how the average time spent by all WPI students on a 1/3 unit seven week undergraduate course compares with the 119 hour guideline. $EBOLD $BR
+
+$PAR
+$BBOLD 2. The Statistical Model: $EBOLD
+$PAR
+The Statistical Model is the distribution of the population of measurements that are being taken. In this problem, the Statistical Model is: $BR
+$BBOLD The hours WPI students spend on 1/3 unit seven week undergraduate courses per term; \(N(\mu,\sigma^2)\)$EBOLD
+$BR
+
+$PAR
+$BBOLD 3. The Model Parameter to Be Estimated: $EBOLD
+$PAR
+At this point we examine how to achieve the Scientific Goal in terms of the statistical model. In this problem,To achieve the Scientific Goal, the project team needs to estimate the average time spent by all WPI students on a 1/3 unit seven week undergraduate courses to find how many hours, on average, WPI students spend per term on coursework. This suggests means that the model parameter we want to estimate is: $BBOLD the Population Mean. $EBOLD $BR
+
+$PAR
+$BBOLD 4.1 Point Estimates: $EBOLD
+$PAR
+The single number estimate of the average number of hours per term spent by WPI students for a 1/3 unit seven week undergraduate course is: $PAR $BBOLD
+\(\bar{y}\) = $ybar2 $EBOLD $BR
+
+$PAR
+$BBOLD 4.2 Interval Estimates: $EBOLD
+$PAR
+The 95% confidence interval is: $BR$BBOLD
+
+($a, $b) $BR$EBOLD
+
+$PAR
+
+$PAR
+$BBOLD 5. Results and Interpretation: $EBOLD
+$PAR
+\{$cmc -> print_q \}
+\{$cmc -> print_a \}
+
+END_TEXT
+
+ANS(radio_cmp($cmc->correct_ans));
+}
+
+##############################################
+
+END_PROBLEM();
+ENDDOCUMENT();        # This should be the last executable line in the problem.

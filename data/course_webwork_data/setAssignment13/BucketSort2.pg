@@ -1,0 +1,97 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "MathObjects.pl",
+  "PGcourse.pl",
+);
+
+Context("Numeric");
+Context()->variables->are(
+      y => ['Real'],
+      d => ['Real', limits=>[0,1], resolution=>0.01],
+      c => ['Real', limits=>[0,1], resolution=>0.01],
+      x => ['Real']
+    );
+
+TEXT(beginproblem);
+$showPartialCorrectAnswers = 1;
+
+$k=random(5,20,1);
+
+######################################################################
+
+BEGIN_PGML
+
+## Sorting in linear time when the distribution is known ##
+
+In last part we described an algorithm that can sort
+in linear time. In this section we show how to generalize this to
+sorting elements drawn IID from an arbitrary density function over the reals.
+
+Suppose we use the CDF as a transformation, in other words, map each
+[`X`] to [`Y=\mbox{CDF}(X)`]. [`Y`] is a new random variable, see
+figure.
+
+END_PGML
+BEGIN_TEXT
+$BR
+ \{ image("CDFmapping.png", width=>670, height=>249) \}
+END_TEXT
+BEGIN_PGML
+
+[$ECENTER]*
+
+This figure depicts an example of mapping a random variable
+  [`X`] whose distribution is defined by a CDF (thick black curve) to
+  another random variable [`Y`], whose distribution is uniform in the
+  interval [`[0,1]`]. The mapping uses the CDF as a function so that
+  [`Y=\mbox{CDF}(X)`].
+
+What is the distribution of the random
+variable [`Y`]? First, it is clear that [`0 \leq Y \leq 1`] because that
+is the range of cumulative distribution function. We need to also
+assume that the CDF is a _reversible_ function, i.e. for any real
+in the range: [`0<c<1`] there exists an inverse [`b=\mbox{CDF}^{-1}(c)`] such
+that [`\mbox{CDF}(b)=c`]. A sufficient condition for this to hold is that the
+distribution over [`R`] is defined by a density function.
+
+To understand the distribution of [`Y`], let us calculate the
+probability that [`Y`] is in some range [`c<Y<d`], where [`0<c<d<1`].
+Using the definition of [`\mbox{CDF}^{-1}`] we get
+
+[`
+P(c \leq Y \leq d) = P(\mbox{CDF}^{-1}(c) \leq X \leq \mbox{CDF}^{-1}(d)) =
+\mbox{CDF}(\mbox{CDF}^{-1}(d))-\mbox{CDF}(\mbox{CDF}^{-1}(c)) = `][________]{d-c}
+
+Where the first equality is justified by the definition of
+[`\mbox{CDF}^{-1}`], the second by the formula for calculating the probability
+of a segment using the CDF, and the fourth by the cancellation :
+[`\mbox{CDF}^{-1}(\mbox{CDF}(X))=X`].  We find that the distribution of [`Y`] is
+uniform between 0 and 1, under the condition that the CDF is invertible.
+
+It might help to consider a particular CDF as an example. Suppose the
+CDF of [`X`] is [`\mbox{CDF}(x) = \frac{1}{1+e^{-x}}`], this function is
+invertible and it's inverse is 
+[`\mbox{CDF}^{-1}(y)=`][____________]{-ln((1/y)-1)}. Apply the steps of
+Equation above to convince yourself the it works.
+
+Recall that we have an efficient algorithm for sorting numbers that
+are distributed uniformly in some segment [`[\min,\max]`].
+If we know the CDF of the distribution that is generating the
+numbers we wish to sort, we can map these numbers to the rannge
+[`[0,1]`] and then use the method suggested in the first section to sort
+them in [`O(N)`] time.
+
+END_PGML
+
+BEGIN_PGML_SOLUTION
+----------
+## Solution: ##
+
+[`\mbox{CDF}^{-1}(y)=-\ln\left(\frac{1}{y}-1\right)`]
+
+END_PGML_SOLUTION
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

@@ -1,0 +1,27 @@
+p{
+  margin: 0;
+  padding: 0;
+}
+.part{
+  margin-top: 1em;
+}
+
+.part li{
+  margin-left: 3em;
+}
+
+.tip{
+  margin-top: 1em;
+  margin-left: 5em;
+  color: #003366;
+}
+
+.incorrect_answer_box {
+    background-color:#ff9494; /*Red*/
+}
+.correct_answer_box {
+    background-color:#88ff88; /*Green*/
+}
+.focus_answer_box {
+    background-color:#D6D6F3; /*Blue*/
+}

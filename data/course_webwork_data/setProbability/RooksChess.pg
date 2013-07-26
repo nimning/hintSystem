@@ -1,0 +1,48 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "MathObjects.pl",
+  "PGcourse.pl",
+);
+
+TEXT(beginproblem);
+$showPartialCorrectAnswers = 1;
+
+sub comb
+{
+	fact($_[0])/(fact($_[1])*fact($_[0]-$_[1]));
+}
+
+$num_outcomes = comb(64,8);
+$prob = fact(8)/$num_outcomes;
+
+######################################################################
+
+BEGIN_PGML
+## Rooks on a Chess Board ##
+
+Rooks on a chessboard. You place 8 rooks at random on a chessboard. What is the chance that they are non-attacking (that is, no rook is attacking another)?
+
+To describe the sample space, number the squares in the chessboard as 1 through 64, and let the configuration of 8 rooks be given by a _set_ of eight positions, [`\omega \subset \{1,2,\ldots,64\}`].  
+
+Thus [``\Omega = \{\omega \subset \{1,2,\ldots,64\}: |\omega| = 8 \} .``]
+
+[`|\Omega| = `] [_____]{"$num_outcomes"} ?
+
+Now we want to count the number of choices of squares for rooks that are non-attacking.  
+In any configuration of non-attacking rooks, there can be at most one rook per row (rank).  In addition, since rooks can attack along columns (files), the column of rooks in each row must be different.  
+Thus we can imagine enumerating every configuration of non-attacking rooks by originally placing rooks along the diagonal of the board, then permuting the rows of the board.  
+In how many ways can the rows of a chess-board be permuted?  [________]{"8!"}
+
+What is the probability that randomly placed rooks on a board will be in a non-attacking configuration?  [_________]{"8!8!56!/64!"}
+
+For the last part, write your answer in the form:
+[`x!y!...z!w!/a!b!...c!d!`].  
+
+END_PGML
+
+######################################################################
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

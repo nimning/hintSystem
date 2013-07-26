@@ -1,0 +1,68 @@
+##KEYWORDS confidence interval, population proportion, pretest
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PGstandard.pl",
+  "package.pl",
+  "Parser.pl",
+  "PGunion.pl",
+  "PGcourse.pl",
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGnumericalmacros.pl",
+"PGstatisticsmacros.pl"
+);
+
+TEXT(beginproblem);
+BEGIN_PROBLEM();
+
+$showPartialCorrectAnswers = 1;
+$n=9;
+$x=random(4,5,1);
+$pbar=($x/$n);
+$w=9-$x;
+$h=$n*$pbar;
+$q=(9*$pbar+0.5*1.96*1.96)/(9+1.96*1.96);
+
+$delta = sqrt(($q*(1-$q))/9)*1.96;
+
+$a = $q - $delta;
+if ($a<0)
+{
+	$a=0;
+}
+$b = $q + $delta;
+$a = floor(($a)*1000)/1000;
+$b = floor(($b)*1000)/1000;
+
+$cmc = new_multiple_choice();
+$cmc->qa(
+	"", 
+	"Based on this interval, they cannot conclude that more than half the population likes Stuart."
+);
+$cmc->extra("They can be  95% confident that more than 95% people in the USA like Stuart.",
+"Since 0.5 is contained in the confidence interval, they can be 95% confident that half people in the USA like Stuart.",
+"They need more information to make any conclusion at all.");
+
+
+BEGIN_TEXT
+$PAR
+Noted television personality Stuart Smalley claims: "I'm good enough,I'm smart enough,and gosh darn it, people like me." 
+To ascertain whether the last part of the statement is true, a national polling organization asked 9 individuals randomly 
+sampled from the American public, "Gosh darn it, do you like Stuart?" Of the 9 sampled, $x said they liked him and $w said they didn't. $PAR
+A 95% approximate score confidence interval that estimates the proportion of the population that likes Stuart is \( ($a, $b)\). Which of the following can the organization conclude?
+$PAR
+\{$cmc -> print_q \}
+\{$cmc -> print_a \}
+
+
+
+
+END_TEXT
+ANS(radio_cmp($cmc->correct_ans));
+
+
+ENDDOCUMENT();       # This should be the last executable line in the problem.

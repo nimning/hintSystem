@@ -1,0 +1,51 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "MathObjects.pl",
+  "parserRadioButtons.pl",
+  "compoundProblem.pl",
+  "Parser.pl",
+  "PGunion.pl",
+  "PGcourse.pl",
+  "PGchoicemacros.pl",
+);
+
+TEXT(beginproblem);
+BEGIN_PROBLEM();
+
+##############################################
+
+$isProfessor = ($studentLogin eq 'yoav.freund' || $studentLogin eq 'professor');
+Context("Interval");
+$showPartialCorrectAnswers = 1; # show student the correct part of their answer.
+
+$Outcomes=Set("{1,2,3,4,5,6,7,8,9,10,11,12}");
+$Div2=Set("{2,4,6,8,10,12}");
+$Div3=Set("{3,6,9,12}");
+$Div6=Set("{6,12}");
+
+BEGIN_PGML
+
+### Title ###
+
+## Overlapping events ##
+We consider a uniform distribution on the integers [`\{1,2,...12\}`].  
+
+o What is the outcome space [`\Omega`] corresponding to this distribution?  [_________]{$Outcomes}
+o Write out the set [`D_2`] representing the event "the integer is even" [__________]{$Div2}
+o Write out the set [`D_3`] representing the event "the integer is divisible by 3" [__________]{$Div3}
+o Write out the set [`D_6`] representing the event "the integer is divisible by 6" [__________]{$Div6}
+o What is [`D_2 \cap D_3`]?  [__________]{$Div6}
+o What is the probability an integer in the range 1..12 is divisible by both 2 and 3? [__________]{1/6}
+o What is the probability an integer in the range 1..12 is divisible by 6? [__________]{1/6}
+o Write out the elements of the set [`D_2 \cup D_3^c`]?  [__________]{Union($Div2,$Outcomes-$Div3)}
+o What is the probability an integer in the range 1..12 is divisible by 2 or not divisible by 3 (take the or here as an inclusive or)" [__________]{10/12}
+
+END_PGML
+
+##############################################
+
+END_PROBLEM();
+ENDDOCUMENT();        # This should be the last executable line in the problem.

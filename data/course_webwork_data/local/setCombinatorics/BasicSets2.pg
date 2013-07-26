@@ -1,0 +1,5 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+BEGIN_PROBLEM();
+
+END_PROBLEM();
+ENDDOCUMENT();        # This should be the last executable line in the problem.

@@ -1,0 +1,438 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "MathObjects.pl",
+  "PGcourse.pl",
+);
+
+Context("Numeric");
+
+Context()->flags->set(tolerance=>0.01);
+
+TEXT(beginproblem);
+$showPartialCorrectAnswers = 1;
+
+$rand_question = 19;
+
+######################################################################
+if ($rand_question == 0) {
+BEGIN_PGML
+Given the following cumulative distribution:
+END_PGML
+BEGIN_TEXT
+$BR
+\{ image("cumulative_uniform_masses_random0.png", width=>650, height=>650) \}
+END_TEXT
+BEGIN_PGML
+What are the uniform densities and mass distributions that could have been summed to produce these CDFs?
+Uniform distributions:
+- Uniform on (0.00,[_____]{4.00}) of probability density [_____]{0.04}
+- Uniform on (6.00,[_____]{8.00}) of probability density [_____]{0.16}
+
+Point masses (ordered by the location):
+- Point mass at [_____]{3} with probability [______]{0.3}
+- Point mass at [_____]{6} with probability [______]{0.0}
+- Point mass at [_____]{10} with probability [______]{0.2}
+END_PGML
+}
+
+if ($rand_question == 1) {
+BEGIN_PGML
+Given the following cumulative distribution:
+END_PGML
+BEGIN_TEXT
+$BR
+\{ image("cumulative_uniform_masses_random1.png", width=>650, height=>650) \}
+END_TEXT
+BEGIN_PGML
+What are the uniform densities and mass distributions that could have been summed to produce these CDFs?
+Uniform distributions:
+- Uniform on (0.00,[_____]{1.00}) of probability density [_____]{0.25}
+- Uniform on (4.00,[_____]{10.00}) of probability density [_____]{0.04}
+
+Point masses (ordered by the location):
+- Point mass at [_____]{2} with probability [______]{0.0}
+- Point mass at [_____]{5} with probability [______]{0.4}
+- Point mass at [_____]{10} with probability [______]{0.0}
+END_PGML
+}
+
+if ($rand_question == 2) {
+BEGIN_PGML
+Given the following cumulative distribution:
+END_PGML
+BEGIN_TEXT
+$BR
+\{ image("cumulative_uniform_masses_random2.png", width=>650, height=>650) \}
+END_TEXT
+BEGIN_PGML
+What are the uniform densities and mass distributions that could have been summed to produce these CDFs?
+Uniform distributions:
+- Uniform on (0.00,[_____]{1.00}) of probability density [_____]{0.17}
+- Uniform on (6.00,[_____]{8.00}) of probability density [_____]{0.16}
+
+Point masses (ordered by the location):
+- Point mass at [_____]{6} with probability [______]{0.3}
+- Point mass at [_____]{9} with probability [______]{0.1}
+- Point mass at [_____]{10} with probability [______]{0.1}
+END_PGML
+}
+
+if ($rand_question == 3) {
+BEGIN_PGML
+Given the following cumulative distribution:
+END_PGML
+BEGIN_TEXT
+$BR
+\{ image("cumulative_uniform_masses_random3.png", width=>650, height=>650) \}
+END_TEXT
+BEGIN_PGML
+What are the uniform densities and mass distributions that could have been summed to produce these CDFs?
+Uniform distributions:
+- Uniform on (0.00,[_____]{7.00}) of probability density [_____]{0.03}
+- Uniform on (3.00,[_____]{8.00}) of probability density [_____]{0.06}
+
+Point masses (ordered by the location):
+- Point mass at [_____]{3} with probability [______]{0.0}
+- Point mass at [_____]{8} with probability [______]{0.3}
+- Point mass at [_____]{10} with probability [______]{0.1}
+END_PGML
+}
+
+if ($rand_question == 4) {
+BEGIN_PGML
+Given the following cumulative distribution:
+END_PGML
+BEGIN_TEXT
+$BR
+\{ image("cumulative_uniform_masses_random4.png", width=>650, height=>650) \}
+END_TEXT
+BEGIN_PGML
+What are the uniform densities and mass distributions that could have been summed to produce these CDFs?
+Uniform distributions:
+- Uniform on (0.00,[_____]{8.00}) of probability density [_____]{0.05}
+- Uniform on (1.00,[_____]{4.00}) of probability density [_____]{0.04}
+
+Point masses (ordered by the location):
+- Point mass at [_____]{2} with probability [______]{0.1}
+- Point mass at [_____]{3} with probability [______]{0.1}
+- Point mass at [_____]{10} with probability [______]{0.3}
+END_PGML
+}
+
+if ($rand_question == 5) {
+BEGIN_PGML
+Given the following cumulative distribution:
+END_PGML
+BEGIN_TEXT
+$BR
+\{ image("cumulative_uniform_masses_random5.png", width=>650, height=>650) \}
+END_TEXT
+BEGIN_PGML
+What are the uniform densities and mass distributions that could have been summed to produce these CDFs?
+Uniform distributions:
+- Uniform on (6.00,[_____]{9.00}) of probability density [_____]{0.09}
+- Uniform on (6.00,[_____]{10.00}) of probability density [_____]{0.06}
+
+Point masses (ordered by the location):
+- Point mass at [_____]{4} with probability [______]{0.1}
+- Point mass at [_____]{6} with probability [______]{0.3}
+- Point mass at [_____]{10} with probability [______]{0.1}
+END_PGML
+}
+
+if ($rand_question == 6) {
+BEGIN_PGML
+Given the following cumulative distribution:
+END_PGML
+BEGIN_TEXT
+$BR
+\{ image("cumulative_uniform_masses_random6.png", width=>650, height=>650) \}
+END_TEXT
+BEGIN_PGML
+What are the uniform densities and mass distributions that could have been summed to produce these CDFs?
+Uniform distributions:
+- Uniform on (2.00,[_____]{10.00}) of probability density [_____]{0.03}
+- Uniform on (8.00,[_____]{9.00}) of probability density [_____]{0.28}
+
+Point masses (ordered by the location):
+- Point mass at [_____]{0} with probability [______]{0.0}
+- Point mass at [_____]{7} with probability [______]{0.2}
+- Point mass at [_____]{10} with probability [______]{0.3}
+END_PGML
+}
+
+if ($rand_question == 7) {
+BEGIN_PGML
+Given the following cumulative distribution:
+END_PGML
+BEGIN_TEXT
+$BR
+\{ image("cumulative_uniform_masses_random7.png", width=>650, height=>650) \}
+END_TEXT
+BEGIN_PGML
+What are the uniform densities and mass distributions that could have been summed to produce these CDFs?
+Uniform distributions:
+- Uniform on (0.00,[_____]{9.00}) of probability density [_____]{0.02}
+- Uniform on (4.00,[_____]{6.00}) of probability density [_____]{0.14}
+
+Point masses (ordered by the location):
+- Point mass at [_____]{2} with probability [______]{0.0}
+- Point mass at [_____]{2} with probability [______]{0.3}
+- Point mass at [_____]{4} with probability [______]{0.2}
+END_PGML
+}
+
+if ($rand_question == 8) {
+BEGIN_PGML
+Given the following cumulative distribution:
+END_PGML
+BEGIN_TEXT
+$BR
+\{ image("cumulative_uniform_masses_random8.png", width=>650, height=>650) \}
+END_TEXT
+BEGIN_PGML
+What are the uniform densities and mass distributions that could have been summed to produce these CDFs?
+Uniform distributions:
+- Uniform on (0.00,[_____]{8.00}) of probability density [_____]{0.06}
+- Uniform on (4.00,[_____]{5.00}) of probability density [_____]{0.06}
+
+Point masses (ordered by the location):
+- Point mass at [_____]{2} with probability [______]{0.1}
+- Point mass at [_____]{9} with probability [______]{0.2}
+- Point mass at [_____]{9} with probability [______]{0.2}
+END_PGML
+}
+
+if ($rand_question == 9) {
+BEGIN_PGML
+Given the following cumulative distribution:
+END_PGML
+BEGIN_TEXT
+$BR
+\{ image("cumulative_uniform_masses_random9.png", width=>650, height=>650) \}
+END_TEXT
+BEGIN_PGML
+What are the uniform densities and mass distributions that could have been summed to produce these CDFs?
+Uniform distributions:
+- Uniform on (2.00,[_____]{4.00}) of probability density [_____]{0.03}
+- Uniform on (5.00,[_____]{7.00}) of probability density [_____]{0.22}
+
+Point masses (ordered by the location):
+- Point mass at [_____]{1} with probability [______]{0.1}
+- Point mass at [_____]{2} with probability [______]{0.0}
+- Point mass at [_____]{8} with probability [______]{0.4}
+END_PGML
+}
+
+if ($rand_question == 10) {
+BEGIN_PGML
+Given the following cumulative distribution:
+END_PGML
+BEGIN_TEXT
+$BR
+\{ image("cumulative_uniform_masses_random10.png", width=>650, height=>650) \}
+END_TEXT
+BEGIN_PGML
+What are the uniform densities and mass distributions that could have been summed to produce these CDFs?
+Uniform distributions:
+- Uniform on (4.00,[_____]{5.00}) of probability density [_____]{0.36}
+- Uniform on (7.00,[_____]{9.00}) of probability density [_____]{0.07}
+
+Point masses (ordered by the location):
+- Point mass at [_____]{0} with probability [______]{0.4}
+- Point mass at [_____]{2} with probability [______]{0.1}
+- Point mass at [_____]{3} with probability [______]{0.0}
+END_PGML
+}
+
+if ($rand_question == 11) {
+BEGIN_PGML
+Given the following cumulative distribution:
+END_PGML
+BEGIN_TEXT
+$BR
+\{ image("cumulative_uniform_masses_random11.png", width=>650, height=>650) \}
+END_TEXT
+BEGIN_PGML
+What are the uniform densities and mass distributions that could have been summed to produce these CDFs?
+Uniform distributions:
+- Uniform on (1.00,[_____]{3.00}) of probability density [_____]{0.08}
+- Uniform on (4.00,[_____]{5.00}) of probability density [_____]{0.34}
+
+Point masses (ordered by the location):
+- Point mass at [_____]{6} with probability [______]{0.2}
+- Point mass at [_____]{7} with probability [______]{0.1}
+- Point mass at [_____]{9} with probability [______]{0.2}
+END_PGML
+}
+
+if ($rand_question == 12) {
+BEGIN_PGML
+Given the following cumulative distribution:
+END_PGML
+BEGIN_TEXT
+$BR
+\{ image("cumulative_uniform_masses_random12.png", width=>650, height=>650) \}
+END_TEXT
+BEGIN_PGML
+What are the uniform densities and mass distributions that could have been summed to produce these CDFs?
+Uniform distributions:
+- Uniform on (0.00,[_____]{1.00}) of probability density [_____]{0.30}
+- Uniform on (3.00,[_____]{4.00}) of probability density [_____]{0.20}
+
+Point masses (ordered by the location):
+- Point mass at [_____]{5} with probability [______]{0.1}
+- Point mass at [_____]{7} with probability [______]{0.2}
+- Point mass at [_____]{8} with probability [______]{0.2}
+END_PGML
+}
+
+if ($rand_question == 13) {
+BEGIN_PGML
+Given the following cumulative distribution:
+END_PGML
+BEGIN_TEXT
+$BR
+\{ image("cumulative_uniform_masses_random13.png", width=>650, height=>650) \}
+END_TEXT
+BEGIN_PGML
+What are the uniform densities and mass distributions that could have been summed to produce these CDFs?
+Uniform distributions:
+- Uniform on (1.00,[_____]{2.00}) of probability density [_____]{0.15}
+- Uniform on (7.00,[_____]{8.00}) of probability density [_____]{0.35}
+
+Point masses (ordered by the location):
+- Point mass at [_____]{0} with probability [______]{0.0}
+- Point mass at [_____]{3} with probability [______]{0.3}
+- Point mass at [_____]{4} with probability [______]{0.2}
+END_PGML
+}
+
+if ($rand_question == 14) {
+BEGIN_PGML
+Given the following cumulative distribution:
+END_PGML
+BEGIN_TEXT
+$BR
+\{ image("cumulative_uniform_masses_random14.png", width=>650, height=>650) \}
+END_TEXT
+BEGIN_PGML
+What are the uniform densities and mass distributions that could have been summed to produce these CDFs?
+Uniform distributions:
+- Uniform on (1.00,[_____]{8.00}) of probability density [_____]{0.07}
+- Uniform on (2.00,[_____]{4.00}) of probability density [_____]{0.01}
+
+Point masses (ordered by the location):
+- Point mass at [_____]{0} with probability [______]{0.0}
+- Point mass at [_____]{7} with probability [______]{0.1}
+- Point mass at [_____]{9} with probability [______]{0.4}
+END_PGML
+}
+
+if ($rand_question == 15) {
+BEGIN_PGML
+Given the following cumulative distribution:
+END_PGML
+BEGIN_TEXT
+$BR
+\{ image("cumulative_uniform_masses_random15.png", width=>650, height=>650) \}
+END_TEXT
+BEGIN_PGML
+What are the uniform densities and mass distributions that could have been summed to produce these CDFs?
+Uniform distributions:
+- Uniform on (2.00,[_____]{5.00}) of probability density [_____]{0.07}
+- Uniform on (6.00,[_____]{8.00}) of probability density [_____]{0.14}
+
+Point masses (ordered by the location):
+- Point mass at [_____]{1} with probability [______]{0.0}
+- Point mass at [_____]{8} with probability [______]{0.2}
+- Point mass at [_____]{10} with probability [______]{0.3}
+END_PGML
+}
+
+if ($rand_question == 16) {
+BEGIN_PGML
+Given the following cumulative distribution:
+END_PGML
+BEGIN_TEXT
+$BR
+\{ image("cumulative_uniform_masses_random16.png", width=>650, height=>650) \}
+END_TEXT
+BEGIN_PGML
+What are the uniform densities and mass distributions that could have been summed to produce these CDFs?
+Uniform distributions:
+- Uniform on (7.00,[_____]{10.00}) of probability density [_____]{0.14}
+
+Point masses (ordered by the location):
+- Point mass at [_____]{0} with probability [______]{0.0}
+- Point mass at [_____]{5} with probability [______]{0.1}
+- Point mass at [_____]{7} with probability [______]{0.4}
+END_PGML
+}
+
+if ($rand_question == 17) {
+BEGIN_PGML
+Given the following cumulative distribution:
+END_PGML
+BEGIN_TEXT
+$BR
+\{ image("cumulative_uniform_masses_random17.png", width=>650, height=>650) \}
+END_TEXT
+BEGIN_PGML
+What are the uniform densities and mass distributions that could have been summed to produce these CDFs?
+Uniform distributions:
+- Uniform on (1.00,[_____]{8.00}) of probability density [_____]{0.04}
+- Uniform on (7.00,[_____]{10.00}) of probability density [_____]{0.06}
+
+Point masses (ordered by the location):
+- Point mass at [_____]{5} with probability [______]{0.0}
+- Point mass at [_____]{7} with probability [______]{0.1}
+- Point mass at [_____]{9} with probability [______]{0.3}
+END_PGML
+}
+
+if ($rand_question == 18) {
+BEGIN_PGML
+Given the following cumulative distribution:
+END_PGML
+BEGIN_TEXT
+$BR
+\{ image("cumulative_uniform_masses_random18.png", width=>650, height=>650) \}
+END_TEXT
+BEGIN_PGML
+What are the uniform densities and mass distributions that could have been summed to produce these CDFs?
+Uniform distributions:
+- Uniform on (8.00,[_____]{9.00}) of probability density [_____]{0.48}
+
+Point masses (ordered by the location):
+- Point mass at [_____]{3} with probability [______]{0.2}
+- Point mass at [_____]{6} with probability [______]{0.0}
+- Point mass at [_____]{9} with probability [______]{0.3}
+END_PGML
+}
+
+if ($rand_question == 19) {
+BEGIN_PGML
+Given the following cumulative distribution:
+END_PGML
+BEGIN_TEXT
+$BR
+\{ image("cumulative_uniform_masses_random19.png", width=>650, height=>650) \}
+END_TEXT
+BEGIN_PGML
+What are the uniform densities and mass distributions that could have been summed to produce these CDFs?
+Uniform distributions:
+- Uniform on (2.00,[_____]{7.00}) of probability density [_____]{0.07}
+- Uniform on (3.00,[_____]{5.00}) of probability density [_____]{0.07}
+
+Point masses (ordered by the location):
+- Point mass at [_____]{1} with probability [______]{0.2}
+- Point mass at [_____]{6} with probability [______]{0.1}
+- Point mass at [_____]{9} with probability [______]{0.2}
+END_PGML
+}
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

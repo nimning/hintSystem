@@ -1,0 +1,31 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "MathObjects.pl",
+  "PGcourse.pl",
+);
+
+TEXT(beginproblem);
+$showPartialCorrectAnswers = 1;
+
+######################################################################
+Context("Numeric");
+
+$R1=random(8,15,1);
+$R2=random(2,$R1-2,1);
+$F=fact($R1)/(fact($R2)*fact($R1-$R2));
+
+TEXT(PGML::Format2(<<'END_PGML'));
+
+### Title ###
+
+Text
+
+Question : [__________]{23}
+END_PGML
+
+######################################################################
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

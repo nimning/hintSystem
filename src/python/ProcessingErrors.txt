@@ -1,0 +1,40 @@
+/Users/yoavfreund/projects/Webwork.Improvement.Project/Demo_for_utube/data/cse103_original_data/WebWork/logs/answer_log14.txt line no:6645: 	
+Traceback (most recent call last):
+  File "./ProcessLogs.py", line 45, in __init__
+    answer_parts =line_parts[4].split('\t')
+IndexError: list index out of range
+/Users/yoavfreund/projects/Webwork.Improvement.Project/Demo_for_utube/data/cse103_original_data/WebWork/logs/answer_log15.txt line no:6645: 	
+Traceback (most recent call last):
+  File "./ProcessLogs.py", line 45, in __init__
+    answer_parts =line_parts[4].split('\t')
+IndexError: list index out of range
+/Users/yoavfreund/projects/Webwork.Improvement.Project/Demo_for_utube/data/cse103_original_data/WebWork/logs/answer_log_assignment1_2.txt line no:7125: 
+Traceback (most recent call last):
+  File "./ProcessLogs.py", line 45, in __init__
+    answer_parts =line_parts[4].split('\t')
+IndexError: list index out of range
+/Users/yoavfreund/projects/Webwork.Improvement.Project/Demo_for_utube/data/cse103_original_data/WebWork/logs/answer_log_assignment1_2.txt line no:9199: 
+Traceback (most recent call last):
+  File "./ProcessLogs.py", line 45, in __init__
+    answer_parts =line_parts[4].split('\t')
+IndexError: list index out of range
+/Users/yoavfreund/projects/Webwork.Improvement.Project/Demo_for_utube/data/cse103_original_data/WebWork/logs/answer_log_assignment5.txt line no:6645: 	
+Traceback (most recent call last):
+  File "./ProcessLogs.py", line 45, in __init__
+    answer_parts =line_parts[4].split('\t')
+IndexError: list index out of range
+/Users/yoavfreund/projects/Webwork.Improvement.Project/Demo_for_utube/data/cse103_original_data/WebWork/logs/answer_log_assignment6.txt line no:6645: 	
+Traceback (most recent call last):
+  File "./ProcessLogs.py", line 45, in __init__
+    answer_parts =line_parts[4].split('\t')
+IndexError: list index out of range
+/Users/yoavfreund/projects/Webwork.Improvement.Project/Demo_for_utube/data/cse103_original_data/WebWork/logs/answer_log_assignment7.txt line no:6645: 	
+Traceback (most recent call last):
+  File "./ProcessLogs.py", line 45, in __init__
+    answer_parts =line_parts[4].split('\t')
+IndexError: list index out of range
+/Users/yoavfreund/projects/Webwork.Improvement.Project/Demo_for_utube/data/cse103_original_data/WebWork/logs/answer_log_assignment8.txt line no:6645: 	
+Traceback (most recent call last):
+  File "./ProcessLogs.py", line 45, in __init__
+    answer_parts =line_parts[4].split('\t')
+IndexError: list index out of range

@@ -1,0 +1,43 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "MathObjects.pl",
+  "PGcourse.pl",
+);
+
+TEXT(beginproblem);
+$showPartialCorrectAnswers = 1;
+
+sub comb
+{
+	fact($_[0])/(fact($_[1])*fact($_[0]-$_[1]));
+}
+
+$ans8 = 40/comb(52,5);
+$ans8Real = Real("$ans8");
+$ans9 = 4/comb(52,5);
+$ans9Real = Real("$ans9");
+
+
+######################################################################
+
+BEGIN_PGML
+## Flipping Ten Coins ##
+
+In this problem we will look at flipping fair coins, e.g. coins where there is an equal chance of heads or tails.  We will calculate the probability of exactly 4 of the coins coming up heads.
+
+The total number of possible options of results for flipping ten coins is [_________________]{1024}.
+
+Representing four heads can be a little bit tricky.  Instead of trying to count each instance where there are exactly four heads, we will instead think of a set (f, s, t, fo) where each number denotes the location (From 1 to 10) of the coin that came up heads.  None of the locations can repeat.  The total number of permutations here is [___________]{5040}.
+
+However, we are again overcounting!  This solution does not take into account that (2,4,7,9) is different from (9,4,7,2).  Instead of calculating the number of permutations, we should calculate the number of combinations.  The number of combinations (e.g. (2, 4, 7, 9) and (9, 2, 7, 4) are different) is [______________]{210}.
+
+Therefore, the probability of getting four heads when flipping ten fair coins is [_____________]{210/1024}
+
+END_PGML
+
+######################################################################
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

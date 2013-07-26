@@ -1,0 +1,6 @@
+### Statistics about the time taken per attempt ###
+
+       total: numer of attempts =  17112, time taken =  4346724
+       <3min: numer of attempts =  15400, time taken =   326373
+>3min,<20min: numer of attempts =   1474, time taken =   572634
+      >20min: numer of attempts =    225, time taken =  3445377

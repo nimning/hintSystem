@@ -1,0 +1,52 @@
+DOCUMENT();
+
+loadMacros(
+    "PGstandard.pl",
+    "PGML.pl",
+    "MathObjects.pl",
+    "PGcourse.pl",
+);
+
+TEXT(beginproblem);
+#$showPartialCorrectAnswers=1;
+
+#################################
+
+$context=Context("Interval");
+$min = random(1,5,1);
+$max = random(20,30,1);
+$n = $max-$min;
+@a = ($min..$max);
+$O = Set(join(",",@a));
+$sq = Set(1,4,9,16,25);
+$A = $O->intersect($sq);
+
+BEGIN_PGML
+### Perfect Squares ###
+
+A perfect square is a positive integer whose square root is an integer. In other words, a positive integer [`i`] is a perfect square if there exists a smaller positive integer [`j`] such that [`i=j^2`].
+
+Suppose we draw an integer number uniformly at random from the range 
+[`\{[$min],\ldots,[$max]\}`]. What is the probability that the number we draw 
+is a perfect square?
+
+1. The minimal value we can draw is: (just copy the number here) [____]{$min}
+2. The maximal value we can draw is: (just copy the number here) [____]{$max}
+3. The size of the instance space is therefor: [____]{$max-$min+1}
+4. The set of integers in that range that are perfect squares is: [__________________]{$A}
+5. The size of the set from the previous step is [___]{$A->length}
+6. Combining the results of steps 3 and 5 we get that the desired probability is [_______]{$A->length/($n+1)}
+
+END_PGML
+
+BEGIN_PGML_SOLUTION
+
+*SOLUTION:* The outcome space [`\Omega`] is the set [$O]. The event [`A`] of drawing a perfect square number corresponds to the set of perfect squares in [`\Omega`], which is [$A]. As all numbers are equally likely to be drawn, the probability of this event is calculated as [`\frac{|A|}{|\Omega|} =`] [`[$A->length]/[$n+1]`]
+
+END_PGML_SOLUTION
+
+
+
+#################################
+
+ENDDOCUMENT();

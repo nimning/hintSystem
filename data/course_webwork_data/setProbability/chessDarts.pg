@@ -1,0 +1,46 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "MathObjects.pl",
+  "parserRadioButtons.pl",
+  "compoundProblem.pl",
+  "Parser.pl",
+  "PGunion.pl",
+  "PGcourse.pl",
+  "PGchoicemacros.pl",
+);
+
+TEXT(beginproblem);
+BEGIN_PROBLEM();
+
+##############################################
+
+$isProfessor = ($studentLogin eq 'yoav.freund' || $studentLogin eq 'professor');
+Context("Interval");
+$showPartialCorrectAnswers = 1; # show student the correct part of their answer.
+
+$darts=random(4,6,1); # number of darts to throw
+
+BEGIN_PGML
+
+## Throwing Darts at a Chessboard ##
+
+For some reason you are throwing [$darts] darts at a chessboard.  Assume we're in the starting position, so each player has 16 pieces.  Recall that a chessboard has 64 squares.  
+
+Assume there is an equal chance of you hitting any square on the chessboard.  
+
+o  How many darts did you throw?  [____]{$darts}
+o  What is the probability that the first dart you throw hits one of your opponent's pieces?  [_____]{"16/64"}
+o  What is the probability that the first dart you throw misses your opponent's pieces?  [_____]{"48/64"}
+o  What is the probability that all your darts miss your opponent's pieces?  [_____]{"(48/64)^$darts"}
+o  What is the probability that at least one of your darts hits your opponent's pieces?  [_____]{"1-(48/64)^$darts"}
+o  What is the probability at least one dart hits your opponent's king?  Recall that each side has only one king.  [____]{"1-(63/64)^$darts"}
+
+END_PGML
+
+##############################################
+
+END_PROBLEM();
+ENDDOCUMENT();        # This should be the last executable line in the problem.

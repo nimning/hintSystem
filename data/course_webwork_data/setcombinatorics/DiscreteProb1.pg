@@ -1,0 +1,60 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "MathObjects.pl",
+  "PGcourse.pl",
+);
+
+TEXT(beginproblem);
+$showPartialCorrectAnswers = 1;
+
+######################################################################
+Context("Numeric");
+
+$R=random(4,9,1);
+$A1=Formula("[$R]^4");
+
+TEXT(PGML::Format2(<<'END_PGML'));
+
+### Uniform Distributions Over Tuples, A guided problem ###
+
+Suppose a seqeunce of 4 digits in the range 1-[$R] is chosen uniformly
+at random. What is the probability that the first and third digit are
+equal, the second and the fourth digits are equal, but the first and
+second digits are unequal?
+
+o *Copy* the maximal allowed digit value here: [__]{$R}
+
+1.  We are going to use the standard formula for probability of sets
+    in a discrete uniform distribution space: the probability of a set
+    [`A`] in an event space [`\Omega`] is
+
+    [``P(A) = \frac{|A|}{|\Omega|}``]
+
+2.  In the enumerator we place the _size_ of the sample space. This is
+    easy, as we have [$R1] choices in each of the four locations the
+    number of sequences, which is equal to the size of the sample
+    space, thus [`|\Omega| =`] [__________]{"[$R]^4"} (remember that "2^3"
+    means [`2^3`] )
+
+3.  Now we want to compute the size of the set [`A`]. To do that it is
+    useful to realize that we need only concern ourselves with the
+    choices of two digits, say digits 1 and 2.  This is because digit
+    1 determines the value of digit 3 and digit 2 determines the value
+    of digit [_]{4}. Now, how many choices do we have for digit 1?
+    Obviously, any integer in the range [`1,\ldots,[$R]`], or [$R]
+    choices. Once the first digit has been chosen, we have one less
+    choice for the second digit, in other words [$R-1]. The size of
+    the set [`A`] is the product of these two numbers,
+    i.e. [_______________]{"([$R]-1)*[$R]"}
+
+4.  Putting this all together we get that the probability of [`A`] is
+
+[`P(A)=`] [_______]{"$R*($R-1)"} / [_________]{"$R^4"} = [___________________________]{"$R*($R-1)/($R^4)"}
+END_PGML
+
+######################################################################
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

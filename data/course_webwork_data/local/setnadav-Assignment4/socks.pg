@@ -1,0 +1,50 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "MathObjects.pl",
+  "PGcourse.pl",
+);
+
+TEXT(beginproblem);
+$showPartialCorrectAnswers = 1;
+
+sub comb
+{
+	fact($_[0])/(fact($_[1])*fact($_[0]-$_[1]));
+}
+
+$ans8 = 40/comb(52,5);
+$ans8Real = Real("$ans8");
+$ans9 = 4/comb(52,5);
+$ans9Real = Real("$ans9");
+
+
+######################################################################
+
+BEGIN_PGML
+## Drawer of Socks ##
+
+Now we turn to a sock drawer with three red socks and three blue socks.
+We will calculate the probability that we draw two socks of the same color.
+
+When we first draw out a sock, there are [__________________]{6} total socks in the drawer, [_________________]{3} of which are blue.
+
+Therefore, the probability of drawing a blue sock is [______________________]{1/2}.
+
+If we have drawn a blue sock, there are now [_______________]{5} total socks in the drawer, [__________________]{2} of which are blue.
+
+Therefore, the probability of drawing a second blue sock is [_________________]{2/5}.
+
+We can conclude, then, that the probability of drawing two blue socks is [____________________]{1/5}.
+
+Since there are equal numbers of red and blue socks in the drawer, we can also conclude that the probability of drawing two red socks is [___________________]{1/5}.
+
+Therefore, there is a [_____________________]{2/5} probability of drawing two socks of the same color.
+
+END_PGML
+
+######################################################################
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

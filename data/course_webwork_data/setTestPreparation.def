@@ -1,0 +1,65 @@
+
+openDate          = 10/01/2012 at 11:02am PDT
+dueDate           = 12/14/2013 at 03:00pm PST
+answerDate        = 12/14/2013 at 03:00pm PST
+paperHeaderFile   = defaultHeader
+screenHeaderFile  = setTestPreparation/setHeader.pg
+problemList       = 
+local/setTestPreparation/stat212-HW05-15_hint.pg, 1, 1 
+setTestPreparation/stat212-HW05-05_hint.pg, 1, 1 
+setTestPreparation/stat212-HW05-14_hint.pg, 1, 1 
+setTestPreparation/stat212-HW05-13_hint.pg, 1, 1 
+setTestPreparation/stat212-HW05-06_hint.pg, 1, 1 
+setTestPreparation/stat212-HW05-01_hint.pg, 1, 1 
+setTestPreparation/stat212-HW05-16_hint.pg, 1, 1 
+setTestPreparation/stat212-HW05-02_hint.pg, 1, 1 
+setTestPreparation/stat212-HW05-03_hint.pg, 1, 1 
+setTestPreparation/stat212-HW05-04_hint.pg, 1, 1 
+setTestPreparation/stat212-HW03-20_hint.pg, 1, 1 
+setTestPreparation/stat212-HW03-17_hint.pg, 1, 1 
+setTestPreparation/stat212-HW03-08_hint.pg, 1, 1 
+setTestPreparation/stat212-HW03-19_hint.pg, 1, 1 
+setTestPreparation/ur_pb_7_5_hint.pg, 1, 1 
+setTestPreparation/ur_pb_7_8_hint.pg, 1, 1 
+setTestPreparation/ur_pb_7_9a_hint.pg, 1, 1 
+setTestPreparation/ur_pb_7_2_hint.pg, 1, 1 
+setTestPreparation/ur_pb_7_9_hint.pg, 1, 1 
+setTestPreparation/ur_pb_7_7_hint.pg, 1, 1 
+setTestPreparation/ur_pb_7_3_hint.pg, 1, 1 
+setTestPreparation/ur_pb_7_6_hint.pg, 1, 1 
+setTestPreparation/p1_hint.pg, 1, 1 
+setTestPreparation/ur_pb_7_4_hint.pg, 1, 1 
+setTestPreparation/ur_pb_7_1_hint.pg, 1, 1 
+setTestPreparation/ur_pb_5_1_hint.pg, 1, 1 
+setTestPreparation/stat212-HW05-07_hint.pg, 1, 1 
+setTestPreparation/stat212-HW05-08_hint.pg, 1, 1 
+setTestPreparation/ur_pb_17_1_hint.pg, 1, 1 
+setTestPreparation/ur_pb_17_4_hint.pg, 1, 1 
+setTestPreparation/ur_pb_17_3_hint.pg, 1, 1 
+setTestPreparation/ur_pb_17_2_hint.pg, 1, 1 
+setTestPreparation/exval3_hint.pg, 1, 1 
+setTestPreparation/exval2_hint.pg, 1, 1 
+setTestPreparation/exval1_hint.pg, 1, 1 
+setTestPreparation/expectedvalue1_hint.pg, 1, 1 
+setTestPreparation/exval4_hint.pg, 1, 1 
+setTestPreparation/cond7_hint.pg, 1, 1 
+setTestPreparation/Bayes4_hint.pg, 1, 1 
+setTestPreparation/Bayes1_hint.pg, 1, 1 
+setTestPreparation/comprob10_hint.pg, 1, 1 
+setTestPreparation/Bayes6_hint.pg, 1, 1 
+setTestPreparation/Bayes2_hint.pg, 1, 1 
+setTestPreparation/Bayes3_hint.pg, 1, 1 
+setTestPreparation/Bayes5_hint.pg, 1, 1 
+setTestPreparation/Bayes7_hint.pg, 1, 1 
+setTestPreparation/dueck5_2_1_hint.pg, 1, 1 
+setTestPreparation/events5_hint.pg, 1, 1 
+setTestPreparation/cond16_hint.pg, 1, 1 
+setTestPreparation/events8_hint.pg, 1, 1 
+setTestPreparation/cond15_hint.pg, 1, 1 
+setTestPreparation/cond6_hint.pg, 1, 1 
+setTestPreparation/cond1_hint.pg, 1, 1 
+setTestPreparation/events6_hint.pg, 1, 1 
+setTestPreparation/events7_hint.pg, 1, 1 
+setTestPreparation/cond14_hint.pg, 1, 1 
+setTestPreparation/events9_hint.pg, 1, 1 
+

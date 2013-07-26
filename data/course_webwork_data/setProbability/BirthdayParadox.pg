@@ -1,0 +1,59 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "MathObjects.pl",
+  "PGcourse.pl",
+);
+
+TEXT(beginproblem);
+$showPartialCorrectAnswers = 1;
+
+sub comb
+{
+	fact($_[0])/(fact($_[1])*fact($_[0]-$_[1]));
+}
+
+$people = 3;
+
+######################################################################
+
+BEGIN_PGML
+## The Birthday Paradox ##
+A room contains [$people] people.  We want to calculate the probability that at least two of them have the same birthday.
+
+### Calculating the Probability ###
+The probability space is not properly specified, so we need to make some assumptions. First, we'll assume that the [$people] birthdays are independent (that is, a person's birthday is not influenced by anyone else's birthday). Second, we'll assume that all days are equally likely -- that is, the chance of a birthday falling on any particular day is exactly [`1/365`] (we're also ignoring the issue of leap years).
+
+Number the people [`1,2,\ldots, [$people]`]  and number the days of the year [`1,2,\ldots, 365`].  We will represent the birthdays of the people in the room by a [`[$people]`] tuple [`(\omega_1, \ldots, \omega_{[$people]})`]  where [`\omega_i \in \{1,2,\ldots,365\}`] is the birthday of the [`i^{th}`] person. 
+
+What is the size of the outcome space of birthdays?  [`\Omega = `] [_______]{"365^$people"}?  
+
+What is the size of the event set [`E`] representing "every person has the birthday January 1"?  [`|E| = `] [____]{1}
+
+What is the probability that every person was born January 1?  [___________]{"1/365^$people"}
+
+The event of interest is
+[` A = \{ \omega: \omega_i = \omega_j \mbox{ for some } i \neq j \} `]
+This is a typical situation in which it is easier to analyze the _complement_ of [`A`] than [`A`] itself (that is, it is easier to compute the probability that [`A`] _doesn't_ occur than the probability that it occurs).
+
+[`` A^c \ \ = \ \ \Omega - A \ \ = \ \ \{\omega: \omega_1 \neq \omega_2 \neq \cdots \neq \omega_{[$people]}\}.``]
+
+In other words, [`A^c`] is the event that everyone's birthday is different. 
+
+Let's say we're choosing the birthdays of people in sequence, such that all birthdays are different.  We first choose [`\omega_1`], then [`\omega_2`], ... [`\omega_{[$people]}`].  
+
+o  How many choices are there for [`\omega_1`]?  [________]{365}
+o  What about [`\omega_2`]?  [________]{364}
+o  [`\omega_{[$people]}`]?  [________]{"365-$people+1"}
+o  How many choices are there for [`(\omega_1,...\omega_[$people]) \mbox{ where all birthdays are different}`]?  [_______]{"365*364*363"}
+o  What is the size of the event set representing the event "all birthdays are different"?  [_______]{"365*364*363"}
+o  What is the probability all [$people] people have different birthdays?  [_______]{"365*364*363/365^$people"}
+o  What is the probability at least two people have the same birthday?  [_______]{"1 - 365*364*363/365^$people"}
+
+END_PGML
+
+######################################################################
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

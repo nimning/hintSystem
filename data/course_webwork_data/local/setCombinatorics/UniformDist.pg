@@ -1,0 +1,56 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+ 
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "MathObjects.pl",
+  "PGcourse.pl",
+);
+
+TEXT(beginproblem);
+$showPartialCorrectAnswers = 1;
+
+######################################################################
+Context("Numeric");
+
+$R1=random(10,20,1); # size of instance space
+$R2=random(5,$R1,1); # size of event set.
+
+TEXT(PGML::Format2(<<'END_PGML'));
+
+### Title ###
+
+##Uniform Distributions##
+
+A _uniform_ distribution over a set of size [`n`] is one which assigns to each element the probability [`1/n`].
+For example the probability that the outcome of a dice throw is 3, is equal to [`1/6`]. The other 5 possible outcome [`\{1,2,4,5,6\}`] also have a probability of [`1/6`] each. 
+
+Now for a slightly harder question: What is the probability of the event "the dice roll is an even number"? 
+You might guess that the probability is [`1/2`]. OK, that is correct, but learning to compute this probability 
+
+The outcome space in this case is the set [`\Omega=\{1,2,3,4,5,6\}`]. In the terminology of probability theory, an
+_event_ is a subset of [`\Omega`]. The event "the dice roll is an even number" corresponds to the set  [`A=\{2,4,6\}`].
+When [`\Omega`] is a finite set and the distribution over [`\Omega`] is uniform; we have a simple expression for the probability of any event [`A \subseteq \Omega`]:
+
+[``P(A) = \frac{|A|}{|\Omega|}``]
+
+For the case above we get:
+
+[``P(\mbox{the dice roll is an even number}) = \frac{|A|}{|\Omega|} = \frac{3}{6} = \frac{1}{2}``]
+
+----
+
+Suppose we have [$R1] cards, numbered 1,...,[$R1]. Suppose that when we pick a card at random the distribution of the card number is uniform. Let [`A`] be the event that number of the card that we picked is smaller or equal to [$R2]. What is the probability of the event [`A`]?
+
+o *Copy* the number of cards here: [_________]{$R1}
+o *Copy* the maximal card value in [`A`] here: [________]{$R2}
+o The probability of the event is equal to [__________________________]{"$R2/$R1"}
+
+END_PGML
+BEGIN_PGML_SOLUTION
+To use the formula above, we need to find the size of the sample space and the size of the event set. In this case these numbers are given in the question: the size of the sample space is [$R2] and the size of the event set is $R1. The probability of the event is therefor [$R2]/[$R1] = [$R2/$R1]
+END_PGML_SOLUTION
+
+######################################################################
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

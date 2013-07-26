@@ -1,0 +1,39 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "MathObjects.pl",
+  "PGcourse.pl",
+);
+
+Context("Numeric");
+
+Context()->flags->set(tolerance=>0.001);
+
+TEXT(beginproblem);
+$showPartialCorrectAnswers = 1;
+
+######################################################################
+
+BEGIN_PGML
+
+Given the following cumulative distribution:
+END_PGML
+BEGIN_TEXT
+$BR 
+\{ image("cumulative_uniform_masses_1.png", width=>650, height=>500) \}
+END_TEXT
+BEGIN_PGML
+What are the uniform densities and mass distributions that could have been summed to produce this CDF?  
+Uniform distributions:
+- Uniform on (0.10,[_____]{0.30}) of probability density [_____]{0.50}
+- Uniform on (0.40,[_____]{0.60}) of probability density [_____]{2.00}
+
+Point masses (ordered by the location):
+- Point mass at [_____]{0.20} with probability [______]{0.40}
+- Point mass at [_____]{0.90} with probability [______]{0.10}
+
+END_PGML
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

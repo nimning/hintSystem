@@ -1,0 +1,47 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "MathObjects.pl",
+  "PGcourse.pl",
+);
+
+Context("Numeric");
+Context()->variables->are(
+      k => ['Real', limits=>[1,10], resolution=>1],
+      n => ['Real', limits=>[1,10], resolution=>1],
+      x => ['Real']
+    );
+
+Context()->flags->set(tolerance=>0.00000001);
+
+TEXT(beginproblem);
+$showPartialCorrectAnswers = 1;
+
+$dollars_exp = random(8,10,1);
+$dollars = "(2 ** $dollars_exp)";
+
+######################################################################
+
+BEGIN_PGML
+## Martingale Betting ##
+You have a lot of money, and you've come up with a betting strategy that will win you a free dollar with very high probability.  
+
+Let's say you're going to apply this strategy to a coin-toss game at a casino.  You place a bet of x dollars.  If the fair coin comes up heads, you win x dollars.  Else you lose x.  
+
+You want your free dollar.  Your strategy: you play this game many times, starting out with 1 dollar.  If you win, you've won your dollar.  Else, you double your bet.  If you win this time, you've covered your losses and still won a dollar.  If you lose, you double your bet again.  You keep doubling until you win or hit your betting limit.  
+
+If you win before you run out of money, you will have won a dollar.  
+
+Let's say you will play this game, and your betting limit per round is $[`2^{[$dollars_exp]}`].  What is the probability you win a dollar?  [______]{"1 - ((1/2)**($dollars_exp+1))"}
+
+The problem with this game: in the slight chance you hit your betting limit and lose, you lose a lot of money.  What is the expected value of your losses (not accounting for the amount you expect to win).  [______]{"1-(1/2)**($dollars_exp+1)"}
+
+What is the expected value of your winnings (not accounting for the amount you expect to lose).  [______]{"1-(1/2)**($dollars_exp+1)"}
+
+What is your expected profit using this strategy?  [_____]{0}
+
+END_PGML
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

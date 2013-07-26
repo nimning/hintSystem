@@ -1,0 +1,123 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+  "PG.pl",
+  "PGbasicmacros.pl",
+  "PGanswermacros.pl",
+  "PGauxiliaryFunctions.pl",
+  "compoundProblem.pl",
+  "Parser.pl",
+);
+
+TEXT(beginproblem);
+
+##############################################
+#
+#  Set the default values and then load the
+#  values set by the professor in a .pl file
+#  (copied to the templates/macros directory).
+#
+
+$parts = 3;       # total number of parts
+$isProfessor = 1; # is studentLogin a professor?
+
+loadMacros("compoundProblem2-which.pl");
+
+#
+#  Start a compound problem.  The number of
+#  parts is set in the .pl file above, so the
+#  professor can specify which part is currently
+#  active.  (E.g., if $parts is set to 1, then
+#  the students will not be able to go on to
+#  parts 2 and 3.  The professor edits the .pl
+#  file loaded above in order to "open" the next
+#  part for the students to work on.)
+#
+$cp = new compoundProblem(
+  parts => $parts,             # stop at this part for now
+  totalAnswers => 4,           # total answers in all parts combined
+  parserValues => 1,           # make Parser objects from student answers
+  allowReset => $isProfessor,  # professors get Reset buttons for testing
+);
+$part = $cp->part($parts);     # set the part to this one.  If the
+                               # student hasn't finished the earlier
+                               # ones, they start at the last one they
+                               # did finish and can work up to this one.
+
+
+
+##############################################
+#
+#  Part 1
+#
+
+if ($part == 1) {
+
+BEGIN_TEXT
+Part 1:
+$PAR
+Enter two numbers: \{NAMED_ANS_RULE("a",10)\}, \{NAMED_ANS_RULE("b",10)\}
+END_TEXT
+
+#
+#  Labelled answers are saved for future parts.
+#  (The checker allows any number to be "correct" for
+#   these blanks.)
+#
+NAMED_ANS(
+  a => Real(1)->cmp(checker=>sub {return 1}, ignoreInfinity=>0),
+  b => Real(2)->cmp(checker=>sub {return 1}, ignoreInfinity=>0),
+);
+
+#
+#  the useGrader() method sets the grader for this part.
+#
+$cp->useGrader(~~&std_problem_grader);
+$showPartialCorrectAnswers = 0;
+
+}
+
+##############################################
+#
+#  Part 2
+#
+
+if ($part == 2) {
+
+#
+#  The values of a and b are obtained from the
+#  first part of the problem.
+#
+BEGIN_TEXT
+Part 2:
+$PAR
+\($a + $b\) = \{ans_rule(10)\}
+END_TEXT
+
+ANS(num_cmp($a+$b,mode=>"strict"));
+
+}
+
+##############################################
+#
+#  Part 3
+#
+
+if ($part == 3) {
+
+$f = Formula("$a x + $b")->reduce;
+
+BEGIN_TEXT
+Part: 3:
+$PAR
+Suppose \(f(x) = \{$f->TeX\}\).$BR
+Then \(f(2)\) = \{ans_rule(10)\}.
+END_TEXT
+
+ANS($f->eval(x=>2)->cmp);
+
+}
+
+##############################################
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

@@ -1,0 +1,88 @@
+##DESCRIPTION
+## DBsubject('Probability')
+## DBchapter('Discrete Probability')
+## DBsection('Conditional Probability')
+## KEYWORDS('Bayes' , 'probability', 'conditional')
+## Author('Monika Keindl')
+## Institution('NAU')
+##ENDDESCRIPTION
+
+# File Created: 7/13/10
+# Problem Author: Monika Keindl
+# Location: Northern Arizona University
+# Course: MAT 119 - Finite Mathematics
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+
+loadMacros(
+    "PGasu.pl",
+    "PGauxiliaryFunctions.pl",
+    "PG.pl",
+"MathObjects.pl",
+    "PGbasicmacros.pl",
+    "PGchoicemacros.pl",
+    "PGanswermacros.pl",
+    "PGgraphmacros.pl",
+    "PGnumericalmacros.pl",
+    "PGstatisticsmacros.pl"
+);
+
+TEXT(beginproblem());
+Context("Numeric");
+Context()->flags->set(
+  tolerance => 0.001,
+  tolType => "absolute",
+);
+
+$showPartialCorrectAnswers = 1;
+
+$m=random(300,400,10);
+$f=600-$m;
+
+$nm=random($m-150,$m-100,10);
+$nf=random($f-100,$f-70,10);
+
+$ans1=(($f/600)*($nf/$f))/(($f/600)*($nf/$f)+($m/600)*($nm/$m));
+
+BEGIN_TEXT
+
+Of $m male and $f female employees at the Flagstaff Mall, $nm of the men and 
+$nf of the women are on flex-time (flexible working hours). Given that 
+an employee selected at random from this group is on flex-time, what is 
+the probability that the employee is a woman?
+
+
+$BR
+$BR
+Answer: \{ ans_rule(30) \}
+$BR
+$BR
+
+END_TEXT
+
+ANS(num_cmp($ans1));
+
+
+$showHint = -1; 
+BEGIN_HINT
+$PAR
+$SOLUTION
+$PAR
+
+\(\newcommand{\pr}{\textbf{Pr}}\)
+\(\newcommand{\f}{\text{flex}}\)
+\(\newcommand{\m}{\text{men}}\)
+\(\newcommand{\w}{\text{women}}\)
+\(
+\begin{align*}
+\pr(\w|\f) &= \frac{\pr(\w,\f)}{\pr(\f)} \\
+&= \frac{\pr(\f|\w)\pr(\w)}{\pr(\f|\w)\pr(\w)+\pr(\f|\m)\pr(\m)} \\
+&= \frac{($f/600)\times ($nf/$f)}{($f/600)\times ($nf/$f)+($m/600)\times ($nm/$m)}\\
+&= $ans1
+\end{align*}
+\)
+
+END_HINT
+ENDDOCUMENT();       # This should be the last executable line in the problem.
+

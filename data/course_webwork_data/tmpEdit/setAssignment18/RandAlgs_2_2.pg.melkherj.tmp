@@ -1,0 +1,93 @@
+## DESCRIPTION
+##   Apply the Central Limit Theorem
+## ENDDESCRIPTION
+
+## KEYWORDS('Probability', 'Central Limit Theorem')
+## Tagged by nhamblet
+
+## DBsubject('Probability')
+## DBchapter('Theory')
+## DBsection('The Central Limit Theorem')
+## Date('')
+## Author('')
+## Institution('Rochester')
+## TitleText1('')
+## EditionText1('')
+## AuthorText1('')
+## Section1('')
+## Problem1('')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGML.pl",
+"MathObjects.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGgraphmacros.pl",
+"PGnumericalmacros.pl",
+"PGstatisticsmacros.pl"
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+package my::Function::numeric;
+our @ISA = ('Parser::Function::numeric');
+
+sub Q {
+   shift; my $x = shift;
+   return main::normal_prob($x, 'infty', mean=>0, deviation=>1);
+}
+
+sub Phi {
+   shift; my $x = shift;
+   return main::normal_prob('-infty', $x, mean=>0, deviation=>1);
+}
+
+sub erf {
+   shift; my $x = shift;
+   $phi = main::normal_prob('-infty', $x*sqrt(2), mean=>0, deviation=>1);
+   $a = 2*$phi-1;
+   return $a;
+}
+
+package main;
+
+Context("Numeric");
+Context()->functions->add(
+erf =>{class=>"my::Function::numeric", nocomplex=>1},
+Q =>{class=>"my::Function::numeric", nocomplex=>1}, 
+Phi =>{class=>"my::Function::numeric", nocomplex=>1}
+);
+Context()->flags->set(tolerance=>0.001);
+
+Context()->texStrings;
+
+Context()->variables->are(
+      n => ['Real', limits=>[1,100], resolution=>1],
+    );
+
+$k = random(3,5);
+$p = "(($k-1)/$k)";
+
+BEGIN_PGML
+
+You have an algorithm A for testing whether a Boolean formula f is satisfiable or not, but it is only correct with probability [`[$k-1]/[$k]`]. More precisely, you can repeatedly run A on the same formula f, and each time it outputs the correct answer with probability [`[$k-1]/[$k]`].
+
+To reduce the probability of error, you run A(f) n times, and return the majority answer. What should [`n`] be if you want the probability of error to be less than 0.05?
+
+Let [`C_i`] be a binary random variable indicating whether the [`i^th`] execution of algorithm A is correct.  Let [`C = (C_1 + C_2 ... C_n)/n`].  
+- What is the minimum value of [`C`] such that our method of returning the majority answer will be correct?  [_____]{"1/2"}
+- What is [`\mathbb{E}(C)`]?  [________]{"$p"}
+- What is [`var(C)`]?  [_________]{"(1/n)*$p*(1-$p)"}
+
+Chebyshev's inequality says for random variable [`Y`] with mean [`\mu`] and for any positive number [`a>0`], [`P(|Y-\mu| \geq a) \leq var(Y)/a^2`]
+- Using Chebyshev's inequality, what is an upper bound on the probability your "majority algorithm" is incorrect?  [_________________]{"(1/n)*$p*(1-$p)/(($p-1/2)**2)"}
+- What is the smallest [`n`] such that the probability of your "majority algorithm" is incorrect is [`\leq 0.05`]?  [________________]{"20*$p*(1-$p)/(($p-1/2)**2)"}
+
+END_PGML
+
+ENDDOCUMENT();       # This should be the last executable line in the problem.

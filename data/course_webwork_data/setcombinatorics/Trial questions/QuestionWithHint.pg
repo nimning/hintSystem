@@ -1,0 +1,58 @@
+##DESCRIPTION
+##  Algebra problem: true or false for inequality 
+##ENDDESCRIPTION
+
+##KEYWORDS('algebra', 'inequality', 'fraction')
+
+## DBsubject('Algebra')
+## DBchapter('Fundamentals')
+## DBsection('Real Numbers')
+## Date('6/3/2002')
+## Author('')
+## Institution('')
+## TitleText1('Precalculus')
+## EditionText1('3')
+## AuthorText1('Stewart, Redlin, Watson')
+## Section1('1.1')
+## Problem1('22')
+
+########################################################################
+
+DOCUMENT(); 
+loadMacros(
+  "PGstandard.pl",
+  "MathObjects.pl",
+  "answerHints.pl",
+);
+
+TEXT(beginproblem());
+Context("Numeric");
+Context()->variables->are(t=>"Real",u=>"Real");
+
+$f = Formula("2 t");
+$answer = Formula("6 u");
+ 
+Context()->texStrings;
+BEGIN_TEXT
+If \( f(t) = $f \), then \( f(3u) \) = \{ ans_rule(10) \} 
+END_TEXT
+
+$showHint = 5;
+BEGIN_TEXT
+$PAR
+If you don't get this in $showHint tries, you can get a hint.
+END_TEXT
+BEGIN_HINT
+Substitute \( 3u \) wherever you see \( t \) in the
+formula for \( f(t) = $f \).
+END_HINT
+Context()->normalStrings;
+
+$showPartialCorrectAnswers = 1;
+
+ANS($answer->cmp()->withPostFilter(AnswerHints( 
+  Formula("6 t") => "Are you using the correct variable?",
+  Formula("6 u") => "Good work!", 
+)));
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.;

@@ -1,0 +1,51 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "MathObjects.pl",
+  "PGcourse.pl",
+);
+
+Context("Numeric");
+Context()->variables->are(
+      k => ['Real', limits=>[1,10], resolution=>1],
+      n => ['Real', limits=>[1,10], resolution=>1],
+      x => ['Real']
+    );
+Context()->flags->set(tolerance=>0.001);
+
+TEXT(beginproblem);
+$showPartialCorrectAnswers = 1;
+
+sub C
+{
+    fact($_[0])/(fact($_[1])*fact($_[0]-$_[1]));
+}
+
+sub BinomDistTail
+{
+ $a = 0;
+ $p = $_[1];
+ $n = $_[0];
+ for ($count = $_[2]; $count >= 0; $count--) {
+ 	$a = $a + C($n,$count)*($p**$count)*((1-$p)**($n-$count));
+  }
+ return $a
+}
+
+$p = 0.432;
+$hit = random(5,8);
+$ans = BinomDistTail(10,1-$p,10-$hit-1);
+######################################################################
+
+BEGIN_PGML
+
+## Binomial Distribution ##
+
+Steve Nash has a 3-point accuracy of 43.2%, and suppose he attempted 10 three-pointers in a game, what is the probability that he hit more than [$hit] ? 
+[_________________]{$ans}
+
+END_PGML
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

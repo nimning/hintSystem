@@ -1,0 +1,27 @@
+
+openDate          = 01/10/2012 at 06:00am PST
+dueDate           = 10/01/2012 at 02:00am PDT
+answerDate        = 10/01/2012 at 02:00am PDT
+paperHeaderFile   = setDemo/paperHeaderFile1.pg
+screenHeaderFile  = setDemo/screenHeaderFile1.pg
+problemList       = 
+setIncrementalQuestions/ci.mean.ctrl.1.pg, 1, -1 
+setIncrementalQuestions/ci.prop.post.1.pg, 1, -1 
+setIncrementalQuestions/ci.mean.ctrl.2.pg, 1, -1 
+setIncrementalQuestions/ci.prop.post.2.pg, 1, -1 
+setIncrementalQuestions/ci.mean.post.1.pg, 1, -1 
+setIncrementalQuestions/ci.prop.pre.1.pg, 1, -1 
+setIncrementalQuestions/ci.mean.post.2.pg, 1, -1 
+setIncrementalQuestions/ci.prop.pre.2.pg, 1, -1 
+setIncrementalQuestions/ci.mean.pre.1.pg, 1, -1 
+setIncrementalQuestions/ci.prop.treat.pg, 1, -1 
+setIncrementalQuestions/ci.mean.pre.2.pg, 1, -1 
+setIncrementalQuestions/ht.mean.ctrl.pg, 1, -1 
+setIncrementalQuestions/ci.mean.treat.pg, 1, -1 
+setIncrementalQuestions/ht.mean.treat.pg, 1, -1 
+setIncrementalQuestions/ci.prop.ctrl.1.pg, 1, -1 
+setIncrementalQuestions/ht.prop.ctrl.pg, 1, -1 
+setIncrementalQuestions/ci.prop.ctrl.2.pg, 1, -1 
+setIncrementalQuestions/ht.prop.treat.pg, 1, -1 
+local/setIncrementalQuestions/TestingHints.pg, 1, -1 
+

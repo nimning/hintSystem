@@ -1,0 +1,23 @@
+DOCUMENT();
+
+loadMacros(
+  "PGstandard.pl",
+  "PGunion.pl",
+);
+
+BEGIN_TEXT
+
+These problems use the ${BTT}compoundProblem.pl${ETT} macro file to
+construct multi-part problems that only show one part at a time.  The
+student can go on to the next part when his or her answers are correct
+for the current part (or at other times determined by the problem
+author).
+$PAR
+
+Once they go on to the next part, students can not return to earlier
+parts.  If you log in as 'professor', you will be able to reset the
+problem and go back to the starting part.
+
+END_TEXT
+
+ENDDOCUMENT();

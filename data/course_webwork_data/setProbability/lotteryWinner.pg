@@ -1,0 +1,52 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "MathObjects.pl",
+  "parserRadioButtons.pl",
+  "compoundProblem.pl",
+  "Parser.pl",
+  "PGunion.pl",
+  "PGcourse.pl",
+  "PGchoicemacros.pl",
+);
+
+TEXT(beginproblem);
+BEGIN_PROBLEM();
+
+##############################################
+
+$isProfessor = ($studentLogin eq 'yoav.freund' || $studentLogin eq 'professor');
+Context("Interval");
+$showPartialCorrectAnswers = 1; # show student the correct part of their answer.
+ 
+$tickets=random(95,105,1); # number of lottery tickets total (millions)
+$john_tickets=random(5,7,1); # number of tickets john has bought
+$mary_tickets=random(5,7,1); # number of tickets mary has bought
+
+BEGIN_PGML
+
+## Lottery Winner ##
+
+Let's say [$tickets] million lottery tickets are bought for some lottery, with 2 winners.  
+
+Let's say John has bought [$john_tickets].  
+
+What is the probability John wins?  
+
+What is the probability neither John nor Mary win?
+
+What is the probability both John and Mary win?
+END_PGML
+
+BEGIN_PGML_SOLUTION
+## Solution ##
+
+END_PGML_SOLUTION
+
+
+##############################################
+
+END_PROBLEM();
+ENDDOCUMENT();        # This should be the last executable line in the problem.

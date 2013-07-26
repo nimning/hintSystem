@@ -1,0 +1,100 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGML.pl",
+"MathObjects.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGgraphmacros.pl",
+"PGnumericalmacros.pl",
+"PGstatisticsmacros.pl",
+"contextArbitraryString.pl",
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+package my::Function::numeric;
+our @ISA = ('Parser::Function::numeric');
+
+sub Q {
+   shift; my $x = shift;
+   return main::normal_prob($x, 'infty', mean=>0, deviation=>1);
+}
+
+sub Phi {
+   shift; my $x = shift;
+   return main::normal_prob('-infty', $x, mean=>0, deviation=>1);
+}
+
+sub erf {
+   shift; my $x = shift;
+   $phi = main::normal_prob('-infty', $x*sqrt(2), mean=>0, deviation=>1);
+   $a = 2*$phi-1;
+   return $a;
+}
+
+package main;
+
+Context("Numeric");
+Context()->flags->set(reduceConstants=>0);
+Context()->functions->add(
+erf =>{class=>"my::Function::numeric", nocomplex=>1},
+Q =>{class=>"my::Function::numeric", nocomplex=>1}, 
+Phi =>{class=>"my::Function::numeric", nocomplex=>1}
+);
+Context()->flags->set(tolerance=>0.001);
+
+Context()->variables->are(
+      n => ['Real', limits=>[1,100], resolution=>1],
+      k => ['Real', limits=>[1,100], resolution=>1],
+      p => ['Real', limits=>[0,1], resolution=>0.01],
+    );
+
+Context()->strings->add(
+     decreasing=>{},
+     increasing=>{},
+);
+
+$b = random(150,400,1);
+$p = random(0.8,0.9,0.01);
+$mean =$b*$p;
+$dev = sqrt ($b * $p * (1 - $p));
+
+$z = random(1.7, 3.1, 0.01);
+$s = 10*int(($z * $dev + $mean)/10+1);
+$ans = Compute("Q(($s-$mean)/$dev)");
+
+BEGIN_PGML
+
+An airline company is considering a new policy of booking as many as [$b] persons on an
+airplane that can seat only [$s]. Past studies have revealed that only [$p*100]% of the booked passengers actually arrive for the flight.
+
+What is the mean of the number of passengers arrive for the flight ? [________]{$mean}
+
+What is the standard deviation ? [________]{$dev}
+
+Estimate the probability that if the company books [$b] persons, not enough seats will be 
+available. [__________]{$ans}
+END_PGML
+
+$q = ($s-$mean)/$dev;
+
+
+$showHint = -1;
+BEGIN_HINT
+$HR
+$SOLUTION
+
+The mean is \($b\cdot $p= $mean\)
+$BR
+The standard deviation is \(\sqrt{$b \cdot $p \cdot (1 - $p)} = $dev\)
+$BR
+The probability is \(Q\left(\frac{$s-$mean}{$dev}\right) = Q($q)= $ans\)
+
+END_HINT
+
+
+ENDDOCUMENT();       # This should be the last executable line in the problem.

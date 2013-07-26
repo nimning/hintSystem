@@ -1,0 +1,56 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "MathObjects.pl",
+  "PGcourse.pl",
+);
+
+TEXT(beginproblem);
+$showPartialCorrectAnswers = 1;
+
+######################################################################
+Context("Numeric");
+Context()->strings->add(R => {}, G => {}, B => {});
+
+#$Prod=List([List(["R",0]),List(["R",1])]);
+#$L = Compute("(R,0),(R,1),(G,0),(G,1),(B,0),(B,1)");
+$L=List("(R,0),(R,1),(G,0),(G,1),(B,0),(B,1)");
+$L ->{open} = "{";
+$L ->{close} = "}";
+$L ->{requireParenMatch}=0;
+
+$R=random(10,30,1);
+$K=random(2,6,10);
+$N=int($R/$K);
+
+TEXT(PGML::Format2(<<'END_PGML'));
+
+## The size of a set ##
+
+The _size_ of a set [`A`] is the number of elements in it and is denoted
+by [`|A|`]  
+
+Thus [`|\{H,T\}|=2`],  [`|\emptyset|=0`] and [`|\mathbb{Z}^+|=\infty`] 
+
+#### Problem ####
+
+1.   What is the size of the set [`\{R,G,B\}`]? [___]{3}
+2.   What is the size of the set [`\{0,1\}`]? [___]{2}
+3.   Let [`A`] be the set of integers between 1 and [$R]. Let [`B`] be the set of integers divisible by [$K]. 
+o The size of [`A`] is [___]{$R}
+o The number in [`B`] are all divisible by [___]{$K}
+o The size of [`A \cap B`] is [___]{$N}?
+
+END_PGML
+
+BEGIN_PGML_SOLUTION
+
+#### Solution ####
+
+To find the size of [`A \cap B`] we can list the integers between 1 and [$R] that are divisible by [$K] and count them. A short-cut way to do this is to round down the ratio [$R]/[$K]=[$R/$K] to the closest lower integer and get [$N].
+END_PGML_SOLUTION
+######################################################################
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

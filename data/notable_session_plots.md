@@ -1,0 +1,20 @@
+# Sample Session Timing Plots #
+![alt text](session_attempt_times/0.png "Session Attempt Times plot")
+![alt text](session_attempt_times/1.png "Session Attempt Times plot")
+![alt text](session_attempt_times/2.png "Session Attempt Times plot")
+![alt text](session_attempt_times/3.png "Session Attempt Times plot")
+![alt text](session_attempt_times/4.png "Session Attempt Times plot")
+![alt text](session_attempt_times/29.png "Session Attempt Times plot")
+![alt text](session_attempt_times/38.png "Session Attempt Times plot")
+
+# Session Timing Plots: Struggling Students #
+![alt text](session_attempt_times/1.png "Session Attempt Times plot")
+![alt text](session_attempt_times/11.png "Session Attempt Times plot")
+![alt text](session_attempt_times/12.png "Session Attempt Times plot")
+![alt text](session_attempt_times/17.png "Session Attempt Times plot")
+![alt text](session_attempt_times/31.png "Session Attempt Times plot")
+![alt text](session_attempt_times/32.png "Session Attempt Times plot")
+![alt text](session_attempt_times/41.png "Session Attempt Times plot")
+![alt text](session_attempt_times/45.png "Session Attempt Times plot")
+![alt text](session_attempt_times/110.png "Session Attempt Times plot")
+![alt text](session_attempt_times/203.png "Session Attempt Times plot")

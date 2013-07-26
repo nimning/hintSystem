@@ -1,0 +1,49 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+  "PGstandard.pl",
+  "PGML.pl",
+  "MathObjects.pl",
+  "PGcourse.pl",
+);
+
+TEXT(beginproblem);
+$showPartialCorrectAnswers = 1;
+
+######################################################################
+Context("Numeric");
+
+$R1=random(8,15,1);
+$R2=random(2,$R1-2,1);
+$F=fact($R1)/(fact($R2)*fact($R1-$R2));
+
+TEXT(PGML::Format2(<<'END_PGML'));
+
+### The cardinality of sets ###
+
+We are all familiar with _finite_ sets. Those are sets whose size is
+finite, or, in other words, who have a finite integer number of
+elements. 
+
+We have already introduced _infinite_ sets. The set of positive
+integers, [`\mathbb{Z}^+`] is infinite. So is the set of real numbers
+in the interval [`(0,1)`].
+
+As it turns out, the infinity describing the size of the set [`(0,1)`]
+is *larger* than the inifinity describing the size of the set
+[`\mathbb{Z}^+`]. We say that the set [`\mathbb{Z}^+`] is _countably
+infinite_ while [`(0,1)`] is _uncountably infinite_.
+
+*Question:*
+For each of the following statements, write "1" if true and "0" if false.
+
+o  [_]{1} The set [`\mathbb{Z}^+  \cup (0,2)`] is uncountably infinite `]
+o  [_]{1} The set [`\mathbb{Z}^+  \cap (0,2)`] is countably infinite `]
+o  [_]{1} The set [`\mathbb{Z}^+  \cap (0,2)`] is finite `]
+o  [_]{1} I understand the concepts of countably and uncountably infinite sets (No points)
+
+END_PGML
+
+######################################################################
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.
