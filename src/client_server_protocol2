@@ -1,0 +1,54 @@
+Sample server response:
+{
+    {
+    "assignment":3
+    "problem":1
+    "part":"0"
+    "correct": false,
+    "text":"\n## Probability of Poker Hands ##\n\nA hand in Texas Hold'em consists
+    "attempt":"52!"
+    },
+    {
+    "assignment":3
+    "problem":1
+    "part":"1"
+    "correct": true,
+    "text":"### Pair: exactly one pair of equal rank cards ###\n\n1. The number of
+    "attempt":null
+    }
+}
+    
+Sample client response:
+{
+    "assignment":3
+    "problem":1
+    "part":"0"
+    "attempt":"52!"
+    "user":"jsmith"
+}
+The above example are almost enough to characterize the json objects sent
+between the client/server (short of writing a json schema). Some caveats about
+this interface:
+•
+The client should poll the server every 0.1 seconds or so, or sooner if the
+student makes an update to a text box.
+Polling when a student is not
+entering data is to allow the server to modify modifyattempt values in boxes.
+•
+Since a student can only change the value for one textbox at a time, only
+one expression need be sent to the server at any time. The client responses
+are thus very simple: either {} or a dict with one value.
+•
+valuecorrect, valuecorrecttext, and andattempt can all take on null values.
+Null values
+are sent by the server when the problem had previously been sent to the
+client, and that value hasn't changed.
+•
+Null values play an important roll: null attributes don't require anima-
+tions.
+For example:
+exampletext=null wouldn't require the problem text be
+slowly displayed.
+•
+Problem parts should be displayed alphabetically by key.
+

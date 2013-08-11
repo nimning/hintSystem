@@ -11,53 +11,113 @@
 
 <body>
 
+<h1>Relevant information about the design of Webwork2</h1>
+
+<h3>Information from Mike Gage:</h3>
+
+<ul>
+<li>All of the mechanisms for answering the questions, including PGML, are
+in the code in the directory webwork/pg/macros and webwork/pg/lib.</li>
+<li>There are several "bridges" between pg and the outside
+world.  One of them is <a href="https://github.com/openwebwork/webwork2/blob/master/lib/WebworkWebservice/RenderProblem.pm">Webworkwebservice/RenderProblem.pm</a>, another is
+<a href="https://github.com/openwebwork/webwork2/blob/master/lib/WeBWorK/ContentGenerator/Problem.pm">webwork2/lib/WeBWorK/ContentGenerator/Problem.pm</a>
+the library browser -- is in WeBWorK/Utils/Tasks.pm
+The last one is the most recent and probably the best written bridge.
+I'd like to refactor and rewrite the other two to look more like the
+last one.  Also involved are PG.pm and PG/Local.pm</li>
+<li>The main purpose of the outside of the bridge is to build the envir
+variable (a large hash) which defines the information available with
+the PG world and a to construct a Safe compartment to compile and run
+the PG problem. The safe compartment is also passed some other
+precompiled programs that it is allowed to use.</li>
+<li>On the PG side, the environment is unpacked in pg/macros/PG.pl and
+the basic macros were defined in PGbasicmacros.pl although I have
+rewritten many of them to use PGcore.pm instead.  The original code
+was perl4 and CGI -- the PGcore modifications take better advantage of
+the object orientation in perl5 and the caching of mod_perl.</li>
+</ul>
+
+<p><a href="http://webwork.maa.org/wiki/MikeRemoteRendering">Some Documentation about remote rendering</a></p>
+
+<h3>The JSON webservice in webwork</h3>
+
+<p>As I learned today from Mike Gage, Webwork includes a json-based
+webservice. This is implemented in
+<a href="https://github.com/openwebwork/webwork2/blob/master/lib/WebworkWebservice.pm">webwork2/lib/WebWorkwebservice.pm</a> and in the files in the directory  <a href="https://github.com/openwebwork/webwork2/tree/master/lib/WebworkWebservice">webwork2/lib/WebWorkwebservice/</a></p>
+
+<p>The code implements both an XML, SOAP and JSON interface.</p>
+
+<p>The skeleton of this API is given here:
+<a href="https://github.com/whytheplatypus/WeBWorK-API">WebworkAPI</a></p>
+
+<p>It is probably more useful to follow the examples that use this API
+here: </p>
+
+<ul>
+<li><a href="https://github.com/openwebwork/webwork2/blob/develop/htdocs/js/lib/views/ProblemView.js">ProblemView.js</a></li>
+<li><a href="https://github.com/openwebwork/webwork2/tree/master/htdocs/js/apps/LibraryBrowser">LibraryBrowser/</a></li>
+</ul>
+
+<p><em>Yoav Question:</em> where in these javascript is the code for sending
+ the JSON query, and where is it specified which webservice routine is
+ supposed to recieve and execute the query?</p>
+
+<h2>Example of a multi-part problem using javascript:</h2>
+
+<p>Mike Gage has a javascript-based multipart problem. </p>
+
+<ul>
+<li>An example .pg file using
+CompoundProblem2:<a href="http://webwork.cse.ucsd.edu/webwork2/CompoundProblems/compoundProblemExperiments/7">CompoundproblemExperiments/7</a></li>
+<li><a href="https://github.com/openwebwork/pg/blob/develop/macros/compoundProblem2.pl">CompoundProblem2.pl</a></li>
+<li><a href="http://webwork.maa.org/wiki/CompoundProblems#.UgeXqGRATYY">An annotated Example of a .pg file using CompoundProblem.pl</a></li>
+<li>The main source file for this is (old) is <a href="https://github.com/openwebwork/pg/blob/develop/macros/compoundProblem.pl">CompoundProblem.pl</a></li>
+</ul>
+
 <h1>Architecture of the hint-server</h1>
 
-<h2><strong>DB</strong> Database</h2>
+<p>The following demo movie on youtube can serve as a rough mockup of the
+interface we have in mind:
+<a href="http://www.youtube.com/watch?v=7KNzBAlh8L0">YouTube, Adaptive Hints</a></p>
 
-<h3>Tables:</h3>
+<h2>Displaying Hints from the Server</h2>
 
-<ol>
-<li>Hints: pgml snippets.</li>
-<li>Activity log: student,Assignment,problem,part,text-typed</li>
-<li>Everything that Webwork stores in the database.</li>
-</ol>
+<p>Hints are associated with an answerbox in a problem page.  They are
+displayed before the question associated with the box.</p>
 
-<h2><strong>JS</strong> Client side program (javascript)</h2>
+<p>PGML files should allow for labels, eg: LABEL "start part 1"
+Hints could then be associated with these labels, instead of with just
+boxes</p>
 
-<p>After initiation, parses the page and identifies the locations of the
-answer boxes. It then:</p>
+<ul>
+<li><em>Yoav</em> Mike Gage told me that in the new version of pg boxes can be
+   associated with labels.</li>
+</ul>
 
-<ol>
-<li>(Optional) <em>Focus Control</em> Allows the student to type into boxes
-only after the previous boxes have been filled.</li>
-<li>The client sends a JSON message to the AJAX server at least once a
-minute, sending a JSON message, which contains a time stamp and the ID
-of the current page that the user is working on. When the user types,
-the updates are more frequent (every 10 seconds) and the JSON message
-contains the user's keystrokes since the last message.  In response,
-the server sends a JSON getting new hints if any. At the least, it is
-a mutual live signal. If page is hidden (for example, the browser is
-on another tab), the javascript should not send anything.</li>
-<li>Sends the keystrokes the user types back to the <em>AJAX</em> server.</li>
-<li>Recieves hints from server, displays them, Optionally moves the
-focus point to the hint answer box [^1]</li>
-</ol>
+<p>To allow us to associate student histories, pgml snippets, ... with
+hint display locations, the HintLocation table is indexed by
+the id/assignment/label.</p>
 
 <h2><strong>AJAX</strong> server side that communicates with the javascript client</h2>
 
 <ul>
 <li>The server program will be written in python and will run on the same
 machine as the webwork server.</li>
-<li>There should be a separate thread running for each student that is
-logged in.</li>
+</ul>
+
+<p>Each user is associated with an entry in the database which stores the
+state of the user (logged in, active, working on problem X) etc. Each
+process on the server will serve 1-10 users.</p>
+
+<ul>
 <li>The server decides whether and which hint based on:
 <ol>
 <li>The page presented and the box being worked on.</li>
-<li>The student's profile.</li>
+<li>Previous expressions answered, the hint/part answered for, and timestamps</li>
 <li>The keystrokes entered.</li>
 <li>the amount of time the student spent on working on the box.</li>
 <li>A proposed hint by an Instructor/TA.</li>
+<li>Other information in the student's profile: grades in previous courses, class year, ...</li>
 </ol></li>
 <li>The hint is sent back to the client.</li>
 <li>When an answer is typed in, the server passes it on to the answer
@@ -71,9 +131,10 @@ pattern matcher for mistakes.</li>
 each html page, which instantiates the javascript program and
 potentially passes it an index identifying the page.</p>
 
-<h2>Hint Authoring This is a separate application, which runs on the</h2>
+<h2>Hint Authoring</h2>
 
-<p>machines of the Instructor, the TA's, and the tutors. It maintains a
+<p>This is a separate application, which runs on the
+machines of the Instructor, the TA's, and the tutors. It maintains a
 queue of students that have been struggling with a particular part of
 a particular question for at least 10 minutes. The instructor can then
 get a summary of what the student did on the current problem, and
@@ -87,6 +148,47 @@ the hint "Please write the expression and not just the final result"
 or "malformed expression" can be used for almost all questions, based
 on simple rules.</p>
 
+<p>Mike Gage will try to create a .dmg file that contains a standalone
+server. I have not been successful in installing the standalone server
+from git on a mac. (Yoav)</p>
+
+<h2>Next Steps</h2>
+
+<p><em>Yoav:</em> Here is my suggestion:</p>
+
+<ul>
+<li>Expand on compoundProblem2.pm so that:
+<ol>
+<li>It uses jQuery/accordion instead of javascript</li>
+<li>It communicates with the server to 
+<ul>
+<li>send keystrokes and </li>
+<li>recieve <em>rendered</em> hint snippets. (using Webworkwebservice/RenderProblem.pm)</li>
+</ul></li>
+<li>Control which elements are seen and which empty boxes can be / have
+to be filled.</li>
+</ol></li>
+</ul>
+
+<p><em>Yoav</em> I have changed the next steps based on what I learned about
+ existing parts of webwork2.</p>
+
+<p><em>Matt's</em> last version:</p>
+
+<blockquote>
+  <ul>
+<li>Get key functionality with javascript in WebWork pages: 
+<ul>
+<li>Get the user, assignment, and problem from the webwork page</li>
+<li>Write a javascript function display<em>after</em>box(box_index) that adds html before or after the box with the given index.  This script should find a nearby <code>&lt;br&gt;</code> or <code>&lt;p&gt;</code> tag, and insert here (instead of in the middle of a paragraph).</li>
+</ul></li>
+<li>Change the student<em>adaptive</em>server/server.py clint/server to adhere to the slightly tweaked client/server protocol</li>
+<li>Improve expression correctness evaluation: it could be better</li>
+<li>Install WebWork &lt;-- Done</li>
+<li>Write hints</li>
+</ul>
+</blockquote>
+
 <hr />
 
 <p>[^1]: It is an interesting question whether or not the student would
@@ -95,6 +197,26 @@ rigorous thinking or it might aggrevate the students. It might be
 better to allow the students to have the hints be only for the benefit
 of the student, not an added challenge. We probably should have
 configuration parameters to control these options.</p>
+
+<p>[^2]: Why should we send for every key entered, rather than
+  faster/slower based on how fast the user is typing?  Using the JSON
+  protocol we outlined, communication is still very light.  We'll need
+  to profile to ensure computing answer correctness is fast- this is
+  probably the greatest issue.  Too much space taken up, or too many
+  entries in the answer history database?  Assuming 420 chars per
+  minute, a user spends an average of 1 hour per day on WebWork, and
+  200 users, this is 420<em>60</em>200 = 5M rows in the database.  Our db
+  should have no problem handling this.  If we have some scaling issue
+  later, we can always send or store less expressions.  We shouldn't
+  prematurely optimize though.</p>
+
+<p><em>Yoav</em> The reason I want a package to be sent every minute or so is
+  for both client and server to know that the other side is there.
+  The reason I don't want each symbol to be sent as a packet is that
+  sometimes many characters are types in quick succession, say, when
+  the user cuts and pastes a long expression. The caclculation you are
+  doing regards <em>throughput</em> not <em>latency</em>. From the point of view of
+  latency, unpacking many small json packets can take a long time.</p>
 
 </body>
 </html>
