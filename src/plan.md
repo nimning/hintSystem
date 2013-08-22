@@ -29,6 +29,12 @@ As I learned today from Mike Gage, Webwork includes a json-based
 webservice. This is implemented in
 [webwork2/lib/WebWorkwebservice.pm](https://github.com/openwebwork/webwork2/blob/master/lib/WebworkWebservice.pm) and in the files in the directory  [webwork2/lib/WebWorkwebservice/](https://github.com/openwebwork/webwork2/tree/master/lib/WebworkWebservice)
 
+Matt believes that this webservice does not cover rendering.
+
+Sunsern believes that this is based on backbone.js (Peter Shaar) and that the 
+js code is the one doing the rendering.
+But maybe this is only for instructor tools and not for rendering problems.
+
 The code implements both an XML, SOAP and JSON interface.
 
 The skeleton of this API is given here:
