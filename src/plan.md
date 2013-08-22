@@ -48,9 +48,11 @@ here:
 
 Mike Gage has a javascript-based multipart problem. 
 
-* An example .pg file using
-  CompoundProblem2:[CompoundproblemExperiments/7](http://webwork.cse.ucsd.edu/webwork2/CompoundProblems/compoundProblemExperiments/7)
 * [CompoundProblem2.pl](https://github.com/openwebwork/pg/blob/develop/macros/compoundProblem2.pl)
+* A deployed .pg file using
+  CompoundProblem2:[CompoundproblemExperiments/7](http://webwork.cse.ucsd.edu/webwork2/CompoundProblems/compoundProblemExperiments/7)
+  ( You will need an account to have access to these files, send an
+  email to yfreund@ucsd.edu )
 * [An annotated Example of a .pg file using CompoundProblem.pl](http://webwork.maa.org/wiki/CompoundProblems#.UgeXqGRATYY)
 * The main source file for this is (old) is [CompoundProblem.pl](https://github.com/openwebwork/pg/blob/develop/macros/compoundProblem.pl)
 
