@@ -7,7 +7,7 @@ in the code in the directory webwork/pg/macros and webwork/pg/lib.
 * There are several "bridges" between pg and the outside
 world.  One of them is [Webworkwebservice/RenderProblem.pm](https://github.com/openwebwork/webwork2/blob/master/lib/WebworkWebservice/RenderProblem.pm), another is
 [webwork2/lib/WeBWorK/ContentGenerator/Problem.pm](https://github.com/openwebwork/webwork2/blob/master/lib/WeBWorK/ContentGenerator/Problem.pm)
-the library browser -- is in WeBWorK/Utils/Tasks.pm
+The third is the library browser which is in WeBWorK/Utils/Tasks.pm
 The last one is the most recent and probably the best written bridge.
 I'd like to refactor and rewrite the other two to look more like the
 last one.  Also involved are PG.pm and PG/Local.pm
