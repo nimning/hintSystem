@@ -5,9 +5,10 @@ Relevant information about the design of Webwork2
 * All of the mechanisms for answering the questions, including PGML, are
 in the code in the directory webwork/pg/macros and webwork/pg/lib.
 * There are several "bridges" between pg and the outside
-world.  One of them is *[Webworkwebservice/RenderProblem.pm]*(https://github.com/openwebwork/webwork2/blob/master/lib/WebworkWebservice/RenderProblem.pm), another is
-*[webwork2/lib/WeBWorK/ContentGenerator/Problem.pm]*(https://github.com/openwebwork/webwork2/blob/master/lib/WeBWorK/ContentGenerator/Problem.pm)
-the library browser -- is in *[WeBWorK/Utils/Tasks.pm]*
+world.  One of them is [Webworkwebservice/RenderProblem.pm](https://github.com/openwebwork/webwork2/blob/master/lib/WebworkWebservice/RenderProblem.pm), another is
+[webwork2/lib/WeBWorK/ContentGenerator/Problem.pm](https://github.com/openwebwork/webwork2/blob/master/lib/WeBWorK/ContentGenerator/Problem.pm)
+The third is the library browser which is in WeBWorK/Utils/Tasks.pm
+
 The last one is the most recent and probably the best written bridge.
 I'd like to refactor and rewrite the other two to look more like the
 last one.  Also involved are *PG.pm* and *PG/Local.pm*
@@ -25,15 +26,21 @@ the object orientation in perl5 and the caching of mod_perl.
 [Some Documentation about remote rendering](http://webwork.maa.org/wiki/MikeRemoteRendering)
 
 ### The JSON webservice in webwork
-As I learned today from Mike Gage, Webwork includes a json-based
-webservice. This is implemented in
-*[webwork2/lib/WebWorkwebservice.pm]*(https://github.com/openwebwork/webwork2/blob/master/lib/WebworkWebservice.pm) and in the files in the directory  *[webwork2/lib/WebWorkwebservice/]*(https://github.com/openwebwork/webwork2/tree/master/lib/WebworkWebservice)
+Webwork includes a json-based webservice. Developed by Peter Staab <pstaab@fitchburgstate.edu>.
 
-Matt believes that this webservice does not cover rendering.
+The relevant PERL code is in
+[webwork2/lib/WebWorkwebservice.pm](https://github.com/openwebwork/webwork2/blob/master/lib/WebworkWebservice.pm) and in the files in the directory  [webwork2/lib/WebWorkwebservice/](https://github.com/openwebwork/webwork2/tree/master/lib/WebworkWebservice)
 
-Sunsern believes that this is based on *backbone.js* (Peter Staab) and that the 
-js code is the one doing the rendering.
-But maybe this is only for instructor tools and not for rendering problems.
+
+The implementation uses the [backbone library](http://backbonejs.org/)
+Implemetations using backbone seperate between the models and the views.
+Yoav believes that the relevant model is [problem.js](https://github.com/openwebwork/webwork2/blob/develop/htdocs/js/lib/models/Problem.js)
+and the relevant view [ProblemView.js](https://github.com/openwebwork/webwork2/blob/develop/htdocs/js/lib/views/ProblemView.js)
+
+Note that this code is in the develop branch of the github repository. It is therefor not on our server yet.
+
+Yoav: I would like to identify the PERL files that embed this javascript. I will try to schedule another meeting with Peter Staab.
+
 
 The code implements both an XML, SOAP and JSON interface.
 
@@ -52,7 +59,7 @@ here:
 
 ## Example of a multi-part problem using javascript:
 
-Mike Gage has a javascript-based multipart problem. 
+Mike Gage has a javascript-based multipart problem (Yoav: I believe this does not use backbone.js)
 
 * [CompoundProblem2.pl](https://github.com/openwebwork/pg/blob/develop/macros/compoundProblem2.pl)
 * A deployed .pg file using
