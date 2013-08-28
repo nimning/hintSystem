@@ -35,7 +35,7 @@ Implemetations using backbone seperate between the models and the views.
 Yoav believes that the relevant model is [problem.js](https://github.com/openwebwork/webwork2/blob/develop/htdocs/js/lib/models/Problem.js)
 and the relevant view [ProblemView.js](https://github.com/openwebwork/webwork2/blob/develop/htdocs/js/lib/views/ProblemView.js)
 
-Note that this code is in the develop branch of the github repository.
+Note that this code is in the develop branch of the github repository. It is therefor not on our server yet.
 
 Yoav: I would like to identify the PERL files that embed this javascript. I will try to schedule another meeting with Peter Staab.
 
@@ -57,7 +57,7 @@ here:
 
 ## Example of a multi-part problem using javascript:
 
-Mike Gage has a javascript-based multipart problem. 
+Mike Gage has a javascript-based multipart problem (Yoav: I believe this does not use backbone.js)
 
 * [CompoundProblem2.pl](https://github.com/openwebwork/pg/blob/develop/macros/compoundProblem2.pl)
 * A deployed .pg file using
