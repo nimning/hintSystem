@@ -25,15 +25,20 @@ the object orientation in perl5 and the caching of mod_perl.
 [Some Documentation about remote rendering](http://webwork.maa.org/wiki/MikeRemoteRendering)
 
 ### The JSON webservice in webwork
-As I learned today from Mike Gage, Webwork includes a json-based
-webservice. This is implemented in
+Webwork includes a json-based webservice. Developed by Peter Staab <pstaab@fitchburgstate.edu>.
+
+The relevant PERL code is in
 [webwork2/lib/WebWorkwebservice.pm](https://github.com/openwebwork/webwork2/blob/master/lib/WebworkWebservice.pm) and in the files in the directory  [webwork2/lib/WebWorkwebservice/](https://github.com/openwebwork/webwork2/tree/master/lib/WebworkWebservice)
 
-Matt believes that this webservice does not cover rendering.
+The implementation uses the [backbone library](http://backbonejs.org/)
+Implemetations using backbone seperate between the models and the views.
+Yoav believes that the relevant model is [problem.js](https://github.com/openwebwork/webwork2/blob/develop/htdocs/js/lib/models/Problem.js)
+and the relevant view [ProblemView.js](https://github.com/openwebwork/webwork2/blob/develop/htdocs/js/lib/views/ProblemView.js)
 
-Sunsern believes that this is based on backbone.js (Peter Shaar) and that the 
-js code is the one doing the rendering.
-But maybe this is only for instructor tools and not for rendering problems.
+Note that this code is in the develop branch of the github repository.
+
+Yoav: I would like to identify the PERL files that embed this javascript. I will try to schedule another meeting with Peter Staab.
+
 
 The code implements both an XML, SOAP and JSON interface.
 
