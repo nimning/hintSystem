@@ -5,20 +5,20 @@ Relevant information about the design of Webwork2
 * All of the mechanisms for answering the questions, including PGML, are
 in the code in the directory webwork/pg/macros and webwork/pg/lib.
 * There are several "bridges" between pg and the outside
-world.  One of them is [Webworkwebservice/RenderProblem.pm](https://github.com/openwebwork/webwork2/blob/master/lib/WebworkWebservice/RenderProblem.pm), another is
-[webwork2/lib/WeBWorK/ContentGenerator/Problem.pm](https://github.com/openwebwork/webwork2/blob/master/lib/WeBWorK/ContentGenerator/Problem.pm)
-the library browser -- is in WeBWorK/Utils/Tasks.pm
+world.  One of them is *[Webworkwebservice/RenderProblem.pm]*(https://github.com/openwebwork/webwork2/blob/master/lib/WebworkWebservice/RenderProblem.pm), another is
+*[webwork2/lib/WeBWorK/ContentGenerator/Problem.pm]*(https://github.com/openwebwork/webwork2/blob/master/lib/WeBWorK/ContentGenerator/Problem.pm)
+the library browser -- is in *[WeBWorK/Utils/Tasks.pm]*
 The last one is the most recent and probably the best written bridge.
 I'd like to refactor and rewrite the other two to look more like the
-last one.  Also involved are PG.pm and PG/Local.pm
+last one.  Also involved are *PG.pm* and *PG/Local.pm*
 * The main purpose of the outside of the bridge is to build the envir
 variable (a large hash) which defines the information available with
 the PG world and a to construct a Safe compartment to compile and run
 the PG problem. The safe compartment is also passed some other
 precompiled programs that it is allowed to use.
-* On the PG side, the environment is unpacked in pg/macros/PG.pl and
-the basic macros were defined in PGbasicmacros.pl although I have
-rewritten many of them to use PGcore.pm instead.  The original code
+* On the PG side, the environment is unpacked in *pg/macros/PG.pl* and
+the basic macros were defined in *PGbasicmacros.pl* although I have
+rewritten many of them to use *PGcore.pm* instead.  The original code
 was perl4 and CGI -- the PGcore modifications take better advantage of
 the object orientation in perl5 and the caching of mod_perl.
 
@@ -27,11 +27,11 @@ the object orientation in perl5 and the caching of mod_perl.
 ### The JSON webservice in webwork
 As I learned today from Mike Gage, Webwork includes a json-based
 webservice. This is implemented in
-[webwork2/lib/WebWorkwebservice.pm](https://github.com/openwebwork/webwork2/blob/master/lib/WebworkWebservice.pm) and in the files in the directory  [webwork2/lib/WebWorkwebservice/](https://github.com/openwebwork/webwork2/tree/master/lib/WebworkWebservice)
+*[webwork2/lib/WebWorkwebservice.pm]*(https://github.com/openwebwork/webwork2/blob/master/lib/WebworkWebservice.pm) and in the files in the directory  *[webwork2/lib/WebWorkwebservice/]*(https://github.com/openwebwork/webwork2/tree/master/lib/WebworkWebservice)
 
 Matt believes that this webservice does not cover rendering.
 
-Sunsern believes that this is based on backbone.js (Peter Shaar) and that the 
+Sunsern believes that this is based on *backbone.js* (Peter Staab) and that the 
 js code is the one doing the rendering.
 But maybe this is only for instructor tools and not for rendering problems.
 
