@@ -40,11 +40,28 @@ To send a message to the server,
   sock.send(message);
 ```
 
-#### Student commands
-  - ```userinfo``` -- Update student's info 
-  - ```keypressed``` -- Send a keystroke
-  - ```checkanswer``` -- Check answers
+#### Student client to server
+  - Included in each message from the client:
+    - user id
+    - session key (key in the html file)
+  - ```pageinfo``` 
+    - HTML [the BODY part]
+  - ```newstring```
+    - ID of the box in which the string was entered
+    - An ascii string.
+    - The client needs some logic to decide when to send the string. 
+      - Basically: when user start typing in a new box. Or when some time-out occured (10sec)
+
+#### Server to student client
+  - ```hint```
+    - HTML of hint (just that [paragraph][1])
+    - Location to insert the hint. (before block containing id=X)
   
 #### Teacher command
   - ```list_students``` -- List all connected students
   - ```send_hint``` -- Send a hint to a student
+
+-----
+[1]: The relevant part of the HTML (the problem body) is partitioned into paragraphs 
+according to the answer blocks. The answer block has the form <input type=text ...id='AnSwEr0003' ... >
+A paragraph consists of the HTML text preceding the answer block, together with the answer block.
