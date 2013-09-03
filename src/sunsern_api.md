@@ -11,18 +11,18 @@ Figures:
 
 Resource [server/rest_server.py]
 ---------------------------------
-#### PG Resources
+#### PG Resources / Matt
   - ```POST /pg``` -- Retrieve PG source from a path 
 
-#### Hint Resources
+#### Hint Resources /Matt
   - ```GET /hints/:pg_id``` -- Retrieve hints associated with the given pg_id
   - ```POST /hints/:pg_ig``` -- Add hints to the given pg_id
   - ```DELETE /hints/:hint_id``` -- Delete a hint
 
-#### Render
+#### Render / Sunsern
   - ```POST /render``` -- Render HTML from PG
 
-#### Check Answer
+#### Check Answer / Sunsern
   - ```POST /checkanswer``` -- Check answers with PG
 
 
