@@ -3,6 +3,11 @@ Adaptive Hint Server API
 
 Repository: <https://github.com/sunsern/adaptive-hint>
 
+Figures:
+* [Yoav's Detailed](https://www.lucidchart.com/documents/edit/4ed8-1c14-521f9e44-a155-55720a00def9)
+* [From meeting](https://docs.google.com/a/eng.ucsd.edu/drawings/d/1HiSdIF7rpkZbfcE_XsuMBfa0AkQFA43FERyPJBVB1Zo/edit)
+* 
+
 
 Resource [server/rest_server.py]
 ---------------------------------
