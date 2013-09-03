@@ -80,4 +80,8 @@ Server_Transport consists of the following classes:
   
 * TAServer: Similar to StudentServer, but for TA's
 
+## Implementation
 
+<https://github.com/sunsern/adaptive-hint>
+
+<https://github.com/sunsern/adaptive-hint/blob/master/README.md>
