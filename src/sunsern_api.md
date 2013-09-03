@@ -1,15 +1,11 @@
-adaptive-hint
-=============
+Adaptive Hint Server API
+========================
 
-Requirements
-------------
-```
-sockjs-tornado==1.0.0
-tornado==3.1.1
-```
+Repository: <https://github.com/sunsern/adaptive-hint>
 
-rest_server.py
---------------
+
+Resource [server/rest_server.py]
+---------------------------------
 #### PG Resources
   - ```POST /pg``` -- Retrieve PG source from a path 
 
@@ -25,8 +21,25 @@ rest_server.py
   - ```POST /checkanswer``` -- Check answers with PG
 
 
-sockjs_server.py
-----------------
+Communication API [server/sockjs_server.py]
+---------------------------------------
+A valid message must have the following format:
+```
+message = JSON.stringify({
+  'command': 'some_command',
+  'arguments': { 
+    'arg1': 'some_text',
+    'arg2': 123
+  }
+});
+```
+
+To send a message to the server, 
+```
+  sock = new SockJS('http://localhost:1234/student');
+  sock.send(message);
+```
+
 #### Student commands
   - ```userinfo``` -- Update student's info 
   - ```keypressed``` -- Send a keystroke
