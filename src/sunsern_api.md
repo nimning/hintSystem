@@ -54,14 +54,14 @@ To send a message to the server,
 
 #### Server to student client
   - ```hint```
-    - HTML of hint (just that [paragraph][1])
-    - Location to insert the hint. (before block containing id=X)
+    - HTML of hint (just that paragraph (see below))
+    - Location to insert the hint. (before paragraph containing id=X)
   
 #### Teacher command
   - ```list_students``` -- List all connected students
   - ```send_hint``` -- Send a hint to a student
 
 -----
-[1]: The relevant part of the HTML (the problem body) is partitioned into paragraphs 
+*Paragraph*: The relevant part of the HTML (the problem body) is partitioned into paragraphs 
 according to the answer blocks. The answer block has the form <input type=text ...id='AnSwEr0003' ... >
 A paragraph consists of the HTML text preceding the answer block, together with the answer block.
