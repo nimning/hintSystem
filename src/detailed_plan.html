@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<title>detailed_plan.html</title>
+
+</head>
+
+<body>
+
+<h2>Transport Layer</h2>
+
+<p>To unify the low level communication and provide checking we will a
+Socket class, both on the javascript side and on the server side. The
+socket provide the infrastructure for sending JSON packets back and
+forth.
+The Socket class supports the following public methods:</p>
+
+<ul>
+<li><em>Open</em>(server-address, @NewCallBack, @StatusCallBack): opens a connection
+to the server.
+<ul>
+<li>@NewCallBack is a pointer to a subroutine that is called when a new
+packet is available from the server.</li>
+<li>@StatusCallBack points to a subroutine that is called when an valid
+acknowledgement is recieved from the other side or if repeated
+attempts to connect have failed (according to some retry policy).</li>
+</ul></li>
+<li><em>Send</em> (packet): sends a JSON packet.</li>
+<li><em>Close</em>: close the connection</li>
+</ul>
+
+<h2>Client</h2>
+
+<p>The client will be written in JavaScript and use the BackBone
+Model-View pattern.</p>
+
+<p><em>Yoav:</em> As I am ignorant about JavaScript, I will not attempt a
+detailed description here, but just give a high-level description of
+the needed functionality.</p>
+
+<ul>
+<li><em>Parse HTML:</em> Send The HTML to the server and get back a modified
+HTML. The Modified HTML has ID's associated with each of the
+question-answer pairs. (By having this Parsing done on the server
+we make sure that there is no mismatch between the server and the
+client. I need to check with Gage, but the HTML might be cached on
+the server, in which case only an index would have to be sent to
+the hint server).</li>
+<li><em>HeartBeat:</em> each client sends a "heartbeat" packet to the server
+every 10 seconds or so. This way the server knows which clients are
+active. From the "Ack" reply of the server the client knows whether
+or not it has a working connection to the hints server.</li>
+<li><em>Capture Keystrokes:</em> The script will listen for keystrokes on each
+of the boxes (both of original questions and of hints). When
+keystrokes are captured, they will be sent to the server every 5
+seconds (not waiting for the <CR>)</li>
+<li><em>Insert hints:</em> When the script recieves a hint, together with an
+index that defines the location. It inserts the hint in the
+appropriate place and starts a new listener for the answer.</li>
+<li><em>Submit:</em> The final evaluation of the answers will be performed just
+as it is now - when the user presses the "submit" button. However,
+to allow continuity this submit is intercepted by the script which
+send the appropriate "POST" to the webwork server.</li>
+</ul>
+
+<h2>Server</h2>
+
+<p>Unlike the client, the server maintains a large number of
+connections. It does not initiate opening connections, but responds to
+incoming open requests.</p>
+
+<p>As the server might need to serve many students and TAs/Tutors at the
+same time, we plan to use multiple threads, each thread servicing
+multiple connections.</p>
+
+<p>Each thread uses a separate port, I will refer to them as port0,port1
+etc. Port0 is special in that it is where the connection is initiated,
+the other ports are used for actual communication. </p>
+
+<p>Server_Transport consists of the following classes:
+* ConnectionListener: listens on port0 for requests for a new
+  connection. Upon recieving a request, either assigns it to an
+  existing StudentServer or TAServer, or starts a new student server on a new port.</p>
+
+<ul>
+<li><p>StudentState: a data structure holding the student's state.</p>
+
+<ul>
+<li>Current PG file</li>
+<li>Current HTML </li>
+<li>Keystrokes (timestamped)</li>
+<li>Hints recieved (timestamped)</li>
+</ul></li>
+<li><p>StudentServer: A class for handling updates to the student
+state. Each student server uses a separate port for communicating and a
+list of StudentState instances that it manages.</p></li>
+<li><p>TAState: The list of students that the TA is currently helping. A
+pointer to the StudentState for each of those.</p></li>
+<li><p>TAServer: Similar to StudentServer, but for TA's</p></li>
+</ul>
+
+</body>
+</html>
