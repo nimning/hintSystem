@@ -1,12 +1,16 @@
 #!/usr/bin/env python
 
-import pandas, sys
+import pandas, sys,os
 import numpy as np
 import pickle
 import matplotlib.pyplot as pl
 from matplotlib.backends.backend_pdf import PdfPages
 
 class PlotTiming:
+    """generate plots describing the time sequence of answers for a
+    user/assignment.
+
+    """
     def __init__(self,filename):
         print 'starting to load',filename
         Dict=pickle.load(open(filename,'rb'))
@@ -111,10 +115,23 @@ class PlotTiming:
 
 
 if __name__=='__main__':
-    if 'WWAH_LOGS' in os.environ.keys() and 'WWAH_OUTPUT' in os.environ.keys():
-        pickle_dir=os.environ['WWAH_LOGS']
+    import argparse
+
+    parser = argparse.ArgumentParser(description='Create timing plots from log files')
+    parser.add_argument('-a','--assignment', default='',
+                        help='restrict to a specific assignment (default = no restriction)')
+    parser.add_argument('-s','--student', default='',
+                        help='restrict to a specific student (default = no restriction)')
+
+    args = vars(parser.parse_args())
+    output_file=args['student']+'.'+args['assignment']+'.pdf'
+    
+    if 'WWAH_PICKLE' in os.environ.keys() and 'WWAH_OUTPUT' in os.environ.keys():
+        pickle_dir=os.environ['WWAH_PICKLE']
         output_dir=os.environ['WWAH_OUTPUT']
         P=PlotTiming(pickle_dir+'/ProcessedLogs.pkl')
-        P.plot(user='', assignment='',filename=output_dir+'/All.pdf')
+        filename=output_dir+output_file
+        P.plot(user=args['student'], assignment=args['assignment'],filename=filename)
+        print 'output file is ',filename
     else:
         print 'source setup.sh first'
