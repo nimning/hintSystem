@@ -12,7 +12,7 @@ Figures:
 Python interfaces to PG scripts [\[server/pgwrapper.py\]](https://github.com/sunsern/adaptive-hint/blob/master/server/pgwrapper.py)
 ----------------------------------------------------
 #### PG rendering
-```
+```python
 def render_pg(pg_file, seed=1234):
     """Render a HTML snippet from a given PG file. 
     
@@ -36,7 +36,7 @@ parses the html and returns only the problem part.
 
 
 #### Answer checking
-```
+```python
 def checkanswer(pg_file, answers, seed=1234):
     """Check answers with a given PG file. 
 	
@@ -105,7 +105,7 @@ Resource [\[server/rest_server.py\]](https://github.com/sunsern/adaptive-hint/bl
     - input: ```pg_file=/opt/webwork/.../sample.pg&seed=123&AnSwEr0001=42&AnSwEr0002=x```
     - JSON output: 
 
-```
+```json
 { 'status': 'OK', 
   'results': { 
     'AnSwEr0001' : {
@@ -127,7 +127,7 @@ Resource [\[server/rest_server.py\]](https://github.com/sunsern/adaptive-hint/bl
 Communication API [\[server/sockjs_server.py\]](https://github.com/sunsern/adaptive-hint/blob/master/server/sockjs_server.py)
 ---------------------------------------
 A valid message must have the following format:
-```
+```python
 message = JSON.stringify({
   'command': 'some_command',
   'arguments': { 
@@ -138,7 +138,7 @@ message = JSON.stringify({
 ```
 
 To send a message to the server, 
-```
+```python
   sock = new SockJS('http://localhost:1234/student');
   sock.send(message);
 ```
