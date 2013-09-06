@@ -1,7 +1,6 @@
-import json
 import logging
 
-from common import ActiveClients, _BaseConnection
+from common import ActiveClients, _BaseConnection, pack_message
 
 class StudentConnection(_BaseConnection):
     """Student SockJS Connection""" 
@@ -29,11 +28,8 @@ class StudentConnection(_BaseConnection):
                 ActiveClients.students.add(self)
                 logging.info("%s signed in"%self.student_id)
                 # broadcast 'student_joined' to teachers
-                self.broadcast(
-                    ActiveClients.teachers,
-                    json.dumps({'command': 'student_joined',
-                                'arguments': args
-                                }))
+                self.broadcast(ActiveClients.teachers,
+                               pack_message('student_joined', args))
             except KeyError:
                 self.session.close()
                 
@@ -44,13 +40,9 @@ class StudentConnection(_BaseConnection):
             logging.info("%s updated %s to %s"%(self.student_id,
                                                 boxname,
                                                 value))
-            # broadcast 'student_joined' to teachers
-            self.broadcast(
-                ActiveClients.teachers,
-                json.dumps({'command': 'newstring',
-                            'arguments': args
-                            }))
-
+            # broadcast 'newstring' to teachers
+            self.broadcast(ActiveClients.teachers,
+                           pack_message('newstring', args))
 
     def on_open(self, info):
         """Callback for when a student is connected"""
@@ -64,12 +56,6 @@ class StudentConnection(_BaseConnection):
         else:
             logging.info("%s disconnected"%self.session.conn_info.ip)
         # broadcast 'student_left' to teachers
-        self.broadcast(
-            ActiveClients.teachers,
-            json.dumps({
-                'command': 'student_left',
-                'arguments': {
-                    'student_id': self.student_id
-                    }
-                }))
-
+        args = { 'student_id': self.student_id }
+        self.broadcast(ActiveClients.teachers,
+                       pack_message('student_left', args))

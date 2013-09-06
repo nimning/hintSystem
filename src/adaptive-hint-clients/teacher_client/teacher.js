@@ -10,7 +10,7 @@ function print(msg) {
 
 // Send a command to SockJS server
 function send_command(sock, cmd, args) {
-    sock.send(JSON.stringify({"command": cmd,
+    sock.send(JSON.stringify({"type": cmd,
 			      "arguments": args}));
     print("SENT: " + cmd + ":" + JSON.stringify(args, null, 2));
 }

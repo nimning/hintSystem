@@ -1,10 +1,6 @@
-from tornado.httpclient import AsyncHTTPClient
-import json
 import logging
 
-from common import ActiveClients, _BaseConnection
-
-REAT_API = 'http://localhost:4351'
+from common import ActiveClients, _BaseConnection, pack_message
 
 class TeacherConnection(_BaseConnection):
     """Teacher SockJS connection"""
@@ -29,12 +25,13 @@ class TeacherConnection(_BaseConnection):
             """
             """
             names = [s.student_id for s in ActiveClients.students]
-            self.send(json.dumps(names))
+            self.send(pack_message('student_list', names))
 
         @self.add_handler('send_hint')
         def handle_send_hint(self, args):
             hint = "<div>hint</div>"
-            self.broadcast(ActiveClients.students, hint)
+            self.broadcast(ActiveClients.students,
+                           pack_message('hint', hint))
             
         @self.add_handler('render_hint')
         def handle_render_hint(self, args): pass

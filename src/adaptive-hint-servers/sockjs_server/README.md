@@ -9,7 +9,7 @@
 A valid message must be in the following format:
 ```javascript
 message = JSON.stringify({
-  'message': 'some_message',
+  'type': 'message_type',
   'arguments': { 
     'arg1': 'some_text',
     'arg2': 123
@@ -29,7 +29,7 @@ To send a message to the server,
 
 ```javascript
 { 
-  'message': 'signin'
+  'type': 'signin'
   'arguments': {
     'student_id': 'scheaman',
     'course_id': 'demo',
@@ -40,12 +40,13 @@ To send a message to the server,
 }
 ```
   - ``newstring`` Notifies the server that an answer box has been updated.
-    - The client needs some logic to decide when to send the string. Basically: when user start 
-typing in a new box. Or when some time-out occured (10sec)
+    - The client needs some logic to decide when to send the string. 
+      - When losing focus.
+      - When a timeout has been reached. 
 
 ```javascript
 { 
-  'message': 'newstring'
+  'type': 'newstring'
   'arguments': {
     'boxname': 'AnSwEr0001',
     'value': '123'
@@ -58,7 +59,7 @@ typing in a new box. Or when some time-out occured (10sec)
    
 ```javascript
 { 
-  'message': 'hint'
+  'type': 'hint'
   'arguments': {
     'hint_html': 'AnSwEr0001',
     'location': [TBD. See notes below]
