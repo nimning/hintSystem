@@ -37,7 +37,12 @@ $(document).ready(function() {
     });
 
     $("#send_hint").click(function() {
-	send_command(sock, 'send_hint', {});
+	send_command(sock, 'send_hint', {
+	    'student_id': $('#student_id').val(),
+	    'location': $('#hint_location').val(),
+	    'hintbox_id': $('#hintbox_id').val(),
+	    'hint_html': $('#hint_html').val()
+	});
     });
 	
     print("INFO: document loaded");
