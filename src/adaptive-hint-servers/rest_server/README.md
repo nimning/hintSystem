@@ -10,15 +10,20 @@
 - Read [pg_wrapper.md](pg_wrapper.md)
 
 
-## REST API Specification
+### Database server 
+This is the interface to the Hints Server Database. Communication with this server through a ReSTful API.
 
 #### PG Resources
+
   - ```POST /pg``` -- Retrieve PG source from a path 
 
 #### Hint Resources
+
   - ```GET /hints/:pg_id``` -- Retrieve hints associated with the given pg_id
   - ```POST /hints/:pg_ig``` -- Add hints to the given pg_id
   - ```DELETE /hints/:hint_id``` -- Delete a hint
+
+### Webwork/PG Interface
 
 #### Render
   - ```POST /render``` -- Render HTML from PG
