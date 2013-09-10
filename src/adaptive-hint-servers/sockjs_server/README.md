@@ -55,14 +55,18 @@ To send a message to the server,
 ```
 
 ### Student [server -> client]
-  - ``hint`` Inserts a hint to the student's browser
+  - ``response_to_signin`` 
+    - List of hints incuding locations, entered value, student feedback, hint_id
+
+  - ``add_hint`` Inserts a hint to the student's browser
    
 ```javascript
 { 
   'type': 'hint'
   'arguments': {
-    'hint_html': 'AnSwEr0001',
-    'location': [TBD. See notes below]
+    'hintbox_id': 'Hint0001',
+    'hint_html': '<div>..</div>',
+    'location': 'AnSwEr0001'
   } 
 }
 ```
