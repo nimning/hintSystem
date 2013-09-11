@@ -7,7 +7,6 @@ port. It responses to the requests from SockJS clients.
 import tornado.ioloop
 import tornado.web
 import sockjs.tornado
-import logging
 
 from student_conn import StudentConnection 
 from teacher_conn import TeacherConnection
@@ -17,6 +16,8 @@ BIND_IP = '0.0.0.0'
 LISTEN_PORT = 4350
 
 if __name__ == "__main__":
+    import logging
+    
     logging.getLogger().setLevel(logging.DEBUG)
 
     # Create routers
