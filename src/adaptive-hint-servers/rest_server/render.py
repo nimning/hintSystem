@@ -11,7 +11,7 @@ def task_render(pg_file, seed, callback=None):
     callback(pg_wrapper.render_pg(pg_file, int(seed)))
  
 class Render(tornado.web.RequestHandler):
-    """Interface with Webwork/PG
+    """Interface with Webwork/PG for rendering a PG
     """
 
     def initialize(self):
@@ -43,7 +43,6 @@ class Render(tornado.web.RequestHandler):
         
         # Case1: pg_file is a path
         if os.path.isabs(pg_file):
-
             # check if the file actually exists
             if not os.path.isfile(pg_file):
                 response['error_msg'] = 'PG file not found'
