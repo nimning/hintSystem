@@ -60,7 +60,7 @@ class CheckAnswer(tornado.web.RequestHandler):
             results = yield tornado.gen.Task(task_checkanswer,
                                              pg_file,
                                              answers,
-                                              int(seed))
+                                             int(seed))
 
             if results is None:
                 response = { 'error_msg': 'PG service error' }
