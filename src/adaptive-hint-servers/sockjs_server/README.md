@@ -184,7 +184,7 @@ list_students
         Requests the list of connected students from the server.
         </td>
         <td>
-        -
+        The server will response with 'student_list'.
         </td>
     </tr>
     <tr>
@@ -250,8 +250,10 @@ student_list
         A list of connected students and their information.
         </td>
         <td>
-        -
+        This is the response to 'list_student' message.
         </td>
     </tr>
 </table>
+
+
 
