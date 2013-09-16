@@ -25,11 +25,11 @@ To send a message to the server,
 
 ### Student [client -> server]
 
-  - ``signin`` Notifies the server that a student is connected. 
+  - ``student_join`` Notifies the server that a student is connected. 
 
 ```javascript
 { 
-  'type': 'signin'
+  'type': 'student_join'
   'arguments': {
     'student_id': 'scheaman',
     'course_id': 'demo',
@@ -39,14 +39,14 @@ To send a message to the server,
   }
 }
 ```
-  - ``newstring`` Notifies the server that an answer box has been updated.
+  - ``student_answer`` Notifies the server that an answer box has been updated.
     - The client needs some logic to decide when to send the string. 
       - When losing focus.
       - When a timeout has been reached. 
 
 ```javascript
 { 
-  'type': 'newstring'
+  'type': 'student_answer'
   'arguments': {
     'boxname': 'AnSwEr0001',
     'value': '123'
@@ -55,19 +55,19 @@ To send a message to the server,
 ```
 
 ### Student [server -> client]
-  - ``response_to_signin`` 
+  - ``answer_status`` 
     - List of hints incuding locations, entered value, student feedback, hint_id
 
-  - ``add_hint`` Inserts a hint to the student's browser
+  - ``hints`` Inserts a hint to the student's browser
    
 ```javascript
 { 
-  'type': 'hint'
-  'arguments': {
+  'type': 'hints'
+  'arguments': [ {
     'hintbox_id': 'Hint0001',
     'hint_html': '<div>..</div>',
     'location': 'AnSwEr0001'
-  } 
+  }, ... ]
 }
 ```
 
