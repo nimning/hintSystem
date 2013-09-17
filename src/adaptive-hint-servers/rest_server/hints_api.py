@@ -1,30 +1,9 @@
 import tornado
-from tornado.template import Template
-from tornado_database import Connection
-import getpass
 import json
 import tornado.ioloop
 import tornado.web
 
-# Connect to webwork mysql database
-conn = Connection('localhost', 'webwork', user='root', password=getpass.getpass())
-
-class ProcessQuery(tornado.web.RequestHandler):
-    def process_query(self, query_template, write_response=True, dehydrate=None):
-        args = self.request.arguments
-        for key in self.request.arguments.keys():
-            args[key] = args[key][0]
-        query_rendered = Template(query_template) \
-            .generate(**args)
-        if write_response:
-            rows = conn.query(query_rendered)
-            if not dehydrate is None:
-                response = dehydrate(rows)
-            else:
-                response = rows
-            self.write(json.dumps(response))
-        else:
-            conn.execute(query_rendered)
+from process_query import ProcessQuery
 
 # GET /user_problem_hints?
 class UserProblemHints(ProcessQuery):
@@ -108,40 +87,16 @@ class ProblemHints(ProcessQuery):
             from {{course}}_hint 
             where set_id="{{set_id}}" AND problem_id={{problem_id}} ''' 
         self.process_query(query_template)
-
-# GET /problem_seed?
-class ProblemSeed(ProcessQuery):
-    def get(self):
-        ''' 
-            To render problems, we need to get the seed from that problem.  
-
-            Sample arguments:
-            course="CompoundProblems", 
-            set_id="compoundProblemExperiments",
-            problem_id=2
-            user_id="melkherj"
-
-            Response: 
-                2225
-            '''
-        query_template = '''
-            select problem_seed from {{course}}_problem_user 
-            where 
-                problem_id={{problem_id}} and 
-                user_id="{{user_id}}" and 
-                set_id="{{set_id}}";
-        '''
-        self.process_query(query_template,
-            dehydrate=lambda rows: rows[0]["problem_seed"])
         
-application = tornado.web.Application([
-    (r"/user_problem_hints", UserProblemHints),
-    (r"/hint", Hint),
-    (r"/problem_hints", ProblemHints),
-    (r"/problem_seed", ProblemSeed),
-])
 
 if __name__ == "__main__":
+    
+    application = tornado.web.Application([
+        (r"/user_problem_hints", UserProblemHints),
+        (r"/hint", Hint),
+        (r"/problem_hints", ProblemHints),
+        ])
+    
     application.listen(8420)
     tornado.ioloop.IOLoop.instance().start()
 
