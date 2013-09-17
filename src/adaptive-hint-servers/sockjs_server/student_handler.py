@@ -9,6 +9,7 @@ from student_session import StudentSession
 
 CHECKANSWER_API = 'http://127.0.0.1:4351/checkanswer'
 PROBLEM_SEED_API = 'http://127.0.0.1:4351/problem_seed'
+PG_PATH_API = 'http://127.0.0.1:4351/pg_path'
         
 class StudentSockJSHandler(_BaseSockJSHandler):
     """Student SockJS connection handler
@@ -79,14 +80,7 @@ class StudentSockJSHandler(_BaseSockJSHandler):
                 
                 # shorthand
                 ss = self.student_session
-                
-                # TODO: these should be obtained from DB instead
-                if ss.pg_file is None:
-                    ss.pg_file = args.get('pg_file', None)
-
-                if ss.pg_seed is None:
-                    ss.pg_seed = args.get('pg_seed', None)
-                
+                                
                 # add the student session to the list
                 StudentSession.active_sessions.add(ss)
 
@@ -155,23 +149,28 @@ class StudentSockJSHandler(_BaseSockJSHandler):
             * entered_value
         """
         ss = self.student_session
-        
-        # get PG file
-        # TODO: get pg_file and pg_seed from DB
-        path_prefix = ('/opt/webwork/libraries/' +
-                       'webwork-open-problem-library/OpenProblem')
-        pg_file = path_prefix + ss.pg_file
-
-        # get problem seed
         http_client = httpclient.HTTPClient()
-        url = url_concat(PROBLEM_SEED_API, {
-            'course': ss.course_id,
-            'set_id': ss.set_id,
-            'problem_id': ss.problem_id,
-            'user_id': ss.student_id
-            })
-        response = http_client.fetch(url)
-        pg_seed = int(response.body)
+            
+        # get PG file path
+        if ss.pg_file is None:
+            url = url_concat(PG_PATH_API, {
+                'course': ss.course_id,
+                'set_id': ss.set_id,
+                'problem_id': ss.problem_id
+                })
+            response = http_client.fetch(url)
+            ss.pg_file = json.loads(response.body)
+            
+        # get problem seed
+        if ss.pg_seed is None:
+            url = url_concat(PROBLEM_SEED_API, {
+                'course': ss.course_id,
+                'set_id': ss.set_id,
+                'problem_id': ss.problem_id,
+                'user_id': ss.student_id
+                })
+            response = http_client.fetch(url)
+            ss.pg_seed = int(response.body)
 
         # check problem answer
         if boxname.startswith('AnSwEr'):
@@ -179,11 +178,11 @@ class StudentSockJSHandler(_BaseSockJSHandler):
                                          method='POST',
                                          headers=None,
                                          body=urllib.urlencode({
-                                             'pg_file' : pg_file,
-                                             'seed' : pg_seed,
+                                             'pg_file' : ss.pg_file,
+                                             'seed' : ss.pg_seed,
                                              boxname : value 
                                              }))
-        
+            
             result_json = json.loads(response.body)[boxname]
             answer_status = { 'boxname': boxname,
                               'is_correct': result_json['is_correct'],
