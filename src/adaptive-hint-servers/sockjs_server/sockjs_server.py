@@ -8,8 +8,8 @@ import tornado.ioloop
 import tornado.web
 import sockjs.tornado
 
-from student_conn import StudentConnection 
-from teacher_conn import TeacherConnection
+from student_handler import StudentSockJSHandler
+from teacher_handler import TeacherSockJSHandler
 
 # Server Configurations 
 BIND_IP = '0.0.0.0'
@@ -21,8 +21,10 @@ if __name__ == "__main__":
     logging.getLogger().setLevel(logging.DEBUG)
 
     # Create routers
-    StudentRouter = sockjs.tornado.SockJSRouter(StudentConnection, '/student')
-    TeacherRouter = sockjs.tornado.SockJSRouter(TeacherConnection, '/teacher')
+    StudentRouter = sockjs.tornado.SockJSRouter(StudentSockJSHandler,
+                                                '/student')
+    TeacherRouter = sockjs.tornado.SockJSRouter(TeacherSockJSHandler,
+                                                '/teacher')
 
     # Create Tornado application
     app = tornado.web.Application(StudentRouter.urls +

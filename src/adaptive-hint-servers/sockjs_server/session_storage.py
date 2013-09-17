@@ -11,7 +11,7 @@ class SessionStorage(object):
     Attributes
     ----------
       timeout : int
-        Session timeout is minutes (Default: 10)
+        Session timeout in minutes (Default: 10)
         
     """
     def __init__(self, timeout=10):
@@ -42,6 +42,10 @@ class SessionStorage(object):
 
         """
         try:
+            # renew the timeout
+            self.sessions[session_id] = (dt.datetime.now() +
+                                         dt.timedelta(minutes=self.timeout))
+
             t = self.data[session_id][(course_id, set_id, problem_id)][varname]
             return t
         except KeyError:
@@ -68,8 +72,10 @@ class SessionStorage(object):
         if value is not None:
             if session_id not in self.data:
                 self.data[session_id] = {}
-                self.sessions[session_id] = (dt.datetime.now() +
-                                             dt.timedelta(minutes=self.timeout))
+
+            # renew the timeout
+            self.sessions[session_id] = (dt.datetime.now() +
+                                         dt.timedelta(minutes=self.timeout))
 
             key = (course_id, set_id, problem_id)
             if key not in self.data[session_id]:

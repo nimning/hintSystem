@@ -7,13 +7,13 @@
 	console.log("SENT: " + cmd + ":" + JSON.stringify(args, null, 2));
     }
 
-    // Send 'newstring' message
-    function newstring(box) {
+    // Send 'student_answer' message
+    function student_answer(box) {
 	if (box.value.length > 0) {
 	    var args = { 'boxname': box.attributes["name"].value,
 			 'value': box.value };
 
-	    send_command(sock, 'newstring', args);
+	    send_command(sock, 'student_answer', args);
 	    box['last_answer'] = box.value;
 	}
     }
@@ -27,10 +27,10 @@
 		window.clearTimeout(this['timer']);
 	    }
 
-	    // Send 'newstring' command if needed
+	    // Send 'student_answer' command if needed
 	    if (!this['last_answer'] || this['last_answer'] != this.value) {
-		newstring(this);
-	    }
+		student_answer(this);
+	    } 
 	});
 
 	// When a keyup is detected
@@ -42,24 +42,38 @@
 
 	    // create a new timeout
 	    this['timer'] = window.setTimeout(function(obj) {
-		// when the timeout is reached, send 'new_string'
+		// when the timeout is reached, send answer
 		if (!obj['last_answer'] || obj['last_answer'] != obj.value) {
-		    newstring(obj);
+		    student_answer(obj);
 		}
 	    }, 1500, this);
 	});
     }
     
+    function remove_all_hints() {
+	$('div[id^=wrapper_]').remove()
+    }
+
     // Insert a hint to a given location.
     function insert_hint(hint_html, location, hintbox_id) {
-	$("input#" + location).before(hint_html);
+	var d = document.createElement('div');
+	d.setAttribute('id', 'wrapper_' + hintbox_id);
+	d.innerHTML = hint_html;
+	$("input#" + location).before(d);
 	var hintbox = $("input#"+hintbox_id);
 	create_textbox_actions(hintbox);
     }
 
     // Update the color of an answer box based on answer status 
-    function update_answerbox(box_id, is_correct, error_msg) {
+    function update_answerbox(box_id, is_correct, error_msg, entered_value) {
 	var box = $("input#" + box_id);
+	
+	if (!box) return;
+
+	// Set value if the box is empty
+	if (box.val().length == 0) {
+	    box.val(entered_value);
+	}
 	// Remove previous title
 	box.attr('title', '');
 	if (error_msg && error_msg.length > 0) {
@@ -76,13 +90,13 @@
     }
 
     $(document).ready(function() {
-	
 	// Gather student's info
 	var pathArray = window.location.pathname.split('/');
 	var course_id = pathArray[2];
 	var set_id = pathArray[3];
 	var problem_id = pathArray[4];
 	var student_id = $("input#hidden_effectiveUser").val();
+	var session_id = $("input#hidden_key").val();
 
 	// Create a SockJS connection to the server
 	sock = new SockJS("http://webwork.cse.ucsd.edu:4350/student");
@@ -91,6 +105,7 @@
 	    console.log("INFO: connected");
 	    // Send `signin` command
 	    var params = {
+		'session_id': session_id,
 		'student_id': student_id,
 		'course_id' : course_id,
 		'set_id': set_id,
@@ -98,7 +113,7 @@
 		'problem_body': $("div#problem-content").html(),
 		'pg_file' : $("input[name=displayMode]").next().attr('value')
 	    };
-	    send_command(sock, 'signin', params);
+	    send_command(sock, 'student_join', params);
 	};
 
 	sock.onmessage = function(e) {
@@ -108,17 +123,27 @@
     	    // If...
     	    //   message = 'hint': insert the hint to a proper place.
     	    //                     Register actions with the new box.
-	    if (message['type'] == 'hint') {
-		args = message['arguments'];
-		insert_hint(args['hint_html'],
-			    args['location'],
-			    args['hintbox_id']);
+	    if (message['type'] == 'hints') {
+		hints = message['arguments'];
+		remove_all_hints();
+		for (var i=0; i < hints.length; i++) {
+		    hint = hints[i];
+		    insert_hint(hint['hint_html'],
+				hint['location'],
+				hint['hintbox_id']);
+		}
 	    }
     	    //   message = 'answer_status': set color of the box according the correctness.
     	    //    Correct = blue, Incorrect = red, Malformed answer = orange
 	    else if (message['type'] == 'answer_status') {
-		args = message['arguments'];
-		update_answerbox(args['boxname'], args['is_correct'], args['error_msg']);
+		answer_statuses = message['arguments'];
+		for (var i=0; i < answer_statuses.length; i++) {
+		    answer_status = answer_statuses[i];
+		    update_answerbox(answer_status['boxname'], 
+				     answer_status['is_correct'], 
+				     answer_status['error_msg'],
+				     answer_status['entered_value']);
+		}
 	    }
 	};
 
