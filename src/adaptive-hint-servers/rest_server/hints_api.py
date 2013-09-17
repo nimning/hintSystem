@@ -104,11 +104,36 @@ class ProblemHints(ProcessQuery):
             from {{course}}_hint 
             where set_id="{{set_id}}" AND problem_id={{problem_id}} ''' 
         self.process_query(query_template)
+
+# GET /problem_seed?
+class ProblemSeed(ProcessQuery):
+    def get(self):
+        ''' 
+            To render problems, we need to get the seed from that problem.  
+
+            Sample arguments:
+            course="CompoundProblems", 
+            set_id="compoundProblemExperiments",
+            problem_id=2
+            user_id="melkherj"
+
+            Response: 
+                [{"problem_seed": 2225}]
+            '''
+        query_template = '''
+            select problem_seed from {{course}}_problem_user 
+            where 
+                problem_id={{problem_id}} and 
+                user_id="{{user_id}}" and 
+                set_id="{{set_id}}";
+        '''
+        self.process_query(query_template)
         
 application = tornado.web.Application([
     (r"/user_problem_hints", UserProblemHints),
     (r"/hint", Hint),
     (r"/problem_hints", ProblemHints),
+    (r"/problem_seed", ProblemSeed),
 ])
 
 if __name__ == "__main__":
