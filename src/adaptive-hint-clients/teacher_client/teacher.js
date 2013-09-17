@@ -22,7 +22,7 @@ $(document).ready(function() {
 	var randomNum = Math.ceil(Math.random()*10000);
 	teacher_id = 'teacher' + randomNum;
 	send_command(sock, 
-		     'signin', 
+		     'teacher_join', 
 		     {'teacher_id': teacher_id});
     };
     sock.onmessage = function(e) {
@@ -36,9 +36,12 @@ $(document).ready(function() {
 	send_command(sock, 'list_students', {});
     });
 
-    $("#send_hint").click(function() {
-	send_command(sock, 'send_hint', {
-	    'student_id': $('#student_id').val(),
+    $("#add_hint").click(function() {
+	send_command(sock, 'add_hint', {
+	    'session_id': $('#hint_session_id').val(),
+	    'course_id': $('#hint_course_id').val(),
+	    'set_id': $('#hint_set_id').val(),
+	    'problem_id': $('#hint_problem_id').val(),
 	    'location': $('#hint_location').val(),
 	    'hintbox_id': $('#hintbox_id').val(),
 	    'hint_html': $('#hint_html').val()
