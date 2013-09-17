@@ -41,7 +41,8 @@ class ProblemPGPath(ProcessQuery):
             problem_id=2
 
             Response: 
-                
+             "/opt/webwork/courses/demo/.../setCounting/counting1.pg"
+             
             '''
         # extract course from the arguments
         course_name = self.get_argument('course')
@@ -72,7 +73,8 @@ class ProblemPGFile(ProcessQuery):
             problem_id=2
 
             Response: 
-                
+             "DOCUMENT();\n ... ENDDOCUMENT();\n\n"
+             
             '''
 
         def _dump_pg_file(mysql_rows):
