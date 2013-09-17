@@ -1,12 +1,6 @@
-import sockjs.tornado
 import json
 import logging
-
-def pack_message(msg_type, args):
-    """Create a JSON message from message type and arguments""" 
-    return json.dumps({ 'type': msg_type,
-                        'arguments': args })
-
+import sockjs.tornado
 
 class _BaseSockJSHandler(sockjs.tornado.SockJSConnection):
     def __init__(self, *args, **kwargs):
@@ -22,6 +16,21 @@ class _BaseSockJSHandler(sockjs.tornado.SockJSConnection):
             return wrapper
         return handler
 
+    def send_message(self, msg_type, args):
+        """Send a message to client
+
+        Arguments
+        ---------
+          msg_type : string
+            Message type e.g. 'student_join', 'answer_status'
+
+          args : dict or list
+            Arguments to the message
+            
+        """
+        packed_message = json.dumps({ 'type': msg_type, 'arguments': args })
+        self.send(packed_message)
+        
     def on_message(self, message):
         """Callback for when a message is received"""
         try:
@@ -32,3 +41,4 @@ class _BaseSockJSHandler(sockjs.tornado.SockJSConnection):
             logging.warning("unhandled message type")
         except:
             logging.exception("Exception in on_message")
+
