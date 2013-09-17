@@ -55,20 +55,22 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
 
             args
             ----
-              Empty
+              course_id : string
+                Webwork course ID
             
             """
-            names = [{ 'session_id': ss.session_id,
-                       'student_id': ss.student_id,
-                       'course_id': ss.course_id,
-                       'set_id': ss.set_id,
-                       'problem_id': ss.problem_id,
-                       'hints': ss.hints,
-                       'answers': ss.answers,
-                       'pg_file': ss.pg_file,
-                       'pg_seed': ss.pg_seed }
-                     for ss in StudentSession.active_sessions]
-            self.send_message('student_list', names)
+            # TODO: filter session using 'course_id'
+            sessions = [{ 'session_id': ss.session_id,
+                          'student_id': ss.student_id,
+                          'course_id': ss.course_id,
+                          'set_id': ss.set_id,
+                          'problem_id': ss.problem_id,
+                          'hints': ss.hints,
+                          'answers': ss.answers,
+                          'pg_file': ss.pg_file,
+                          'pg_seed': ss.pg_seed }
+                        for ss in StudentSession.active_sessions]
+            self.send_message('student_list', sessions)
 
         @self.add_handler('add_hint')
         def handle_add_hint(self, args):
