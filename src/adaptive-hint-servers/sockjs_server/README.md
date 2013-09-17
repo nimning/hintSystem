@@ -179,7 +179,9 @@ list_students
         </td>
         <td>
 <pre>
-{}
+{
+  'course_id': 'demo'
+}
 </pre>
         </td>
         <td>
