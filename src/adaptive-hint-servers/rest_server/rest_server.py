@@ -4,7 +4,7 @@ import logging
 
 from render import Render 
 from checkanswer import CheckAnswer
-from hints_api import ProblemSeed
+from webwork import ProblemSeed, ProblemPGPath, ProblemPGFile
 
 # Server configuration
 BIND_IP = '0.0.0.0'
@@ -13,7 +13,9 @@ DEFAULT_PORT = 4351
 application = tornado.web.Application([
     (r"/render", Render),
     (r"/checkanswer", CheckAnswer),
-    (r"/problem_seed", ProblemSeed)
+    (r"/problem_seed", ProblemSeed),
+    (r"/pg_path", ProblemPGPath),
+    (r"/pg_file", ProblemPGFile)
     ])
 
 if __name__ == "__main__":
