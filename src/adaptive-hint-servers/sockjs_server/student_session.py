@@ -46,6 +46,9 @@ class StudentSession(object):
      answer_history : list
        History of student's answers with timestamps
 
+     assigned_teacher_id : string or None
+        Current teacher ID assinged to this student
+
      _sockjs_handler : StudentSockJSHandler
        SockJS handler
      
