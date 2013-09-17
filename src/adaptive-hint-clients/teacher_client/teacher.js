@@ -16,7 +16,7 @@ function send_command(sock, cmd, args) {
 }
 
 $(document).ready(function() {
-    sock = new SockJS('http://webwork.cse.ucsd.edu:4349/teacher');
+    sock = new SockJS('http://webwork.cse.ucsd.edu:4350/teacher');
     sock.onopen = function() {
 	print("INFO: connected");
 	var randomNum = Math.ceil(Math.random()*10000);
