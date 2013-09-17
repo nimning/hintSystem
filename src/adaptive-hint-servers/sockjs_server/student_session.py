@@ -43,6 +43,9 @@ class StudentSession(object):
      _answers : dict
        Current answers on student's browser [PERSIST]
 
+     answer_history : list
+       History of student's answers with timestamps
+
      _sockjs_handler : StudentSockJSHandler
        SockJS handler
      
