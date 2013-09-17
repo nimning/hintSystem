@@ -1,4 +1,5 @@
 from tornado import gen, httpclient
+from tornado.httputil import url_concat
 import logging
 import json
 import urllib
@@ -7,6 +8,7 @@ from _base_handler import _BaseSockJSHandler
 from student_session import StudentSession
 
 CHECKANSWER_API = 'http://127.0.0.1:4351/checkanswer'
+PROBLEM_SEED_API = 'http://127.0.0.1:4351/problem_seed'
         
 class StudentSockJSHandler(_BaseSockJSHandler):
     """Student SockJS connection handler
@@ -100,6 +102,7 @@ class StudentSockJSHandler(_BaseSockJSHandler):
                 self.session.close()
                 
         @self.add_handler('student_answer')
+        @gen.engine
         def handle_student_answer(self, args):
             """Handler for 'student_answer'
 
@@ -128,35 +131,21 @@ class StudentSockJSHandler(_BaseSockJSHandler):
                     ss.student_id, boxname, value))
 
                 # TODO: Only monitor message from demo course
-                if ss.course_id == 'demo':
-                    if len(value) > 0:
-                        if boxname.startswith('AnSwEr'):
-                            self._perform_checkanswer(boxname, value)
-                        else:
-                            self._perform_checkanswer_hint(boxname, value)
+                if ss.course_id == 'demo' and len(value) > 0:
+                    answer_status = yield gen.Task(self._perform_checkanswer,
+                                                   boxname,
+                                                   value)
+                    # update session data
+                    ss.update_answer(boxname, answer_status)
+        
+                    # send the status to client
+                    self.send_answer_status([answer_status,])
+                    
             except:
                 logging.exception('Exception in student_answer handler')
 
-
-    def _perform_checkanswer_hint(self, boxname, value):
-        # TODO: implement this
-        import random
-        answer_status = { 'boxname': boxname,
-                          'entered_value': value }
-        if random.random() < 0.5:
-            answer_status['is_correct'] = True
-        else:
-            answer_status['is_correct'] = False
-                            
-        # update session
-        self.student_session.answers[boxname] = answer_status
-        
-        # send the status to client
-        self.send_answer_status([answer_status,])
-
             
-    @gen.engine
-    def _perform_checkanswer(self, boxname, value):
+    def _perform_checkanswer(self, boxname, value, callback=None):
         """
           Returns 'answer_status' that contains the following arguments:
             * boxname
@@ -167,35 +156,54 @@ class StudentSockJSHandler(_BaseSockJSHandler):
         """
         ss = self.student_session
         
-        http_client = httpclient.AsyncHTTPClient()
-        # Hacky way to get PG path
+        # get PG file
         # TODO: get pg_file and pg_seed from DB
         path_prefix = ('/opt/webwork/libraries/' +
                        'webwork-open-problem-library/OpenProblem')
         pg_file = path_prefix + ss.pg_file
-        pg_seed = 123
-        
-        post_data = { 'pg_file' : pg_file,
-                      'seed' : pg_seed,
-                      boxname : value }
-        
-        response = yield http_client.fetch(CHECKANSWER_API,
-                                           method='POST',
-                                           headers=None,
-                                           body=urllib.urlencode(post_data))
-        
-        result_json = json.loads(response.body)[boxname]
-        answer_status = { 'boxname': boxname,
-                          'is_correct': result_json['is_correct'],
-                          'error_msg': result_json['error_msg'],
-                          'correct_value': result_json['correct_value'],
-                          'entered_value': value }
 
-        # update session data
-        ss.update_answer(boxname,answer_status)
+        # get problem seed
+        http_client = httpclient.HTTPClient()
+        url = url_concat(PROBLEM_SEED_API, {
+            'course': ss.course_id,
+            'set_id': ss.set_id,
+            'problem_id': ss.problem_id,
+            'user_id': ss.student_id
+            })
+        response = http_client.fetch(url)
+        pg_seed = int(response.body)
+
+        # check problem answer
+        if boxname.startswith('AnSwEr'):
+            response = http_client.fetch(CHECKANSWER_API,
+                                         method='POST',
+                                         headers=None,
+                                         body=urllib.urlencode({
+                                             'pg_file' : pg_file,
+                                             'seed' : pg_seed,
+                                             boxname : value 
+                                             }))
         
-        # send the status to client
-        self.send_answer_status([answer_status,])
+            result_json = json.loads(response.body)[boxname]
+            answer_status = { 'boxname': boxname,
+                              'is_correct': result_json['is_correct'],
+                              'error_msg': result_json['error_msg'],
+                              'correct_value': result_json['correct_value'],
+                              'entered_value': value }
+
+            return callback(answer_status)
+        
+        else:
+            # TODO: Implement this
+            import random
+            answer_status = { 'boxname': boxname,
+                              'entered_value': value }
+            if random.random() < 0.5:
+                answer_status['is_correct'] = True
+            else:
+                answer_status['is_correct'] = False
+
+            return callback(answer_status)
 
         
     def send_answer_status(self, answer_statuses):
