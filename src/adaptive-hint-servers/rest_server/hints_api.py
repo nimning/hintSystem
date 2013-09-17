@@ -10,7 +10,7 @@ import tornado.web
 conn = Connection('localhost', 'webwork', user='root', password=getpass.getpass())
 
 class ProcessQuery(tornado.web.RequestHandler):
-    def process_query(self, query_template, write_response=True):
+    def process_query(self, query_template, write_response=True, dehydrate=None):
         args = self.request.arguments
         for key in self.request.arguments.keys():
             args[key] = args[key][0]
@@ -18,7 +18,11 @@ class ProcessQuery(tornado.web.RequestHandler):
             .generate(**args)
         if write_response:
             rows = conn.query(query_rendered)
-            self.write(json.dumps(rows)) 
+            if not dehydrate is None:
+                response = dehydrate(rows)
+            else:
+                response = rows
+            self.write(json.dumps(response))
         else:
             conn.execute(query_rendered)
 
@@ -118,7 +122,7 @@ class ProblemSeed(ProcessQuery):
             user_id="melkherj"
 
             Response: 
-                [{"problem_seed": 2225}]
+                2225
             '''
         query_template = '''
             select problem_seed from {{course}}_problem_user 
@@ -127,7 +131,8 @@ class ProblemSeed(ProcessQuery):
                 user_id="{{user_id}}" and 
                 set_id="{{set_id}}";
         '''
-        self.process_query(query_template)
+        self.process_query(query_template,
+            dehydrate=lambda rows: rows[0]["problem_seed"])
         
 application = tornado.web.Application([
     (r"/user_problem_hints", UserProblemHints),
