@@ -1,8 +1,10 @@
 ## Files
-- [sockjs_server.py](sockjs_server.py) -- Starts the SockJS server.
-- [student_conn.py](student_conn.py) -- Handler for student connections (via ``\student``).
-- [teacher_conn.py](teacher_conn.py) -- Handler for teach connections (via ``\teacher``).
-- [common.py](common.py) -- Common code shared between ``student_conn.py`` and ``teacher_conn.py``.
+- [sockjs_server.py](sockjs_server.py) -- Main entry point for the SockJS server.
+- [student_handler.py](student_handler.py) -- Handler for student connections (via ``\student``).
+- [teacher_handler.py](teacher_handler.py) -- Handler for teach connections (via ``\teacher``).
+- [student_session.py](student_session.py) -- Provides an interface to each student's session information.
+- [session_storage.py](session_storage.py) -- Storage for storing session information.
+- [_base_handler.py](_base_handler.py) -- A base handler class for both student and teacher.
 
 ## Messaging API specification
 
