@@ -124,7 +124,7 @@ POST /render
 or
 
 { 
- 'pg_file': 'DOCUMENT();...',
+ 'pg_file': {BASE64 pg text},
  'seed': 1234 
 }
 </pre>
@@ -160,7 +160,7 @@ POST /checkanswer
 or
 
 { 
- 'pg_file': 'DOCUMENT();...',
+ 'pg_file': {BASE64 pg text},
  'seed': 1234,
  'AnSwEr0001': '15!',
  'AnSwEr0002': 'x'
