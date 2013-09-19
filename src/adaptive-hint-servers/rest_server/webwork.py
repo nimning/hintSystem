@@ -53,16 +53,26 @@ class ProblemPGPath(ProcessQuery):
                 problem_id={{problem_id}} and 
                 set_id="{{set_id}}";
         '''
-        self.process_query(query_template,
-            dehydrate=lambda rows: os.path.join(webwork_dir,
-                                                'courses',
-                                                course_name,
-                                                'templates',
-                                                rows[0]["source_file"]))
+
+        def _dump_pg_path(mysql_rows):
+            if len(mysql_rows) > 0:
+                return os.path.join(webwork_dir,
+                                    'courses',
+                                    course_name,
+                                    'templates',
+                                    mysql_rows[0]["source_file"])
+            else:
+                return ''
+            
+        self.process_query(query_template, dehydrate=_dump_pg_path)
 
 
 # GET /pg_file?
 class ProblemPGFile(ProcessQuery):
+    def initialize(self):
+        # Allows X-site requests
+        self.set_header("Access-Control-Allow-Origin", "*")
+
     def get(self):
         ''' 
             Get the content of the PG file of a given problem
@@ -78,13 +88,16 @@ class ProblemPGFile(ProcessQuery):
             '''
 
         def _dump_pg_file(mysql_rows):
-            pg_path = os.path.join(webwork_dir,
-                                   'courses',
-                                   course_name,
-                                   'templates',
-                                   mysql_rows[0]["source_file"])
-            with open(pg_path, 'r') as fin:
-                return fin.read()
+            if len(mysql_rows) > 0:
+                pg_path = os.path.join(webwork_dir,
+                                       'courses',
+                                       course_name,
+                                       'templates',
+                                       mysql_rows[0]["source_file"])
+                with open(pg_path, 'r') as fin:
+                    return fin.read()
+            else:
+                return ''
         
 
         # extract course from the arguments
@@ -96,7 +109,6 @@ class ProblemPGFile(ProcessQuery):
                 problem_id={{problem_id}} and 
                 set_id="{{set_id}}";
         '''
-        self.process_query(query_template,
-                           dehydrate=_dump_pg_file)
+        self.process_query(query_template, dehydrate=_dump_pg_file)
 
         

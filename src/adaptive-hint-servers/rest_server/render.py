@@ -36,7 +36,7 @@ class Render(tornado.web.RequestHandler):
 
         # check validity of input
         if (len(pg_file) == 0 or len(seed) == 0 or not seed.isdigit()):
-            raise tornato.web.HTTPError(400)
+            raise tornado.web.HTTPError(400)
 
         response = { 'render_html' : '',
                      'error_msg' : '' }
