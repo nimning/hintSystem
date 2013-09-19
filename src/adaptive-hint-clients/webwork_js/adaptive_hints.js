@@ -49,7 +49,9 @@
 	});
 
 	// Add Math button
-	textbox.addMathEditorButton("PGML");
+	if (typeof textbox.addMathEditorButton == 'function') {
+	    textbox.addMathEditorButton("PGML");
+	}
     }
     
     // Remove all displayed hints. 
