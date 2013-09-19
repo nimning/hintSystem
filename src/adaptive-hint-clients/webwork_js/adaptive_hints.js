@@ -47,6 +47,9 @@
 		}
 	    }, 1500, this);
 	});
+
+	// Add Math button
+	textbox.addMathEditorButton("PGML");
     }
     
     // Remove all displayed hints. 
