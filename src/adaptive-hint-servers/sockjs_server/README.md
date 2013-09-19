@@ -264,9 +264,7 @@ student_list
   'set_id': 'sandbox',
   'problem_id': '1',
   'hints': { ... },
-  'answers': { ... },
-  'pg_file': '/opt/webwork/...',
-  'pg_seed': 1234
+  'answers': { ... }
 },...] 
 </pre>
         </td>
@@ -292,6 +290,61 @@ my_students
         </td>
         <td>
         A list of students assigned to the client.
+        </td>
+        <td>
+        -
+        </td>
+    </tr>
+    <tr>
+        <td>
+<pre>
+answer_update
+</pre>
+        </td>
+        <td>
+<pre>
+{ 
+  'session_id': '7GPWHBoRc...',
+  'course_id': 'demo',
+  'set_id': 'sandbox',
+  'problem_id': '1',
+  'timestamp': 1379620647,
+  'boxname': 'AnSwEr0001',
+  'entered_value': '123',
+  'is_correct': False,
+  'error_msg': ''
+}
+</pre>
+        </td>
+        <td>
+        Notifies that a student has updated an answer box.
+        </td>
+        <td>
+        -
+        </td>
+    </tr>
+    <tr>
+        <td>
+<pre>
+hint_update
+</pre>
+        </td>
+        <td>
+<pre>
+{ 
+  'session_id': '7GPWHBoRc...',
+  'course_id': 'demo',
+  'set_id': 'sandbox',
+  'problem_id': '1',
+  'timestamp': 1379620647,
+  'hintbox_id': 'Hint1183',
+  'location': 'AnSwEr0001',
+  'hint_html': '...'
+}
+</pre>
+        </td>
+        <td>
+        Notifies that a hint has been updated.
         </td>
         <td>
         -
