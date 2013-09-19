@@ -217,6 +217,26 @@ add_hint
         -
         </td>
     </tr>
+    <tr>
+        <td>
+<pre>
+help_student
+</pre>
+        </td>
+        <td>
+<pre>
+{
+  'session_id': '8Qa12ad1...',
+}
+</pre>
+        </td>
+        <td>
+        Request to help the student identified by the session_id.
+        </td>
+        <td>
+        
+        </td>
+    </tr>
 </table>
 
 
@@ -255,6 +275,26 @@ student_list
         </td>
         <td>
         This is the response to 'list_student' message.
+        </td>
+    </tr>
+    <tr>
+        <td>
+<pre>
+my_students
+</pre>
+        </td>
+        <td>
+<pre>
+[{ 
+  'session_id': '7GPWHBoRc...',
+},...] 
+</pre>
+        </td>
+        <td>
+        A list of students assigned to the client.
+        </td>
+        <td>
+        -
         </td>
     </tr>
 </table>
