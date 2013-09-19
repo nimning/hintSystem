@@ -220,7 +220,7 @@ add_hint
     <tr>
         <td>
 <pre>
-help_student
+request_student
 </pre>
         </td>
         <td>
@@ -232,6 +232,26 @@ help_student
         </td>
         <td>
         Request to help the student identified by the session_id.
+        </td>
+        <td>
+        
+        </td>
+    </tr>
+     <tr>
+        <td>
+<pre>
+release_student
+</pre>
+        </td>
+        <td>
+<pre>
+{
+  'session_id': '8Qa12ad1...',
+}
+</pre>
+        </td>
+        <td>
+        Release the student identified by the session_id to unassigned pool.
         </td>
         <td>
         
