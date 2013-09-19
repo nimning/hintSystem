@@ -1,10 +1,10 @@
 (function() {
 
-    // Send a command to SockJS server.
-    function send_command(sock, cmd, args) {
-	sock.send(JSON.stringify({"type": cmd,
+    // Send a message to SockJS server.
+    function send_command(sock, msg, args) {
+	sock.send(JSON.stringify({"type": msg,
 				  "arguments": args}));
-	console.log("SENT: " + cmd + ":" + JSON.stringify(args, null, 2));
+	console.log("SENT: " + msg + ":" + JSON.stringify(args, null, 2));
     }
 
     // Send 'student_answer' message
@@ -12,7 +12,6 @@
 	if (box.value.length > 0) {
 	    var args = { 'boxname': box.attributes["name"].value,
 			 'value': box.value };
-
 	    send_command(sock, 'student_answer', args);
 	    box['last_answer'] = box.value;
 	}
@@ -50,6 +49,7 @@
 	});
     }
     
+    // Remove all displayed hints. 
     function remove_all_hints() {
 	$('div[id^=wrapper_]').remove()
     }
@@ -89,7 +89,13 @@
 	}
     }
 
+    ///////////////////////////////////////////////////////////////////
+    
     $(document).ready(function() {
+
+	// Disable console logging
+	console.log = function () {};
+
 	// Gather student's info
 	var pathArray = window.location.pathname.split('/');
 	var course_id = pathArray[2];
@@ -98,63 +104,73 @@
 	var student_id = $("input#hidden_effectiveUser").val();
 	var session_id = $("input#hidden_key").val();
 
+	// SockJS server for each course 
+	// Only courses listed here will be affected by this script.
+	var router = {
+	    'demo': 'http://webwork.cse.ucsd.edu:4350/student'
+	};
+
 	// Create a SockJS connection to the server
-	sock = new SockJS("http://webwork.cse.ucsd.edu:4350/student");
-
-	sock.onopen = function() {
-	    console.log("INFO: connected");
-	    // Send `signin` command
-	    var params = {
-		'session_id': session_id,
-		'student_id': student_id,
-		'course_id' : course_id,
-		'set_id': set_id,
-		'problem_id': problem_id,
-		'problem_body': $("div#problem-content").html(),
-		'pg_file' : $("input[name=displayMode]").next().attr('value')
+	if (router[course_id]) {
+	    sock = new SockJS(router[course_id]);
+	    
+	    sock.onopen = function() {
+		console.log("INFO: connected");
+		// Send `student_join` message
+		var params = {
+		    'session_id': session_id,
+		    'student_id': student_id,
+		    'course_id' : course_id,
+		    'set_id': set_id,
+		    'problem_id': problem_id
+		};
+		send_command(sock, 'student_join', params);
 	    };
-	    send_command(sock, 'student_join', params);
-	};
 
-	sock.onmessage = function(e) {
-	    console.log("RECIEVED: " + e.data);
-	    message = $.parseJSON(e.data);
-    	    // Process the received messages here.
-    	    // If...
-    	    //   message = 'hint': insert the hint to a proper place.
-    	    //                     Register actions with the new box.
-	    if (message['type'] == 'hints') {
-		hints = message['arguments'];
-		remove_all_hints();
-		for (var i=0; i < hints.length; i++) {
-		    hint = hints[i];
-		    insert_hint(hint['hint_html'],
-				hint['location'],
-				hint['hintbox_id']);
+	    sock.onmessage = function(e) {
+		console.log("RECIEVED: " + e.data);
+		message = $.parseJSON(e.data);
+
+		// Handle 'hints' message
+		//  - Remove all displayed hints
+		//  - Display the newly recieved hints
+		if (message['type'] == 'hints') {
+		    hints = message['arguments'];
+		    remove_all_hints();
+		    for (var i=0; i < hints.length; i++) {
+			hint = hints[i];
+			insert_hint(hint['hint_html'],
+				    hint['location'],
+				    hint['hintbox_id']);
+		    }
 		}
-	    }
-    	    //   message = 'answer_status': set color of the box according the correctness.
-    	    //    Correct = blue, Incorrect = red, Malformed answer = orange
-	    else if (message['type'] == 'answer_status') {
-		answer_statuses = message['arguments'];
-		for (var i=0; i < answer_statuses.length; i++) {
-		    answer_status = answer_statuses[i];
-		    update_answerbox(answer_status['boxname'], 
-				     answer_status['is_correct'], 
-				     answer_status['error_msg'],
-				     answer_status['entered_value']);
+
+		// Handle 'answer_status' message
+    		//  - Set color of the box according the correctness.
+    		//     * Correct = blue 
+		//     * Incorrect = red 
+                //     * Malformed answer = orange
+		else if (message['type'] == 'answer_status') {
+		    answer_statuses = message['arguments'];
+		    for (var i=0; i < answer_statuses.length; i++) {
+			answer_status = answer_statuses[i];
+			update_answerbox(answer_status['boxname'], 
+					 answer_status['is_correct'], 
+					 answer_status['error_msg'],
+					 answer_status['entered_value']);
+		    }
 		}
-	    }
-	};
+	    };
 
-	sock.onclose = function() {
-	    console.log("INFO: disconnected");
-	};
+	    sock.onclose = function() {
+		console.log("INFO: disconnected");
+	    };
 
-	// Associates actions to answer boxes.
-	var answer_boxes = $("input[id^=AnSwEr]");
-	create_textbox_actions(answer_boxes);
-
+	    // Associates actions to answer boxes.
+	    var answer_boxes = $("input[id^=AnSwEr]");
+	    create_textbox_actions(answer_boxes);
+	}
+	
 	console.log("INFO: document loaded");
     });  
 
