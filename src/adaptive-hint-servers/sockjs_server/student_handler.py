@@ -6,6 +6,8 @@ import urllib
 
 from _base_handler import _BaseSockJSHandler
 from student_session import StudentSession
+from teacher_session import TeacherSession
+from session_storage import SessionStorage
 
 CHECKANSWER_API = 'http://127.0.0.1:4351/checkanswer'
 PROBLEM_SEED_API = 'http://127.0.0.1:4351/problem_seed'
@@ -30,7 +32,18 @@ class StudentSockJSHandler(_BaseSockJSHandler):
       student_session : StudentSession
         The corresponding instance of StudentSession.
       
-    """    
+    """
+
+    def __load_session(self, session_id, course_id, set_id, problem_id):
+        self.student_session = StudentSession.storage.\
+                               load(session_id, (course_id, set_id, problem_id))
+        
+    def __save_session(self):
+        ss = self.student_session
+        StudentSession.storage.save(ss.session_id,
+                                    (ss.course_id, ss.set_id, ss.problem_id),
+                                    self.student_session)    
+        
     def __init__(self, *args, **kwargs):
         super(StudentSockJSHandler, self).__init__(*args, **kwargs)
         self.student_session = None
@@ -70,21 +83,36 @@ class StudentSockJSHandler(_BaseSockJSHandler):
                 Webwork problem ID
             """
             try:
-                # create a new instace of StudentSession
-                self.student_session = StudentSession(args['session_id'],
-                                                      args['student_id'],
-                                                      args['course_id'],
-                                                      args['set_id'],
-                                                      args['problem_id'],
-                                                      self)
+                # read args
+                session_id = args['session_id']
+                student_id = args['student_id']
+                course_id = args['course_id']
+                set_id = args['set_id']
+                problem_id = args['problem_id']
+                
+                # try to resume session
+                self.__load_session(session_id, course_id, set_id, problem_id)
+
+                # check if loaded successfully
+                if self.student_session is None:
+                    # create a new instace of StudentSession
+                    self.student_session = StudentSession(session_id,
+                                                          student_id,
+                                                          course_id,
+                                                          set_id,
+                                                          problem_id,
+                                                          self)
+                else:
+                    # update sockjs handler
+                    self.student_session._sockjs_handler = self
                 
                 # shorthand
                 ss = self.student_session
                                 
-                # add the student session to the list
+                # add to active student list
                 StudentSession.active_sessions.add(ss)
 
-                # send previoud hints
+                # send previous hints
                 self.send_hints(ss.hints.values())
 
                 # send previous answers
@@ -134,6 +162,20 @@ class StudentSockJSHandler(_BaseSockJSHandler):
         
                     # send the status to client
                     self.send_answer_status([answer_status,])
+
+                    # also send status to teachers
+                    ans = ss.answers[boxname]
+                    ext_ans = {
+                        'session_id': ss.session_id,
+                        'course_id': ss.course_id,
+                        'set_id': ss.set_id,
+                        'problem_id': ss.problem_id,
+                        'timestamp': ans['timestamp'],
+                        'boxname': ans['boxname'],
+                        'entered_value': ans['entered_value'],
+                        'is_correct': ans['is_correct'] }
+                    for ts in TeacherSession.active_sessions:
+                        ts.answer_update(ext_ans)
                     
             except:
                 logging.exception('Exception in student_answer handler')
@@ -187,7 +229,6 @@ class StudentSockJSHandler(_BaseSockJSHandler):
             answer_status = { 'boxname': boxname,
                               'is_correct': result_json['is_correct'],
                               'error_msg': result_json['error_msg'],
-                              'correct_value': result_json['correct_value'],
                               'entered_value': value }
 
             return callback(answer_status)
@@ -226,11 +267,14 @@ class StudentSockJSHandler(_BaseSockJSHandler):
         """Callback for when a student is disconnected"""
         ss = self.student_session
 
-        # save state of the session
-        ss.save_session()
-
         # Remove the session from active list
         StudentSession.active_sessions.remove(ss)
+
+        # remove reference to this handler
+        self._sockjs_handler = None
+
+        # save session
+        self.__save_session()
 
         if len(ss.student_id) > 0:
             logging.info("%s left"%ss.student_id)

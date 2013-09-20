@@ -4,7 +4,7 @@ class SessionStorage(object):
     """Session data storage
 
     Storage for maintaining session data. In a typical SockJS setup,
-    when a client is disconnected, the data is lost. The clients can
+    when a client is disconnected, the data is lost. The client can
     use this class as a storage and retrieve the stored data when they
     reconnect with the server.
 
@@ -12,76 +12,69 @@ class SessionStorage(object):
     ----------
       timeout : int
         Session timeout in minutes (Default: 10)
-        
     """
     def __init__(self, timeout=10):
         self.data = {}
         self.sessions = {}
         self.timeout = timeout
-        
-    def load(self, varname, session_id, course_id, set_id, problem_id):
-        """Load a saved variable
+
+    def is_timedout(self, session_id):
+        return not (session_id in self.sessions)
+
+    def all_sessions(self):
+        """List of all session data"""
+        sessions = []
+        for session_id in data:
+            for hashkey in data[session_id]:
+                sessions.append(data[session_id][hashkey])
+        return sessions
+                
+    def load(self, session_id, hashkey):
+        """Load a saved session
 
         Arguments
         ---------
-          varname : string
-            Variable name
           session_id : string
             Webwork session ID
-          course_id : string
-            Webwork course ID
-          set_id : string
-            Webwork set ID
-          problem_id : string
-            Webwork problem ID
+          hashkey : hashable
+            Suggested hashkey is (course_id, set_id, problem_id)
 
         Return
         ------
-          The previusly saved value of the variable or None
-          if the variable was not saved earlier.
-
+          The previously saved session data or None
+          if the session was not saved earlier.          
         """
         try:
             # renew the timeout
             self.sessions[session_id] = (dt.datetime.now() +
                                          dt.timedelta(minutes=self.timeout))
 
-            t = self.data[session_id][(course_id, set_id, problem_id)][varname]
+            t = self.data[session_id][hashkey]
             return t
         except KeyError:
             return None
 
-    def save(self, varname, session_id, course_id, set_id, problem_id, value):
-        """Save a variable
+    def save(self, session_id, hashkey, session):
+        """Save a session
 
         Arguments
         ---------
-          varname : string
-            Variable name
           session_id : string
             Webwork session ID
-          course_id : string
-            Webwork course ID
-          set_id : string
-            Webwork set ID
-          problem_id : string
-            Webwork problem ID
-          value : object
-            The value of the variable
+          hashkey : hashable
+            Suggested hashkey is (course_id, set_id, problem_id)
+          session : object
+            Session data to save
         """
-        if value is not None:
+        if session is not None:
             if session_id not in self.data:
                 self.data[session_id] = {}
 
             # renew the timeout
             self.sessions[session_id] = (dt.datetime.now() +
                                          dt.timedelta(minutes=self.timeout))
-
-            key = (course_id, set_id, problem_id)
-            if key not in self.data[session_id]:
-                self.data[session_id][key] = {}
             
-            self.data[session_id][key][varname] = value
+            self.data[session_id][hashkey] = session
 
         # Also check for and remove timed-out sessions
         self._remove_expired_sessions()
@@ -95,11 +88,11 @@ class SessionStorage(object):
 
 def _test():
     storage = SessionStorage(timeout=1.0/60)
-    storage.save('answers', 1, 1, 1, 1, 'ans1')
-    storage.save('answers', 1, 1, 1, 2, 'ans2')
-    print storage.load('answers', 1, 1, 1, 1)
-    print storage.load('answers', 1, 1, 1, 2)
-    print storage.load('answers', 1, 1, 1, 3)
+    storage.save(1, (1, 1, 1), 'ans1')
+    storage.save(1, (1, 1, 2), 'ans2')
+    print storage.load(1, (1, 1, 1))
+    print storage.load(1, (1, 1, 2))
+    print storage.load(1, (1, 1, 3))
     import time
     time.sleep(1.1)
     print storage.data
