@@ -221,8 +221,9 @@ GET /user_problem_hints
  {
   'pg_text': 'Hint text',
   'pg_header': 'DOCUMENT(); ... ',
-  'pg_footer': '... ENDDOCUMENT();'
-  'pg_id': 'b'
+  'pg_footer': '... ENDDOCUMENT();',
+  'pg_id': 'b',
+  'hint_location': 'AnSwEr0001'
  }
 ]
 </pre>
@@ -249,7 +250,7 @@ GET /hints
 <pre>
 {
  "pg_text": "My name is Mr Hint", 
-'pg_header': 'DOCUMENT(); ... ',
+ 'pg_header': 'DOCUMENT(); ... ',
  'pg_footer': '... ENDDOCUMENT();'
  "pg_id": "b", 
  "problem_id": "2"
