@@ -188,7 +188,7 @@ list_students
         Requests the list of connected students from the server.
         </td>
         <td>
-        The server will response with 'student_list'.
+        The server will response with 'unassigned_students' and 'my_students'.
         </td>
     </tr>
     <tr>
@@ -214,7 +214,7 @@ add_hint
         Give a new hint to a student identified by her 'session_id'
         </td>
         <td>
-        -
+        The server will response with 'hint_update'
         </td>
     </tr>
     <tr>
@@ -234,7 +234,7 @@ request_student
         Request to help the student identified by the session_id.
         </td>
         <td>
-        
+        The server will response with 'unassigned_students' and 'my_students'.
         </td>
     </tr>
      <tr>
@@ -254,7 +254,30 @@ release_student
         Release the student identified by the session_id to unassigned pool.
         </td>
         <td>
-        
+        The server will response with 'unassigned_students' and 'my_students'.
+        </td>
+    </tr>
+    <tr>
+        <td>
+<pre>
+get_student_info
+</pre>
+        </td>
+        <td>
+<pre>
+{
+  'session_id': '8Qa12ad1...',
+  'course_id': 'demo',
+  'set_id': 'sandbox',
+  'problem_id': '1'
+}
+</pre>
+        </td>
+        <td>
+        Get a student info of a specified student
+        </td>
+        <td>
+        The server will response with 'student_info'.
         </td>
     </tr>
 </table>
@@ -272,7 +295,7 @@ release_student
     <tr>
         <td>
 <pre>
-student_list
+unassigned_students
 </pre>
         </td>
         <td>
@@ -284,15 +307,16 @@ student_list
   'set_id': 'sandbox',
   'problem_id': '1',
   'hints': { ... },
-  'answers': { ... }
+  'answers': { ... },
+  'past_answers': [ ... ]
 },...] 
 </pre>
         </td>
         <td>
-        A list of connected students and their information.
+        A list of students in the unassigned pool.
         </td>
         <td>
-        This is the response to 'list_student' message.
+        -
         </td>
     </tr>
     <tr>
@@ -305,6 +329,13 @@ my_students
 <pre>
 [{ 
   'session_id': '7GPWHBoRc...',
+  'student_id': 'scheaman',
+  'course_id': 'demo',
+  'set_id': 'sandbox',
+  'problem_id': '1',
+  'hints': { ... },
+  'answers': { ... },
+  'past_answers': [ ... ]
 },...] 
 </pre>
         </td>
@@ -331,8 +362,7 @@ answer_update
   'timestamp': 1379620647,
   'boxname': 'AnSwEr0001',
   'entered_value': '123',
-  'is_correct': False,
-  'error_msg': ''
+  'is_correct': False
 }
 </pre>
         </td>
@@ -358,8 +388,7 @@ hint_update
   'problem_id': '1',
   'timestamp': 1379620647,
   'hintbox_id': 'Hint1183',
-  'location': 'AnSwEr0001',
-  'hint_html': '...'
+  'location': 'AnSwEr0001'
 }
 </pre>
         </td>
@@ -368,6 +397,33 @@ hint_update
         </td>
         <td>
         -
+        </td>
+    </tr>
+     <tr>
+        <td>
+<pre>
+student_info
+</pre>
+        </td>
+        <td>
+<pre>
+{ 
+  'session_id': '7GPWHBoRc...',
+  'student_id': 'scheaman',
+  'course_id': 'demo',
+  'set_id': 'sandbox',
+  'problem_id': '1',
+  'hints': { ... },
+  'answers': { ... },
+  'past_answers': [ ... ]
+}
+</pre>
+        </td>
+        <td>
+        Student information
+        </td>
+        <td>
+        This is the response to 'get_student_info'
         </td>
     </tr>
 </table>
