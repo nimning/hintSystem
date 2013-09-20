@@ -220,13 +220,105 @@ GET /user_problem_hints
 [
  {
   'pg_text': 'Hint text',
-  'pg_id': 'b'
+  'pg_header': 'DOCUMENT(); ... ',
+  'pg_footer': '... ENDDOCUMENT();',
+  'pg_id': 'b',
+  'hint_location': 'AnSwEr0001'
  }
 ]
 </pre>
     </td>
     <td>
       Get hints assigned to a user for a particular problem.
+    </td>
+  </tr>
+  <tr>
+    <td>
+<code>
+GET /hints
+</code>
+    </td>
+    <td>
+<pre>
+{
+ 'course': 'demo',
+ 'hint_id': '1234'
+}
+</pre>
+    </td>
+    <td>
+<pre>
+{
+ "pg_text": "My name is Mr Hint", 
+ 'pg_header': 'DOCUMENT(); ... ',
+ 'pg_footer': '... ENDDOCUMENT();'
+ "pg_id": "b", 
+ "problem_id": "2"
+ "set_id": "compoundProblemExperiments"
+}
+</pre>
+    </td>
+    <td>
+      Get a hint from the hint DB.
+    </td>
+  </tr>
+  <tr>
+    <td>
+<code>
+POST /hints
+</code>
+    </td>
+    <td>
+<pre>
+{
+ 'course': 'demo', 
+ 'pg_id': "b",
+ 'set_id': "compoundProblemExperiments",
+ 'problem_id' : '2',
+ 'pg_text': 'What is [`x^2+4x+2`]?',
+ 'pg_header': 'DOCUMENT(); ... ',
+ 'pg_footer': '... ENDDOCUMENT();'
+}
+</pre>
+    </td>
+    <td>
+<pre>
+None
+</pre>
+    </td>
+    <td>
+      Add a hint to the hint DB.
+    </td>
+  </tr>
+   <tr>
+    <td>
+<code>
+GET /problem_hints
+</code>
+    </td>
+    <td>
+<pre>
+{
+ 'course': 'demo', 
+ 'set_id': "compoundProblemExperiments",
+ 'problem_id' : '2',
+}
+</pre>
+    </td>
+    <td>
+<pre>
+[
+ {
+  "pg_text": "My name is Mr Hint",
+  'pg_header': 'DOCUMENT(); ... ',
+  'pg_footer': '... ENDDOCUMENT();'
+  "pg_id": "b"
+ },...
+]
+</pre>
+    </td>
+    <td>
+      List all hints for a problem.
     </td>
   </tr>
 </table>
