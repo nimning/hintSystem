@@ -257,6 +257,29 @@ release_student
         The server will response with 'unassigned_students' and 'my_students'.
         </td>
     </tr>
+    <tr>
+        <td>
+<pre>
+get_student_info
+</pre>
+        </td>
+        <td>
+<pre>
+{
+  'session_id': '8Qa12ad1...',
+  'course_id': 'demo',
+  'set_id': 'sandbox',
+  'problem_id': '1'
+}
+</pre>
+        </td>
+        <td>
+        Get a student info of a specified student
+        </td>
+        <td>
+        The server will response with 'student_info'.
+        </td>
+    </tr>
 </table>
 
 
@@ -374,6 +397,33 @@ hint_update
         </td>
         <td>
         -
+        </td>
+    </tr>
+     <tr>
+        <td>
+<pre>
+student_info
+</pre>
+        </td>
+        <td>
+<pre>
+{ 
+  'session_id': '7GPWHBoRc...',
+  'student_id': 'scheaman',
+  'course_id': 'demo',
+  'set_id': 'sandbox',
+  'problem_id': '1',
+  'hints': { ... },
+  'answers': { ... },
+  'past_answers': [ ... ]
+}
+</pre>
+        </td>
+        <td>
+        Student information
+        </td>
+        <td>
+        This is the response to 'get_student_info'
         </td>
     </tr>
 </table>
