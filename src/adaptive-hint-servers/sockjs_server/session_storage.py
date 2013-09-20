@@ -28,7 +28,7 @@ class SessionStorage(object):
             for hashkey in data[session_id]:
                 sessions.append(data[session_id][hashkey])
         return sessions
-                
+
     def load(self, session_id, hashkey):
         """Load a saved session
 
