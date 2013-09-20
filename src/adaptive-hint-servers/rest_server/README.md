@@ -293,7 +293,7 @@ None
    <tr>
     <td>
 <code>
-POST /problem_hints
+GET /problem_hints
 </code>
     </td>
     <td>
