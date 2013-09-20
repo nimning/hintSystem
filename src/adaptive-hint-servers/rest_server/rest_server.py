@@ -5,6 +5,7 @@ import logging
 from render import Render 
 from checkanswer import CheckAnswer
 from webwork import ProblemSeed, ProblemPGPath, ProblemPGFile
+from hints_api import UserProblemHints, Hint, ProblemHints
 
 # Server configuration
 BIND_IP = '0.0.0.0'
@@ -15,7 +16,10 @@ application = tornado.web.Application([
     (r"/checkanswer", CheckAnswer),
     (r"/problem_seed", ProblemSeed),
     (r"/pg_path", ProblemPGPath),
-    (r"/pg_file", ProblemPGFile)
+    (r"/pg_file", ProblemPGFile),
+    (r"/user_problem_hints", UserProblemHints),
+    (r"/hint", Hint),
+    (r"/problem_hints", ProblemHints)    
     ])
 
 if __name__ == "__main__":
