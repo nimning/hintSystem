@@ -81,6 +81,27 @@ student_answer
         once the answer checking process is complete.
         </td>
     </tr>
+    <tr>
+        <td>
+<pre>
+hint_feedback
+</pre>
+        </td>
+        <td>
+<pre>
+{
+  'hintbox_id': 'Hint0001',
+  'feedback': 'Helpful'
+} 
+</pre>
+        </td>
+        <td>
+        Notifies the server that a feedback box has changed. 
+        </td>
+        <td>
+        -
+        </td>
+    </tr>
 </table>
 
 
@@ -413,6 +434,9 @@ student_info
   'course_id': 'demo',
   'set_id': 'sandbox',
   'problem_id': '1',
+  'pg_file': '/opt/path/problem.pg',
+  'pg_seed': 123,
+  'sockjs_active': true,
   'hints': { ... },
   'answers': { ... },
   'past_answers': [ ... ]
