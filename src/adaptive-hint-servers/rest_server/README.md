@@ -220,6 +220,8 @@ GET /user_problem_hints
 [
  {
   'pg_text': 'Hint text',
+  'pg_header': 'DOCUMENT(); ... ',
+  'pg_footer': '... ENDDOCUMENT();'
   'pg_id': 'b'
  }
 ]
@@ -247,6 +249,8 @@ GET /hints
 <pre>
 {
  "pg_text": "My name is Mr Hint", 
+'pg_header': 'DOCUMENT(); ... ',
+ 'pg_footer': '... ENDDOCUMENT();'
  "pg_id": "b", 
  "problem_id": "2"
  "set_id": "compoundProblemExperiments"
@@ -270,7 +274,9 @@ POST /hints
  'pg_id': "b",
  'set_id': "compoundProblemExperiments",
  'problem_id' : '2',
- 'pg_text': 'What is [`x^2+4x+2`]?'
+ 'pg_text': 'What is [`x^2+4x+2`]?',
+ 'pg_header': 'DOCUMENT(); ... ',
+ 'pg_footer': '... ENDDOCUMENT();'
 }
 </pre>
     </td>
@@ -302,7 +308,9 @@ POST /problem_hints
 <pre>
 [
  {
-  "pg_text": "My name is Mr Hint", 
+  "pg_text": "My name is Mr Hint",
+  'pg_header': 'DOCUMENT(); ... ',
+  'pg_footer': '... ENDDOCUMENT();'
   "pg_id": "b"
  },...
 ]
