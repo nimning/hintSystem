@@ -339,8 +339,7 @@ answer_update
   'timestamp': 1379620647,
   'boxname': 'AnSwEr0001',
   'entered_value': '123',
-  'is_correct': False,
-  'error_msg': ''
+  'is_correct': False
 }
 </pre>
         </td>
@@ -366,8 +365,7 @@ hint_update
   'problem_id': '1',
   'timestamp': 1379620647,
   'hintbox_id': 'Hint1183',
-  'location': 'AnSwEr0001',
-  'hint_html': '...'
+  'location': 'AnSwEr0001'
 }
 </pre>
         </td>
