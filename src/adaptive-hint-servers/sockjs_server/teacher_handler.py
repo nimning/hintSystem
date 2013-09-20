@@ -2,6 +2,8 @@ import logging
 
 from _base_handler import _BaseSockJSHandler
 from student_session import StudentSession
+from teacher_session import TeacherSession
+from session_storage import SessionStorage
 
 class TeacherSockJSHandler(_BaseSockJSHandler):
     """Teacher SockJS connection handler
@@ -19,13 +21,20 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
 
     Properties
     ----------
-        teacher_id : string
-           Teacher ID
+        teacher_session : TeacherSession
+           Teacher session
            
-    """ 
+    """
+    def __load_session(self, teacher_id):
+        self.teacher_session = TeacherSession.storage.load(teacher_id, 1)
+        
+    def __save_session(self):
+        ts = self.teacher_session
+        TeacherSession.storage.save(ts.teacher_id, 1, ts)
+
     def __init__(self, *args, **kwargs):
         super(TeacherSockJSHandler, self).__init__(*args, **kwargs)
-        self.teacher_id = ''
+        self.teacher_session = None
         
         @self.add_handler('teacher_join')
         def handle_teacher_join(self, args):
@@ -41,8 +50,30 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
                 Teacher ID
             """
             try:
-                self.teacher_id = args['teacher_id']
-                logging.info("Teacher: %s joined"%self.teacher_id)
+                # read args
+                teacher_id = args['teacher_id']
+
+                # try to resume session
+                self.__load_session(teacher_id)
+
+                if self.teacher_session is None:
+                    # create a new instance of teacher
+                    self.teacher_session = TeacherSession(teacher_id, self)
+                else:
+                    # update sockjs handler
+                    self.teacher_session._sockjs_handler = self
+
+                # shorthand
+                ts = self.teacher_session
+
+                # add to the active session list
+                TeacherSession.active_sessions.add(ts)
+
+                # send student lists
+                self.send_unassigned_students(ts.unassigned_students())
+                self.send_my_students(ts.my_students())
+                
+                logging.info("Teacher: %s joined"%ts.teacher_id)
             except:
                 logging.exception("Exception in teacher_join handler")
                 self.session.close()
@@ -53,25 +84,13 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
 
             Requests a list of all active students.
 
-            args
-            ----
-              course_id : string
-                Webwork course ID
-            
             """
-            # TODO: filter session using 'course_id'
-            sessions = [{ 'session_id': ss.session_id,
-                          'student_id': ss.student_id,
-                          'course_id': ss.course_id,
-                          'set_id': ss.set_id,
-                          'problem_id': ss.problem_id,
-                          'hints': ss.hints,
-                          'answers': ss.answers,
-                          'pg_file': ss.pg_file,
-                          'pg_seed': ss.pg_seed }
-                        for ss in StudentSession.active_sessions]
-            self.send_message('student_list', sessions)
-
+            ts = self.teacher_session
+            
+            # send student lists
+            self.send_unassigned_students(ts.unassigned_students())
+            self.send_my_students(ts.my_students())
+            
         @self.add_handler('add_hint')
         def handle_add_hint(self, args):
             """Handler for 'add_hint'
@@ -117,5 +136,105 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
                         set_id == ss.set_id and
                         problem_id == ss.problem_id):
                         ss.add_hint(hintbox_id, location, hint_html)
+
+                        # also send status to teachers
+                        hint = ss.hints[hintbox_id]
+                        ext_hint = {
+                            'session_id': ss.session_id,
+                            'course_id': ss.course_id,
+                            'set_id': ss.set_id,
+                            'problem_id': ss.problem_id,
+                            'timestamp': hint['timestamp'],
+                            'hintbox_id': hint['hintbox_id'],
+                            'location': hint['location'] }
+                        for ts in TeacherSession.active_sessions:
+                            ts.hint_update(ext_hint)
+                            
             except:
                 logging.exception("Exception add_hint")
+
+        @self.add_handler('request_student')
+        def handle_request_student(self, args):
+            """Handler for 'request_student'
+
+            Request to help a student
+            
+            args
+            ----
+              session_id : string
+                Webwork session id
+
+            """
+            try:
+                ts = self.teacher_session
+                
+                session_id = args['session_id']
+                self.teacher_session.request_student(session_id)
+
+                # send student lists
+                self.send_unassigned_students(ts.unassigned_students())
+                self.send_my_students(ts.my_students())
+            except:
+                logging.exception("Exception handling 'request_student'")
+
+        @self.add_handler('release_student')
+        def handle_release_student(self, args):
+            """Handler for 'release_student'
+
+            Release a student to the unassigned pool
+            
+            args
+            ----
+              session_id : string
+                Webwork session id
+
+            """
+            try:
+                ts = self.teacher_session
+                
+                session_id = args['session_id']
+                self.teacher_session.release_student(session_id)
+
+                # send student lists
+                self.send_unassigned_students(ts.unassigned_students())
+                self.send_my_students(ts.my_students())
+            except:
+                logging.exception("Exception handling 'release_student'")
+
+    def send_unassigned_students(self, unassigned_students):
+        self.send_message('unassigned_students', unassigned_students)
+
+    def send_my_students(self, my_students):
+        self.send_message('my_students', my_students)
+
+    def send_answer_update(self, answer_update):
+        self.send_message('answer_update', answer_update)
+        
+    def send_hint_update(self, hint_update):
+        self.send_message('hint_update', hint_update)
+
+
+    def on_open(self, info):
+        """Callback for when a teacher is connected"""
+        logging.info("%s connected"%info.ip)
+
+        
+    def on_close(self):
+        """Callback for when a teacher is disconnected"""
+        ts = self.teacher_session
+
+        # Remove the session from active list
+        TeacherSession.active_sessions.remove(ts)
+
+        # remove reference to this handler
+        self._sockjs_handler = None
+
+        # save state of the session
+        self.__save_session()
+
+        if len(ts.teacher_id) > 0:
+            logging.info("%s left"%ts.teacher_id)
+        
+        logging.info("%s disconnected"%self.session.conn_info.ip)
+
+            
