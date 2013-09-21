@@ -219,6 +219,7 @@ GET /user_problem_hints
 <pre>
 [
  {
+  'hint_id': 1234,
   'pg_text': 'Hint text',
   'pg_header': 'DOCUMENT(); ... ',
   'pg_footer': '... ENDDOCUMENT();',
@@ -249,6 +250,7 @@ GET /hints
     <td>
 <pre>
 {
+ "hint_id": 1234,
  "pg_text": "My name is Mr Hint", 
  'pg_header': 'DOCUMENT(); ... ',
  'pg_footer': '... ENDDOCUMENT();'
@@ -309,6 +311,7 @@ GET /problem_hints
 <pre>
 [
  {
+  'hint_id': 123,
   "pg_text": "My name is Mr Hint",
   'pg_header': 'DOCUMENT(); ... ',
   'pg_footer': '... ENDDOCUMENT();'
