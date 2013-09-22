@@ -13,8 +13,6 @@ def _student_info(session_ids):
                           'course_id': ss.course_id,
                           'set_id': ss.set_id,
                           'problem_id': ss.problem_id,
-                          'pg_file': ss.pg_file,
-                          'pg_seed': ss.pg_seed,
                           'hints': ss.hints,
                           'answers': ss.answers,
                           'past_answers': ss.past_answers,

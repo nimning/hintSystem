@@ -137,18 +137,17 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
                         course_id == ss.course_id and
                         set_id == ss.set_id and
                         problem_id == ss.problem_id):
-                        ss.add_hint(hintbox_id, location, hint_html)
+                        timestamp = ss.add_hint(hintbox_id, location, hint_html)
 
                         # also send status to teachers
-                        hint = ss.hints[hintbox_id]
                         ext_hint = {
                             'session_id': ss.session_id,
                             'course_id': ss.course_id,
                             'set_id': ss.set_id,
                             'problem_id': ss.problem_id,
-                            'timestamp': hint['timestamp'],
-                            'hintbox_id': hint['hintbox_id'],
-                            'location': hint['location'] }
+                            'timestamp': timestamp,
+                            'hintbox_id': hintbox_id,
+                            'location': location }
                         for ts in TeacherSession.active_sessions:
                             ts.hint_update(ext_hint)
 
