@@ -221,7 +221,7 @@ add_hint
         <td>
 <pre>
 {
-  'session_id': '8Qa12ad1...',
+  'student_id': 'scheaman',
   'course_id': 'demo',
   'set_id': 'sandbox',
   'problem_id': '1',
@@ -232,7 +232,7 @@ add_hint
 </pre>
         </td>
         <td>
-        Give a new hint to a student identified by her 'session_id'
+        Assign a hint to a student
         </td>
         <td>
         The server will response with 'hint_update'
