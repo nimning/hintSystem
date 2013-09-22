@@ -3,16 +3,19 @@ from tornado.httputil import url_concat
 import logging
 import json
 import urllib
+import base64
 
 from _base_handler import _BaseSockJSHandler
 from student_session import StudentSession
 from teacher_session import TeacherSession
 from session_storage import SessionStorage
 
-CHECKANSWER_API = 'http://127.0.0.1:4351/checkanswer'
-PROBLEM_SEED_API = 'http://127.0.0.1:4351/problem_seed'
-PG_PATH_API = 'http://127.0.0.1:4351/pg_path'
-        
+REST_SERVER = 'http://127.0.0.1:4351'
+CHECKANSWER_API = REST_SERVER + '/checkanswer'
+PROBLEM_SEED_API = REST_SERVER + '/problem_seed'
+PG_PATH_API = REST_SERVER + '/pg_path'
+HINTS_API = REST_SERVER + '/hint'
+
 class StudentSockJSHandler(_BaseSockJSHandler):
     """Student SockJS connection handler
     
@@ -113,7 +116,7 @@ class StudentSockJSHandler(_BaseSockJSHandler):
                 StudentSession.active_sessions.add(ss)
 
                 # send previous hints
-                self.send_hints(ss.hints.values())
+                self.send_hints(ss.hints)
 
                 # send previous answers
                 self.send_answer_status(ss.answers.values())
@@ -158,22 +161,20 @@ class StudentSockJSHandler(_BaseSockJSHandler):
                                                    boxname,
                                                    value)
                     # update session data
-                    ss.update_answer(boxname, answer_status)
+                    timestamp = ss.update_answer(boxname, answer_status)
         
                     # send the status to client
                     self.send_answer_status([answer_status,])
 
                     # also send status to teachers
-                    ans = ss.answers[boxname]
                     ext_ans = {
                         'session_id': ss.session_id,
                         'course_id': ss.course_id,
                         'set_id': ss.set_id,
                         'problem_id': ss.problem_id,
-                        'timestamp': ans['timestamp'],
-                        'boxname': ans['boxname'],
-                        'entered_value': ans['entered_value'],
-                        'is_correct': ans['is_correct'] }
+                        'timestamp': timestamp,
+                        'boxname': boxname,
+                        'is_correct': answer_status['is_correct'] }
                     for ts in TeacherSession.active_sessions:
                         ts.answer_update(ext_ans)
                     
@@ -192,17 +193,7 @@ class StudentSockJSHandler(_BaseSockJSHandler):
         """
         ss = self.student_session
         http_client = httpclient.HTTPClient()
-            
-        # get PG file path
-        if ss.pg_file is None:
-            url = url_concat(PG_PATH_API, {
-                'course': ss.course_id,
-                'set_id': ss.set_id,
-                'problem_id': ss.problem_id
-                })
-            response = http_client.fetch(url)
-            ss.pg_file = json.loads(response.body)
-            
+
         # get problem seed
         if ss.pg_seed is None:
             url = url_concat(PROBLEM_SEED_API, {
@@ -216,6 +207,17 @@ class StudentSockJSHandler(_BaseSockJSHandler):
 
         # check problem answer
         if boxname.startswith('AnSwEr'):
+            
+            # get PG file path
+            if ss.pg_file is None:
+                url = url_concat(PG_PATH_API, {
+                    'course': ss.course_id,
+                    'set_id': ss.set_id,
+                    'problem_id': ss.problem_id
+                    })
+                response = http_client.fetch(url)
+                ss.pg_file = json.loads(response.body)
+            
             response = http_client.fetch(CHECKANSWER_API,
                                          method='POST',
                                          headers=None,
@@ -233,18 +235,39 @@ class StudentSockJSHandler(_BaseSockJSHandler):
 
             return callback(answer_status)
         
-        else:
-            # TODO: Implement this
-            import random
+        elif boxname.startswith('Hint'):
+
+            # get hint pg
+            url = url_concat(HINTS_API, {
+                'course': ss.course_id,
+                'hint_id': int(boxname[4:])
+                })
+            response = http_client.fetch(url)
+            hint = json.loads(response.body)
+            
+            pg_file = base64.b64encode(
+                hint['pg_header'] + '\n' +
+                hint['pg_text'] + '\n' +
+                hint['pg_footer'])
+            
+            response = http_client.fetch(CHECKANSWER_API,
+                                         method='POST',
+                                         headers=None,
+                                         body=urllib.urlencode({
+                                             'pg_file' : pg_file,
+                                             'seed' : ss.pg_seed,
+                                             'AnSwEr0001' : value 
+                                             }))
+            
+            result_json = json.loads(response.body)['AnSwEr0001']
             answer_status = { 'boxname': boxname,
+                              'is_correct': result_json['is_correct'],
+                              'error_msg': result_json['error_msg'],
                               'entered_value': value }
-            if random.random() < 0.5:
-                answer_status['is_correct'] = True
-            else:
-                answer_status['is_correct'] = False
 
             return callback(answer_status)
-
+        else:
+            raise ValueError('Boxname must begin with AnSwEr or Hint')
         
     def send_answer_status(self, answer_statuses):
         if not isinstance(answer_statuses, list):

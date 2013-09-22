@@ -19,6 +19,7 @@ class SessionStorage(object):
         self.timeout = timeout
 
     def is_timedout(self, session_id):
+        self._remove_expired_sessions()
         return not (session_id in self.sessions)
 
     def all_sessions(self):

@@ -41,7 +41,7 @@ class StudentSession(object):
      pg_seed : int
        Random seed
 
-     hints : dict
+     hints : list
        Hints given in this session (readonly)
        
      answers : dict
@@ -75,7 +75,7 @@ class StudentSession(object):
 
     @property
     def hints(self):
-        return self._hints
+        return self._hints.values()
     
     @property
     def answers(self):
@@ -86,24 +86,40 @@ class StudentSession(object):
         return self._past_answers
 
     def add_hint(self, hintbox_id, location, hint_html):
-        """Adds a hint"""
+        """Adds a hint
+
+        Returns
+        -------
+          timestamp of the added hint.
+          
+        """
         hint = { 'timestamp': _datetime_to_timestamp(datetime.datetime.now()),
                  'hint_html': hint_html,
                  'location': location,
                  'hintbox_id': hintbox_id }
         self._hints[hintbox_id] = hint
-        self._sockjs_handler.send_hints(self.hints.values())
-        logging.info("Add a hint to %s"%(self.session_id))
         
-    def remove_hint(self, hintbox_id):
+        # ask the client to display the hints 
+        self._sockjs_handler.send_hints(self.hints)
+        logging.info("Added a hint to %s"%(self.session_id))
+        return hint['timestamp']
+        
+    def remove_hint(self, hintbox_id, location):
         """Removes a hint"""
         del self._hints[hintbox_id]
-        self._sockjs_handler.send_hints(self._hints.values())
-        logging.info("Remove a hint from %s"%(self.session_id))
+      
+        # ask the client to refresh the hints
+        self._sockjs_handler.send_hints(self.hints)
+        logging.info("Removed a hint from %s"%(self.session_id))
 
     def update_answer(self, boxname, answer_status):
-        """Update an answer box"""
+        """Update an answer box
 
+        Returns
+        -------
+          timestamp of the updated answer.
+
+        """
         # Insert a timestamp
         answer_status['timestamp'] = _datetime_to_timestamp(
             datetime.datetime.now())
@@ -113,4 +129,4 @@ class StudentSession(object):
 
         # Update past_answer as well
         self._past_answers.append(answer_status)
-        
+        return answer_status['timestamp']
