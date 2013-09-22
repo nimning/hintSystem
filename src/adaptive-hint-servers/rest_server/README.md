@@ -234,9 +234,39 @@ GET /user_problem_hints
     </td>
   </tr>
   <tr>
+
+
+<td>
+<code>
+POST /assign_hint
+</code>
+    </td>
+    <td>
+<pre>
+{
+ 'user_id': 'melkherj',
+ 'hint_id': '1234', 
+ 'course': 'demo', 
+ 'pg_id': "b",
+ 'set_id': "compoundProblemExperiments",
+ 'problem_id' : '2',
+}
+</pre>
+    </td>
+    <td>
+<pre>
+None
+</pre>
+    </td>
+    <td>
+      Assign a hint to a user at a locati.  
+    </td>
+  </tr>
+  <tr>
+    
     <td>
 <code>
-GET /hints
+GET /hint
 </code>
     </td>
     <td>
@@ -267,7 +297,7 @@ GET /hints
   <tr>
     <td>
 <code>
-POST /hints
+POST /hint
 </code>
     </td>
     <td>

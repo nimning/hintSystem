@@ -327,7 +327,7 @@ unassigned_students
   'course_id': 'demo',
   'set_id': 'sandbox',
   'problem_id': '1',
-  'hints': { ... },
+  'hints': [ ... ],
   'answers': { ... },
   'past_answers': [ ... ]
 },...] 
@@ -354,7 +354,7 @@ my_students
   'course_id': 'demo',
   'set_id': 'sandbox',
   'problem_id': '1',
-  'hints': { ... },
+  'hints': [ ... ],
   'answers': { ... },
   'past_answers': [ ... ]
 },...] 
@@ -382,7 +382,6 @@ answer_update
   'problem_id': '1',
   'timestamp': 1379620647,
   'boxname': 'AnSwEr0001',
-  'entered_value': '123',
   'is_correct': False
 }
 </pre>
@@ -437,7 +436,7 @@ student_info
   'pg_file': '/opt/path/problem.pg',
   'pg_seed': 123,
   'sockjs_active': true,
-  'hints': { ... },
+  'hints': [ ... ],
   'answers': { ... },
   'past_answers': [ ... ]
 }
