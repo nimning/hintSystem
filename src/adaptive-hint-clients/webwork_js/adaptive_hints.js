@@ -9,12 +9,9 @@
 
     // Send 'student_answer' message
     function student_answer(box) {
-	if (box.value.length > 0) {
-	    var args = { 'boxname': box.attributes["name"].value,
-			 'value': box.value };
-	    send_command(sock, 'student_answer', args);
-	    box['last_answer'] = box.value;
-	}
+	var args = { 'boxname': box.attributes["name"].value,
+		     'value': box.value };
+	send_command(sock, 'student_answer', args);
     }
 
     // Create actions for a textbox
@@ -27,9 +24,11 @@
 	    }
 
 	    // Send 'student_answer' command if needed
-	    if (!this['last_answer'] || this['last_answer'] != this.value) {
+	    if ((!this.last_answer && this.value.length > 0) ||
+		(this.last_answer && this.last_answer != this.value)) {
 		student_answer(this);
-	    } 
+		this.last_answer = this.value;
+	    }
 	});
 
 	// When a keyup is detected
@@ -42,8 +41,10 @@
 	    // create a new timeout
 	    this['timer'] = window.setTimeout(function(obj) {
 		// when the timeout is reached, send answer
-		if (!obj['last_answer'] || obj['last_answer'] != obj.value) {
+		if ((!obj.last_answer && obj.value.length > 0) ||
+		    (obj.last_answer && obj.last_answer != obj.value)) {
 		    student_answer(obj);
+		    obj.last_answer = obj.value;
 		}
 	    }, 1500, this);
 	});
@@ -56,7 +57,7 @@
     
     // Remove all displayed hints. 
     function remove_all_hints() {
-	$('div[id^=wrapper_]').remove()
+	$('div[id^=wrapper_]').remove();
     }
 
     // Insert a hint to a given location.
@@ -64,6 +65,12 @@
 	var d = document.createElement('div');
 	d.setAttribute('id', 'wrapper_' + hintbox_id);
 	d.innerHTML = hint_html;
+	d.setAttribute('style',
+		       'background-color: #E0FAC0; ' +
+		       'clear:left; ' +
+		       'margin:10px; ' +
+		       'border:1px solid; ' +
+		       'padding:5px; ');
 	$("input#" + location).before(d);
 	var hintbox = $("input#"+hintbox_id);
 	create_textbox_actions(hintbox);
@@ -76,7 +83,7 @@
 	if (!box) return;
 
 	// Set value if the box is empty
-	if (box.val().length == 0) {
+	if (box.val().length === 0) {
 	    box.val(entered_value);
 	}
 	// Remove previous title
@@ -134,16 +141,16 @@
 
 	    sock.onmessage = function(e) {
 		console.log("RECIEVED: " + e.data);
-		message = $.parseJSON(e.data);
+		var message = $.parseJSON(e.data);
 
 		// Handle 'hints' message
 		//  - Remove all displayed hints
 		//  - Display the newly recieved hints
 		if (message['type'] == 'hints') {
-		    hints = message['arguments'];
+		    var hints = message['arguments'];
 		    remove_all_hints();
 		    for (var i=0; i < hints.length; i++) {
-			hint = hints[i];
+			var hint = hints[i];
 			insert_hint(hint['hint_html'],
 				    hint['location'],
 				    hint['hintbox_id']);
@@ -156,9 +163,9 @@
 		//     * Incorrect = red 
                 //     * Malformed answer = orange
 		else if (message['type'] == 'answer_status') {
-		    answer_statuses = message['arguments'];
+		    var answer_statuses = message['arguments'];
 		    for (var i=0; i < answer_statuses.length; i++) {
-			answer_status = answer_statuses[i];
+			var answer_status = answer_statuses[i];
 			update_answerbox(answer_status['boxname'], 
 					 answer_status['is_correct'], 
 					 answer_status['error_msg'],
