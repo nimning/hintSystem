@@ -1,8 +1,10 @@
 import logging
 import datetime
 import time
+from threading import Thread
 
 from session_storage import SessionStorage
+from fake_db import FakeDB
 
 def _datetime_to_timestamp(dt):
     return time.mktime(dt.timetuple())
@@ -42,22 +44,19 @@ class StudentSession(object):
        Random seed
 
      hints : list
-       Hints given in this session (readonly)
-       
-     answers : dict
-       Current answers on student's browser (readonly)
+       Hints assigned to the student
 
-     past_answers : list
-       Student's past (including current) answers with timestamps (readonly)
+     answers : list
+       Student's answers (past and current) with timestamps
+
+     current_answers : list
+       Current answers on student's browser
 
      _sockjs_handler : StudentSockJSHandler
        SockJS handler
      
     """
     active_sessions = set()
-
-    # Session storage with 30 minutes time-out
-    storage = SessionStorage(timeout=30)
     
     def __init__(self, session_id, student_id, course_id,
                  set_id, problem_id, sockjs_handler):
@@ -69,64 +68,54 @@ class StudentSession(object):
         self.pg_file = None
         self.pg_seed = None
         self._sockjs_handler = sockjs_handler
-        self._hints = {}
-        self._answers = {}
-        self._past_answers = []
 
     @property
     def hints(self):
-        return self._hints.values()
+        return FakeDB.get_hints(self.student_id,
+                                self.course_id,
+                                self.set_id,
+                                self.problem_id)
     
     @property
     def answers(self):
-        return self._answers
+        return FakeDB.get_answers(self.student_id,
+                                  self.course_id,
+                                  self.set_id,
+                                  self.problem_id)
 
     @property
-    def past_answers(self):
-        return self._past_answers
+    def current_answers(self):
+        answer_dict = {}
+        # recontruct the current answers
+        for answer in self.answers:
+            answer_dict[answer['boxname']] = answer        
+        return answer_dict.values()
 
-    def add_hint(self, hintbox_id, location, hint_html):
-        """Adds a hint
-
-        Returns
-        -------
-          timestamp of the added hint.
-          
-        """
-        hint = { 'timestamp': _datetime_to_timestamp(datetime.datetime.now()),
-                 'hint_html': hint_html,
-                 'location': location,
-                 'hintbox_id': hintbox_id }
-        self._hints[hintbox_id] = hint
-        
-        # ask the client to display the hints 
-        self._sockjs_handler.send_hints(self.hints)
-        logging.info("Added a hint to %s"%(self.session_id))
-        return hint['timestamp']
-        
-    def remove_hint(self, hintbox_id, location):
-        """Removes a hint"""
-        del self._hints[hintbox_id]
-      
-        # ask the client to refresh the hints
-        self._sockjs_handler.send_hints(self.hints)
-        logging.info("Removed a hint from %s"%(self.session_id))
+    def reload_hints(self):
+        """Update the hints displayed on the client"""
+        def _perform_send_hints():
+            self._sockjs_handler.send_hints(self.hints)
+            
+        Thread(target=_perform_send_hints).start()
 
     def update_answer(self, boxname, answer_status):
         """Update an answer box
 
+        *Blocked until complete*
+
         Returns
         -------
           timestamp of the updated answer.
-
         """
         # Insert a timestamp
         answer_status['timestamp'] = _datetime_to_timestamp(
             datetime.datetime.now())
 
         # update current answer
-        self._answers[boxname] = answer_status
+        FakeDB.add_answer(self.student_id,
+                          self.course_id,
+                          self.set_id,
+                          self.problem_id,
+                          answer_status)
 
-        # Update past_answer as well
-        self._past_answers.append(answer_status)
         return answer_status['timestamp']
