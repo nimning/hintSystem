@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html>
+<!--
+  Created using jsbin.com
+  Source can be edited via http://jsbin.com/iCaVObU/22/edit
+-->
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <base href="http://webwork.cse.ucsd.edu">
+  
+<style id="jsbin-css">
+
+#page_container {
+ display: none;
+}
+
+#past_answers {
+  width: 300px;
+  padding:10px;
+  margin:10px;
+  float:left;
+  font-size: 14px;
+}
+
+#problem_preview {
+  background-color: #ffffff;
+  border:1px solid;
+  border-radius:10px;
+  min-height: 100px;
+  width: 600px;
+  overflow-y: auto;
+  padding:10px;
+  margin:10px;
+  float:left;
+  font-size: 14px;
+}
+
+#hints {
+  width: 600px;
+}
+
+.timestamp {
+  margin: 2px;
+}
+
+.dataTables_wrapper {
+  margin-top: 20px;
+  margin-bottom: 40px;
+  border:1px solid black;
+}
+
+.dataTables_wrapper .header {
+  text-align: left;
+  font-weight: bold;
+  font-size: 16px;
+  padding: 10px;
+}
+
+.hint_html_container {
+  border: 1px solid black; 
+  padding: 3px; 
+  width: 600px;
+}
+</style>
+</head>
+  <body>
+    <link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/codemirror/3.14.0/codemirror.css">
+    <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
+    <script src="//cdn.jsdelivr.net/codemirror/3.14.0/codemirror.js"></script>
+    <script src="//cdn.jsdelivr.net/codemirror/3.14.0/mode/xml/xml.js"></script>
+    <script src="//cdn.jsdelivr.net/codemirror/3.14.0/mode/javascript/javascript.js"></script>
+    <script src="//cdn.jsdelivr.net/codemirror/3.14.0/mode/css/css.js"></script>
+    <script src="//cdn.jsdelivr.net/codemirror/3.14.0/mode/htmlmixed/htmlmixed.js"></script>
+    
+    <input type="hidden" id="teacher_id" value="ta1"/>
+    <input type="hidden" id="course_id" value="demo"/>
+    <input type="hidden" id="set_id" value="sandbox"/>
+    <input type="hidden" id="problem_id" value="1"/>
+    <input type="hidden" id="session_id" value=""/>
+    <input type="hidden" id="student_id" value=""/>
+    <input type="hidden" id="pg_file" value=""/>
+    <input type="hidden" id="pg_seed" value=""/>
+    
+    
+    <div id="page_container">
+      
+    <div id="past_answers">
+      <h2>Past answers</h2>
+      <div id="answer_container" class="table_container">
+        <table id="AnSwEr0001_table">
+          <thead>
+            <tr>
+              <th>Timestamp_hidden</th>
+              <th>Seconds ago</th>
+              <th>Answer</th>
+              <th>Correct</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+    
+    <div style="float:left;">    
+      <div style="clear:left;">
+        <h2>Student's view</h2>
+        <div id="problem_preview">
+        </div>
+      </div>
+      
+      <div style="clear:left; margin-bottom:100px;">
+        <h2>Hints</h2>
+        <button id="create_hint" style="height:30px;">
+          Create a new hint
+        </button>
+        <div id="hints">
+          <div class="table_container">
+            <table id="hint_table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Hint PGML</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>Hint: Blah</td>
+                  <td>
+                    <button>Fork</button>
+                    <button>Select</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div>
+          <div class="hint_html_container">
+            <textarea id="hint_html"></textarea>
+          </div>
+          <br/>
+          <div style="float:left;">
+            <input type="checkbox" id="feedback" checked="on"/>
+            Include feedback
+          </div>
+          <div style="float:right; text-align:right; padding-right: 50px;">
+            Hint Location:
+            <select id="hint_location">
+            </select>
+            <button id="add_hint">Send</button>
+          </div>
+        </div>
+      </div>
+    </div>
+      
+    </div>
+  <script>
+function pad(num, size) {
+  var s = num + "";
+  while (s.length < size) s = "0" + s;
+  return s;
+}
+
+
+function remove_hint(hintbox_id, location) {
+  send_command(sock, 'remove_hint', {
+      'student_id': $('#student_id').val(),
+      'course_id': $('#course_id').val(),
+      'set_id': $('#set_id').val(),
+      'problem_id': $('#problem_id').val(),
+      'location': location,
+      'hintbox_id': hintbox_id
+    });
+}
+
+function render_hint(idx) {
+  var pg_text = (hints[idx].pg_header + '\n' + 
+                 hints[idx].pg_text + '\n' + 
+                 hints[idx].pg_footer);
+  var post_data = {
+    'pg_file': btoa(pg_text),
+    'seed': $('#pg_seed').val()
+  };
+  hint_html.setValue('Rendering...');
+  $.post("http://webwork.cse.ucsd.edu:4351/render", post_data, function(r) {
+    var err = r.error_msg;
+    // Clean up
+    var clean_html = r.rendered_html.replace(/[\s\S]*?<div/m, '<div').trim();
+    // Rename answer box
+    hintbox_id = 'Hint' + pad(hints[idx].hint_id, 5);
+    clean_html = clean_html.replace(/AnSwEr0001/g, hintbox_id);
+    // Include feedback?
+    if ($('#feedback').is(':checked')) {
+      clean_html += '<div style="clear:left;">' +
+        '<input type="radio" name="feedback_' +
+        hintbox_id + '" value="too hard">Too hard' +
+        '<input type="radio" name="feedback_' +
+        hintbox_id + '" value="easy but unhelpful">Easy but unhelpful' +
+        '<input type="radio" name="feedback_' +
+        hintbox_id + '" value="helpful">Helpful' +
+        '</div>';  
+    }
+    
+    hint_html.setValue(clean_html);  
+  });
+}
+
+
+function fork_hint(idx) {
+  var url = '/teacher/hint_editor.html';
+  url += '?course_id=' + $('#course_id').val() +
+    '&set_id=' + $('#set_id').val() +
+    '&problem_id=' + $('#problem_id').val() +
+    '&seed=' + $('#pg_seed').val() +
+    '&hint_id=' + hints[idx].hint_id;
+  window.open(url, '_blank');
+}
+
+function get_params() {
+  
+  // Get the query string params
+  var QueryString = function() {
+    // This function is anonymous, is executed immediately and 
+    // the return value is assigned to QueryString!
+    var query_string = {};
+    var query = window.location.search.substring(1);
+    var vars = query.split("&");
+    for (var i = 0; i < vars.length; i++) {
+      var pair = vars[i].split("=");
+      // If first entry with this name
+      if (typeof query_string[pair[0]] === "undefined") {
+        query_string[pair[0]] = pair[1];
+        // If second entry with this name
+      } else if (typeof query_string[pair[0]] === "string") {
+        var arr = [query_string[pair[0]], pair[1]];
+        query_string[pair[0]] = arr;
+        // If third or later entry with this name
+      } else {
+        query_string[pair[0]].push(pair[1]);
+      }
+    }
+    return query_string;
+  }();
+  
+  if (QueryString.session_id) {
+    $('#session_id').val(QueryString.session_id);
+  }
+  
+  if (QueryString.teacher_id) {
+    $('#teacher_id').val(QueryString.teacher_id);
+  }
+  
+  if (QueryString.course_id) {
+    $('#course_id').val(QueryString.course_id);
+  }
+  
+  if (QueryString.set_id) {
+    $('#set_id').val(QueryString.set_id);
+  }
+  
+  if (QueryString.problem_id) {
+    $('#problem_id').val(QueryString.problem_id);
+  } 
+}
+
+// Debug print
+function print(msg) {
+  console.log(msg);
+}
+
+// Send a command to SockJS server
+function send_command(sock, cmd, args) {
+  sock.send(JSON.stringify({
+    "type": cmd,
+    "arguments": args
+  }));
+  print("SENT: " + cmd + ":" + JSON.stringify(args, null, 2));
+}
+
+
+
+function parse_past_answers(answers, boxname, dtable) {
+  dtable.fnClearTable();
+  for (var i = 0; i < answers.length; i++) {
+    if (answers[i].boxname == boxname) {
+      dtable.fnAddData([
+        answers[i].timestamp.toString(),
+        "<p class=\"timestamp\" value=\"" +
+        answers[i].timestamp.toString() +
+        "\">---</p>",
+        answers[i].entered_value,
+        answers[i].is_correct]);
+    }
+  }
+  dtable.fnSort([
+    [0, 'desc']
+  ]);
+}
+
+function update_answer_tables(data) {
+  $('#past_answers  table[id^=AnSwEr]').each(function() {
+    var boxname = $(this).attr('id').split('_')[0];
+    parse_past_answers(data.answers,
+                       boxname, 
+                       $(this).dataTable());
+  });
+}
+
+function onRenderComplete(student_info) {
+  // Create answer table for each answer box
+  $('#problem_preview input[id^=AnSwEr]').each(function() {
+    var boxname = $(this).attr('id');
+    if (boxname != 'AnSwEr0001') {
+      $('#AnSwEr0001_table')
+      .clone()
+      .attr('id', boxname + '_table')
+      .appendTo('#answer_container');
+    }
+    
+    $('#hint_location')
+       .append($('<option>', { boxname : 'value' })
+          .text(boxname)); 
+  });
+  
+  // Add table header
+  $('#past_answers  table[id^=AnSwEr]').each(function() {
+    $(this).dataTable({
+      'bPaginate': false,
+      'bSort': false,
+      'bInfo': false,
+      'bFilter': false,
+      'sScrollY': '120px',
+      "sDom": '<"header">frtip',
+      "aoColumns": [ 
+			/* timestamp */ { "bVisible":    false },
+			/* sec. ago */  null,
+			/* answer */ null,
+			/* correct */  null
+		]
+    });
+    var this_id = $(this).attr('id');
+    var table_title = this_id.replace("_table","");
+    $('#' + this_id + '_wrapper div.header').html(table_title);
+  });
+  
+  // Show the page if everything loads correctly.
+  $('#page_container').show();
+  
+  update_answer_tables(student_info);
+  update_hints(student_info);
+  update_answers(student_info);
+}
+
+function render_problem(student_info) {
+  var post_data = {
+    'pg_file': $('#pg_file').val(),
+    'seed': $('#pg_seed').val()
+  };
+  $("#problem_preview").html('Rendering problem...');
+  $.post("http://webwork.cse.ucsd.edu:4351/render", 
+         post_data, 
+         function(r) {
+           var err = r.error_msg;
+           if (err && err.length > 0) {
+             $("#problem_preview").html(err);
+           } else {
+             $("#problem_preview").html(r.rendered_html);
+           }
+           onRenderComplete(student_info);
+         });
+}
+
+
+// Remove all displayed hints. 
+function remove_all_hints() {
+  $('#problem_preview div[id^=wrapper_]').remove();
+}
+
+// Insert a hint to a given location.
+function insert_hint(hint_html, location, hintbox_id) {
+  hint_html = '<div style="float:right;">' + 
+    '<button onclick=remove_hint("'+ hintbox_id +
+    '","' + location + '")>X</button></div>' + hint_html;
+  var d = document.createElement('div');
+  d.setAttribute('id', 'wrapper_' + hintbox_id);
+  d.innerHTML = hint_html;
+  d.setAttribute('style',
+                 'background-color: #E0FAC0; ' +
+                 'clear:left; ' +
+                 'margin:10px; ' +
+                 'border:1px solid; ' +
+                 'padding:5px; ');
+  $("#problem_preview input#" + location).before(d);
+}
+
+
+function update_hints(student_info) {
+  remove_all_hints();
+  for (var hint in student_info.hints) {
+    if (student_info.hints.hasOwnProperty(hint)) {
+      var h = student_info.hints[hint];
+      insert_hint(h.hint_html, 
+                  h.location, 
+                  h.hintbox_id);
+    }
+  }
+}
+
+
+function update_answers(student_info) {
+  for (var answer in student_info.answers) {
+    if (student_info.answers.hasOwnProperty(answer)) {
+      var ans = student_info.answers[answer];
+      $('#problem_preview input#'+ans.boxname).val(ans.entered_value);
+    }
+  }
+}
+
+function update_view(student_info) {
+  if (window.rendered === undefined) {
+    render_problem(student_info);
+    window.rendered = true;
+  }
+  else { 
+    update_answer_tables(student_info); 
+    update_hints(student_info);
+    update_answers(student_info);
+  }
+}
+
+function parse_hints(dtable) {
+  dtable.fnClearTable();
+  for (var i = 0; i < hints.length; i++) {
+    dtable.fnAddData([
+      hints[i].hint_id, 
+      hints[i].pg_text, 
+      "<button onclick=\"fork_hint(" + i + ")\">Fork</button>"+
+      "<button onclick=\"render_hint(" + i + ")\">Generate HTML</button>"]);
+  }
+}
+
+function get_hints() {
+  $.get("http://webwork.cse.ucsd.edu:4351/problem_hints", {
+    'course': $('#course_id').val(),
+    'set_id': $('#set_id').val(),
+    'problem_id': $('#problem_id').val()
+  }, function(data) {
+    hints = $.parseJSON(data);
+    var dtable = $('#hint_table').dataTable({
+      'bPaginate': false,
+      'bInfo': false,
+      'bFilter': false,
+      "aoColumns": [
+        { "sWidth": "10%", "sClass": "center"  },
+        { "sWidth": "70%" },
+        { "sWidth": "20%", "sClass": "center", "bSortable": false }]
+    });
+    parse_hints(dtable);
+  });
+}
+
+// Request student info from server
+function get_student_info() {
+  send_command(sock, 'get_student_info', {
+    'session_id': $('#session_id').val(),
+    'course_id': $('#course_id').val(),
+    'set_id': $('#set_id').val(),
+    'problem_id': $('#problem_id').val()
+  });
+}
+
+// Set up the SockJS connection
+function setup_sockjs() {
+  sock = new SockJS('http://webwork.cse.ucsd.edu:4350/teacher');
+  
+  sock.onopen = function() {
+    print("INFO: connected");
+    send_command(sock, 'teacher_join', {
+      'teacher_id': $('#teacher_id').val()
+    });
+    get_student_info();
+  };
+  
+  sock.onmessage = function(e) {
+    print("RECIEVED: " + e.data);
+    var data = $.parseJSON(e.data);
+    if (data.type == 'student_info') {
+      var student_info = data['arguments'];
+      document.title = student_info.student_id + 
+        '-' + student_info.set_id + 
+        '-' + student_info.problem_id;
+      $('#pg_file').val(student_info.pg_file);
+      $('#pg_seed').val(student_info.pg_seed);
+      $('#student_id').val(student_info.student_id);
+      update_view(student_info);
+    }
+  };
+  
+  sock.onclose = function() {
+    print("INFO: disconnected");
+  };
+}
+
+//////////////////////////////////////////////////////
+
+$(document).ready(function() {
+  
+  // Set up elements
+  hint_html = CodeMirror.fromTextArea(document.getElementById("hint_html"), {
+    mode: "htmlmixed",
+    lineNumbers: true,
+    styleActiveLine: true,
+    matchBrackets: true
+  });
+  hint_html.setSize("100%", 150);
+  
+  get_params();
+  
+  // Set up SockJS
+  setup_sockjs(); 
+  
+  // Get available hints
+  get_hints();
+  
+  $("#add_hint").click(function() {
+    send_command(sock, 'add_hint', {
+      'student_id': $('#student_id').val(),
+      'course_id': $('#course_id').val(),
+      'set_id': $('#set_id').val(),
+      'problem_id': $('#problem_id').val(),
+      'location': $('#hint_location').val(),
+      'hintbox_id': hintbox_id,
+      'hint_html': hint_html.getValue()
+    });
+  });
+  
+  $("#create_hint").click(function() {
+    var url = '/teacher/hint_editor.html';
+    url += '?course_id=' + $('#course_id').val() +
+      '&set_id=' + $('#set_id').val() +
+      '&problem_id=' + $('#problem_id').val() +
+      '&seed=' + $('#pg_seed').val();
+    window.open(url,'_blank');
+  });
+  
+  var ts_refresh = setInterval(function() {
+    var ts = Math.round((new Date()).getTime() / 1000);
+    $('.timestamp').each(function() {
+      $(this).html(ts - $(this).attr('value'));
+    });
+  }, 1000);
+  
+  print("INFO: document loaded");
+});
+</script>
+</body>
+</html>
