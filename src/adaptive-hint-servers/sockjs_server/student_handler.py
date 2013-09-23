@@ -147,6 +147,28 @@ class StudentSockJSHandler(_BaseSockJSHandler):
 
         # shorthand
         ss = self.student_session
+        http_client = httpclient.HTTPClient()
+        
+        # get PG file path
+        if ss.pg_file is None:
+            url = url_concat(PG_PATH_API, {
+                'course': ss.course_id,
+                'set_id': ss.set_id,
+                'problem_id': ss.problem_id
+                })
+            response = http_client.fetch(url)
+            ss.pg_file = json.loads(response.body)
+            
+        # get problem seed
+        if ss.pg_seed is None:
+            url = url_concat(PROBLEM_SEED_API, {
+                'course': ss.course_id,
+                'set_id': ss.set_id,
+                'problem_id': ss.problem_id,
+                'user_id': ss.student_id
+                })
+            response = http_client.fetch(url)
+            ss.pg_seed = int(response.body)
                                 
         # add to active student list.
         StudentSession.active_sessions.add(ss)
@@ -177,31 +199,10 @@ class StudentSockJSHandler(_BaseSockJSHandler):
         ss = self.student_session
         http_client = httpclient.HTTPClient()
 
-        # get problem seed
-        if ss.pg_seed is None:
-            url = url_concat(PROBLEM_SEED_API, {
-                'course': ss.course_id,
-                'set_id': ss.set_id,
-                'problem_id': ss.problem_id,
-                'user_id': ss.student_id
-                })
-            response = http_client.fetch(url)
-            ss.pg_seed = int(response.body)
-
-
         answer_status = {}
         
         # check problem answer
         if boxname.startswith('AnSwEr'):
-            # get PG file path
-            if ss.pg_file is None:
-                url = url_concat(PG_PATH_API, {
-                    'course': ss.course_id,
-                    'set_id': ss.set_id,
-                    'problem_id': ss.problem_id
-                    })
-                response = http_client.fetch(url)
-                ss.pg_file = json.loads(response.body)
             
             response = http_client.fetch(CHECKANSWER_API,
                                          method='POST',

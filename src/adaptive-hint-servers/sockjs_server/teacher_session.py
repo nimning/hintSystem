@@ -126,7 +126,8 @@ class TeacherSession(object):
         course_id = extended_answer_status['course_id']
         set_id = extended_answer_status['set_id']
         problem_id = extended_answer_status['problem_id']
-        if TeacherSession.student_assignment[session_id] == self.teacher_id:
+        if (session_id in TeacherSession.student_assignment and
+            TeacherSession.student_assignment[session_id] == self.teacher_id):
             self._sockjs_handler.send_student_info(session_id,
                                                    course_id,
                                                    set_id,
@@ -138,7 +139,8 @@ class TeacherSession(object):
         course_id = extended_hint['course_id']
         set_id = extended_hint['set_id']
         problem_id = extended_hint['problem_id']
-        if TeacherSession.student_assignment[session_id] == self.teacher_id:
+        if (session_id in TeacherSession.student_assignment and
+            TeacherSession.student_assignment[session_id] == self.teacher_id):
             self._sockjs_handler.send_student_info(session_id,
                                                    course_id,
                                                    set_id,

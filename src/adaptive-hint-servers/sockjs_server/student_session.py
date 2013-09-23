@@ -3,7 +3,6 @@ import datetime
 import time
 from threading import Thread
 
-from session_storage import SessionStorage
 from fake_db import FakeDB
 
 def _datetime_to_timestamp(dt):
@@ -16,9 +15,6 @@ class StudentSession(object):
     ---------------
       active_sessions : set of StudentSession
         Set of all connected students
-
-      storage : SessionStorage
-        Storage for resuming from disconnection
     
     Properties
     ----------
@@ -50,7 +46,7 @@ class StudentSession(object):
        Student's answers (past and current) with timestamps
 
      current_answers : list
-       Current answers on student's browser
+       Current answers on the student's browser
 
      _sockjs_handler : StudentSockJSHandler
        SockJS handler
@@ -68,20 +64,27 @@ class StudentSession(object):
         self.pg_file = None
         self.pg_seed = None
         self._sockjs_handler = sockjs_handler
+        # internal cache
+        self._answers = None
+        self._hints = None
 
     @property
     def hints(self):
-        return FakeDB.get_hints(self.student_id,
-                                self.course_id,
-                                self.set_id,
-                                self.problem_id)
+        if self._hints is None:
+            self._hints = FakeDB.get_hints(self.student_id,
+                                           self.course_id,
+                                           self.set_id,
+                                           self.problem_id)
+        return self._hints
     
     @property
     def answers(self):
-        return FakeDB.get_answers(self.student_id,
-                                  self.course_id,
-                                  self.set_id,
-                                  self.problem_id)
+        if self._answers is None:
+            self._answers = FakeDB.get_answers(self.student_id,
+                                               self.course_id,
+                                               self.set_id,
+                                               self.problem_id)
+        return self._answers
 
     @property
     def current_answers(self):
@@ -95,7 +98,9 @@ class StudentSession(object):
         """Update the hints displayed on the client"""
         def _perform_send_hints():
             self._sockjs_handler.send_hints(self.hints)
-            
+
+        # invalidate internal cache
+        self._hints = None               
         Thread(target=_perform_send_hints).start()
 
     def update_answer(self, boxname, answer_status):
@@ -118,4 +123,7 @@ class StudentSession(object):
                           self.problem_id,
                           answer_status)
 
+        # invalidate internal cache
+        self._answers = None
+        
         return answer_status['timestamp']
