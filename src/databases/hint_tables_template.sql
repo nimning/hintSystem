@@ -24,7 +24,8 @@ CREATE TABLE {{course_name}}_assigned_hint (
     -- When the hint was assigned:
     assigned TIMESTAMP,
 
-    primary key (id)
+    primary key (id),
+    CONSTRAINT FOREIGN KEY (hint_id) REFERENCES {{course_name}}_hint(id)
 );
 
 CREATE TABLE {{course_name}}_hint_attempt (
@@ -35,5 +36,6 @@ CREATE TABLE {{course_name}}_hint_attempt (
     -- When the student attempted the hint:
     timestamp TIMESTAMP,
 
-    primary key (id)
+    primary key (id),
+    CONSTRAINT FOREIGN KEY (assigned_hint) REFERENCES {{course_name}}_assigned_hint(id)
 );
