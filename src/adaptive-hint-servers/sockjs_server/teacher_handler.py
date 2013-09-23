@@ -135,10 +135,10 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
                         
                 # notify the teachers about the new hint
                 ext_hint = {
-                    'session_id': ss.session_id,
-                    'course_id': ss.course_id,
-                    'set_id': ss.set_id,
-                    'problem_id': ss.problem_id,
+                    'student_id': student_id,
+                    'course_id': course_id,
+                    'set_id': set_id,
+                    'problem_id': problem_id,
                     'timestamp': timestamp,
                     'hintbox_id': hintbox_id,
                     'location': location }
@@ -202,10 +202,10 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
                         
                 # notify the teachers about the update
                 ext_hint = {
-                    'session_id': ss.session_id,
-                    'course_id': ss.course_id,
-                    'set_id': ss.set_id,
-                    'problem_id': ss.problem_id }
+                    'student_id': student_id,
+                    'course_id': course_id,
+                    'set_id': set_id,
+                    'problem_id': problem_id }
                 for ts in TeacherSession.active_sessions:
                     ts.notify_hint_update(ext_hint)
 
@@ -275,7 +275,7 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
 
             args
             ----
-              session_id : string
+              student_id : string
                 Webwork Session ID
 
               course_id : string
@@ -288,15 +288,16 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
                 Webwork problem ID
             """
             try:
-                session_id = args['session_id']
+                student_id = args['student_id']
                 course_id = args['course_id']
                 set_id = args['set_id']
                 problem_id = args['problem_id']
 
-                self.send_student_info(session_id, course_id,
-                                       set_id, problem_id)
-                
                 ts = self.teacher_session
+                info = ts.student_info(student_id, course_id,
+                                       set_id, problem_id)
+                self.send_student_info(info) 
+                
                 logging.info("%s: get_student_info"%ts.teacher_id)    
             except:
                 logging.exception("Exception handling 'get_student_info'")
@@ -310,27 +311,8 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
         self.send_message('my_students', my_students)
 
 
-    def send_student_info(self, session_id, course_id, set_id, problem_id):
-        for ss in StudentSession.active_sessions:
-            if (ss.session_id == session_id and
-                ss.course_id == course_id and
-                ss.set_id == set_id and
-                ss.problem_id == problem_id):
-                student_info = {
-                    'session_id': ss.session_id,
-                    'student_id': ss.student_id,
-                    'course_id': ss.course_id,
-                    'set_id': ss.set_id,
-                    'problem_id': ss.problem_id,
-                    'pg_file': ss.pg_file,
-                    'pg_seed': ss.pg_seed,
-                    'hints': ss.hints,
-                    'answers': ss.answers,
-                    'curent_answers': ss.current_answers,
-                    'sockjs_active': (ss._sockjs_handler is not None)
-                    }
-                self.send_message('student_info', student_info)
-                break
+    def send_student_info(self, student_info):
+        self.send_message('student_info', student_info)
 
 
     def on_open(self, info):
