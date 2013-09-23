@@ -3,7 +3,7 @@
 <html>
 <!--
   Created using jsbin.com
-  Source can be edited via http://jsbin.com/iCaVObU/24/edit
+  Source can be edited via http://jsbin.com/iCaVObU/25/edit
 -->
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -80,7 +80,7 @@
     <input type="hidden" id="course_id" value="demo"/>
     <input type="hidden" id="set_id" value="sandbox"/>
     <input type="hidden" id="problem_id" value="1"/>
-    <input type="hidden" id="student_id" value=""/>
+    <input type="hidden" id="student_id" value="scheaman"/>
     <input type="hidden" id="pg_file" value=""/>
     <input type="hidden" id="pg_seed" value=""/>
     
@@ -286,8 +286,6 @@ function send_command(sock, cmd, args) {
   print("SENT: " + cmd + ":" + JSON.stringify(args, null, 2));
 }
 
-
-
 function parse_past_answers(answers, boxname, dtable) {
   dtable.fnClearTable();
   for (var i = 0; i < answers.length; i++) {
@@ -485,7 +483,11 @@ function setup_sockjs() {
   sock.onopen = function() {
     print("INFO: connected");
     send_command(sock, 'teacher_join', {
-      'teacher_id': $('#teacher_id').val()
+      'teacher_id': $('#teacher_id').val(),
+      'student_id': $('#student_id').val(),
+      'course_id': $('#course_id').val(),
+      'set_id': $('#set_id').val(),
+      'problem_id': $('#problem_id').val()
     });
     get_student_info();
   };
