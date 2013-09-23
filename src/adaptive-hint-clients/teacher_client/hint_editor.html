@@ -2,7 +2,7 @@
 <html>
 <!--
   Created using jsbin.com
-  Source can be edited via http://jsbin.com/UFALiVA/5/edit
+  Source can be edited via http://jsbin.com/UFALiVA/6/edit
 -->
   <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
@@ -231,6 +231,7 @@ function check_hint_answer() {
     'seed': $('#seed').val()
   };
   post_data.AnSwEr0001 = $('#hint_preview #AnSwEr0001').val();
+  $("#answer_status").val("Checking the answer...");
   $.post("http://webwork.cse.ucsd.edu:4351/checkanswer",
          post_data,
          function (r) {
@@ -251,6 +252,7 @@ function render_hint() {
     'pg_file': btoa(pg_text),
     'seed': $('#seed').val()
   };
+  $("#hint_preview").html("Rendering...");
   $.post("http://webwork.cse.ucsd.edu:4351/render",
          post_data,
          function (r) {
@@ -280,7 +282,7 @@ function load_pg() {
   }, function (response) {
     var pg_text = $.parseJSON(response);
     // Parse the pg text
-    var re_header = /([\s\S]*)(TEXT\(PGML|BEGIN_PGML)[\S]*/m;
+    var re_header = /([\s\S]*)(\bTEXT\(PGML\b|\bBEGIN_PGML\b)[\S]*/m;
     var re_footer = /^END_PGML([\s\S]*)/m;
     pg_header = re_header.exec(pg_text);
     pg_footer = re_footer.exec(pg_text);
