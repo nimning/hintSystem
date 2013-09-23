@@ -262,6 +262,7 @@ class StudentSockJSHandler(_BaseSockJSHandler):
             # also send status to teachers
             ext_ans = {
                 'session_id': ss.session_id,
+                'student_id': ss.student_id,
                 'course_id': ss.course_id,
                 'set_id': ss.set_id,
                 'problem_id': ss.problem_id,
