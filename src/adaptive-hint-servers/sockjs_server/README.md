@@ -181,7 +181,11 @@ teacher_join
         <td>
 <pre>
 { 
-  'teacher_id': 'scheaman'
+  'teacher_id': 'TA_1',
+  ('student_id': 'scheaman',)*
+  ('course_id': 'demo',)*
+  ('set_id': 'sandbox',)*
+  ('problem_id': '1')*
 } 
 </pre>
         </td>
@@ -189,7 +193,7 @@ teacher_join
         Notifies the server that a teacher is connected.
         </td>
         <td>
-        -
+        * are optional.
         </td>
     </tr>
     <tr>
