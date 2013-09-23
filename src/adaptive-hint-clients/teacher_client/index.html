@@ -1,0 +1,299 @@
+
+<!DOCTYPE html>
+<html>
+<!--
+  Created using jsbin.com
+  Source can be edited via http://jsbin.com/UniciTu/39/edit
+-->
+<head>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+  <script src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
+  <script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>  
+  <link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css">
+  <meta charset=utf-8 />
+  <title>Datatable</title>
+
+<style id="jsbin-css">
+.table_container {
+  margin: 20px;
+  width: 800px;
+  padding: 5px;
+  clear: left;
+}
+
+.login_panel {
+  height: 60px;
+  margin: 10px;
+  padding: 5px;
+}
+
+div.dataTables_wrapper {
+  padding: 20px;
+  border:1px solid;
+}
+</style>
+</head>
+<body>
+  <div class="login_panel">
+    Teacher ID: <input type="text" name="teacher_id"/>
+    <button id="login_button">Login</button>
+	<button id="logout_button">Logout</button>
+  </div>
+	
+  <textarea id="textarea" rows="10" cols="80"></textarea>
+<div id="after_login">
+  <div>
+    <h2>Unasssigned students</h2>
+  </div>
+  <div class="table_container">
+    <table id="unassigned_students">
+        <thead>
+            <tr>
+                <th>Student</th>
+                <th>Time spent</th>
+                <th>Set</th>
+                <th>Problem</th>
+                <th>Part</th>
+                <th>Tries</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+            
+        </tbody>
+    </table>
+  </div>
+  <div>
+    <h2>My students</h2>
+  </div>
+  <div class="table_container">
+    <table id="my_students">
+        <thead>
+            <tr>
+                <th>Student</th>
+                <th>Time spent</th>
+                <th>Set</th>
+                <th>Problem</th>
+                <th>Part</th>
+                <th>Time since last incorrect</th>
+                <th>Time since last hint</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+        </tbody>
+    </table>
+  </div>
+</div>
+<script>
+function print(msg) {
+  var textbox = $("#textarea");
+  textbox.val(textbox.val() + msg + "\n");
+  textbox.scrollTop(textbox[0].scrollHeight - textbox.height());
+}
+
+function open_student_view(teacher_id, student_id, course_id, set_id, problem_id) {
+  var url = "/student_monitor.html?" +
+      "teacher_id=" + teacher_id + "&" +
+      "student_id=" + student_id + "&" +
+      "course_id=" + course_id + "&" +
+      "set_id=" + set_id + "&" +
+      "problem_id=" + problem_id;
+  window.open(url, '_blank');
+}
+
+function send_command(sock, cmd, args) {
+  
+  sock.send(JSON.stringify({
+    "type" : cmd,
+    "arguments" : args
+  }));
+  print("SENT: " + cmd + ":" + JSON.stringify(args, null, 2));
+}
+function parse_my(data){
+  num_active_students = data.length;
+  print(num_active_students);
+  
+  my.fnClearTable();
+  for (var i = 0; i < num_active_students; i++) {
+    
+    stud_data = data[i];
+    details = parse_pastanswers(stud_data.answers);
+    
+    // element = document.createElement("unassign").button();
+    //element.setAttribute("class",stud_data.session_id);
+    time_lasthint = parse_hints (stud_data.hints);
+    
+    
+    my.fnAddData([stud_data.student_id,details[0],stud_data.set_id,stud_data.problem_id,details[1],details[3],
+                  "hint_time",
+                  "<button onclick=open_student_view('" +
+                  teacher_id + "','" +
+                  stud_data.student_id + "','" +
+                  stud_data.course_id + "','" +
+                  stud_data.set_id + "','" +
+                  stud_data.problem_id +
+                  "')>View</button><button id=unassign class="+stud_data.session_id+">Unassign</button>"]);
+  }
+  
+}
+function parse_unassigned(data){
+  
+  unassigned.fnClearTable();
+  num_active_students = data.length;
+  print(num_active_students);
+  
+  
+  for (var i = 0; i < num_active_students; i++) {
+    stud_data = data[i];
+    details = parse_pastanswers(stud_data.answers);
+    
+    
+    unassigned.fnAddData([stud_data.student_id,details[0],stud_data.set_id,stud_data.problem_id,details[1],details[2],"<button id=take class="+stud_data.session_id+">Take</button>"]);
+    
+  }
+  
+  
+}
+
+function parse_hints (hints)
+{
+  return "-";
+}
+
+
+function parse_pastanswers(past_answers){
+  
+  var details = [];
+  len = past_answers.length;
+  part = past_answers[len-1].boxname;
+  trim_part = part.substr(6);
+  
+  for (var i=len-1;i>=0;i--)
+  {
+    if(past_answers[i].boxname!=part)
+    {
+      break;
+    }
+  }
+  i++;
+  
+  var d = new Date();
+  
+  //in min
+  time_spent_temp = (d.getTime()/1000 - past_answers[i].timestamp)/(60);
+  min = Math.floor(time_spent_temp);
+  sec = Math.floor((time_spent_temp%1)*60);
+  time_spent = min + " min "+sec+" sec";
+  
+  tries = len - i;
+  
+  var min = 0;
+  var sec = 0;
+  if (past_answers[len-1].is_correct === false)
+  {
+    time_temp = (d.getTime()/1000 - past_answers[len-1].timestamp)/(60);
+    min = Math.floor(time_temp);
+    sec = Math.floor((time_temp%1)*60);
+    time_lastincorrect = min + " min "+sec+" sec";
+    
+  }
+  else
+  {
+    time_lastincorrect = min + " min "+sec+" sec";
+  }
+  
+  details[0] = time_spent;
+  details[1] = parseInt(trim_part,10).toString();
+  details[2] = tries;
+  details[3] = time_lastincorrect;
+  return details;
+  
+}
+
+
+
+
+$(document).ready(function() {
+  $("#after_login").hide();
+  $("#textarea").hide();
+  
+  
+  
+  $('#login_button').click(function (){ 
+    
+    sock = new SockJS('http://webwork.cse.ucsd.edu:4350/teacher');
+    sock.onopen = function() {
+      print("INFO: connected");
+      send_command(sock, 'teacher_join', {'teacher_id' : teacher_id});
+    };
+    
+    sock.onclose = function() {
+      print("INFO: disconnected");
+    };
+    
+    sock.onmessage = function(e) {
+      print("RECIEVED: " + e.data);
+      data = jQuery.parseJSON(e.data);
+      print(data.type);
+      if(data.type=="my_students")
+      {
+        table_my = parse_my(data["arguments"]);
+      }
+      else if (data.type=="unassigned_students")
+      {	
+        table_un = parse_unassigned(data["arguments"]);
+      }
+    };
+    
+    teacher_id = $('input[name=teacher_id]').val();    
+    
+    
+    $("#after_login").show();
+    $("input[name=teacher_id]").hide();
+    $("#login_button").hide();	
+    
+    unassigned = $('#unassigned_students').dataTable();
+    my = $('#my_students').dataTable();
+    interval_id = window.setInterval(
+      function() { 
+        send_command(sock,'list_students',{});
+      }, 5000);        
+  });
+  
+  $('#logout_button').click(function (){
+
+    clearInterval(interval_id);
+    sock.close();
+    unassigned.fnDestroy();
+    my.fnClearTable();
+    my.fnDestroy();
+    
+    $("#after_login").hide();
+    $("input[name=teacher_id]").show();
+    $("#login_button").show();
+    
+    
+  });
+  
+  $(document).on('click','#take',function()    {
+    
+    var session_id = $(this).attr('class');
+    //alert(session_id);
+    send_command(sock,'request_student',{'session_id':session_id});
+  }
+                );
+  $(document).on('click','#unassign',function()    {
+    var session_id = $(this).attr('class');
+    //alert(session_id);
+    send_command(sock,'release_student',{'session_id':session_id});
+  }
+                );
+  $(document).on('click','#unassign',function(){});
+  
+});
+</script>
+</body>
+</html>
