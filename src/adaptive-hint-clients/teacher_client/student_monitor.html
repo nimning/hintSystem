@@ -1,8 +1,9 @@
+
 <!DOCTYPE html>
 <html>
 <!--
   Created using jsbin.com
-  Source can be edited via http://jsbin.com/iCaVObU/22/edit
+  Source can be edited via http://jsbin.com/iCaVObU/24/edit
 -->
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -79,7 +80,6 @@
     <input type="hidden" id="course_id" value="demo"/>
     <input type="hidden" id="set_id" value="sandbox"/>
     <input type="hidden" id="problem_id" value="1"/>
-    <input type="hidden" id="session_id" value=""/>
     <input type="hidden" id="student_id" value=""/>
     <input type="hidden" id="pg_file" value=""/>
     <input type="hidden" id="pg_seed" value=""/>
@@ -162,6 +162,8 @@
       
     </div>
   <script>
+var HINT_EDITOR = '/teacher/hint_editor.html';
+
 function pad(num, size) {
   var s = num + "";
   while (s.length < size) s = "0" + s;
@@ -214,7 +216,7 @@ function render_hint(idx) {
 
 
 function fork_hint(idx) {
-  var url = '/teacher/hint_editor.html';
+  var url = HINT_EDITOR;
   url += '?course_id=' + $('#course_id').val() +
     '&set_id=' + $('#set_id').val() +
     '&problem_id=' + $('#problem_id').val() +
@@ -249,8 +251,8 @@ function get_params() {
     return query_string;
   }();
   
-  if (QueryString.session_id) {
-    $('#session_id').val(QueryString.session_id);
+  if (QueryString.student_id) {
+    $('#student_id').val(QueryString.student_id);
   }
   
   if (QueryString.teacher_id) {
@@ -469,7 +471,7 @@ function get_hints() {
 // Request student info from server
 function get_student_info() {
   send_command(sock, 'get_student_info', {
-    'session_id': $('#session_id').val(),
+    'student_id': $('#student_id').val(),
     'course_id': $('#course_id').val(),
     'set_id': $('#set_id').val(),
     'problem_id': $('#problem_id').val()
@@ -512,6 +514,9 @@ function setup_sockjs() {
 
 $(document).ready(function() {
   
+  // Get url params
+  get_params();
+  
   // Set up elements
   hint_html = CodeMirror.fromTextArea(document.getElementById("hint_html"), {
     mode: "htmlmixed",
@@ -520,8 +525,6 @@ $(document).ready(function() {
     matchBrackets: true
   });
   hint_html.setSize("100%", 150);
-  
-  get_params();
   
   // Set up SockJS
   setup_sockjs(); 
@@ -542,7 +545,7 @@ $(document).ready(function() {
   });
   
   $("#create_hint").click(function() {
-    var url = '/teacher/hint_editor.html';
+    var url = HINT_EDITOR;
     url += '?course_id=' + $('#course_id').val() +
       '&set_id=' + $('#set_id').val() +
       '&problem_id=' + $('#problem_id').val() +
