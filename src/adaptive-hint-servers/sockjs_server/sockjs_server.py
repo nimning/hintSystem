@@ -7,6 +7,8 @@ port. It responses to the requests from SockJS clients.
 import tornado.ioloop
 import tornado.web
 import sockjs.tornado
+import logging
+import argparse
 
 from student_handler import StudentSockJSHandler
 from teacher_handler import TeacherSockJSHandler
@@ -14,13 +16,23 @@ from teacher_handler import TeacherSockJSHandler
 # Server Configurations 
 BIND_IP = '0.0.0.0'
 DEFAULT_PORT = 4350
+LOG_FILENAME = '/var/log/hint/sockjs.log'
 
 if __name__ == "__main__":
-    import logging    
-    logging.getLogger().setLevel(logging.DEBUG)
+    # set up the root logger
+    logger = logging.getLogger()
+    logger.setLevel(logging.DEBUG)
 
+    formatter = logging.Formatter('%(asctime)s - %(name)s - '
+                                  '%(levelname)s - %(message)s')
+    
+    handler = logging.handlers.RotatingFileHandler(LOG_FILENAME,
+                                                   maxBytes=2000000,
+                                                   backupCount=5)
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+    
     # read command-line arguments
-    import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument("--port",
                         type=int,
