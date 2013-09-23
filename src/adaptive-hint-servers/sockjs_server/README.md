@@ -99,7 +99,7 @@ hint_feedback
         Notifies the server that a feedback box has changed. 
         </td>
         <td>
-        -
+        *Not Yet Implemented*
         </td>
     </tr>
 </table>
@@ -221,7 +221,7 @@ add_hint
         <td>
 <pre>
 {
-  'session_id': '8Qa12ad1...',
+  'student_id': 'scheaman',
   'course_id': 'demo',
   'set_id': 'sandbox',
   'problem_id': '1',
@@ -232,10 +232,35 @@ add_hint
 </pre>
         </td>
         <td>
-        Give a new hint to a student identified by her 'session_id'
+        Assign a hint to a student
         </td>
         <td>
-        The server will response with 'hint_update'
+        -
+        </td>
+    </tr>
+    <tr>
+        <td>
+<pre>
+remove_hint
+</pre>
+        </td>
+        <td>
+<pre>
+{
+  'student_id': 'scheaman',
+  'course_id': 'demo',
+  'set_id': 'sandbox',
+  'problem_id': '1',
+  'location': 'AnSwEr0001',
+  'hintbox_id': 'Hint1231',
+}
+</pre>
+        </td>
+        <td>
+        Remove a hint from a student
+        </td>
+        <td>
+        -
         </td>
     </tr>
     <tr>
@@ -328,8 +353,7 @@ unassigned_students
   'set_id': 'sandbox',
   'problem_id': '1',
   'hints': [ ... ],
-  'answers': { ... },
-  'past_answers': [ ... ]
+  'answers': [ ... ]
 },...] 
 </pre>
         </td>
@@ -355,8 +379,7 @@ my_students
   'set_id': 'sandbox',
   'problem_id': '1',
   'hints': [ ... ],
-  'answers': { ... },
-  'past_answers': [ ... ]
+  'answers': [ ... ]
 },...] 
 </pre>
         </td>
@@ -368,58 +391,6 @@ my_students
         </td>
     </tr>
     <tr>
-        <td>
-<pre>
-answer_update
-</pre>
-        </td>
-        <td>
-<pre>
-{ 
-  'session_id': '7GPWHBoRc...',
-  'course_id': 'demo',
-  'set_id': 'sandbox',
-  'problem_id': '1',
-  'timestamp': 1379620647,
-  'boxname': 'AnSwEr0001',
-  'is_correct': False
-}
-</pre>
-        </td>
-        <td>
-        Notifies that a student has updated an answer box.
-        </td>
-        <td>
-        -
-        </td>
-    </tr>
-    <tr>
-        <td>
-<pre>
-hint_update
-</pre>
-        </td>
-        <td>
-<pre>
-{ 
-  'session_id': '7GPWHBoRc...',
-  'course_id': 'demo',
-  'set_id': 'sandbox',
-  'problem_id': '1',
-  'timestamp': 1379620647,
-  'hintbox_id': 'Hint1183',
-  'location': 'AnSwEr0001'
-}
-</pre>
-        </td>
-        <td>
-        Notifies that a hint has been updated.
-        </td>
-        <td>
-        -
-        </td>
-    </tr>
-     <tr>
         <td>
 <pre>
 student_info
@@ -437,16 +408,16 @@ student_info
   'pg_seed': 123,
   'sockjs_active': true,
   'hints': [ ... ],
-  'answers': { ... },
-  'past_answers': [ ... ]
+  'answers': [ ... ],
+  'current_answers': { ... }
 }
 </pre>
         </td>
         <td>
-        Student information
+        Student-Problem information
         </td>
         <td>
-        This is the response to 'get_student_info'
+        This is the response to 'get_student_info' or whenever there are changes.
         </td>
     </tr>
 </table>
