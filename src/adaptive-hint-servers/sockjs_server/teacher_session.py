@@ -1,8 +1,14 @@
 import logging
+import datetime
+import time
 
 from student_session import StudentSession
-from session_storage import SessionStorage
+from fake_db import FakeDB
 
+def _datetime_to_timestamp(dt):
+    return time.mktime(dt.timetuple())
+
+# TODO: change some of the fields
 def _student_info(session_ids):
     student_set = set(session_ids)
     info = []
@@ -15,7 +21,7 @@ def _student_info(session_ids):
                           'problem_id': ss.problem_id,
                           'hints': ss.hints,
                           'answers': ss.answers,
-                          'past_answers': ss.past_answers,
+                          'current_answers': ss.current_answers,
                           'sockjs_active': (ss._sockjs_handler is not None)
                           })
     return info
@@ -39,9 +45,6 @@ class TeacherSession(object):
       teacher_id : string
         Teacher ID
 
-      students : set
-        Session IDs of students associated with this teacher.
-
       _sockjs_handler : StudentSockJSHandler
         SockJS handler
         
@@ -49,20 +52,10 @@ class TeacherSession(object):
     active_sessions = set()
     student_assignment = {}
 
-    # Session storage with 24 hours time-out
-    storage = SessionStorage(timeout=60*24)
-
     def __init__(self, teacher_id, sockjs_handler):
         self.teacher_id = teacher_id
         self._sockjs_handler = sockjs_handler
-        self.students = set()
         
-    def _remove_timedout_students(self):
-        """Remove timed-out students from the student set"""
-        for session_id in list(self.students):
-            if StudentSession.storage.is_timedout(session_id):
-                self.students.remove(session_id)
-
     def request_student(self, session_id):
         """Try to add a student with the session id to the set"""
         if session_id not in TeacherSession.student_assignment:
@@ -74,18 +67,52 @@ class TeacherSession(object):
             TeacherSession.student_assignment[session_id] == self.teacher_id):
             del TeacherSession.student_assignment[session_id]
 
-    def my_students(self):
+    def add_hint(self, student_id, course_id, set_id, problem_id,
+                 location, hintbox_id, hint_html):
+        """Add a hint to user_problem_hint DB
+
+        *Blocked until complete*
+        """
+        timestamp = _datetime_to_timestamp(datetime.datetime.now())
+        hint = hint = { 'timestamp': timestamp,
+                        'hint_html': hint_html,
+                        'location': location,
+                        'hintbox_id': hintbox_id }
+        FakeDB.add_hint(student_id, course_id, set_id, problem_id, hint)
+        return timestamp
+
+    def add_hint(self, student_id, course_id, set_id, problem_id,
+                 location, hintbox_id, hint_html):
+        """Add a hint to user_problem_hint DB
+
+        *Blocked until complete*
+        """
+        timestamp = _datetime_to_timestamp(datetime.datetime.now())
+        hint = hint = { 'timestamp': timestamp,
+                        'hint_html': hint_html,
+                        'location': location,
+                        'hintbox_id': hintbox_id }
+        FakeDB.add_hint(student_id, course_id, set_id, problem_id, hint)
+        return timestamp
+
+    def remove_hint(self, student_id, course_id, set_id, problem_id,
+                    location, hintbox_id):
+        """Remove a hint to user_problem_hint DB
+
+        *Blocked until complete*
+        """
+        FakeDB.remove_hint(student_id, course_id, set_id, problem_id,
+                           location, hintbox_id)
+
+    def list_my_students(self):
         """List all my students"""
         student_list = []
-        for session_id in list(TeacherSession.student_assignment):
+        for session_id in TeacherSession.student_assignment.keys():
             if TeacherSession.student_assignment[session_id] == self.teacher_id:
-                if StudentSession.storage.is_timedout(session_id):
-                    del TeacherSession.student_assignment[session_id]
-                else:
-                    student_list.append(session_id)
+                student_list.append(session_id)
         return _student_info(student_list)
 
-    def unassigned_students(self):
+    def list_unassigned_students(self):
         """List all unassigned students"""
         student_list = []
         for ss in list(StudentSession.active_sessions):
@@ -93,11 +120,32 @@ class TeacherSession(object):
                 student_list.append(ss.session_id)
         return _student_info(student_list)
 
-    def answer_update(self, extended_answer_status):
-        """Send 'answer_update' message"""
-        self._sockjs_handler.send_answer_update(extended_answer_status)
+    def notify_answer_update(self, extended_answer_status):
+        """Called when there is an answer update"""
+        session_id = extended_answer_status['session_id']
+        course_id = extended_answer_status['course_id']
+        set_id = extended_answer_status['set_id']
+        problem_id = extended_answer_status['problem_id']
+        if TeacherSession.student_assignment[session_id] == self.teacher_id:
+            self._sockjs_handler.send_student_info(session_id,
+                                                   course_id,
+                                                   set_id,
+                                                   problem_id)
 
-    def hint_update(self, extended_hint):
-        """Send 'hint_update' message"""
-        self._sockjs_handler.send_hint_update(extended_hint)
+    def notify_hint_update(self, extended_hint):
+        """Called when there is a hint update"""
+        session_id = extended_hint['session_id']
+        course_id = extended_hint['course_id']
+        set_id = extended_hint['set_id']
+        problem_id = extended_hint['problem_id']
+        if TeacherSession.student_assignment[session_id] == self.teacher_id:
+            self._sockjs_handler.send_student_info(session_id,
+                                                   course_id,
+                                                   set_id,
+                                                   problem_id)
 
+    def notify_student_join(self):
+        """Called when a student has joined"""
+        self._sockjs_handler.send_my_students(self.list_my_students())
+        self._sockjs_handler.send_unassigned_students(
+            self.list_unassigned_students())

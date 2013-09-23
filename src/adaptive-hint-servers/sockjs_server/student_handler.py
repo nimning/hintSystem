@@ -8,7 +8,6 @@ import base64
 from _base_handler import _BaseSockJSHandler
 from student_session import StudentSession
 from teacher_session import TeacherSession
-from session_storage import SessionStorage
 
 REST_SERVER = 'http://127.0.0.1:4351'
 CHECKANSWER_API = REST_SERVER + '/checkanswer'
@@ -34,34 +33,20 @@ class StudentSockJSHandler(_BaseSockJSHandler):
     ----------
       student_session : StudentSession
         The corresponding instance of StudentSession.
-      
-    """
-
-    def __load_session(self, session_id, course_id, set_id, problem_id):
-        self.student_session = StudentSession.storage.\
-                               load(session_id, (course_id, set_id, problem_id))
         
-    def __save_session(self):
-        ss = self.student_session
-        StudentSession.storage.save(ss.session_id,
-                                    (ss.course_id, ss.set_id, ss.problem_id),
-                                    self.student_session)    
-        
+    """        
     def __init__(self, *args, **kwargs):
         super(StudentSockJSHandler, self).__init__(*args, **kwargs)
         self.student_session = None
 
         @self.add_handler('student_join')
+        @gen.engine
         def handle_student_join(self, args):
             """Handler for 'student_join'
 
             'student_join' is sent from the client as the first message
             after the connection has been established. The message also
             includes the client information.
-
-            When 'student_join' is received, the following tasks are performed:
-              * Update session information e.g. student_id, problem_id.
-              * Relay 'student_join' to all active teachers.
               
             More detail:
               https://github.com/yoavfreund/Webwork_AdaptiveHints/tree/master/
@@ -92,40 +77,22 @@ class StudentSockJSHandler(_BaseSockJSHandler):
                 course_id = args['course_id']
                 set_id = args['set_id']
                 problem_id = args['problem_id']
-                
-                # try to resume session
-                self.__load_session(session_id, course_id, set_id, problem_id)
 
-                # check if loaded successfully
-                if self.student_session is None:
-                    # create a new instace of StudentSession
-                    self.student_session = StudentSession(session_id,
-                                                          student_id,
-                                                          course_id,
-                                                          set_id,
-                                                          problem_id,
-                                                          self)
-                else:
-                    # update sockjs handler
-                    self.student_session._sockjs_handler = self
-                
-                # shorthand
-                ss = self.student_session
+                # yield and call _perform_student_join
+                yield gen.Task(
+                    self._perform_student_join,
+                    session_id,
+                    student_id,
+                    course_id,
+                    set_id,
+                    problem_id)
                                 
-                # add to active student list
-                StudentSession.active_sessions.add(ss)
-
-                # send previous hints
-                self.send_hints(ss.hints)
-
-                # send previous answers
-                self.send_answer_status(ss.answers.values())
-
-                logging.info("Student: %s joined"%ss.student_id)
+                logging.info("Student: %s joined"%student_id)
             except:
                 logging.exception("Exception in student_join handler")
                 self.session.close()
-                
+            
+
         @self.add_handler('student_answer')
         @gen.engine
         def handle_student_answer(self, args):
@@ -148,40 +115,56 @@ class StudentSockJSHandler(_BaseSockJSHandler):
               * value
             """
             try:
-                ss = self.student_session
-        
+                # read args
                 boxname = args['boxname']
                 value = args['value']
+
+                # shorthand
+                ss = self.student_session
+        
+                # yeild and perform checkanswer
+                yield gen.Task(self._perform_checkanswer,
+                               boxname,
+                               value)
+
                 logging.info("%s updated %s to %s"%(
                     ss.student_id, boxname, value))
-
-                # TODO: Only monitor message from demo course
-                if ss.course_id == 'demo' and len(value) > 0:
-                    answer_status = yield gen.Task(self._perform_checkanswer,
-                                                   boxname,
-                                                   value)
-                    # update session data
-                    timestamp = ss.update_answer(boxname, answer_status)
-        
-                    # send the status to client
-                    self.send_answer_status([answer_status,])
-
-                    # also send status to teachers
-                    ext_ans = {
-                        'session_id': ss.session_id,
-                        'course_id': ss.course_id,
-                        'set_id': ss.set_id,
-                        'problem_id': ss.problem_id,
-                        'timestamp': timestamp,
-                        'boxname': boxname,
-                        'is_correct': answer_status['is_correct'] }
-                    for ts in TeacherSession.active_sessions:
-                        ts.answer_update(ext_ans)
-                    
             except:
                 logging.exception('Exception in student_answer handler')
 
-            
+    def _perform_student_join(self, session_id, student_id, course_id,
+                              set_id, problem_id, callback=None):
+        """
+          Returns a new instance of StudentSession
+        """
+        # create an instance of StudentSession
+        self.student_session = StudentSession(session_id,
+                                              student_id,
+                                              course_id,
+                                              set_id,
+                                              problem_id,
+                                              self)
+
+        # shorthand
+        ss = self.student_session
+                                
+        # add to active student list.
+        StudentSession.active_sessions.add(ss)
+
+        # send assigned hints.
+        self.send_hints(ss.hints)
+
+        # send previously entered answers.
+        self.send_answer_status(ss.current_answers)
+
+        # notify the teachers that a student has joined.
+        for ts in TeacherSession.active_sessions:
+            ts.notify_student_join()
+
+        # done
+        callback()
+
+
     def _perform_checkanswer(self, boxname, value, callback=None):
         """
           Returns 'answer_status' that contains the following arguments:
@@ -205,9 +188,11 @@ class StudentSockJSHandler(_BaseSockJSHandler):
             response = http_client.fetch(url)
             ss.pg_seed = int(response.body)
 
+
+        answer_status = {}
+        
         # check problem answer
         if boxname.startswith('AnSwEr'):
-            
             # get PG file path
             if ss.pg_file is None:
                 url = url_concat(PG_PATH_API, {
@@ -232,11 +217,9 @@ class StudentSockJSHandler(_BaseSockJSHandler):
                               'is_correct': result_json['is_correct'],
                               'error_msg': result_json['error_msg'],
                               'entered_value': value }
-
-            return callback(answer_status)
-        
+            
+        # check hint answer
         elif boxname.startswith('Hint'):
-
             # get hint pg
             url = url_concat(HINTS_API, {
                 'course': ss.course_id,
@@ -264,18 +247,43 @@ class StudentSockJSHandler(_BaseSockJSHandler):
                               'is_correct': result_json['is_correct'],
                               'error_msg': result_json['error_msg'],
                               'entered_value': value }
-
-            return callback(answer_status)
         else:
             raise ValueError('Boxname must begin with AnSwEr or Hint')
+
+        # post-process the answer status
+        if len(answer_status) > 0:
+            # update the database
+            timestamp = ss.update_answer(boxname, answer_status)
         
+            # send the status to client
+            self.send_answer_status([answer_status,])
+
+            # also send status to teachers
+            ext_ans = {
+                'session_id': ss.session_id,
+                'course_id': ss.course_id,
+                'set_id': ss.set_id,
+                'problem_id': ss.problem_id,
+                'timestamp': timestamp,
+                'boxname': boxname,
+                'is_correct': answer_status['is_correct'] }
+
+            for ts in TeacherSession.active_sessions:
+                ts.notify_answer_update(ext_ans)
+
+        # done
+        callback()
+
+
     def send_answer_status(self, answer_statuses):
+        """Send a list of answer statuses to the client"""
         if not isinstance(answer_statuses, list):
             answer_statuses = [answer_statuses,]
         self.send_message('answer_status', answer_statuses)
 
 
     def send_hints(self, hints):
+        """Send a list of hints to the client"""
         if not isinstance(hints, list):
             hints = [hints,]
         self.send_message('hints', hints)
@@ -290,18 +298,11 @@ class StudentSockJSHandler(_BaseSockJSHandler):
         """Callback for when a student is disconnected"""
         ss = self.student_session
 
-        if ss is not None:
-            # Remove the session from active list
-            StudentSession.active_sessions.remove(ss)
+        # Remove the session from active list
+        StudentSession.active_sessions.remove(ss)
 
-            # remove reference to this handler
-            ss._sockjs_handler = None
-
-            # save session
-            self.__save_session()
-
-            if len(ss.student_id) > 0:
-                logging.info("%s left"%ss.student_id)
+        if len(ss.student_id) > 0:
+            logging.info("%s left"%ss.student_id)
                 
         logging.info("%s disconnected"%self.session.conn_info.ip)
             
