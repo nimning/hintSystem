@@ -399,7 +399,6 @@ student_info
         <td>
 <pre>
 { 
-  'session_id': '7GPWHBoRc...',
   'student_id': 'scheaman',
   'course_id': 'demo',
   'set_id': 'sandbox',
