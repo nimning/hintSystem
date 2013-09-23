@@ -1,16 +1,9 @@
-from tornado import httpclient
-from tornado.httputil import url_concat
 import logging
 import datetime
 import time
-import json
 
 from student_session import StudentSession
 from fake_db import FakeDB
-
-REST_SERVER = 'http://127.0.0.1:4351'
-PROBLEM_SEED_API = REST_SERVER + '/problem_seed'
-PG_PATH_API = REST_SERVER + '/pg_path'
 
 def _datetime_to_timestamp(dt):
     return time.mktime(dt.timetuple())
@@ -26,9 +19,7 @@ def _active_students(session_ids):
                           'set_id': ss.set_id,
                           'problem_id': ss.problem_id,
                           'hints': ss.hints,
-                          'answers': ss.answers,
-                          'current_answers': ss.current_answers,
-                          'sockjs_active': (ss._sockjs_handler is not None)
+                          'answers': ss.answers
                           })
     return info
 
@@ -58,72 +49,20 @@ class TeacherSession(object):
     """
     active_sessions = set()
     student_assignment = {}
-    _hints_cache = {}
-    _answers_cache = {}
-    _session_id_cache = {}
-
-    def student_info(self, student_id, course_id, set_id, problem_id):
-        hashkey = (student_id, course_id, set_id, problem_id)
         
-        if hashkey in TeacherSession._hints_cache:
-            hints = TeacherSession._hints_cache[hashkey]
-        else:
-            hints = FakeDB.get_hints(student_id, course_id, set_id,
-                                     problem_id)
-            
-        if hashkey in TeacherSession._answers_cache:
-            answers = TeacherSession._answers_cache[hashkey]
-        else:
-            answers = FakeDB.get_answers(student_id, course_id, set_id,
-                                         problem_id)
-        current_answers = {}
-        for answer in answers:
-            current_answers[answer['boxname']] = answer
-
-        # get PG file path
-        http_client = httpclient.HTTPClient()
-        url = url_concat(PG_PATH_API, {
-            'course': course_id,
-            'set_id': set_id,
-            'problem_id': problem_id
-            })
-        response = http_client.fetch(url)
-        pg_file = json.loads(response.body)
-            
-        # get problem seed
-        url = url_concat(PROBLEM_SEED_API, {
-            'course': course_id,
-            'set_id': set_id,
-            'problem_id': problem_id,
-            'user_id': student_id
-            })
-        response = http_client.fetch(url)
-        pg_seed = int(response.body)
-        
-        info = {
-            'student_id': student_id,
-            'course_id': course_id,
-            'set_id': set_id,
-            'problem_id': problem_id,
-            'pg_file': pg_file,
-            'pg_seed': pg_seed,
-            'hints': hints,
-            'answers': answers,
-            'current_answers': current_answers,
-            }
-        return info
-        
-    def __init__(self, teacher_id, sockjs_handler):
+    def __init__(self, teacher_id, sockjs_handler, student_id=None,
+                 course_id=None, set_id=None, problem_id=None):
         self.teacher_id = teacher_id
         self._sockjs_handler = sockjs_handler
         
+        # student assigned to this instance
+        self.student_id = student_id
+        self.course_id = course_id
+        self.set_id = set_id
+        self.problem_id = problem_id
+        
     def request_student(self, session_id):
         """Try to add a student with the session id to the set"""
-        
-        for ss in StudentSession.active_sessions:
-            if ss.session_id == session_id:
-                TeacherSession._session_id_cache[ss.student_id] = ss.session_id
-        
         if session_id not in TeacherSession.student_assignment:
             TeacherSession.student_assignment[session_id] = self.teacher_id
 
@@ -172,23 +111,43 @@ class TeacherSession(object):
                 student_list.append(ss.session_id)
         return _active_students(student_list)
 
+    def student_info(self, student_id, course_id, set_id, problem_id):
+        info = {}
+        for ss in StudentSession.active_sessions:
+            if (ss.student_id == student_id and
+                ss.course_id == course_id and
+                ss.set_id == set_id and
+                ss.problem_id == problem_id):
+                info = { 'student_id': ss.student_id,
+                         'course_id': ss.course_id,
+                         'set_id': ss.set_id,
+                         'problem_id': ss.problem_id,
+                         'pg_file': ss.pg_file,
+                         'pg_seed': ss.pg_seed,
+                         'hints': ss.hints,
+                         'answers': ss.answers,
+                         'current_answers': ss.current_answers }
+                break
+
+        return info
+
     def notify_answer_update(self, extended_answer_status):
         """Called when there is an answer update"""
-        session_id = extended_answer_status['session_id']
         student_id = extended_answer_status['student_id']
         course_id = extended_answer_status['course_id']
         set_id = extended_answer_status['set_id']
         problem_id = extended_answer_status['problem_id']
 
-        # invalidate cache
-        hashkey = (student_id, course_id, set_id, problem_id)
-        TeacherSession._answers_cache.pop(hashkey, None)
-
         # send updated student info to the teacher
-        if (session_id in TeacherSession.student_assignment and
-            TeacherSession.student_assignment[session_id] == self.teacher_id):
+        if (student_id == self.student_id and
+            course_id == self.course_id and
+            set_id == self.set_id and
+            problem_id == self.problem_id):
             info = self.student_info(student_id, course_id, set_id, problem_id)
-            self._sockjs_handler.send_student_info(info)
+
+            # do not send empty
+            if len(info) > 0:
+                self._sockjs_handler.send_student_info(info)
         
     def notify_hint_update(self, extended_hint):
         """Called when there is a hint update"""
@@ -196,20 +155,17 @@ class TeacherSession(object):
         course_id = extended_hint['course_id']
         set_id = extended_hint['set_id']
         problem_id = extended_hint['problem_id']
-
-        # TODO: improve this
-        session_id = TeacherSession._session_id_cache[student_id]
-
-        # invalidate cache
-        hashkey = (student_id, course_id, set_id, problem_id)
-        TeacherSession._hints_cache.pop(hashkey, None)
-
+        
         # send updated student info to the teacher
-        if (session_id in TeacherSession.student_assignment and
-            TeacherSession.student_assignment[session_id] == self.teacher_id):
+        if (student_id == self.student_id and
+            course_id == self.course_id and
+            set_id == self.set_id and
+            problem_id == self.problem_id):
             info = self.student_info(student_id, course_id, set_id, problem_id)
-            self._sockjs_handler.send_student_info(info)
 
+            # do not send empty
+            if len(info) > 0:
+                self._sockjs_handler.send_student_info(info)
 
     def notify_student_join(self):
         """Called when a student has joined"""

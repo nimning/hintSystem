@@ -27,7 +27,7 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
     def __init__(self, *args, **kwargs):
         super(TeacherSockJSHandler, self).__init__(*args, **kwargs)
         self.teacher_session = None
-        
+                
         @self.add_handler('teacher_join')
         def handle_teacher_join(self, args):
             """Handler for 'teacher_join'
@@ -45,8 +45,19 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
                 # read args
                 teacher_id = args['teacher_id']
 
+                # optional args
+                student_id = args.get('student_id', None)
+                course_id = args.get('course_id', None)
+                set_id = args.get('set_id', None)
+                problem_id = args.get('problem_id', None)
+
                 # create an instance of TeacherSession
-                self.teacher_session = TeacherSession(teacher_id, self)
+                self.teacher_session = TeacherSession(teacher_id,
+                                                      self,
+                                                      student_id=student_id,
+                                                      course_id=course_id,
+                                                      set_id=set_id,
+                                                      problem_id=problem_id)
                 
                 # shorthand
                 ts = self.teacher_session
@@ -125,7 +136,7 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
                     student_id, course_id, set_id, problem_id,
                     location, hintbox_id, hint_html)
 
-                # Ask the clients to reload hints
+                # Ask the client to update its view
                 for ss in StudentSession.active_sessions:
                     if (student_id == ss.student_id and
                         course_id == ss.course_id and
@@ -133,7 +144,7 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
                         problem_id == ss.problem_id):
                         ss.reload_hints()
                         
-                # notify the teachers about the new hint
+                # Notify the teachers about the new hint
                 ext_hint = {
                     'student_id': student_id,
                     'course_id': course_id,
