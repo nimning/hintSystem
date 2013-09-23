@@ -405,7 +405,6 @@ student_info
   'problem_id': '1',
   'pg_file': '/opt/path/problem.pg',
   'pg_seed': 123,
-  'sockjs_active': true,
   'hints': [ ... ],
   'answers': [ ... ],
   'current_answers': { ... }
