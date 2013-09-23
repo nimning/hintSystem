@@ -16,11 +16,15 @@ class ProcessQuery(tornado.web.RequestHandler):
     def process_query(self,
                       query_template,
                       write_response=True,
-                      dehydrate=None):
-        args = self.request.arguments
+                      dehydrate=None,
+                      verbose=False):
+        self.args = self.request.arguments
         for key in self.request.arguments.keys():
-            args[key] = args[key][0]
-        query_rendered = Template(query_template).generate(**args)
+            self.args[key] = self.args[key][0]
+        query_rendered = Template(query_template).generate(**self.args)
+        if verbose:
+            print 'Running sql query:'
+            print query_rendered
         if write_response:
             rows = conn.query(query_rendered)
             if not dehydrate is None:
@@ -29,4 +33,6 @@ class ProcessQuery(tornado.web.RequestHandler):
                 response = rows
             self.write(json.dumps(response))
         else:
-            conn.execute(query_rendered)
+            response = conn.execute(query_rendered)
+            if not response is None:
+                self.write(json.dumps(response))
