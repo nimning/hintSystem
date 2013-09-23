@@ -1,0 +1,342 @@
+
+<html>
+<!--
+  Created using jsbin.com
+  Source can be edited via http://jsbin.com/UFALiVA/5/edit
+-->
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Hint Editor</title>
+    <base href="http://webwork.cse.ucsd.edu">
+  
+<style id="jsbin-css">
+.big_button{
+  height: 40px;
+}
+.heading {
+  height:25px;
+}
+.textarea_wrapper {
+  border: 1px solid black;
+  margin: 10px; 
+}
+#container {
+  width:1200px;
+}
+#navbar {
+  background-color:#FFD700;
+  height:800px;
+  width:175px;
+  float:left;
+}
+#content {
+  height:800px;
+  width:1024px;
+  float:left;
+  margin-top: 20px;
+}
+#hint_area {
+  background-color:#d8da3d;
+  height:800px;
+  width:500px;
+  float:left;
+}
+#hint_preview {
+  background-color: #ffffff;
+  border:1px solid;
+  border-radius:10px;
+  height: 170px;
+  width: 460px;
+  overflow-y: auto;
+  padding: 10px;
+  margin:10px;
+}
+#problem_area {
+  background-color: #cccccc;
+  height: 800px;
+  width: 500px;
+  float: left;
+}
+#problem_preview {
+  background-color: #ffffff;
+  border:1px solid;
+  border-radius:10px;
+  height: 380px;
+  width: 460px;
+  overflow-y: auto;
+  padding:10px;
+  margin:10px;
+}
+#answer_status {
+  height:100px;
+  width:460px;
+  border:1px solid;
+  border-radius:10px;
+  padding:10px;
+  margin:10px;
+}
+
+</style>
+</head>
+  <body>
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/codemirror/3.14.0/codemirror.css">
+    
+    <script src='//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js'></script>
+    <script src="//cdn.jsdelivr.net/codemirror/3.14.0/codemirror.js"></script>
+    <script src="//cdn.jsdelivr.net/codemirror/3.14.0/mode/perl/perl.js"></script>
+    <script src="//cdn.jsdelivr.net/codemirror/3.14.0/mode/xml/xml.js"></script>
+    <script src="//cdn.jsdelivr.net/codemirror/3.14.0/mode/markdown/markdown.js"></script>
+    
+    <input type="hidden" id="course_id" value="UCSD_CSE103" />
+    <input type="hidden" id="set_id" value="Assignment2" />
+    <input type="hidden" id="problem_id" value="2" />
+    <input type="hidden" id="seed" value="100" />
+    <input type="hidden" id="hint_id" value="" />
+    
+    <div id="container">
+      <div id="header">
+        <h1 style="margin-bottom:0;">Hint Editor</h1>     
+      </div>
+      <div id="content">
+        <div id="hint_area">
+          <div class="heading">
+            Hint PGML
+            <button id="render">Render</button>
+          </div>
+          <div class="textarea_wrapper">
+          <textarea id="hint_body"></textarea>
+          </div>
+          <div class="heading">
+            Hint Preview
+            <button id="checkanswer">Check hint's answer</button>
+          </div>
+          <div id="hint_preview"></div>
+          <div class="heading">Hint Answer</div>
+          <textarea id="answer_status"></textarea>
+          <div style="text-align: center;">
+            <button id="save_hint" class="big_button">
+              Save hint to DB
+            </button>
+          </div>
+        </div>
+        <div id="problem_area">
+          <div class="heading">Problem PGML</div>
+          <div class="textarea_wrapper">
+          <textarea id="problem_pg"></textarea>
+          </div>
+          <div class="heading">Problem Preview</div>
+          <div id="problem_preview"></div>
+        </div>
+      </div>
+    </div>
+    <div id="error_report" style="display:none;"></div>
+  <script>
+function get_params() {
+  // Get the query string params
+  var QueryString = function() {
+    // This function is anonymous, is executed immediately and 
+    // the return value is assigned to QueryString!
+    var query_string = {};
+    var query = window.location.search.substring(1);
+    var vars = query.split("&");
+    for (var i = 0; i < vars.length; i++) {
+      var pair = vars[i].split("=");
+      // If first entry with this name
+      if (typeof query_string[pair[0]] === "undefined") {
+        query_string[pair[0]] = pair[1];
+        // If second entry with this name
+      } else if (typeof query_string[pair[0]] === "string") {
+        var arr = [query_string[pair[0]], pair[1]];
+        query_string[pair[0]] = arr;
+        // If third or later entry with this name
+      } else {
+        query_string[pair[0]].push(pair[1]);
+      }
+    }
+    return query_string;
+  }();
+  
+  if (QueryString.seed) {
+    $('#seed').val(QueryString.seed);
+  }
+  
+  if (QueryString.course_id) {
+    $('#course_id').val(QueryString.course_id);
+  }
+  
+  if (QueryString.set_id) {
+    $('#set_id').val(QueryString.set_id);
+  }
+  
+  if (QueryString.problem_id) {
+    $('#problem_id').val(QueryString.problem_id);
+  } 
+  
+  if (QueryString.hint_id) {
+    $('#hint_id').val(QueryString.hint_id);
+  } 
+}
+
+function get_hint_by_hint_id() {
+  $.get('http://webwork.cse.ucsd.edu:4351/hint', {
+    'course': $('#course_id').val(),
+    'hint_id': $('#hint_id').val()
+  }, function (response) {
+    var hint = response;
+    hint_body.setValue(hint.pg_text);
+  });
+}
+
+function initialize_codemirror() {
+  hint_body = CodeMirror.fromTextArea(document.getElementById("hint_body"), {
+    mode: "markdown",
+    lineNumbers: true,
+    styleActiveLine: true,
+    matchBrackets: true
+  });
+  
+  problem_pg = CodeMirror.fromTextArea(document.getElementById("problem_pg"), {
+    mode: "perl",
+    lineNumbers: true,
+    readOnly: true
+  });
+  
+  problem_pg.setSize('100%', 300);
+  hint_body.setSize('100%', 300);
+}
+
+function render_problem(pg_text) {
+  var post_data = {
+    'pg_file': btoa(pg_text),
+    'seed': $('#seed').val()
+  };
+  $.post("http://webwork.cse.ucsd.edu:4351/render",
+         post_data,
+         function (r) {
+           var err = r.error_msg;
+           if (err && err.length > 0) {
+             $("#problem_preview").html(err);
+           } else {
+             $("#problem_preview").html(r.rendered_html);
+           }
+         });
+}
+
+function check_hint_answer() {
+  var pg_text = (pg_header + '\n' +
+                 hint_body.getValue() + '\n' +
+                 pg_footer);
+  var post_data = {
+    'pg_file': btoa(pg_text),
+    'seed': $('#seed').val()
+  };
+  post_data.AnSwEr0001 = $('#hint_preview #AnSwEr0001').val();
+  $.post("http://webwork.cse.ucsd.edu:4351/checkanswer",
+         post_data,
+         function (r) {
+           var err = r.error_msg;
+           if (err && err.length > 0) {
+             $("#answer_status").val(err);
+           } else {
+             $("#answer_status").val(JSON.stringify(r.AnSwEr0001));
+           }
+         });
+}
+
+function render_hint() {
+  var pg_text = (pg_header + '\n' +
+                 hint_body.getValue() + '\n' +
+                 pg_footer);
+  var post_data = {
+    'pg_file': btoa(pg_text),
+    'seed': $('#seed').val()
+  };
+  $.post("http://webwork.cse.ucsd.edu:4351/render",
+         post_data,
+         function (r) {
+           var err = r.error_msg;
+           if (err && err.length > 0) {
+             $("#hint_preview").html(err);
+           } else {
+             // Clean up
+             var clean_html = r.rendered_html.replace(/[\s\S]*?<div/m, '<div').trim();
+             $("#hint_preview").html(clean_html);
+           }
+         });
+}
+
+
+function invalid_pg_file() {
+  $('#container').hide();
+  $('#error_report').html('Error: The PG file is not in PGML format.').show();
+}
+
+
+function load_pg() {
+  $.get('http://webwork.cse.ucsd.edu:4351/pg_file', {
+    'course': $('#course_id').val(),
+    'set_id': $('#set_id').val(),
+    'problem_id': $('#problem_id').val()
+  }, function (response) {
+    var pg_text = $.parseJSON(response);
+    // Parse the pg text
+    var re_header = /([\s\S]*)(TEXT\(PGML|BEGIN_PGML)[\S]*/m;
+    var re_footer = /^END_PGML([\s\S]*)/m;
+    pg_header = re_header.exec(pg_text);
+    pg_footer = re_footer.exec(pg_text);
+    // check pgml format
+    if (pg_header && pg_footer) {
+      pg_header = pg_header[0];
+      pg_footer = pg_footer[0];
+      // Remove Solution section
+      pg_footer = pg_footer.replace(/^BEGIN_PGML_SOLUTION[\s\S]*END_PGML_SOLUTION/m,'');
+      problem_pg.setValue(pg_text);
+      render_problem(pg_text);
+    }
+    else {
+      invalid_pg_file();
+    }
+  });
+}
+
+
+$(function () {
+  
+  initialize_codemirror();
+  
+  get_params();
+  
+  load_pg();
+  
+  if ($('#hint_id').val().length > 0) {
+    get_hint_by_hint_id();
+  }
+  
+  $('#render').click(function () {
+    render_hint();
+  });
+  
+  $('#checkanswer').click(function() {
+    check_hint_answer();
+  });
+  
+  $('#save_hint').click(function() {
+    var hint = {
+      'pg_header': pg_header,
+      'pg_footer': pg_footer,
+      'pg_text': hint_body.getValue(),
+      'course': $('#course_id').val(),
+      'set_id': $('#set_id').val(),
+      'problem_id': $('#problem_id').val() 
+    };
+    
+    //$.post('http://webwork.cse.ucsd.edu:4351/hint', 
+    //       hint,
+    //       function(response) { });
+    
+    window.close();
+  });
+});
+</script>
+</body>
+</html>
