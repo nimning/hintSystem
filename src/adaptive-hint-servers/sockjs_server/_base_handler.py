@@ -2,6 +2,8 @@ import json
 import logging
 import sockjs.tornado
 
+logger = logging.getLogger(__name__)
+
 class _BaseSockJSHandler(sockjs.tornado.SockJSConnection):
     def __init__(self, *args, **kwargs):
         super(_BaseSockJSHandler, self).__init__(*args, **kwargs)
@@ -38,7 +40,7 @@ class _BaseSockJSHandler(sockjs.tornado.SockJSConnection):
             f = self.handlers[message['type']]
             f(self, message['arguments'])
         except KeyError:
-            logging.warning("unhandled message type")
+            logger.warning("unhandled message type")
         except:
-            logging.exception("Exception in on_message")
+            logger.exception("Exception in on_message")
 

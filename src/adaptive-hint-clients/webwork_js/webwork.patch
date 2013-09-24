@@ -1,0 +1,28 @@
+From e366fbc07324e590d0071dff51480a56edfe420b Mon Sep 17 00:00:00 2001
+From: sunsern <sunsern@gmail.com>
+Date: Tue, 24 Sep 2013 11:25:33 -0700
+Subject: [PATCH] Integrate adaptive_hints.js into WeBWorK
+
+---
+ lib/WeBWorK/ContentGenerator/Problem.pm |    5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/lib/WeBWorK/ContentGenerator/Problem.pm b/lib/WeBWorK/ContentGenerator/Problem.pm
+index 310cae9..8b80fd2 100644
+--- a/lib/WeBWorK/ContentGenerator/Problem.pm
++++ b/lib/WeBWorK/ContentGenerator/Problem.pm
+@@ -1765,7 +1765,10 @@ sub output_JS{
+ 	
+ 	# The Base64.js file, which handles base64 encoding and decoding.
+ 	print CGI::start_script({type=>"text/javascript", src=>"$site_url/js/Base64.js"}), CGI::end_script();
+-	
++
++	# Adaptive Hints
++	print CGI::start_script({type=>"text/javascript", src=>"http://cdn.sockjs.org/sockjs-0.3.min.js"}), CGI::end_script();
++	print CGI::start_script({type=>"text/javascript", src=>"$site_url/js/adaptive_hints.js"}), CGI::end_script();
+ 	
+ 	return "";
+ }
+-- 
+1.7.9.5
+
