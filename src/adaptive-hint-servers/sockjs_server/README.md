@@ -284,7 +284,7 @@ request_student
 </pre>
         </td>
         <td>
-        Request to help the student identified by the session_id.
+        Request to help the student.
         </td>
         <td>
         The server will response with 'unassigned_students' and 'my_students'.
@@ -307,7 +307,7 @@ release_student
 </pre>
         </td>
         <td>
-        Release the student identified by the session_id to unassigned pool.
+        Release the student to unassigned pool.
         </td>
         <td>
         The server will response with 'unassigned_students' and 'my_students'.
