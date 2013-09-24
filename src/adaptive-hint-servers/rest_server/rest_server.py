@@ -1,17 +1,20 @@
 import tornado.ioloop
 import tornado.web
 import logging
+import argparse
 
 from render import Render 
 from checkanswer import CheckAnswer
-from webwork import ProblemSeed, ProblemPGPath, ProblemPGFile, UserProblemAnswers, RealtimeProblemAnswer
-from hints_api import UserProblemHints, Hint, AssignedHint, HintAnswer, \
-    ProblemHints
+from webwork import (ProblemSeed, ProblemPGPath, ProblemPGFile,
+                     UserProblemAnswers, RealtimeProblemAnswer)
+from hints_api import (UserProblemHints, Hint, AssignedHint,
+                       HintAnswer, ProblemHints)
 
 # Server configuration
 BIND_IP = '0.0.0.0'
 DEFAULT_PORT = 4351
-    
+LOG_PATH = '/var/log/hint'
+
 application = tornado.web.Application([
     (r"/render", Render),
     (r"/checkanswer", CheckAnswer),
@@ -28,7 +31,6 @@ application = tornado.web.Application([
     ])
 
 if __name__ == "__main__":
-    import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument("--port",
                         type=int,
@@ -36,8 +38,20 @@ if __name__ == "__main__":
                         help="port to listen")
     args = parser.parse_args()
 
-    logging.getLogger().setLevel(logging.DEBUG)
+    # set up the root logger
+    logger = logging.getLogger()
+    logger.setLevel(logging.DEBUG)
 
+    formatter = logging.Formatter('%(asctime)s - %(name)s - '
+                                  '%(levelname)s - %(message)s')
+
+    log_filename =  LOG_PATH + "/rest-%d.log"%args.port
+    handler = logging.handlers.RotatingFileHandler(log_filename,
+                                                   maxBytes=2000000,
+                                                   backupCount=5)
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+    
     application.listen(args.port, address=BIND_IP)
     logging.info(" [*] Listening on %s:%d"%(BIND_IP,args.port))
     
