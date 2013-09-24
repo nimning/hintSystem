@@ -5,24 +5,31 @@ import time
 from student_session import StudentSession
 from fake_db import FakeDB
 
+DEFAULT_TIMEOUT = 60 # minutes
+
 def _datetime_to_timestamp(dt):
     return time.mktime(dt.timetuple())
 
-def _active_students(session_ids):
-    student_set = set(session_ids)
-    info = []
+def _hashkey_to_student(hashkey):
+    (student_id, course_id, set_id, problem_id) = hashkey
     for ss in StudentSession.active_sessions:
-        if ss.session_id in student_set:
-            info.append({ 'session_id': ss.session_id,
-                          'student_id': ss.student_id,
-                          'course_id': ss.course_id,
-                          'set_id': ss.set_id,
-                          'problem_id': ss.problem_id,
-                          'hints': ss.hints,
-                          'answers': ss.answers
-                          })
-    return info
+        if (ss.student_id == student_id and
+            ss.course_id == course_id and
+            ss.set_id == set_id and
+            ss.problem_id == problem_id):
+            return ss        
+    return None
 
+def _extract_student_info(ss):
+    return { 'student_id': ss.student_id,
+             'course_id': ss.course_id,
+             'set_id': ss.set_id,
+             'problem_id': ss.problem_id,
+             'pg_file': ss.pg_file,
+             'pg_seed': ss.pg_seed,
+             'hints': ss.hints,
+             'answers': ss.answers,
+             'current_answers': ss.current_answers }
 
 class TeacherSession(object):
     """Teacher session state
@@ -34,9 +41,6 @@ class TeacherSession(object):
 
       student_assignment : dict
         Mapping from students to teachers 
-
-      storage : SessionStorage
-        Storage for resuming from disconnection
 
     Properties
     ----------
@@ -60,17 +64,22 @@ class TeacherSession(object):
         self.course_id = course_id
         self.set_id = set_id
         self.problem_id = problem_id
-        
-    def request_student(self, session_id):
+            
+    def request_student(self, student_id, course_id, set_id, problem_id):
         """Try to add a student with the session id to the set"""
-        if session_id not in TeacherSession.student_assignment:
-            TeacherSession.student_assignment[session_id] = self.teacher_id
+        hashkey = (student_id, course_id, set_id, problem_id)
+        if hashkey not in TeacherSession.student_assignment:
+            timeout = (datetime.datetime.now() +
+                       datetime.timedelta(minutes=DEFAULT_TIMEOUT))
+            TeacherSession.student_assignment[hashkey] = (self.teacher_id,
+                                                          timeout)
 
-    def release_student(self, session_id):
+    def release_student(self, student_id, course_id, set_id, problem_id):
         """Remove a student with the session id from the set"""
-        if (session_id in TeacherSession.student_assignment and
-            TeacherSession.student_assignment[session_id] == self.teacher_id):
-            del TeacherSession.student_assignment[session_id]
+        hashkey = (student_id, course_id, set_id, problem_id)
+        if (hashkey in TeacherSession.student_assignment and
+            TeacherSession.student_assignment[hashkey][0] == self.teacher_id):
+            del TeacherSession.student_assignment[hashkey]
 
     def add_hint(self, student_id, course_id, set_id, problem_id,
                  location, hintbox_id, hint_html):
@@ -98,18 +107,44 @@ class TeacherSession(object):
     def list_my_students(self):
         """List all my students"""
         student_list = []
-        for session_id in TeacherSession.student_assignment.keys():
-            if TeacherSession.student_assignment[session_id] == self.teacher_id:
-                student_list.append(session_id)
-        return _active_students(student_list)
+        now = datetime.datetime.now()           
+        for hashkey in TeacherSession.student_assignment.keys():
+            (teacher_id, timeout) = TeacherSession.student_assignment[hashkey]
+            # Release students that are timed-out.
+            if timeout < now:
+                del TeacherSession.student_assignment[hashkey]
+            elif teacher_id == self.teacher_id:
+                # check if the student is still connected
+                ss = _hashkey_to_student(hashkey)
+                if ss is not None:
+                    student_list.append({
+                        'session_id': ss.session_id,
+                        'student_id': ss.student_id,
+                        'course_id': ss.course_id,
+                        'set_id': ss.set_id,
+                        'problem_id': ss.problem_id,
+                        'hints': ss.hints,
+                        'answers': ss.answers
+                        })
+        return student_list
 
     def list_unassigned_students(self):
         """List all unassigned students"""
         student_list = []
         for ss in list(StudentSession.active_sessions):
-            if ss.session_id not in TeacherSession.student_assignment:
-                student_list.append(ss.session_id)
-        return _active_students(student_list)
+            hashkey = (ss.student_id, ss.course_id,
+                       ss.set_id, ss.problem_id)            
+            if hashkey not in TeacherSession.student_assignment:
+                student_list.append({
+                    'session_id': ss.session_id,
+                    'student_id': ss.student_id,
+                    'course_id': ss.course_id,
+                    'set_id': ss.set_id,
+                    'problem_id': ss.problem_id,
+                    'hints': ss.hints,
+                    'answers': ss.answers
+                    })
+        return student_list
 
     def student_info(self, student_id, course_id, set_id, problem_id):
         info = {}
@@ -118,17 +153,8 @@ class TeacherSession(object):
                 ss.course_id == course_id and
                 ss.set_id == set_id and
                 ss.problem_id == problem_id):
-                info = { 'student_id': ss.student_id,
-                         'course_id': ss.course_id,
-                         'set_id': ss.set_id,
-                         'problem_id': ss.problem_id,
-                         'pg_file': ss.pg_file,
-                         'pg_seed': ss.pg_seed,
-                         'hints': ss.hints,
-                         'answers': ss.answers,
-                         'current_answers': ss.current_answers }
+                info = _extract_student_info(ss)
                 break
-
         return info
 
     def notify_answer_update(self, extended_answer_status):
@@ -167,8 +193,23 @@ class TeacherSession(object):
             if len(info) > 0:
                 self._sockjs_handler.send_student_info(info)
 
-    def notify_student_join(self):
+    def notify_student_join(self, ss):
         """Called when a student has joined"""
-        self._sockjs_handler.send_my_students(self.list_my_students())
-        self._sockjs_handler.send_unassigned_students(
-            self.list_unassigned_students())
+        if (ss.student_id == self.student_id and
+            ss.course_id == self.course_id and
+            ss.set_id == self.set_id and
+            ss.problem_id == self.problem_id):
+            self._sockjs_handler.send_student_info(_extract_student_info(ss))
+        elif (self.student_id is None):
+            # no student associated, must be the console
+            self._sockjs_handler.send_my_students(self.list_my_students())
+            self._sockjs_handler.send_unassigned_students(
+                self.list_unassigned_students())
+            
+    def notify_student_left(self, ss):
+        if (ss.student_id == self.student_id and
+            ss.course_id == self.course_id and
+            ss.set_id == self.set_id and
+            ss.problem_id == self.problem_id):
+            # send empty info
+            self._sockjs_handler.send_student_info({})

@@ -15,6 +15,8 @@ PROBLEM_SEED_API = REST_SERVER + '/problem_seed'
 PG_PATH_API = REST_SERVER + '/pg_path'
 HINTS_API = REST_SERVER + '/hint'
 
+logger = logging.getLogger(__name__)
+
 class StudentSockJSHandler(_BaseSockJSHandler):
     """Student SockJS connection handler
     
@@ -87,9 +89,9 @@ class StudentSockJSHandler(_BaseSockJSHandler):
                     set_id,
                     problem_id)
                                 
-                logging.info("Student: %s joined"%student_id)
+                logger.info("Student: %s joined"%student_id)
             except:
-                logging.exception("Exception in student_join handler")
+                logger.exception("Exception in student_join handler")
                 self.session.close()
             
 
@@ -127,10 +129,10 @@ class StudentSockJSHandler(_BaseSockJSHandler):
                                boxname,
                                value)
 
-                logging.info("%s updated %s to %s"%(
+                logger.info("%s updated %s to %s"%(
                     ss.student_id, boxname, value))
             except:
-                logging.exception('Exception in student_answer handler')
+                logger.exception('Exception in student_answer handler')
 
     def _perform_student_join(self, session_id, student_id, course_id,
                               set_id, problem_id, callback=None):
@@ -181,7 +183,7 @@ class StudentSockJSHandler(_BaseSockJSHandler):
 
         # notify the teachers that a student has joined.
         for ts in TeacherSession.active_sessions:
-            ts.notify_student_join()
+            ts.notify_student_join(ss)
 
         # done
         callback()
@@ -293,7 +295,7 @@ class StudentSockJSHandler(_BaseSockJSHandler):
                      
     def on_open(self, info):
         """Callback for when a student is connected"""
-        logging.info("%s connected"%info.ip)
+        logger.info("%s connected"%info.ip)
 
         
     def on_close(self):
@@ -303,8 +305,12 @@ class StudentSockJSHandler(_BaseSockJSHandler):
         # Remove the session from active list
         StudentSession.active_sessions.remove(ss)
 
+        # notify teachers
+        for ts in TeacherSession.active_sessions:
+            ts.notify_student_left(ss)
+
         if len(ss.student_id) > 0:
-            logging.info("%s left"%ss.student_id)
+            logger.info("%s left"%ss.student_id)
                 
-        logging.info("%s disconnected"%self.session.conn_info.ip)
+        logger.info("%s disconnected"%self.session.conn_info.ip)
             
