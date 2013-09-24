@@ -30,12 +30,12 @@ CREATE TABLE {{course_name}}_assigned_hint (
 
 CREATE TABLE {{course_name}}_hint_attempt (
     id int NOT NULL AUTO_INCREMENT,
-    assigned_hint int NOT NULL, -- id field of ..._assigned_hint
+    assigned_hint_id int NOT NULL, -- id field of ..._assigned_hint
     correct BOOLEAN NOT NULL,
-    expression varchar(65536) NOT NULL,
+    answer_string varchar(65536) NOT NULL,
     -- When the student attempted the hint:
     timestamp TIMESTAMP,
 
     primary key (id),
-    CONSTRAINT FOREIGN KEY (assigned_hint) REFERENCES {{course_name}}_assigned_hint(id)
+    CONSTRAINT FOREIGN KEY (assigned_hint_id) REFERENCES {{course_name}}_assigned_hint(id)
 );

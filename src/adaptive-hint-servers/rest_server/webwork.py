@@ -1,7 +1,8 @@
 """Webwork DB API"""
 import os.path
-from process_query import ProcessQuery
+from process_query import ProcessQuery, conn
 from webwork_config import webwork_dir
+from tornado.template import Template
 
 # GET /problem_seed?
 class ProblemSeed(ProcessQuery):
@@ -111,4 +112,71 @@ class ProblemPGFile(ProcessQuery):
         '''
         self.process_query(query_template, dehydrate=_dump_pg_file)
 
-        
+# GET /UserProblemHints?
+class UserProblemAnswers(ProcessQuery):
+    def get(self):
+        ''' For showing the instructor student attempts at a problem
+
+            Sample arguments:
+            course="CompoundProblems",
+            user_id="melkherj", 
+            set_id="compoundProblemExperiments",
+            problem_id=1
+
+            Returning: 
+                [{"scores": "11", "answer_string": "1\t2\t", "answer_id": 5}]
+       '''
+        query_template = '''
+            select 
+                {{course}}_past_answer.answer_id,
+                {{course}}_past_answer.scores,
+                {{course}}_past_answer.answer_string
+            from {{course}}_past_answer
+            where 
+                {{course}}_past_answer.set_id="{{set_id}}"        AND
+                {{course}}_past_answer.problem_id={{problem_id}}   AND
+                {{course}}_past_answer.user_id="{{user_id}}"
+        '''
+        self.process_query(query_template)
+ 
+
+# GET /RealtimeProblemAnswer?
+class RealtimeProblemAnswer(ProcessQuery):
+    def add_problem_source(self, args):
+        query_template = '''select source_file from {{course}}_problem
+            where {{course}}_problem.set_id     = "{{set_id}}" AND
+                  {{course}}_problem.problem_id = {{problem_id}} '''
+        query_rendered = Template(query_template).generate(**args) 
+        print query_rendered
+        rows = conn.query(query_rendered)
+        if len(rows) == 1:
+            args['source_file'] = rows[0]['source_file']
+        else:
+            args['source_file'] = None
+        return args
+
+    
+    def post(self):
+        ''' For logging real-time student answers to problems
+
+            Sample arguments:
+            course="CompoundProblems",
+            set_id="compoundProblemExperiments",
+            problem_id=1
+            pg_id="a"
+            user_id="melkherj", 
+            correct=1
+            answer_string="x^2+4x"
+
+            Returning:
+       '''
+        query_template = '''
+            insert into {{course}}_realtime_past_answer
+                (set_id, problem_id, pg_id, user_id, source_file, correct, 
+                    answer_string) values
+                ( "{{set_id}}", {{problem_id}}, "{{pg_id}}", "{{user_id}}", 
+                    "{{source_file}}", {{correct}}, 
+                    "{{answer_string}}" )
+        '''
+        self.process_query(query_template, hydrate = self.add_problem_source,
+            verbose=True, write_response=False)

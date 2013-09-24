@@ -10,7 +10,6 @@ from get_header_footer import get_header, get_footer
 class UserProblemHints(ProcessQuery):
 
     def add_header_footer(self, response):
-        print self.args['course']
         relative_filename_query = \
             "select source_file from %s_problem;" % self.args['course']
         relative_filename = conn.query(relative_filename_query) \
@@ -110,7 +109,7 @@ class Hint(ProcessQuery):
             (pg_text, author) values ("{{pg_text}}", "{{author}}") '''
         self.process_query(query_template, write_response=False)
        
-
+# POST /assigned_hint?
 class AssignedHint(ProcessQuery):
     
     def post(self):
@@ -131,29 +130,55 @@ class AssignedHint(ProcessQuery):
             '''
         self.process_query(query_template, write_response=False)
 
+# GET /hint_answer?
+class HintAnswer(ProcessQuery):
 
-## GET /problem_hints?
-#class ProblemHints(ProcessQuery):
-#    def get(self):
-#        ''' 
-#            For listing all hints for a problem (for instructors) that could be reused for other students:
-#
-#            Sample arguments:
-#            course="CompoundProblems", 
-#            set_id="compoundProblemExperiments",
-#            problem_id=2
-#
-#            Response: [
-#                {"pg_text": "My name is Mr Hint", "pg_id": "b"}, 
-#                {"pg_text": "What is [`x^2+4x+2`]?", "pg_id": "b"}, 
-#                {"pg_text": "some new problem text!", "pg_id": "b"}, 
-#                {"pg_text": "some new problem text!", "pg_id": "b"}, 
-#                {"pg_text": "some new problem text!", "pg_id": "b"}, 
-#                {"pg_text": "More hints for you dear", "pg_id": "b"}
-#            ]
-#            '''
-#        query_template = '''
-#            select pg_id, pg_text,
-#            from {{course}}_hint 
-#            where set_id="{{set_id}}" AND problem_id={{problem_id}} ''' 
-#        self.process_query(query_template)
+    def post(self):
+        ''' For logging student answers to hints
+
+            Sample arguments:
+            course="CompoundProblems",
+            assigned_hint_id=1,
+            correct=1
+            answer_string="x^2+2x"
+
+            Returning: 
+       '''
+        query_template = '''
+            insert into {{course}}_hint_attempt
+                (assigned_hint_id, correct, answer_string) values
+                ( {{assigned_hint_id}}, {{correct}}, "{{answer_string}}" )
+        '''
+        self.process_query(query_template, verbose=True, write_response=False)
+
+# GET /problem_hints?
+class ProblemHints(ProcessQuery):
+    def get(self):
+        ''' 
+            For listing all hints for a problem (for instructors) that could be reused for other students:
+
+            Sample arguments:
+            course="CompoundProblems", 
+            set_id="compoundProblemExperiments",
+            problem_id=2
+
+            Response: [
+                {"pg_text": "My name is Mr Hint", "pg_id": "b"}, 
+                {"pg_text": "What is [`x^2+4x+2`]?", "pg_id": "b"}, 
+                {"pg_text": "some new problem text!", "pg_id": "b"}, 
+                {"pg_text": "some new problem text!", "pg_id": "b"}, 
+                {"pg_text": "some new problem text!", "pg_id": "b"}, 
+                {"pg_text": "More hints for you dear", "pg_id": "b"}
+            ]
+            '''
+        query_template = '''
+            select {{course}}_hint.id as hint_id, {{course}}_hint.pg_text, 
+                {{course}}_hint.author
+            from {{course}}_hint inner join {{course}}_assigned_hint
+            on {{course}}_assigned_hint.hint_id={{course}}_hint.id
+            where 
+                {{course}}_assigned_hint.set_id="{{set_id}}"        AND
+                {{course}}_assigned_hint.problem_id={{problem_id}}
+            group by {{course}}_hint.id
+        '''
+        self.process_query(query_template)
