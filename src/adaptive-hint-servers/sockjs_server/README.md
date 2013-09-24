@@ -276,12 +276,15 @@ request_student
         <td>
 <pre>
 {
-  'session_id': '8Qa12ad1...',
+  'student_id': 'scheaman',
+  'course_id': 'demo',
+  'set_id': 'sandbox',
+  'problem_id': '1'
 }
 </pre>
         </td>
         <td>
-        Request to help the student identified by the session_id.
+        Request to help the student.
         </td>
         <td>
         The server will response with 'unassigned_students' and 'my_students'.
@@ -296,12 +299,15 @@ release_student
         <td>
 <pre>
 {
-  'session_id': '8Qa12ad1...',
+  'student_id': 'scheaman',
+  'course_id': 'demo',
+  'set_id': 'sandbox',
+  'problem_id': '1'
 }
 </pre>
         </td>
         <td>
-        Release the student identified by the session_id to unassigned pool.
+        Release the student to unassigned pool.
         </td>
         <td>
         The server will response with 'unassigned_students' and 'my_students'.
