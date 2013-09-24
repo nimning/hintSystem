@@ -276,7 +276,10 @@ request_student
         <td>
 <pre>
 {
-  'session_id': '8Qa12ad1...',
+  'student_id': 'scheaman',
+  'course_id': 'demo',
+  'set_id': 'sandbox',
+  'problem_id': '1'
 }
 </pre>
         </td>
@@ -296,7 +299,10 @@ release_student
         <td>
 <pre>
 {
-  'session_id': '8Qa12ad1...',
+  'student_id': 'scheaman',
+  'course_id': 'demo',
+  'set_id': 'sandbox',
+  'problem_id': '1'
 }
 </pre>
         </td>
