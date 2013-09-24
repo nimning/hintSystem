@@ -236,15 +236,23 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
             
             args
             ----
-              session_id : string
-                Webwork session id
-
+              student_id : string
+              course_id : string
+              set_id : string
+              problem_id : string
             """
             try:
                 ts = self.teacher_session
                 
-                session_id = args['session_id']
-                self.teacher_session.request_student(session_id)
+                student_id = args['student_id']
+                course_id = args['course_id']
+                set_id = args['set_id']
+                problem_id = args['problem_id']
+                
+                self.teacher_session.request_student(student_id,
+                                                     course_id,
+                                                     set_id,
+                                                     problem_id)
 
                 # send student lists
                 self.send_unassigned_students(ts.list_unassigned_students())
@@ -263,15 +271,24 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
             
             args
             ----
-              session_id : string
-                Webwork session id
+              student_id : string
+              course_id : string
+              set_id : string
+              problem_id : string
 
             """
             try:
                 ts = self.teacher_session
                 
-                session_id = args['session_id']
-                self.teacher_session.release_student(session_id)
+                student_id = args['student_id']
+                course_id = args['course_id']
+                set_id = args['set_id']
+                problem_id = args['problem_id']
+
+                self.teacher_session.release_student(student_id,
+                                                     course_id,
+                                                     set_id,
+                                                     problem_id)
 
                 # send student lists
                 self.send_unassigned_students(ts.list_unassigned_students())

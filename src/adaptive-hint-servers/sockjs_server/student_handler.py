@@ -183,7 +183,7 @@ class StudentSockJSHandler(_BaseSockJSHandler):
 
         # notify the teachers that a student has joined.
         for ts in TeacherSession.active_sessions:
-            ts.notify_student_join()
+            ts.notify_student_join(ss)
 
         # done
         callback()
@@ -304,6 +304,10 @@ class StudentSockJSHandler(_BaseSockJSHandler):
 
         # Remove the session from active list
         StudentSession.active_sessions.remove(ss)
+
+        # notify teachers
+        for ts in TeacherSession.active_sessions:
+            ts.notify_student_left(ss)
 
         if len(ss.student_id) > 0:
             logger.info("%s left"%ss.student_id)

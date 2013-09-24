@@ -16,22 +16,9 @@ from teacher_handler import TeacherSockJSHandler
 # Server Configurations 
 BIND_IP = '0.0.0.0'
 DEFAULT_PORT = 4350
-LOG_FILENAME = '/var/log/hint/sockjs.log'
+LOG_PATH = '/var/log/hint'
 
 if __name__ == "__main__":
-    # set up the root logger
-    logger = logging.getLogger()
-    logger.setLevel(logging.DEBUG)
-
-    formatter = logging.Formatter('%(asctime)s - %(name)s - '
-                                  '%(levelname)s - %(message)s')
-    
-    handler = logging.handlers.RotatingFileHandler(LOG_FILENAME,
-                                                   maxBytes=2000000,
-                                                   backupCount=5)
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
-    
     # read command-line arguments
     parser = argparse.ArgumentParser()
     parser.add_argument("--port",
@@ -40,6 +27,20 @@ if __name__ == "__main__":
                         help="port to listen")
     args = parser.parse_args()
 
+    # set up the root logger
+    logger = logging.getLogger()
+    logger.setLevel(logging.DEBUG)
+
+    formatter = logging.Formatter('%(asctime)s - %(name)s - '
+                                  '%(levelname)s - %(message)s')
+
+    log_filename =  LOG_PATH + "/sockjs-%d.log"%args.port
+    handler = logging.handlers.RotatingFileHandler(log_filename,
+                                                   maxBytes=2000000,
+                                                   backupCount=5)
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+    
     # Create routers
     StudentRouter = sockjs.tornado.SockJSRouter(StudentSockJSHandler,
                                                 '/student')
