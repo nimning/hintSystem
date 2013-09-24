@@ -112,10 +112,17 @@ class ProblemPGFile(ProcessQuery):
         '''
         self.process_query(query_template, dehydrate=_dump_pg_file)
 
-# GET /UserProblemHints?
-class UserProblemAnswers(ProcessQuery):
+# GET /realtime_user_problem_answers?
+class RealtimeUserProblemAnswers(ProcessQuery):
+    def serialize_timestamp(self, rows):
+        for row in rows:
+            # To unix timestamp
+            row['timestamp'] = int( row['timestamp'].strftime('%s') )
+        return rows
+
     def get(self):
-        ''' For showing the instructor student attempts at a problem
+        ''' For showing the instructor student attempts at a problem, in 
+                realtime
 
             Sample arguments:
             course="CompoundProblems",
@@ -126,18 +133,22 @@ class UserProblemAnswers(ProcessQuery):
             Returning: 
                 [{"scores": "11", "answer_string": "1\t2\t", "answer_id": 5}]
        '''
+
         query_template = '''
             select 
-                {{course}}_past_answer.answer_id,
-                {{course}}_past_answer.scores,
-                {{course}}_past_answer.answer_string
-            from {{course}}_past_answer
+                {{course}}_realtime_past_answer.id,
+                {{course}}_realtime_past_answer.pg_id,
+                {{course}}_realtime_past_answer.source_file,
+                {{course}}_realtime_past_answer.correct,
+                {{course}}_realtime_past_answer.answer_string,
+                {{course}}_realtime_past_answer.timestamp
+            from {{course}}_realtime_past_answer
             where 
-                {{course}}_past_answer.set_id="{{set_id}}"        AND
-                {{course}}_past_answer.problem_id={{problem_id}}   AND
-                {{course}}_past_answer.user_id="{{user_id}}"
+                {{course}}_realtime_past_answer.set_id="{{set_id}}"        AND
+                {{course}}_realtime_past_answer.problem_id={{problem_id}}  AND
+                {{course}}_realtime_past_answer.user_id="{{user_id}}"
         '''
-        self.process_query(query_template)
+        self.process_query(query_template, dehydrate=self.serialize_timestamp)
  
 
 # GET /RealtimeProblemAnswer?
