@@ -6,7 +6,7 @@ import argparse
 from render import Render 
 from checkanswer import CheckAnswer
 from webwork import (ProblemSeed, ProblemPGPath, ProblemPGFile,
-                     UserProblemAnswers, RealtimeProblemAnswer)
+                     RealtimeUserProblemAnswers, RealtimeProblemAnswer)
 from hints_api import (UserProblemHints, Hint, AssignedHint,
                        HintAnswer, ProblemHints)
 
@@ -24,7 +24,7 @@ application = tornado.web.Application([
     (r"/user_problem_hints", UserProblemHints),
     (r"/hint", Hint),
     (r"/assigned_hint", AssignedHint),
-    (r"/user_problem_answers", UserProblemAnswers),
+    (r"/realtime_user_problem_answers", RealtimeUserProblemAnswers),
     (r"/problem_hints", ProblemHints),
     (r"/realtime_problem_answer", RealtimeProblemAnswer),
     (r"/hint_answer", HintAnswer)

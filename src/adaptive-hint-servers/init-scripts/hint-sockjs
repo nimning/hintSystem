@@ -1,0 +1,35 @@
+#!/bin/bash
+
+PORT=4350
+NAME="hint-sockjs-"$PORT
+PIDFILE=/var/run/$NAME.pid
+
+SERVER_PATH="/home/scheaman/Webwork_AdaptiveHints/src/adaptive-hint-servers/sockjs_server"
+DAEMON="/usr/bin/python"
+DAEMON_ARG=$SERVER_PATH"/sockjs_server.py -- --port="$PORT
+
+case "$1" in
+  start)
+        echo -n "Starting "$NAME
+        start-stop-daemon --make-pidfile --background --start --pidfile $PIDFILE --exec $DAEMON $DAEMON_ARG
+        echo "."
+        ;;
+  stop)
+        echo -n "Stopping "$NAME
+        start-stop-daemon --stop --oknodo --pidfile $PIDFILE
+	/bin/rm $PIDFILE
+        echo "."
+        ;;
+  restart)
+        echo -n "Restarting "$NAME
+        start-stop-daemon --stop  --oknodo --retry 30 --pidfile $PIDFILE
+        start-stop-daemon --make-pidfile --background --start --pidfile $PIDFILE --exec $DAEMON $DAEMON_ARG
+        echo "."
+        ;;
+
+  *)
+        echo "Usage: "$1" {start|stop|restart}"
+        exit 1
+esac
+
+exit 0
