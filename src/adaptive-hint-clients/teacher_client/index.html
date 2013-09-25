@@ -3,20 +3,21 @@
 <html>
 <!--
   Created using jsbin.com
-  Source can be edited via http://jsbin.com/UniciTu/39/edit
+  Source can be edited via http://jsbin.com/UniciTu/58/edit
 -->
-<head>
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-  <script src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
-  <script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>  
-  <link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css">
-  <meta charset=utf-8 />
-  <title>Datatable</title>
-
+  <head>
+    <link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
+    <script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
+    <meta charset=utf-8 />
+    <title>TA Console</title>
+  
 <style id="jsbin-css">
 .table_container {
-  margin: 20px;
+  height: 300px;
   width: 800px;
+  margin: 20px;
   padding: 5px;
   clear: left;
 }
@@ -26,208 +27,344 @@
   margin: 10px;
   padding: 5px;
 }
-
-div.dataTables_wrapper {
-  padding: 20px;
-  border:1px solid;
-}
 </style>
 </head>
-<body>
-  <div class="login_panel">
-    Teacher ID: <input type="text" name="teacher_id"/>
-    <button id="login_button">Login</button>
-	<button id="logout_button">Logout</button>
-  </div>
-	
-  <textarea id="textarea" rows="10" cols="80"></textarea>
-<div id="after_login">
-  <div>
-    <h2>Unasssigned students</h2>
-  </div>
-  <div class="table_container">
-    <table id="unassigned_students">
-        <thead>
-            <tr>
-                <th>Student</th>
-                <th>Time spent</th>
-                <th>Set</th>
-                <th>Problem</th>
-                <th>Part</th>
-                <th>Tries</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            
-            
-        </tbody>
-    </table>
-  </div>
-  <div>
-    <h2>My students</h2>
-  </div>
-  <div class="table_container">
-    <table id="my_students">
-        <thead>
-            <tr>
-                <th>Student</th>
-                <th>Time spent</th>
-                <th>Set</th>
-                <th>Problem</th>
-                <th>Part</th>
-                <th>Time since last incorrect</th>
-                <th>Time since last hint</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            
-        </tbody>
-    </table>
-  </div>
-</div>
-<script>
-function print(msg) {
-  var textbox = $("#textarea");
-  textbox.val(textbox.val() + msg + "\n");
-  textbox.scrollTop(textbox[0].scrollHeight - textbox.height());
-}
-
-function open_student_view(teacher_id, student_id, course_id, set_id, problem_id) {
-  var url = "/teacher/student_monitor.html?" +
-      "teacher_id=" + teacher_id + "&" +
-      "student_id=" + student_id + "&" +
-      "course_id=" + course_id + "&" +
-      "set_id=" + set_id + "&" +
-      "problem_id=" + problem_id;
-  window.open(url, '_blank');
-}
-
-function send_command(sock, cmd, args) {
   
+  <body>
+    
+    <input type="hidden" id="port" value="4350"/>
+    
+    
+    <div class="login_panel">
+      TeacherID: <span id="teacher_id_label"></span>  
+      <select id="teacher_id">
+        <option value="yfreund">yfreund</option>
+        <option value="scheaman">scheaman</option>
+        <option value="melkherj">melkherj</option>
+        <option value="yuncong">yuncong</option>
+        <option value="tutor1">tutor1</option>
+        <option value="tutor2">tutor2</option>
+        <option value="tutor3">tutor3</option>
+      </select>
+      <button id="login_button">Login</button>
+      <button id="logout_button">Logout</button>
+    </div>
+    
+    <div id="after_login">
+      <div><h2>Unasssigned students</h2></div>
+      <div class="table_container">
+        <table id="unassigned_students">
+          <thead>
+            <tr>
+              <th>Student</th>
+              <th>Time spent (in min)</th>
+              <th>Set</th>
+              <th>Problem</th>
+              <th>Part</th>
+              <th>Tries</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>      
+      <div><h2>My students</h2></div>
+      <div class="table_container">
+        <table id="my_students">
+          <thead>
+            <tr>
+              <th>Student</th>
+              <th>Time spent (in min)</th>
+              <th>Set</th>
+              <th>Problem</th>
+              <th>Part</th>
+              <th>Time since last incorrect (in min)</th>
+              <th>Time since last hint (in min)</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>          
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <script>
+// Debug print
+function print(msg) {
+  console.log(msg);
+}
+
+function get_params() { 
+  // Get the query string params
+  var QueryString = function() {
+    // This function is anonymous, is executed immediately and 
+    // the return value is assigned to QueryString!
+    var query_string = {};
+    var query = window.location.search.substring(1);
+    var vars = query.split("&");
+    for (var i = 0; i < vars.length; i++) {
+      var pair = vars[i].split("=");
+      // If first entry with this name
+      if (typeof query_string[pair[0]] === "undefined") {
+        query_string[pair[0]] = pair[1];
+        // If second entry with this name
+      } else if (typeof query_string[pair[0]] === "string") {
+        var arr = [query_string[pair[0]], pair[1]];
+        query_string[pair[0]] = arr;
+        // If third or later entry with this name
+      } else {
+        query_string[pair[0]].push(pair[1]);
+      }
+    }
+    return query_string;
+  }();
+
+  if (QueryString.port) {
+    $('#port').val(QueryString.port);
+  }
+}
+
+// Helper for sending a command to sockJS server
+function send_command(sock, cmd, args) {
   sock.send(JSON.stringify({
     "type" : cmd,
     "arguments" : args
   }));
   print("SENT: " + cmd + ":" + JSON.stringify(args, null, 2));
 }
-function parse_my(data){
-  num_active_students = data.length;
-  print(num_active_students);
-  
-  my.fnClearTable();
-  for (var i = 0; i < num_active_students; i++) {
+
+// Open student_monitor page
+function open_student_view(student_id, course_id, set_id, problem_id) {
+  var url = "http://webwork.cse.ucsd.edu/teacher/student_monitor.html?" + 
+      "teacher_id=" + $('#teacher_id').val() + "&" +
+      "student_id=" + student_id + "&" +
+      "course_id=" + course_id + "&" +
+      "set_id=" + set_id + "&" +
+      "problem_id=" + problem_id + "&" +
+      "port=" + $("#port").val();
+  window.open(url, '_blank'); 
+}
+
+function take_student(student_id, course_id, set_id, problem_id) {
+  send_command(sock, 'request_student',
+               {'student_id':student_id,
+                'course_id': course_id,
+                'set_id': set_id,
+                'problem_id': problem_id});
+}
+
+function release_student(student_id, course_id, set_id, problem_id) {
+  send_command(sock, 'release_student',
+               {'student_id':student_id,
+                'course_id': course_id,
+                'set_id': set_id,
+                'problem_id': problem_id});
+}
+
+function parse_hints (hints) {
+  var len = hints.length;	
+  if (len > 0) { 
+    var d = new Date();
+    var time_temp = (Math.round(d.getTime()/1000) - 
+                     hints[len-1].timestamp)/(60);
     
-    stud_data = data[i];
-    details = parse_pastanswers(stud_data.answers);
+    var min = Math.floor(time_temp);
+    //var sec = Math.floor((time_temp%1)*60);
     
-    // element = document.createElement("unassign").button();
-    //element.setAttribute("class",stud_data.session_id);
-    time_lasthint = parse_hints (stud_data.hints);
+    var time_lasthint = min;
     
+    if (time_lasthint > 10) {
+      time_lasthint = '>10';
+    }
     
-    my.fnAddData([stud_data.student_id,details[0],stud_data.set_id,stud_data.problem_id,details[1],details[3],
-                  "hint_time",
-                  "<button onclick=open_student_view('" +
-                  teacher_id + "','" +
-                  stud_data.student_id + "','" +
-                  stud_data.course_id + "','" +
-                  stud_data.set_id + "','" +
-                  stud_data.problem_id +
-                  "')>View</button><button id=unassign class="+stud_data.session_id+">Unassign</button>"]);
+    return time_lasthint; 
   }
-  
-}
-function parse_unassigned(data){
-  
-  unassigned.fnClearTable();
-  num_active_students = data.length;
-  print(num_active_students);
-  
-  
-  for (var i = 0; i < num_active_students; i++) {
-    stud_data = data[i];
-    details = parse_pastanswers(stud_data.answers);
-    
-    
-    unassigned.fnAddData([stud_data.student_id,details[0],stud_data.set_id,stud_data.problem_id,details[1],details[2],"<button id=take class="+stud_data.session_id+">Take</button>"]);
-    
+  else {
+    return 0;
   }
-  
-  
 }
 
-function parse_hints (hints)
-{
-  return "-";
-}
-
-
-function parse_pastanswers(past_answers){
-  
-  var details = [];
-  len = past_answers.length;
-  part = past_answers[len-1].boxname;
-  trim_part = part.substr(6);
-  
-  for (var i=len-1;i>=0;i--)
-  {
-    if(past_answers[i].boxname!=part)
-    {
-      break;
+// Calculate time spent in minutes
+// Returns: time spent in minutes
+function calc_time_spent(past_answers, part) {
+  var len = past_answers.length;
+  var sum_time = 0;  
+  for (var i = len-1; i >= 1; i--) {
+    if (past_answers[i].boxname == part) {
+      sum_time += past_answers[i].timestamp - past_answers[i-1].timestamp;
+      //print("sum="+sum_time);
     }
   }
-  i++;
+  var time_spent_temp = (Math.round(new Date().getTime()/1000) + 
+                         sum_time - past_answers[len-1].timestamp)/(60);
   
-  var d = new Date();
+  //print(new Date().getTime()/1000);
+  //print(sum_time);
+  //print(past_answers[len-1].timestamp);
+  //print(time_spent_temp);
   
-  //in min
-  time_spent_temp = (d.getTime()/1000 - past_answers[i].timestamp)/(60);
-  min = Math.floor(time_spent_temp);
-  sec = Math.floor((time_spent_temp%1)*60);
-  time_spent = min + " min "+sec+" sec";
-  
-  tries = len - i;
-  
-  var min = 0;
-  var sec = 0;
-  if (past_answers[len-1].is_correct === false)
-  {
-    time_temp = (d.getTime()/1000 - past_answers[len-1].timestamp)/(60);
-    min = Math.floor(time_temp);
-    sec = Math.floor((time_temp%1)*60);
-    time_lastincorrect = min + " min "+sec+" sec";
-    
+  return Math.round(time_spent_temp);
+}
+
+// Calculate the number of tries
+// Returns: number of tries or null if correct answer was given.
+function calc_tries(past_answers, part) {
+  var len = past_answers.length;
+  var tries = 0;
+  for (var j = len-1; j>=0; j--) {
+    // Count the incorrect tries only.
+    if (past_answers[j].boxname == part && 
+        past_answers[j].is_correct === false) {
+      tries++;
+    } 
+    else if (past_answers[j].boxname == part && 
+             past_answers[j].is_correct === true) {
+      // Found a correct answer.
+      return null;
+    }
   }
-  else
-  {
-    time_lastincorrect = min + " min "+sec+" sec";
+  return tries;
+}
+
+function calc_time_lastincorrect(past_answers, part) {
+  var len = past_answers.length;
+  var time_lastincorrect = 0;
+  if (past_answers[len-1].is_correct === false) {
+    var time_temp = (Math.round(new Date().getTime()/1000) -
+                     past_answers[len-1].timestamp)/(60);
+    //print(new Date().getTime()/1000 +" "+ past_answers[len-1].timestamp);  
+    time_lastincorrect = Math.round(time_temp);
+  }
+  return time_lastincorrect;
+}
+
+function add_row_my(stud_data) {
+  var past_answers = stud_data.answers;
+  var len = past_answers.length;
+  
+  // Answers are empty. Don't display in the table.
+  if (len === 0) {
+    return;
   }
   
-  details[0] = time_spent;
-  details[1] = parseInt(trim_part,10).toString();
-  details[2] = tries;
-  details[3] = time_lastincorrect;
-  return details;
+  var part = past_answers[len-1].boxname;
+  var time_spent = calc_time_spent(past_answers, part);
+  var time_lastincorrect = calc_time_lastincorrect(past_answers, part);
+  var time_lasthint = parse_hints(stud_data.hints);
   
+  if (time_spent > 10) {
+    time_spent = '>10';
+  }
+  
+  if (time_lastincorrect > 10) {
+    time_lastincorrect = '>10';
+  }
+  
+  // Add the row
+  my.fnAddData([stud_data.student_id,
+                time_spent,
+                stud_data.set_id,
+                stud_data.problem_id,
+                parseInt(part.substr(6), 10).toString(), 
+                time_lastincorrect,
+                time_lasthint,
+                "<button onclick=open_student_view('" +
+                stud_data.student_id + "','" +
+                stud_data.course_id + "','" +
+                stud_data.set_id + "','" +
+                stud_data.problem_id +
+                "')>View</button>" + 
+                "<button onclick=release_student('" +
+                stud_data.student_id + "','" +
+                stud_data.course_id + "','" +
+                stud_data.set_id + "','" +
+                stud_data.problem_id + 
+                "')>Unassign</button>"]);
 }
 
 
+function add_rows_unassigned(stud_data) {
+  var past_answers = stud_data.answers;
+  var len = past_answers.length;
+  
+  // Answers are empty. Don't display in the table
+  if (len === 0) {
+    return;
+  }
+  
+  // Find out part names
+  var all_parts = {};
+  for (var ii = 0; ii < len; ii++) {
+    all_parts[past_answers[ii].boxname] = (
+      past_answers[ii].boxname.substr(6));
+  }
+  
+  for (var part in all_parts) {
+    var time_spent = calc_time_spent(past_answers, part);
+    var tries = calc_tries(past_answers, part);
+    
+    // Not enough tries. Don't display on the table.
+    if (tries === null || tries < 3) {
+      continue;
+    }
+    
+    if (time_spent > 10) {
+      time_spent = '>10';
+    }
+    
+    // Add the row    
+    unassigned.fnAddData([stud_data.student_id, 
+                          time_spent,
+                          stud_data.set_id, 
+                          stud_data.problem_id, 
+                          parseInt(part.substr(6), 10).toString(),
+                          tries,
+                          "<button id=take onclick=take_student('" +
+                          stud_data.student_id + "','" +
+                          stud_data.course_id + "','" +
+                          stud_data.set_id + "','" +
+                          stud_data.problem_id + 
+                          "')>Take</button>"]);	
+  }
+}
 
+
+function parse_my(data) {
+  my.fnClearTable();
+  for (var i = 0; i < data.length; i++) {    
+    var stud_data = data[i];
+    add_row_my(stud_data);
+  }
+}
+
+function parse_unassigned(data) {
+  unassigned.fnClearTable();
+  for (var i = 0; i < data.length; i++) {
+    var stud_data = data[i];
+    add_rows_unassigned(stud_data);
+  }
+}
+
+//////////////////////////////////////////////
 
 $(document).ready(function() {
+  
+  // Read URL params
+  get_params();
+  
   $("#after_login").hide();
-  $("#textarea").hide();
   
-  
-  
-  $('#login_button').click(function (){ 
+  $('#login_button').click(function (){
+    sock = new SockJS('http://webwork.cse.ucsd.edu:' + 
+                      $('#port').val() +
+                      '/teacher');
     
-    sock = new SockJS('http://webwork.cse.ucsd.edu:4350/teacher');
     sock.onopen = function() {
       print("INFO: connected");
-      send_command(sock, 'teacher_join', {'teacher_id' : teacher_id});
+      teacher_id = $('#teacher_id').val();    
+      send_command(sock, 'teacher_join', 
+                   { 'teacher_id' : teacher_id });
     };
     
     sock.onclose = function() {
@@ -237,61 +374,43 @@ $(document).ready(function() {
     sock.onmessage = function(e) {
       print("RECIEVED: " + e.data);
       data = jQuery.parseJSON(e.data);
-      print(data.type);
-      if(data.type=="my_students")
-      {
-        table_my = parse_my(data["arguments"]);
+      if(data.type == "my_students") {
+        parse_my(data["arguments"]);
       }
-      else if (data.type=="unassigned_students")
-      {	
-        table_un = parse_unassigned(data["arguments"]);
+      else if (data.type=="unassigned_students") {	
+        parse_unassigned(data["arguments"]);
       }
     };
     
-    teacher_id = $('input[name=teacher_id]').val();    
-    
-    
+    // Set UIs
+    $("#login_button").hide();
+    $("#teacher_id").hide();
+    $("#teacher_id_label").html($("#teacher_id").val());
     $("#after_login").show();
-    $("input[name=teacher_id]").hide();
-    $("#login_button").hide();	
     
+    // Create tables
     unassigned = $('#unassigned_students').dataTable();
     my = $('#my_students').dataTable();
+    
+    // Set up refresh interval
     interval_id = window.setInterval(
       function() { 
         send_command(sock,'list_students',{});
       }, 5000);        
   });
   
-  $('#logout_button').click(function (){
-
-    clearInterval(interval_id);
-    sock.close();
-    unassigned.fnDestroy();
-    my.fnClearTable();
-    my.fnDestroy();
-    
-    $("#after_login").hide();
-    $("input[name=teacher_id]").show();
-    $("#login_button").show();
-    
-    
-  });
   
-  $(document).on('click','#take',function()    {
+  $('#logout_button').click(function () {
+    clearInterval(interval_id);
+    unassigned.fnClearTable();
+    my.fnClearTable();
     
-    var session_id = $(this).attr('class');
-    //alert(session_id);
-    send_command(sock,'request_student',{'session_id':session_id});
-  }
-                );
-  $(document).on('click','#unassign',function()    {
-    var session_id = $(this).attr('class');
-    //alert(session_id);
-    send_command(sock,'release_student',{'session_id':session_id});
-  }
-                );
-  $(document).on('click','#unassign',function(){});
+    $("#teacher_id_label").html("");
+    $("#after_login").hide();
+    $("#teacher_id").show();
+    $("#login_button").show();
+    sock.close();
+  });
   
 });
 </script>
