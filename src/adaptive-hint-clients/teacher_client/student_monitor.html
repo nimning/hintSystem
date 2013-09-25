@@ -1,9 +1,8 @@
-
 <!DOCTYPE html>
 <html>
 <!--
   Created using jsbin.com
-  Source can be edited via http://jsbin.com/iCaVObU/25/edit
+  Source can be edited via http://jsbin.com/iCaVObU/29/edit
 -->
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -40,6 +39,18 @@
   width: 600px;
 }
 
+#hint_html_container {
+  padding: 20px; 
+}
+
+.hint_html {
+  background-color: #E0FAC0;
+  clear:left; 
+  margin:10px;
+  border:1px solid;
+  padding:5px;
+}
+
 .timestamp {
   margin: 2px;
 }
@@ -57,11 +68,7 @@
   padding: 10px;
 }
 
-.hint_html_container {
-  border: 1px solid black; 
-  padding: 3px; 
-  width: 600px;
-}
+
 </style>
 </head>
   <body>
@@ -70,97 +77,92 @@
     <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
     <script src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
-    <script src="//cdn.jsdelivr.net/codemirror/3.14.0/codemirror.js"></script>
-    <script src="//cdn.jsdelivr.net/codemirror/3.14.0/mode/xml/xml.js"></script>
-    <script src="//cdn.jsdelivr.net/codemirror/3.14.0/mode/javascript/javascript.js"></script>
-    <script src="//cdn.jsdelivr.net/codemirror/3.14.0/mode/css/css.js"></script>
-    <script src="//cdn.jsdelivr.net/codemirror/3.14.0/mode/htmlmixed/htmlmixed.js"></script>
     
-    <input type="hidden" id="teacher_id" value="ta1"/>
+    <input type="hidden" id="teacher_id" value="__TESTER__"/>
     <input type="hidden" id="course_id" value="demo"/>
     <input type="hidden" id="set_id" value="sandbox"/>
     <input type="hidden" id="problem_id" value="1"/>
     <input type="hidden" id="student_id" value="scheaman"/>
     <input type="hidden" id="pg_file" value=""/>
-    <input type="hidden" id="pg_seed" value=""/>
+    <input type="hidden" id="pg_seed" value=""/>  
+    <input type="hidden" id="port" value="4350"/>
     
-    
-    <div id="page_container">
-      
-    <div id="past_answers">
-      <h2>Past answers</h2>
-      <div id="answer_container" class="table_container">
-        <table id="AnSwEr0001_table">
-          <thead>
-            <tr>
-              <th>Timestamp_hidden</th>
-              <th>Seconds ago</th>
-              <th>Answer</th>
-              <th>Correct</th>
-            </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    
-    
-    <div style="float:left;">    
-      <div style="clear:left;">
-        <h2>Student's view</h2>
-        <div id="problem_preview">
+    <div id="page_container">   
+      <div id="past_answers">
+        <h2>Past answers</h2>
+        <div id="answer_container" class="table_container">
+          <table id="AnSwEr0001_table">
+            <thead>
+              <tr>
+                <th>Timestamp_hidden</th>
+                <th>Seconds ago</th>
+                <th>Answer</th>
+                <th>Correct</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
         </div>
       </div>
       
-      <div style="clear:left; margin-bottom:100px;">
-        <h2>Hints</h2>
-        <button id="create_hint" style="height:30px;">
-          Create a new hint
-        </button>
-        <div id="hints">
-          <div class="table_container">
-            <table id="hint_table">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Hint PGML</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>Hint: Blah</td>
-                  <td>
-                    <button>Fork</button>
-                    <button>Select</button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+      <div style="float:left;">    
+        <div style="clear:left;">
+          <h2>Student's view</h2>
+          <div id="problem_preview">
           </div>
         </div>
-        <div>
-          <div class="hint_html_container">
-            <textarea id="hint_html"></textarea>
+        
+        <div style="clear:left; margin-bottom:100px;">
+          <h2>Hints</h2>
+          <button id="create_hint" style="height:30px;">
+            Create a new hint
+          </button>
+          <div id="hints">
+            <div class="table_container">
+              <table id="hint_table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Hint PGML</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>Hint: Blah</td>
+                    <td>
+                      <button>Fork</button>
+                      <button>Select</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
-          <br/>
-          <div style="float:left;">
-            <input type="checkbox" id="feedback" checked="on"/>
-            Include feedback
-          </div>
-          <div style="float:right; text-align:right; padding-right: 50px;">
-            Hint Location:
-            <select id="hint_location">
-            </select>
-            <button id="add_hint">Send</button>
+          <div>
+            <div id="hint_html_container">
+              <div id="hint_status"></div>
+              <div id="hint_html"></div>
+            </div>
+            <br/>
+            <div style="float:left;">
+              <input type="checkbox" id="feedback" checked="on"/>
+              Include feedback
+            </div>
+            <div style="float:right; text-align:right; padding-right: 50px;">
+              Hint Location:
+              <select id="hint_location">
+              </select>
+              <button id="add_hint">Send</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
-      
-    </div>
+    
+    <div id="error_message"></div>
   <script>
 var HINT_EDITOR = '/teacher/hint_editor.html';
 
@@ -182,6 +184,7 @@ function remove_hint(hintbox_id, location) {
     });
 }
 
+
 function render_hint(idx) {
   var pg_text = (hints[idx].pg_header + '\n' + 
                  hints[idx].pg_text + '\n' + 
@@ -190,7 +193,7 @@ function render_hint(idx) {
     'pg_file': btoa(pg_text),
     'seed': $('#pg_seed').val()
   };
-  hint_html.setValue('Rendering...');
+  $('#hint_status').html('Rendering...');
   $.post("http://webwork.cse.ucsd.edu:4351/render", post_data, function(r) {
     var err = r.error_msg;
     // Clean up
@@ -208,9 +211,12 @@ function render_hint(idx) {
         '<input type="radio" name="feedback_' +
         hintbox_id + '" value="helpful">Helpful' +
         '</div>';  
-    }
-    
-    hint_html.setValue(clean_html);  
+    }  
+    $('#hint_status').html('Preview');
+    $('#hint_html')
+    .html(clean_html)
+    .addClass('hint_html')
+    .show();
   });
 }
 
@@ -270,6 +276,10 @@ function get_params() {
   if (QueryString.problem_id) {
     $('#problem_id').val(QueryString.problem_id);
   } 
+  
+  if (QueryString.port) {
+    $('#port').val(QueryString.port);
+  }
 }
 
 // Debug print
@@ -476,9 +486,17 @@ function get_student_info() {
   });
 }
 
+function timed_out() {
+  $('#page_container').hide();
+  $('#error_message').html('Hmm..the student has gone offline' +
+                           '<br><button onclick="window.close()">' +
+                           'Close</button>');
+}
+
 // Set up the SockJS connection
-function setup_sockjs() {
-  sock = new SockJS('http://webwork.cse.ucsd.edu:4350/teacher');
+function setup_sockjs(port) {
+  sock = new SockJS('http://webwork.cse.ucsd.edu:' +
+                    port + '/teacher');
   
   sock.onopen = function() {
     print("INFO: connected");
@@ -496,14 +514,26 @@ function setup_sockjs() {
     print("RECIEVED: " + e.data);
     var data = $.parseJSON(e.data);
     if (data.type == 'student_info') {
-      var student_info = data['arguments'];
-      document.title = student_info.student_id + 
-        '-' + student_info.set_id + 
-        '-' + student_info.problem_id;
-      $('#pg_file').val(student_info.pg_file);
-      $('#pg_seed').val(student_info.pg_seed);
-      $('#student_id').val(student_info.student_id);
-      update_view(student_info);
+     var student_info = data['arguments'];
+      if ($.isEmptyObject(student_info)) {
+        $('#add_hint').attr("disabled", "disabled");        
+        window.close_timer = setTimeout(function(){
+          timed_out();  
+        }, 60000); 
+      }
+      else {
+        if (window.close_timer !== undefined) {
+          clearTimeout(window.close_timer);
+        }
+        $('#add_hint').removeAttr('disabled');
+        document.title = student_info.student_id + 
+          '-' + student_info.set_id + 
+          '-' + student_info.problem_id;
+        $('#pg_file').val(student_info.pg_file);
+        $('#pg_seed').val(student_info.pg_seed);
+        $('#student_id').val(student_info.student_id);
+        update_view(student_info);
+      }
     }
   };
   
@@ -518,21 +548,15 @@ $(document).ready(function() {
   
   // Get url params
   get_params();
-  
-  // Set up elements
-  hint_html = CodeMirror.fromTextArea(document.getElementById("hint_html"), {
-    mode: "htmlmixed",
-    lineNumbers: true,
-    styleActiveLine: true,
-    matchBrackets: true
-  });
-  hint_html.setSize("100%", 150);
-  
+   
   // Set up SockJS
-  setup_sockjs(); 
+  setup_sockjs($('#port').val()); 
   
   // Get available hints
   get_hints();
+  
+  // Hide the preview box
+  $('#hint_html').hide();
   
   $("#add_hint").click(function() {
     send_command(sock, 'add_hint', {
@@ -542,8 +566,11 @@ $(document).ready(function() {
       'problem_id': $('#problem_id').val(),
       'location': $('#hint_location').val(),
       'hintbox_id': hintbox_id,
-      'hint_html': hint_html.getValue()
+      'hint_html': $('#hint_html').html()
     });
+    // Clear preview box
+    $('#hint_status').html('');
+    $('#hint_html').hide();
   });
   
   $("#create_hint").click(function() {
@@ -554,6 +581,17 @@ $(document).ready(function() {
       '&seed=' + $('#pg_seed').val();
     window.open(url,'_blank');
   });
+    
+  // Auto send 'release_student' when closing window
+  window.onbeforeunload = function() {
+    console.log('what');
+     send_command(sock, 'release_student', {
+      'student_id': $('#student_id').val(),
+      'course_id': $('#course_id').val(),
+      'set_id': $('#set_id').val(),
+      'problem_id': $('#problem_id').val()
+    });
+  };
   
   var ts_refresh = setInterval(function() {
     var ts = Math.round((new Date()).getTime() / 1000);
