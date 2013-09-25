@@ -1,8 +1,9 @@
+
 <!DOCTYPE html>
 <html>
 <!--
   Created using jsbin.com
-  Source can be edited via http://jsbin.com/iCaVObU/29/edit
+  Source can be edited via http://jsbin.com/iCaVObU/36/edit
 -->
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -11,27 +12,46 @@
 <style id="jsbin-css">
 
 #page_container {
- display: none;
+  width: 100%;
+  height: 100%;
+  display: none;
 }
 
 #past_answers {
+  position: absolute;
+  left: 0px;
   width: 300px;
-  padding:10px;
-  margin:10px;
-  float:left;
+  height: 95%;
+  overflow: scroll;
+  margin: 10px;
+  padding: 10px;
+  padding-right: 20px;
   font-size: 14px;
 }
 
+#problem_container {
+  background-color: white;
+  margin-left: 350px;
+  overflow: auto;
+}
+
+#hint_container {
+  background-color: white;
+  margin-left: 350px;
+  display: none;
+  overflow: auto;
+}
+
 #problem_preview {
-  background-color: #ffffff;
-  border:1px solid;
+  background-color: white;
+  border: 1px solid black;
   border-radius:10px;
   min-height: 100px;
   width: 600px;
-  overflow-y: auto;
-  padding:10px;
-  margin:10px;
-  float:left;
+  overflow: auto;
+  padding: 10px;
+  margin: 10px;
+  float: left;
   font-size: 14px;
 }
 
@@ -57,7 +77,7 @@
 
 .dataTables_wrapper {
   margin-top: 20px;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
   border:1px solid black;
 }
 
@@ -68,6 +88,10 @@
   padding: 10px;
 }
 
+html, body {
+  width: 98%; 
+  height: 100%;
+}
 
 </style>
 </head>
@@ -87,7 +111,7 @@
     <input type="hidden" id="pg_seed" value=""/>  
     <input type="hidden" id="port" value="4350"/>
     
-    <div id="page_container">   
+    <div id="page_container">
       <div id="past_answers">
         <h2>Past answers</h2>
         <div id="answer_container" class="table_container">
@@ -95,7 +119,7 @@
             <thead>
               <tr>
                 <th>Timestamp_hidden</th>
-                <th>Seconds ago</th>
+                <th>Last update</th>
                 <th>Answer</th>
                 <th>Correct</th>
               </tr>
@@ -106,57 +130,51 @@
         </div>
       </div>
       
-      <div style="float:left;">    
-        <div style="clear:left;">
-          <h2>Student's view</h2>
-          <div id="problem_preview">
+      <div id="problem_container">
+        <h2>Student's view</h2>
+        <div id="problem_preview">
+        </div> 
+      </div>
+      
+      <div id="hint_container">
+        <h2>Hints</h2>
+        <button id="create_hint" style="height: 30px;">
+          Create a new hint
+        </button>
+        <div id="hints">
+          <div class="table_container">
+            <table id="hint_table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Hint PGML</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>Hint: Blah</td>
+                  <td>
+                    <button>Fork</button>
+                    <button>Select</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-        </div>
-        
-        <div style="clear:left; margin-bottom:100px;">
-          <h2>Hints</h2>
-          <button id="create_hint" style="height:30px;">
-            Create a new hint
-          </button>
-          <div id="hints">
-            <div class="table_container">
-              <table id="hint_table">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Hint PGML</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>Hint: Blah</td>
-                    <td>
-                      <button>Fork</button>
-                      <button>Select</button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+          <div id="hint_html_container">
+            <div id="hint_status"></div>
+            <div id="hint_html"></div>
           </div>
-          <div>
-            <div id="hint_html_container">
-              <div id="hint_status"></div>
-              <div id="hint_html"></div>
-            </div>
-            <br/>
-            <div style="float:left;">
-              <input type="checkbox" id="feedback" checked="on"/>
-              Include feedback
-            </div>
-            <div style="float:right; text-align:right; padding-right: 50px;">
-              Hint Location:
-              <select id="hint_location">
-              </select>
-              <button id="add_hint">Send</button>
-            </div>
+          <div style="float:left;">
+            <input type="checkbox" id="feedback" checked="on"/>
+            Include feedback
+          </div>
+          <div style="float:right; text-align:right; padding-right: 50px; margin-bottom: 100px;">
+            <input type="text" disabled id="hint_location" value=""/>
+            <button id="add_hint">Send</button>
+            <button id="cancel_hint">Cancel</button>
           </div>
         </div>
       </div>
@@ -172,7 +190,7 @@ function pad(num, size) {
   return s;
 }
 
-
+// Remove a hint from the student's view
 function remove_hint(hintbox_id, location) {
   send_command(sock, 'remove_hint', {
       'student_id': $('#student_id').val(),
@@ -184,7 +202,7 @@ function remove_hint(hintbox_id, location) {
     });
 }
 
-
+// Render hint for preview
 function render_hint(idx) {
   var pg_text = (hints[idx].pg_header + '\n' + 
                  hints[idx].pg_text + '\n' + 
@@ -220,19 +238,18 @@ function render_hint(idx) {
   });
 }
 
-
 function fork_hint(idx) {
   var url = HINT_EDITOR;
   url += '?course_id=' + $('#course_id').val() +
     '&set_id=' + $('#set_id').val() +
     '&problem_id=' + $('#problem_id').val() +
     '&seed=' + $('#pg_seed').val() +
-    '&hint_id=' + hints[idx].hint_id;
+    '&hint_id=' + hints[idx].hint_id +
+    '&teacher_id=' + $('#teacher_id').val();
   window.open(url, '_blank');
 }
 
-function get_params() {
-  
+function get_params() { 
   // Get the query string params
   var QueryString = function() {
     // This function is anonymous, is executed immediately and 
@@ -304,7 +321,7 @@ function parse_past_answers(answers, boxname, dtable) {
         answers[i].timestamp.toString(),
         "<p class=\"timestamp\" value=\"" +
         answers[i].timestamp.toString() +
-        "\">---</p>",
+        "\"></p>",
         answers[i].entered_value,
         answers[i].is_correct]);
     }
@@ -314,6 +331,20 @@ function parse_past_answers(answers, boxname, dtable) {
   ]);
 }
 
+function update_timestamp() {
+  var ts = Math.round((new Date()).getTime() / 1000);
+  $('.timestamp').each(function() {
+    var min = Math.floor((ts - $(this).attr('value')) / 60);
+    if (min < 0) {
+      min = 0;
+    }
+    if (min > 10) {
+      min = '>10';
+    }
+    $(this).html(min + ' min ago');
+  });
+}
+
 function update_answer_tables(data) {
   $('#past_answers  table[id^=AnSwEr]').each(function() {
     var boxname = $(this).attr('id').split('_')[0];
@@ -321,6 +352,7 @@ function update_answer_tables(data) {
                        boxname, 
                        $(this).dataTable());
   });
+  update_timestamp();
 }
 
 function onRenderComplete(student_info) {
@@ -359,6 +391,31 @@ function onRenderComplete(student_info) {
     var table_title = this_id.replace("_table","");
     $('#' + this_id + '_wrapper div.header').html(table_title);
   });
+  
+  $('#problem_preview input[id^=AnSwEr]').each(function() {
+    // get the boxname
+    var boxid = $(this).attr('id');
+    $(this).prop('readonly', true);
+    // Add focus events
+    $(this).focus(function() {     
+      $('div[id$="_table_wrapper"]')
+      .css('border','1px solid black');
+      var target_answer = $('div[id^="' + boxid +'"]');
+      target_answer.css('border','2px solid red');
+      var p =  target_answer.position().top;
+      $('#past_answers').scrollTop(p);
+    });
+    
+    // Add hint button
+    var button = $('<button>+</button>')
+    .click(function() {
+      $('#hint_location').val(boxid);
+      $('#hint_container').show();
+      window.scrollTo(0, document.body.scrollHeight);
+    });
+    $(this).after(button);
+  });
+  
   
   // Show the page if everything loads correctly.
   $('#page_container').show();
@@ -428,7 +485,9 @@ function update_answers(student_info) {
   for (var answer in student_info.answers) {
     if (student_info.answers.hasOwnProperty(answer)) {
       var ans = student_info.answers[answer];
-      $('#problem_preview input#'+ans.boxname).val(ans.entered_value);
+      var box = $('#problem_preview input#'+ans.boxname);
+      box.val(ans.entered_value);
+      box.attr('title', 'Correct answer is ' + ans.correct_value);
     }
   }
 }
@@ -542,6 +601,7 @@ function setup_sockjs(port) {
   };
 }
 
+
 //////////////////////////////////////////////////////
 
 $(document).ready(function() {
@@ -559,26 +619,39 @@ $(document).ready(function() {
   $('#hint_html').hide();
   
   $("#add_hint").click(function() {
-    send_command(sock, 'add_hint', {
-      'student_id': $('#student_id').val(),
-      'course_id': $('#course_id').val(),
-      'set_id': $('#set_id').val(),
-      'problem_id': $('#problem_id').val(),
-      'location': $('#hint_location').val(),
-      'hintbox_id': hintbox_id,
-      'hint_html': $('#hint_html').html()
-    });
-    // Clear preview box
-    $('#hint_status').html('');
-    $('#hint_html').hide();
+    var location = $('#hint_location').val();
+    if (location.length > 0 &&
+        hintbox_id !== undefined &&
+        hintbox_id !== null) { 
+      send_command(sock, 'add_hint', {
+        'student_id': $('#student_id').val(),
+        'course_id': $('#course_id').val(),
+        'set_id': $('#set_id').val(),
+        'problem_id': $('#problem_id').val(),
+        'location': $('#hint_location').val(),
+        'hintbox_id': hintbox_id,
+        'hint_html': $('#hint_html').html()
+      });
+    }
+    $("#cancel_hint").click();
   });
   
+  $("#cancel_hint").click(function() {
+    $('#hint_status').html('');
+    $('#hint_html').hide();
+    $('#hint_location').val('');
+    hintbox_id = null;
+    $('#hint_container').hide();
+    window.scrollTo(0, 0);
+  });
+                          
   $("#create_hint").click(function() {
     var url = HINT_EDITOR;
     url += '?course_id=' + $('#course_id').val() +
       '&set_id=' + $('#set_id').val() +
       '&problem_id=' + $('#problem_id').val() +
-      '&seed=' + $('#pg_seed').val();
+      '&seed=' + $('#pg_seed').val() +
+      '&teacher_id=' + $('#teacher_id').val();
     window.open(url,'_blank');
   });
     
@@ -593,12 +666,8 @@ $(document).ready(function() {
     });
   };
   
-  var ts_refresh = setInterval(function() {
-    var ts = Math.round((new Date()).getTime() / 1000);
-    $('.timestamp').each(function() {
-      $(this).html(ts - $(this).attr('value'));
-    });
-  }, 1000);
+  // Refresh timestamp every 5 sec.
+  var ts_refresh = setInterval(update_timestamp, 5000);
   
   print("INFO: document loaded");
 });
