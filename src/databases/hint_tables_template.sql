@@ -6,7 +6,9 @@ CREATE TABLE {{course_name}}_hint (
     id int NOT NULL AUTO_INCREMENT,
     pg_text varchar(65536) NOT NULL,
     author varchar(255) NOT NULL,
-    created TIMESTAMP, 
+    set_id varchar(255) NOT NULL,
+    problem_id int NOT NULL,
+    created TIMESTAMP,
 
     primary key (id)
 );
