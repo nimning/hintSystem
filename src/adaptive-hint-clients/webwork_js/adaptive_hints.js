@@ -1,10 +1,14 @@
 (function() {
 
+    function print(msg) {
+	console.log(msg);
+    }
+
     // Send a message to SockJS server.
     function send_command(sock, msg, args) {
 	sock.send(JSON.stringify({"type": msg,
 				  "arguments": args}));
-	console.log("SENT: " + msg + ":" + JSON.stringify(args, null, 2));
+	print("SENT: " + msg + ":" + JSON.stringify(args, null, 2));
     }
 
     // Send 'student_answer' message
@@ -12,6 +16,13 @@
 	var args = { 'boxname': box.attributes["name"].value,
 		     'value': box.value };
 	send_command(sock, 'student_answer', args);
+    }
+
+    // Send 'hint_feedback' message
+    function hint_feedback(hintbox_id, feedback) {
+	var args = { 'hintbox_id': hintbox_id,
+		     'feedback': feedback };
+	send_command(sock, 'hint_feedback', args);
     }
 
     // Create actions for a textbox
@@ -55,6 +66,12 @@
 	}
     }
     
+    function create_feedback_actions(hintbox_id) {
+	$('input[name=feedback_' + hintbox_id + ']').change(function() {
+	    hint_feedback(hintbox_id, $(this).val());
+	});
+    }
+
     // Remove all displayed hints. 
     function remove_all_hints() {
 	$('div[id^=wrapper_]').remove();
@@ -74,6 +91,7 @@
 	$("input#" + location).before(d);
 	var hintbox = $("input#"+hintbox_id);
 	create_textbox_actions(hintbox);
+	create_feedback_actions(hintbox_id);
     }
 
     // Update the color of an answer box based on answer status 
@@ -105,9 +123,6 @@
     
     $(document).ready(function() {
 
-	// Disable console logging
-	console.log = function () {};
-
 	// Gather student's info
 	var pathArray = window.location.pathname.split('/');
 	var course_id = pathArray[2];
@@ -119,7 +134,8 @@
 	// SockJS server for each course 
 	// Only courses listed here will be affected by this script.
 	var router = {
-	    'demo': 'http://webwork.cse.ucsd.edu:4350/student'
+	    'demo': 'http://webwork.cse.ucsd.edu:4350/student',
+	    'CompoundProblems': 'http://webwork.cse.ucsd.edu:4349/student'
 	};
 
 	// Create a SockJS connection to the server
@@ -127,7 +143,7 @@
 	    sock = new SockJS(router[course_id]);
 	    
 	    sock.onopen = function() {
-		console.log("INFO: connected");
+		print("INFO: connected");
 		// Send `student_join` message
 		var params = {
 		    'session_id': session_id,
@@ -140,7 +156,7 @@
 	    };
 
 	    sock.onmessage = function(e) {
-		console.log("RECIEVED: " + e.data);
+		print("RECEIVED: " + e.data);
 		var message = $.parseJSON(e.data);
 
 		// Handle 'hints' message
@@ -175,7 +191,7 @@
 	    };
 
 	    sock.onclose = function() {
-		console.log("INFO: disconnected");
+		print("INFO: disconnected");
 	    };
 
 	    // Associates actions to answer boxes.
@@ -183,7 +199,7 @@
 	    create_textbox_actions(answer_boxes);
 	}
 	
-	console.log("INFO: document loaded");
+	print("INFO: document loaded");
     });  
 
 })();
