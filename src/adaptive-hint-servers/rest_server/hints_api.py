@@ -72,6 +72,11 @@ class Hint(ProcessQuery):
             where id={{hint_id}} '''
         self.process_query(query_template, write_response=False)
 
+    def _add_header_footer(self, response):
+        self.args['set_id'] = response[0]['set_id']
+        self.args['problem_id'] = response[0]['problem_id']
+        return self.add_header_footer(response)
+    
     def get(self):
         '''  For helping the instructor read hints
             
@@ -86,7 +91,7 @@ class Hint(ProcessQuery):
             select pg_text, author, set_id, problem_id
             from {{course}}_hint 
             where id={{hint_id}} '''
-        self.process_query(query_template, dehydrate=self.add_header_footer)
+        self.process_query(query_template, dehydrate=self._add_header_footer)
 
     def post(self):
         ''' For helping the instructor add hints 
