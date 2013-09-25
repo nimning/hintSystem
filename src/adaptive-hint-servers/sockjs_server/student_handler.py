@@ -134,6 +134,30 @@ class StudentSockJSHandler(_BaseSockJSHandler):
             except:
                 logger.exception('Exception in student_answer handler')
 
+
+        @self.add_handler('hint_feedback')
+        def handle_hint_feedback(self, args):
+            """Handler for 'hint_feedback'
+
+            args
+            ----
+              * hintbox_id
+              * feedback
+            """
+            try:
+                # read args
+                hintbox_id = args['hintbox_id']
+                feedback = args['feedback']
+
+                # shorthand
+                ss = self.student_session
+                
+                logger.info("%s updated feedback for %s to %s"%(
+                    ss.student_id, hintbox_id, feedback))
+            except:
+                logger.exception('Exception in hint_feedback handler')
+                
+
     def _perform_student_join(self, session_id, student_id, course_id,
                               set_id, problem_id, callback=None):
         """
@@ -219,7 +243,8 @@ class StudentSockJSHandler(_BaseSockJSHandler):
             answer_status = { 'boxname': boxname,
                               'is_correct': result_json['is_correct'],
                               'error_msg': result_json['error_msg'],
-                              'entered_value': value }
+                              'entered_value': value,
+                              'correct_value': result_json['correct_value'] }
             
         # check hint answer
         elif boxname.startswith('Hint'):
@@ -283,7 +308,15 @@ class StudentSockJSHandler(_BaseSockJSHandler):
         """Send a list of answer statuses to the client"""
         if not isinstance(answer_statuses, list):
             answer_statuses = [answer_statuses,]
-        self.send_message('answer_status', answer_statuses)
+
+        # Make sure we don't send the solution to the student
+        clean_answer_statuses = []
+        for answer in answer_statuses:
+            answer = answer.copy()
+            answer.pop('correct_value', None)
+            clean_answer_statuses.append(answer)
+            
+        self.send_message('answer_status', clean_answer_statuses)
 
 
     def send_hints(self, hints):
