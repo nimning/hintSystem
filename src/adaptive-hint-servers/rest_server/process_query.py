@@ -43,8 +43,15 @@ class ProcessQuery(tornado.web.RequestHandler):
                self.write(json.dumps(response))
 
     def add_header_footer(self, response):
-        relative_filename_query = \
-            "select source_file from %s_problem;" % self.args['course']
+        query_template = '''
+            select source_file from {{course}}_problem
+            where
+                set_id="{{set_id}}" and
+                problem_id={{problem_id}}
+        '''
+        print self.args
+        relative_filename_query = Template(query_template).generate(**self.args)
+        print relative_filename_query
         relative_filename = conn.query(relative_filename_query) \
             [0]['source_file']
         pg_file_path = '/opt/webwork/courses/%s/templates/%s' % \
