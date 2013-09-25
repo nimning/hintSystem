@@ -4,7 +4,6 @@ import tornado.ioloop
 import tornado.web
 
 from process_query import ProcessQuery, conn
-from get_header_footer import get_header, get_footer
 
 # GET /user_problem_hints?
 class UserProblemHints(ProcessQuery):
@@ -13,24 +12,6 @@ class UserProblemHints(ProcessQuery):
         # Allows X-site requests
         self.set_header("Access-Control-Allow-Origin", "*")
     
-    def add_header_footer(self, response):
-        relative_filename_query = \
-            "select source_file from %s_problem;" % self.args['course']
-        relative_filename = conn.query(relative_filename_query) \
-            [0]['source_file']
-        pg_file_path = '/opt/webwork/courses/%s/templates/%s' % \
-            (self.args['course'], relative_filename)
-        with open(pg_file_path, 'r') as f:
-            pg_file_str = f.read()
-            header = get_header(pg_file_str)
-            footer = get_header(pg_file_str)
-            
-        for row in response:
-            row['pg_header'] = header
-            row['pg_footer'] = footer
-            row['pg_file_path'] = pg_file_path
-        return response
-
     def get(self):
         ''' For rendering assigned hints in the student page.  
 
@@ -102,10 +83,10 @@ class Hint(ProcessQuery):
                 "author": "melkherj"}]
         '''
         query_template = '''
-            select pg_text, author
+            select pg_text, author, set_id, problem_id
             from {{course}}_hint 
             where id={{hint_id}} '''
-        self.process_query(query_template)
+        self.process_query(query_template, dehydrate=self.add_header_footer)
 
     def post(self):
         ''' For helping the instructor add hints 
@@ -179,7 +160,7 @@ class ProblemHints(ProcessQuery):
     def initialize(self):
         # Allows X-site requests
         self.set_header("Access-Control-Allow-Origin", "*")
-
+    
     def get(self):
         ''' 
             For listing all hints for a problem (for instructors) that could be reused for other students:
@@ -201,7 +182,9 @@ class ProblemHints(ProcessQuery):
         query_template = '''
             select {{course}}_hint.id as hint_id,
                    {{course}}_hint.pg_text,
-                   {{course}}_hint.author
+                   {{course}}_hint.author,
+                   {{course}}_hint.set_id,
+                   {{course}}_hint.problem_id
             from {{course}}_hint left outer join {{course}}_assigned_hint
             on {{course}}_assigned_hint.hint_id={{course}}_hint.id
             where (
@@ -213,4 +196,4 @@ class ProblemHints(ProcessQuery):
             )
             group by {{course}}_hint.id
         '''
-        self.process_query(query_template)
+        self.process_query(query_template, dehydrate=self.add_header_footer)
