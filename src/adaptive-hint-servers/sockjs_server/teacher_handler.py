@@ -1,3 +1,4 @@
+from tornado import gen
 import logging
 
 from _base_handler import _BaseSockJSHandler
@@ -31,6 +32,7 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
         self.teacher_session = None
                 
         @self.add_handler('teacher_join')
+        @gen.engine
         def handle_teacher_join(self, args):
             """Handler for 'teacher_join'
 
@@ -53,45 +55,34 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
                 set_id = args.get('set_id', None)
                 problem_id = args.get('problem_id', None)
 
-                # create an instance of TeacherSession
-                self.teacher_session = TeacherSession(teacher_id,
-                                                      self,
-                                                      student_id=student_id,
-                                                      course_id=course_id,
-                                                      set_id=set_id,
-                                                      problem_id=problem_id)
-                
+                # perform work in another thread
+                yield gen.Task(self._perform_teacher_join,
+                               teacher_id,
+                               student_id,
+                               course_id,
+                               set_id,
+                               problem_id)
+
                 # shorthand
                 ts = self.teacher_session
 
-                # add to the active session list
-                TeacherSession.active_sessions.add(ts)
-
-                # send student lists
-                self.send_unassigned_students(ts.list_unassigned_students())
-                self.send_my_students(ts.list_my_students())
-                
                 logger.info("Teacher: %s joined"%ts.teacher_id)
             except:
                 logger.exception("Exception in teacher_join handler")
                 self.session.close()
 
         @self.add_handler('list_students')
-        def handle_list_student(self, args):
+        @gen.engine
+        def handle_list_students(self, args):
             """Handler for 'list_students'
 
             Requests a list of all active students.
 
             """
-            ts = self.teacher_session
-
-            # send student lists
-            self.send_unassigned_students(ts.list_unassigned_students())
-            self.send_my_students(ts.list_my_students())
-
-            #logger.info("%s: list_students"%ts.teacher_id)
+            yield gen.Task(self._perform_list_students)
             
         @self.add_handler('add_hint')
+        @gen.engine
         def handle_add_hint(self, args):
             """Handler for 'add_hint'
 
@@ -133,37 +124,22 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
                 # shorthand
                 ts = self.teacher_session
 
-                # TODO: wrap this with Task()
-                timestamp = ts.add_hint(
-                    student_id, course_id, set_id, problem_id,
-                    location, hintbox_id, hint_html)
-
-                # Ask the client to update its view
-                for ss in StudentSession.active_sessions:
-                    if (student_id == ss.student_id and
-                        course_id == ss.course_id and
-                        set_id == ss.set_id and
-                        problem_id == ss.problem_id):
-                        ss.reload_hints()
-                        
-                # Notify the teachers about the new hint
-                ext_hint = {
-                    'student_id': student_id,
-                    'course_id': course_id,
-                    'set_id': set_id,
-                    'problem_id': problem_id,
-                    'timestamp': timestamp,
-                    'hintbox_id': hintbox_id,
-                    'location': location }
-                for ts in TeacherSession.active_sessions:
-                    ts.notify_hint_update(ext_hint)
-
+                yield gen.Task(self._perform_add_hint,
+                               student_id,
+                               course_id,
+                               set_id,
+                               problem_id,
+                               location,
+                               hintbox_id,
+                               hint_html)
+                
                 logger.info("%s: add_hint"%ts.teacher_id)
                 
             except:
                 logger.exception("Exception add_hint")
 
         @self.add_handler('remove_hint')
+        @gen.engine
         def handle_remove_hint(self, args):
             """Handler for 'remove_hint'
 
@@ -201,27 +177,14 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
                 # shorthand
                 ts = self.teacher_session
 
-                # TODO: wrap this with Task()
-                ts.remove_hint(student_id, course_id, set_id, problem_id,
-                               location, hintbox_id)
-
-                # Ask the clients to reload hints
-                for ss in StudentSession.active_sessions:
-                    if (student_id == ss.student_id and
-                        course_id == ss.course_id and
-                        set_id == ss.set_id and
-                        problem_id == ss.problem_id):
-                        ss.reload_hints()
-                        
-                # notify the teachers about the update
-                ext_hint = {
-                    'student_id': student_id,
-                    'course_id': course_id,
-                    'set_id': set_id,
-                    'problem_id': problem_id }
-                for ts in TeacherSession.active_sessions:
-                    ts.notify_hint_update(ext_hint)
-
+                yield gen.Task(self._perform_remove_hint,
+                               student_id,
+                               course_id,
+                               set_id,
+                               problem_id,
+                               location,
+                               hintbox_id)
+                
                 logger.info("%s: remove_hint"%ts.teacher_id)
                 
             except:
@@ -300,6 +263,7 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
                 logger.exception("Exception handling 'release_student'")
 
         @self.add_handler('get_student_info')
+        @gen.engine
         def handle_get_student_info(self, args):
             """Handler for 'get_student_info'
 
@@ -324,18 +288,138 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
                 problem_id = args['problem_id']
 
                 ts = self.teacher_session
-                info = ts.student_info(student_id, course_id,
-                                       set_id, problem_id)
-                self.send_student_info(info) 
+
+                yield gen.Task(self._perform_get_student_info,
+                               student_id,
+                               course_id,
+                               set_id,
+                               problem_id)
                 
                 logger.info("%s: get_student_info"%ts.teacher_id)    
             except:
                 logger.exception("Exception handling 'get_student_info'")
+ 
+    ################################################################
+    # Tasks                                                        #
+    ################################################################
+    def _perform_teacher_join(self, teacher_id, student_id,
+                              course_id, set_id, problem_id,
+                              callback=None):
+        
+        # create an instance of TeacherSession
+        self.teacher_session = TeacherSession(teacher_id,
+                                              self,
+                                              student_id=student_id,
+                                              course_id=course_id,
+                                              set_id=set_id,
+                                              problem_id=problem_id)
+                
+        # shorthand
+        ts = self.teacher_session
 
+        # add to the active session list
+        TeacherSession.active_sessions.add(ts)
+
+        # send student lists
+        self.send_unassigned_students(ts.list_unassigned_students())
+        self.send_my_students(ts.list_my_students())
+
+        # done
+        callback()
+
+
+    def _perform_list_students(self, callback=None):
+        ts = self.teacher_session
+        
+        # send student lists
+        self.send_unassigned_students(ts.list_unassigned_students())
+        self.send_my_students(ts.list_my_students())
+
+        # done
+        callback()
+
+
+    def _perform_add_hint(self, student_id, course_id,
+                          set_id, problem_id, location,
+                          hintbox_id, hint_html, callback=None):
+
+        # shorthand
+        ts = self.teacher_session
+
+        timestamp = ts.add_hint(
+            student_id, course_id, set_id, problem_id,
+            location, hintbox_id, hint_html)
+
+        # Ask the client to update its view
+        for ss in StudentSession.active_sessions:
+            if (student_id == ss.student_id and
+                course_id == ss.course_id and
+                set_id == ss.set_id and
+                problem_id == ss.problem_id):
+                ss.reload_hints()
+                        
+        # Notify the teachers about the new hint
+        ext_hint = {
+            'student_id': student_id,
+            'course_id': course_id,
+            'set_id': set_id,
+            'problem_id': problem_id,
+            'timestamp': timestamp,
+            'hintbox_id': hintbox_id,
+            'location': location }
+        for ts in TeacherSession.active_sessions:
+            ts.notify_hint_update(ext_hint)
+
+        # done
+        callback()
+
+    def _perform_remove_hint(self, student_id, course_id, set_id, problem_id,
+                               location, hintbox_id, callback=None):
+        # shorthand
+        ts = self.teacher_session
+
+        ts.remove_hint(student_id, course_id, set_id, problem_id,
+                       location, hintbox_id)
+
+        # Ask the clients to reload hints
+        for ss in StudentSession.active_sessions:
+            if (student_id == ss.student_id and
+                course_id == ss.course_id and
+                set_id == ss.set_id and
+                problem_id == ss.problem_id):
+                ss.reload_hints()
+                        
+        # notify the teachers about the update
+        ext_hint = {
+            'student_id': student_id,
+            'course_id': course_id,
+            'set_id': set_id,
+            'problem_id': problem_id }
+        
+        for ts in TeacherSession.active_sessions:
+            ts.notify_hint_update(ext_hint)
+
+        # done
+        callback()
+
+    def _perform_get_student_info(self, student_id, course_id,
+                                  set_id, problem_id, callback=None):
+        
+        ts = self.teacher_session
+        info = ts.student_info(student_id, course_id,
+                               set_id, problem_id)
+        
+        self.send_student_info(info)
+        
+        # done
+        callback()
+
+    ################################################################
+    # SockJS helpers                                               #
+    ################################################################
 
     def send_unassigned_students(self, unassigned_students):
         self.send_message('unassigned_students', unassigned_students)
-
 
     def send_my_students(self, my_students):
         self.send_message('my_students', my_students)
@@ -344,11 +428,9 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
     def send_student_info(self, student_info):
         self.send_message('student_info', student_info)
 
-
     def on_open(self, info):
         """Callback for when a teacher is connected"""
         logger.info("%s connected"%info.ip)
-
         
     def on_close(self):
         """Callback for when a teacher is disconnected"""
