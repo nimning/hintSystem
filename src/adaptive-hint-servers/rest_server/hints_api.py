@@ -9,6 +9,10 @@ from get_header_footer import get_header, get_footer
 # GET /user_problem_hints?
 class UserProblemHints(ProcessQuery):
 
+    def initialize(self):
+        # Allows X-site requests
+        self.set_header("Access-Control-Allow-Origin", "*")
+    
     def add_header_footer(self, response):
         relative_filename_query = \
             "select source_file from %s_problem;" % self.args['course']
@@ -54,7 +58,9 @@ class UserProblemHints(ProcessQuery):
                 {{course}}_hint.pg_text,
                 {{course}}_hint.id as hint_id,
                 {{course}}_assigned_hint.pg_id,
-                {{course}}_assigned_hint.id as assigned_hint_id
+                {{course}}_assigned_hint.id as assigned_hint_id,
+                {{course}}_hint.set_id as original_set_id,
+                {{course}}_hint.problem_id as original_problem_id
             from {{course}}_hint, {{course}}_assigned_hint
             where 
                 {{course}}_assigned_hint.user_id="{{user_id}}"        AND
@@ -66,6 +72,10 @@ class UserProblemHints(ProcessQuery):
        
 
 class Hint(ProcessQuery):
+
+    def initialize(self):
+        # Allows X-site requests
+        self.set_header("Access-Control-Allow-Origin", "*")
 
     def delete(self):
         '''  For helping the instructor delete hints
@@ -100,17 +110,25 @@ class Hint(ProcessQuery):
     def post(self):
         ''' For helping the instructor add hints 
             Sample arguments:
+            course="CompoundProblems"
             pg_text="This might help you.  3+3=? [____]{6}"
             author="melkherj"
-            course="CompoundProblems"
+            set_id="compoundProblemExperiments"
+            problem_id=1
 
             With return 6   (the id of the row created)'''
         query_template = '''insert into {{course}}_hint 
-            (pg_text, author) values ("{{pg_text}}", "{{author}}") '''
+            (pg_text, author, set_id, problem_id) values 
+            ("{{pg_text}}", "{{author}}", "{{set_id}}", "{{problem_id}}") 
+        '''
         self.process_query(query_template, write_response=False)
        
 # POST /assigned_hint?
 class AssignedHint(ProcessQuery):
+
+    def initialize(self):
+        # Allows X-site requests
+        self.set_header("Access-Control-Allow-Origin", "*")
     
     def post(self):
         ''' For helping the instructor assign hints 
@@ -133,6 +151,10 @@ class AssignedHint(ProcessQuery):
 # GET /hint_answer?
 class HintAnswer(ProcessQuery):
 
+    def initialize(self):
+        # Allows X-site requests
+        self.set_header("Access-Control-Allow-Origin", "*")
+
     def post(self):
         ''' For logging student answers to hints
 
@@ -153,6 +175,11 @@ class HintAnswer(ProcessQuery):
 
 # GET /problem_hints?
 class ProblemHints(ProcessQuery):
+
+    def initialize(self):
+        # Allows X-site requests
+        self.set_header("Access-Control-Allow-Origin", "*")
+
     def get(self):
         ''' 
             For listing all hints for a problem (for instructors) that could be reused for other students:
@@ -172,13 +199,18 @@ class ProblemHints(ProcessQuery):
             ]
             '''
         query_template = '''
-            select {{course}}_hint.id as hint_id, {{course}}_hint.pg_text, 
-                {{course}}_hint.author
-            from {{course}}_hint inner join {{course}}_assigned_hint
+            select {{course}}_hint.id as hint_id,
+                   {{course}}_hint.pg_text,
+                   {{course}}_hint.author
+            from {{course}}_hint left outer join {{course}}_assigned_hint
             on {{course}}_assigned_hint.hint_id={{course}}_hint.id
-            where 
+            where (
                 {{course}}_assigned_hint.set_id="{{set_id}}"        AND
                 {{course}}_assigned_hint.problem_id={{problem_id}}
+            ) OR (
+                {{course}}_hint.set_id="{{set_id}}"                 AND
+                {{course}}_hint.problem_id={{problem_id}}
+            )
             group by {{course}}_hint.id
         '''
         self.process_query(query_template)
