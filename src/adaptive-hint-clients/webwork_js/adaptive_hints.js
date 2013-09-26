@@ -30,37 +30,36 @@
 	// When a textbox loses focus
 	textbox.blur(function() {
 	    // invalidate existng timeout
-	    if (this['timer']) {
-		window.clearTimeout(this['timer']);
+	    if (this.timer) {
+		window.clearTimeout(this.timer);
 	    }
 
 	    // Send 'student_answer' command if needed
-	    if ((!this.last_answer && this.value.length > 0) ||
-		(this.last_answer && this.last_answer != this.value)) {
+	    if (this.value.length > 0 && this.changed) {
 		student_answer(this);
-		this.last_answer = this.value;
+		this.changed = false;
 	    }
 	});
 
-	// When a keydown is detected, remove box color
-	textbox.keyup(function() {
+	// When a keypress is detected, remove box color
+	textbox.keydown(function(e) {
 	    $(this).css('background-color', 'white');
+	    this.changed = true;
 	});
 
 	// When a keyup is detected
 	textbox.keyup(function() {
 	    // invalidate existing timeout
-	    if (this['timer']) {
-		window.clearTimeout(this['timer']);
+	    if (this.timer) {
+		window.clearTimeout(this.timer);
 	    }
 
 	    // create a new timeout
-	    this['timer'] = window.setTimeout(function(obj) {
+	    this.timer = window.setTimeout(function(obj) {
 		// when the timeout is reached, send answer
-		if ((!obj.last_answer && obj.value.length > 0) ||
-		    (obj.last_answer && obj.last_answer != obj.value)) {
+		if (obj.value.length > 0  && obj.changed) {
 		    student_answer(obj);
-		    obj.last_answer = obj.value;
+		    obj.changed = false;
 		}
 	    }, 1500, this);
 	});
