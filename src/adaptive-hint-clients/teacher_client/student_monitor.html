@@ -1,9 +1,8 @@
-
 <!DOCTYPE html>
 <html>
 <!--
   Created using jsbin.com
-  Source can be edited via http://jsbin.com/iCaVObU/36/edit
+  Source can be edited via http://jsbin.com/iCaVObU/37/edit
 -->
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -140,6 +139,9 @@ html, body {
         <h2>Hints</h2>
         <button id="create_hint" style="height: 30px;">
           Create a new hint
+        </button>
+        <button id="reload_hints" style="height: 30px;">
+          Reload hints
         </button>
         <div id="hints">
           <div class="table_container">
@@ -522,15 +524,7 @@ function get_hints() {
     'problem_id': $('#problem_id').val()
   }, function(data) {
     hints = $.parseJSON(data);
-    var dtable = $('#hint_table').dataTable({
-      'bPaginate': false,
-      'bInfo': false,
-      'bFilter': false,
-      "aoColumns": [
-        { "sWidth": "10%", "sClass": "center"  },
-        { "sWidth": "70%" },
-        { "sWidth": "20%", "sClass": "center", "bSortable": false }]
-    });
+    var dtable = $('#hint_table').dataTable();
     parse_hints(dtable);
   });
 }
@@ -612,6 +606,17 @@ $(document).ready(function() {
   // Set up SockJS
   setup_sockjs($('#port').val()); 
   
+  // Set up hint table
+  $('#hint_table').dataTable({
+    'bPaginate': false,
+    'bInfo': false,
+    'bFilter': false,
+    "aoColumns": [
+      { "sWidth": "10%", "sClass": "center"  },
+      { "sWidth": "70%" },
+      { "sWidth": "20%", "sClass": "center", "bSortable": false }]
+  });
+  
   // Get available hints
   get_hints();
   
@@ -655,6 +660,8 @@ $(document).ready(function() {
     window.open(url,'_blank');
   });
     
+  $("#reload_hints").click(get_hints);
+  
   // Auto send 'release_student' when closing window
   window.onbeforeunload = function() {
     console.log('what');
