@@ -1,8 +1,7 @@
-
 <html>
 <!--
   Created using jsbin.com
-  Source can be edited via http://jsbin.com/UFALiVA/8/edit
+  Source can be edited via http://jsbin.com/UFALiVA/9/edit
 -->
   <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
@@ -203,7 +202,7 @@ function get_hint_by_hint_id() {
     'course': $('#course_id').val(),
     'hint_id': $('#hint_id').val()
   }, function (response) {
-    var hint = response;
+    var hint = $.parseJSON(response);
     hint_body.setValue(hint.pg_text);
   });
 }
@@ -359,6 +358,21 @@ $(function () {
            });
   });
 });
+</script>
+<script src="http://static.jsbin.com/js/render/edit.js"></script>
+<script>jsbinShowEdit({"root":"http://static.jsbin.com","csrf":"uK3lAQPTwUnq5hj2en1EjOTY"});</script>
+<script src="http://static.jsbin.com/js/vendor/eventsource.js?3.7.3"></script>
+<script src="http://static.jsbin.com/js/spike.js?3.7.3"></script>
+<script>
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-1656750-34']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
+})();
 </script>
 </body>
 </html>
