@@ -1,15 +1,11 @@
-from tornado import gen, httpclient
-from tornado.httputil import url_concat
+from tornado import gen
 import logging
-import json
-import urllib
 import base64
 
+from hint_rest_api import HintRestAPI
 from _base_handler import _BaseSockJSHandler
 from student_session import StudentSession
 from teacher_session import TeacherSession
-
-HOSTNAME = "http://127.0.0.1"
 
 logger = logging.getLogger(__name__)
 
@@ -33,23 +29,10 @@ class StudentSockJSHandler(_BaseSockJSHandler):
         The corresponding instance of StudentSession.
         
     """
-    rest_port = None
     
     def __init__(self, *args, **kwargs):
         super(StudentSockJSHandler, self).__init__(*args, **kwargs)
         self.student_session = None
-
-        self.apis = {
-            'checkanswer' : "%s:%d/checkanswer"%(
-                HOSTNAME, StudentSockJSHandler.rest_port),
-            'problem_seed' : "%s:%d/problem_seed"%(
-                HOSTNAME, StudentSockJSHandler.rest_port),
-            'pg_path' : "%s:%d/pg_path"%(
-                HOSTNAME, StudentSockJSHandler.rest_port),
-            'hint' : "%s:%d/hint"%(
-                HOSTNAME, StudentSockJSHandler.rest_port)
-            }
-
 
         @self.add_handler('student_join')
         @gen.engine
@@ -183,28 +166,19 @@ class StudentSockJSHandler(_BaseSockJSHandler):
 
         # shorthand
         ss = self.student_session
-        http_client = httpclient.HTTPClient()
         
         # get PG file path
         if ss.pg_file is None:
-            url = url_concat(self.apis['pg_path'], {
-                'course': ss.course_id,
-                'set_id': ss.set_id,
-                'problem_id': ss.problem_id
-                })
-            response = http_client.fetch(url)
-            ss.pg_file = json.loads(response.body)
+            ss.pg_file = HintRestAPI.pg_path(ss.course_id,
+                                             ss.set_id,
+                                             ss.problem_id)
             
         # get problem seed
         if ss.pg_seed is None:
-            url = url_concat(self.apis['problem_seed'], {
-                'course': ss.course_id,
-                'set_id': ss.set_id,
-                'problem_id': ss.problem_id,
-                'user_id': ss.student_id
-                })
-            response = http_client.fetch(url)
-            ss.pg_seed = int(response.body)
+            ss.pg_seed = HintRestAPI.problem_seed(ss.student_id,
+                                                  ss.course_id,
+                                                  ss.set_id,
+                                                  ss.problem_id)
                                 
         # add to active student list.
         StudentSession.active_sessions.add(ss)
@@ -233,58 +207,33 @@ class StudentSockJSHandler(_BaseSockJSHandler):
             * entered_value
         """
         ss = self.student_session
-        http_client = httpclient.HTTPClient()
-
         answer_status = {}
         
         # check problem answer
         if boxname.startswith('AnSwEr'):
-            
-            response = http_client.fetch(self.apis['checkanswer'],
-                                         method='POST',
-                                         headers=None,
-                                         body=urllib.urlencode({
-                                             'pg_file' : ss.pg_file,
-                                             'seed' : ss.pg_seed,
-                                             boxname : value 
-                                             }))
-            
-            result_json = json.loads(response.body)[boxname]
-            answer_status = { 'boxname': boxname,
-                              'is_correct': result_json['is_correct'],
-                              'error_msg': result_json['error_msg'],
-                              'entered_value': value,
-                              'correct_value': result_json['correct_value'] }
-            
+            answer_status = HintRestAPI.checkanswer(ss.pg_file,
+                                                    ss.pg_seed,
+                                                    boxname,
+                                                    value)         
         # check hint answer
         elif boxname.startswith('Hint'):
             # get hint pg
-            url = url_concat(self.apis['hint'], {
-                'course': ss.course_id,
-                'hint_id': int(boxname[4:])
-                })
-            response = http_client.fetch(url)
-            hint = json.loads(response.body)
+            hint = HintRestAPI.hint(ss.course_id, int(boxname[4:]))
             
             pg_file = base64.b64encode(
                 hint['pg_header'] + '\n' +
                 hint['pg_text'] + '\n' +
                 hint['pg_footer'])
+
+            # check using temporary boxname 'AnSwEr0001' 
+            answer_status = HintRestAPI.checkanswer(pg_file,
+                                                    ss.pg_seed,
+                                                    'AnSwEr0001',
+                                                    value)
+            # set boxname to the hint boxname
+            answer_status['boxname'] = boxname
             
-            response = http_client.fetch(self.apis['checkanswer'],
-                                         method='POST',
-                                         headers=None,
-                                         body=urllib.urlencode({
-                                             'pg_file' : pg_file,
-                                             'seed' : ss.pg_seed,
-                                             'AnSwEr0001' : value 
-                                             }))
-            
-            result_json = json.loads(response.body)['AnSwEr0001']
-            answer_status = { 'boxname': boxname,
-                              'is_correct': result_json['is_correct'],
-                              'error_msg': result_json['error_msg'],
-                              'entered_value': value }
+        # unknown box name    
         else:
             raise ValueError('Boxname must begin with AnSwEr or Hint')
 
