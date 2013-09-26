@@ -49,9 +49,7 @@ class ProcessQuery(tornado.web.RequestHandler):
                 set_id="{{set_id}}" and
                 problem_id={{problem_id}}
         '''
-        print self.args
         relative_filename_query = Template(query_template).generate(**self.args)
-        print relative_filename_query
         relative_filename = conn.query(relative_filename_query) \
             [0]['source_file']
         pg_file_path = '/opt/webwork/courses/%s/templates/%s' % \
@@ -59,7 +57,7 @@ class ProcessQuery(tornado.web.RequestHandler):
         with open(pg_file_path, 'r') as f:
             pg_file_str = f.read()
             header = get_header(pg_file_str)
-            footer = get_header(pg_file_str)
+            footer = get_footer(pg_file_str)
 
         for row in response:
             row['pg_header'] = header
