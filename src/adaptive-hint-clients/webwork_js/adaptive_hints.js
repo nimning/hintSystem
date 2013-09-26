@@ -42,6 +42,11 @@
 	    }
 	});
 
+	// When a keydown is detected, remove box color
+	textbox.keyup(function() {
+	    $(this).css('background-color', 'white');
+	});
+
 	// When a keyup is detected
 	textbox.keyup(function() {
 	    // invalidate existing timeout
@@ -108,13 +113,13 @@
 	box.attr('title', '');
 	if (error_msg && error_msg.length > 0) {
 	    box.attr('title', error_msg);
-	    box.attr('style','background-color: #ffcc66;');
+	    box.css('background-color', '#ffcc66');
 	} else {
 	    if (is_correct) {
-		box.attr('style','background-color: #55ff55;');
+		box.css('background-color', '#55ff55');
 	    }
 	    else {
-		box.attr('style','background-color: #ff5555;');
+		box.css('background-color', '#ff5555');
 	    }
 	}
     }
