@@ -1,18 +1,18 @@
-import json
+import json, yaml
 import tornado
 from tornado.template import Template
 from tornado_database import Connection
 from tornado.web import RequestHandler
 from get_header_footer import get_header, get_footer
 
-
-from webwork_config import mysql_username, mysql_password
+with open('../server_config.yaml', 'r') as f:
+    config = yaml.safe_load(f)
 
 # Connect to webwork mysql database
 conn = Connection('localhost',
                   'webwork',
-                  user=mysql_username,
-                  password=mysql_password)
+                  user=config['mysql_username'],
+                  password=config['mysql_password'])
 
 class ProcessQuery(tornado.web.RequestHandler):
     def process_query(self,
