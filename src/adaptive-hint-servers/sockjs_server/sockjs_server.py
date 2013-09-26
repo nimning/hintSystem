@@ -16,6 +16,7 @@ from teacher_handler import TeacherSockJSHandler
 # Server Configurations 
 BIND_IP = '0.0.0.0'
 DEFAULT_PORT = 4350
+DEFAULT_REST_PORT = 4351
 LOG_PATH = '/var/log/hint'
 
 if __name__ == "__main__":
@@ -25,6 +26,11 @@ if __name__ == "__main__":
                         type=int,
                         default=DEFAULT_PORT,
                         help="port to listen")
+    parser.add_argument("--rest_port",
+                        type=int,
+                        default=DEFAULT_REST_PORT,
+                        help="port to the ReST server")
+
     args = parser.parse_args()
 
     # set up the root logger
@@ -40,6 +46,9 @@ if __name__ == "__main__":
                                                    backupCount=5)
     handler.setFormatter(formatter)
     logger.addHandler(handler)
+
+    # Set the ReST server port
+    StudentSockJSHandler.rest_port = args.rest_port
     
     # Create routers
     StudentRouter = sockjs.tornado.SockJSRouter(StudentSockJSHandler,
