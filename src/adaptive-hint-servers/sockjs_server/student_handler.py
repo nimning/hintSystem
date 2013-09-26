@@ -4,12 +4,16 @@ import logging
 import json
 import urllib
 import base64
+import yaml
 
 from _base_handler import _BaseSockJSHandler
 from student_session import StudentSession
 from teacher_session import TeacherSession
 
-REST_SERVER = 'http://127.0.0.1:4351'
+with open('../server_config.yaml', 'r') as f:
+    config = yaml.safe_load(f)
+
+REST_SERVER = 'http://127.0.0.1:%d'%int(config['rest_port'])
 CHECKANSWER_API = REST_SERVER + '/checkanswer'
 PROBLEM_SEED_API = REST_SERVER + '/problem_seed'
 PG_PATH_API = REST_SERVER + '/pg_path'
