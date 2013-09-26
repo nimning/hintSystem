@@ -9,13 +9,17 @@ import tornado.web
 import sockjs.tornado
 import logging
 import argparse
+import yaml
 
 from student_handler import StudentSockJSHandler
 from teacher_handler import TeacherSockJSHandler
 
+with open('../server_config.yaml', 'r') as f:
+    config = yaml.safe_load(f)
+
 # Server Configurations 
 BIND_IP = '0.0.0.0'
-DEFAULT_PORT = 4350
+DEFAULT_PORT = int(config['sockjs_port'])
 LOG_PATH = '/var/log/hint'
 
 if __name__ == "__main__":

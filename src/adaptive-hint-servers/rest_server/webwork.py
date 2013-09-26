@@ -1,8 +1,11 @@
 """Webwork DB API"""
+import yaml
 import os.path
 from process_query import ProcessQuery, conn
-from webwork_config import webwork_dir
 from tornado.template import Template
+
+with open('../server_config.yaml', 'r') as f:
+    config = yaml.safe_load(f)
 
 # GET /problem_seed?
 class ProblemSeed(ProcessQuery):
@@ -57,7 +60,7 @@ class ProblemPGPath(ProcessQuery):
 
         def _dump_pg_path(mysql_rows):
             if len(mysql_rows) > 0:
-                return os.path.join(webwork_dir,
+                return os.path.join(config['webwork_dir'],
                                     'courses',
                                     course_name,
                                     'templates',
@@ -90,7 +93,7 @@ class ProblemPGFile(ProcessQuery):
 
         def _dump_pg_file(mysql_rows):
             if len(mysql_rows) > 0:
-                pg_path = os.path.join(webwork_dir,
+                pg_path = os.path.join(config['webwork_dir'],
                                        'courses',
                                        course_name,
                                        'templates',

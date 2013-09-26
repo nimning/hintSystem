@@ -2,7 +2,7 @@ import tornado.ioloop
 import tornado.web
 import logging
 import argparse
-
+import yaml
 from render import Render 
 from checkanswer import CheckAnswer
 from webwork import (ProblemSeed, ProblemPGPath, ProblemPGFile,
@@ -10,9 +10,12 @@ from webwork import (ProblemSeed, ProblemPGPath, ProblemPGFile,
 from hints_api import (UserProblemHints, Hint, AssignedHint,
                        HintAnswer, ProblemHints)
 
+with open('../server_config.yaml', 'r') as f:
+    config = yaml.safe_load(f)
+
 # Server configuration
 BIND_IP = '0.0.0.0'
-DEFAULT_PORT = 4351
+DEFAULT_PORT = int(config['rest_port'])
 LOG_PATH = '/var/log/hint'
 
 application = tornado.web.Application([
