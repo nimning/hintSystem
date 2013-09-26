@@ -17,8 +17,8 @@ header_end_regex = '|'.join(escaped_header_ends)
 ## Create regex to match footer beginnnings ##
 footer_begins = [
     r"END_TEXT",
-    r"END_PGML",
-    r"END_PGML_SOLUTION"
+    r"END_PGML_SOLUTION",
+    r"END_PGML"
 ]
 escaped_footer_begins = ["(%s)"%re.escape(footer_begin) 
     for footer_begin in footer_begins]
@@ -29,7 +29,7 @@ def get_header(pg_file_str):
     try:
         header_end_index = re.finditer(header_end_regex, pg_file_str) \
             .next().start()
-        return pg_file_str[:header_end_index]
+        return pg_file_str[:header_end_index]+"\nBEGIN_PGML\n"
     except StopIteration:
         return pg_file_str
 
@@ -42,7 +42,7 @@ def get_footer(pg_file_str):
     if footer_begin is None:
         return pg_file_str 
     else:
-        return pg_file_str[footer_begin.end():]
+        return "\nEND_PGML\n"+pg_file_str[footer_begin.end():]
 
 def title_str(title):
     return '#'*80 + '\n### %72s ###\n'%title + '#'*80
