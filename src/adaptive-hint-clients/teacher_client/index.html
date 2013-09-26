@@ -3,7 +3,7 @@
 <html>
 <!--
   Created using jsbin.com
-  Source can be edited via http://jsbin.com/UniciTu/58/edit
+  Source can be edited via http://jsbin.com/UniciTu/60/edit
 -->
   <head>
     <link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css">
@@ -31,10 +31,9 @@
 </head>
   
   <body>
-    
-    <input type="hidden" id="port" value="4350"/>
-    
-    
+    <input type="hidden" id="sockjs_port" value="4350"/>
+    <input type="hidden" id="rest_port" value="4351"/>
+     
     <div class="login_panel">
       TeacherID: <span id="teacher_id_label"></span>  
       <select id="teacher_id">
@@ -90,6 +89,8 @@
       </div>
     </div>
   <script>
+var HOST = 'http://webwork.cse.ucsd.edu';
+
 // Debug print
 function print(msg) {
   console.log(msg);
@@ -120,8 +121,12 @@ function get_params() {
     return query_string;
   }();
 
-  if (QueryString.port) {
-    $('#port').val(QueryString.port);
+  if (QueryString.sockjs_port) {
+    $('#sockjs_port').val(QueryString.sockjs_port);
+  }
+  
+  if (QueryString.rest_port) {
+    $('#rest_port').val(QueryString.rest_port);
   }
 }
 
@@ -136,13 +141,14 @@ function send_command(sock, cmd, args) {
 
 // Open student_monitor page
 function open_student_view(student_id, course_id, set_id, problem_id) {
-  var url = "http://webwork.cse.ucsd.edu/teacher/student_monitor.html?" + 
-      "teacher_id=" + $('#teacher_id').val() + "&" +
-      "student_id=" + student_id + "&" +
-      "course_id=" + course_id + "&" +
-      "set_id=" + set_id + "&" +
-      "problem_id=" + problem_id + "&" +
-      "port=" + $("#port").val();
+  var url = HOST + "/teacher/student_monitor.html?" + 
+      "teacher_id=" + $('#teacher_id').val() + 
+      "&student_id=" + student_id + 
+      "&course_id=" + course_id + 
+      "&set_id=" + set_id + 
+      "&problem_id=" + problem_id + 
+      "&sockjs_port=" + $("#sockjs_port").val() + 
+      "&rest_port=" + $("#rest_port").val();
   window.open(url, '_blank'); 
 }
 
@@ -356,8 +362,8 @@ $(document).ready(function() {
   $("#after_login").hide();
   
   $('#login_button').click(function (){
-    sock = new SockJS('http://webwork.cse.ucsd.edu:' + 
-                      $('#port').val() +
+    sock = new SockJS(HOST + ':' +
+                      $('#sockjs_port').val() +
                       '/teacher');
     
     sock.onopen = function() {

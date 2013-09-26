@@ -2,11 +2,12 @@
 <html>
 <!--
   Created using jsbin.com
-  Source can be edited via http://jsbin.com/iCaVObU/37/edit
+  Source can be edited via http://jsbin.com/iCaVObU/38/edit
 -->
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <base href="http://webwork.cse.ucsd.edu">
+    <title>Monitor</title>
   
 <style id="jsbin-css">
 
@@ -108,7 +109,8 @@ html, body {
     <input type="hidden" id="student_id" value="scheaman"/>
     <input type="hidden" id="pg_file" value=""/>
     <input type="hidden" id="pg_seed" value=""/>  
-    <input type="hidden" id="port" value="4350"/>
+    <input type="hidden" id="sockjs_port" value="4350"/>
+    <input type="hidden" id="rest_port" value="4351"/>
     
     <div id="page_container">
       <div id="past_answers">
@@ -184,6 +186,7 @@ html, body {
     
     <div id="error_message"></div>
   <script>
+var HOST = 'http://webwork.cse.ucsd.edu';
 var HINT_EDITOR = '/teacher/hint_editor.html';
 
 function pad(num, size) {
@@ -195,13 +198,13 @@ function pad(num, size) {
 // Remove a hint from the student's view
 function remove_hint(hintbox_id, location) {
   send_command(sock, 'remove_hint', {
-      'student_id': $('#student_id').val(),
-      'course_id': $('#course_id').val(),
-      'set_id': $('#set_id').val(),
-      'problem_id': $('#problem_id').val(),
-      'location': location,
-      'hintbox_id': hintbox_id
-    });
+    'student_id': $('#student_id').val(),
+    'course_id': $('#course_id').val(),
+    'set_id': $('#set_id').val(),
+    'problem_id': $('#problem_id').val(),
+    'location': location,
+    'hintbox_id': hintbox_id
+  });
 }
 
 // Render hint for preview
@@ -214,30 +217,31 @@ function render_hint(idx) {
     'seed': $('#pg_seed').val()
   };
   $('#hint_status').html('Rendering...');
-  $.post("http://webwork.cse.ucsd.edu:4351/render", post_data, function(r) {
-    var err = r.error_msg;
-    // Clean up
-    var clean_html = r.rendered_html.replace(/[\s\S]*?<div/m, '<div').trim();
-    // Rename answer box
-    hintbox_id = 'Hint' + pad(hints[idx].hint_id, 5);
-    clean_html = clean_html.replace(/AnSwEr0001/g, hintbox_id);
-    // Include feedback?
-    if ($('#feedback').is(':checked')) {
-      clean_html += '<div style="clear:left;">' +
-        '<input type="radio" name="feedback_' +
-        hintbox_id + '" value="too hard">Too hard' +
-        '<input type="radio" name="feedback_' +
-        hintbox_id + '" value="easy but unhelpful">Easy but unhelpful' +
-        '<input type="radio" name="feedback_' +
-        hintbox_id + '" value="helpful">Helpful' +
-        '</div>';  
-    }  
-    $('#hint_status').html('Preview');
-    $('#hint_html')
-    .html(clean_html)
-    .addClass('hint_html')
-    .show();
-  });
+  $.post(HOST + ':' + $('#rest_port').val() + '/render', 
+         post_data, function(r) {
+           var err = r.error_msg;
+           // Clean up
+           var clean_html = r.rendered_html.replace(/[\s\S]*?<div/m, '<div').trim();
+           // Rename answer box
+           hintbox_id = 'Hint' + pad(hints[idx].hint_id, 5);
+           clean_html = clean_html.replace(/AnSwEr0001/g, hintbox_id);
+           // Include feedback?
+           if ($('#feedback').is(':checked')) {
+             clean_html += '<div style="clear:left;">' +
+               '<input type="radio" name="feedback_' +
+               hintbox_id + '" value="too hard">Too hard' +
+               '<input type="radio" name="feedback_' +
+               hintbox_id + '" value="easy but unhelpful">Easy but unhelpful' +
+               '<input type="radio" name="feedback_' +
+               hintbox_id + '" value="helpful">Helpful' +
+               '</div>';  
+           }  
+           $('#hint_status').html('Preview');
+           $('#hint_html')
+           .html(clean_html)
+           .addClass('hint_html')
+           .show();
+         });
 }
 
 function fork_hint(idx) {
@@ -247,7 +251,8 @@ function fork_hint(idx) {
     '&problem_id=' + $('#problem_id').val() +
     '&seed=' + $('#pg_seed').val() +
     '&hint_id=' + hints[idx].hint_id +
-    '&teacher_id=' + $('#teacher_id').val();
+    '&teacher_id=' + $('#teacher_id').val() +
+    '&port=' + $('#rest_port').val();
   window.open(url, '_blank');
 }
 
@@ -296,8 +301,12 @@ function get_params() {
     $('#problem_id').val(QueryString.problem_id);
   } 
   
-  if (QueryString.port) {
-    $('#port').val(QueryString.port);
+  if (QueryString.sockjs_port) {
+    $('#sockjs_port').val(QueryString.sockjs_port);
+  }
+  
+  if (QueryString.rest_port) {
+    $('#rest_port').val(QueryString.rest_port);
   }
 }
 
@@ -369,8 +378,8 @@ function onRenderComplete(student_info) {
     }
     
     $('#hint_location')
-       .append($('<option>', { boxname : 'value' })
-          .text(boxname)); 
+    .append($('<option>', { boxname : 'value' })
+            .text(boxname)); 
   });
   
   // Add table header
@@ -383,11 +392,11 @@ function onRenderComplete(student_info) {
       'sScrollY': '120px',
       "sDom": '<"header">frtip',
       "aoColumns": [ 
-			/* timestamp */ { "bVisible":    false },
-			/* sec. ago */  null,
-			/* answer */ null,
-			/* correct */  null
-		]
+        /* timestamp */ { "bVisible":    false },
+        /* sec. ago */  null,
+        /* answer */ null,
+        /* correct */  null
+      ]
     });
     var this_id = $(this).attr('id');
     var table_title = this_id.replace("_table","");
@@ -433,7 +442,7 @@ function render_problem(student_info) {
     'seed': $('#pg_seed').val()
   };
   $("#problem_preview").html('Rendering problem...');
-  $.post("http://webwork.cse.ucsd.edu:4351/render", 
+  $.post(HOST + ':' + $('#rest_port').val() + '/render', 
          post_data, 
          function(r) {
            var err = r.error_msg;
@@ -518,15 +527,15 @@ function parse_hints(dtable) {
 }
 
 function get_hints() {
-  $.get("http://webwork.cse.ucsd.edu:4351/problem_hints", {
-    'course': $('#course_id').val(),
-    'set_id': $('#set_id').val(),
-    'problem_id': $('#problem_id').val()
-  }, function(data) {
-    hints = $.parseJSON(data);
-    var dtable = $('#hint_table').dataTable();
-    parse_hints(dtable);
-  });
+  $.get(HOST + ':' + $('#rest_port').val() + '/problem_hints', 
+        { 'course': $('#course_id').val(),
+         'set_id': $('#set_id').val(),
+         'problem_id': $('#problem_id').val()
+        }, function(data) {
+          hints = $.parseJSON(data);
+          var dtable = $('#hint_table').dataTable();
+          parse_hints(dtable);
+        });
 }
 
 // Request student info from server
@@ -548,7 +557,7 @@ function timed_out() {
 
 // Set up the SockJS connection
 function setup_sockjs(port) {
-  sock = new SockJS('http://webwork.cse.ucsd.edu:' +
+  sock = new SockJS(HOST + ':' +
                     port + '/teacher');
   
   sock.onopen = function() {
@@ -567,7 +576,7 @@ function setup_sockjs(port) {
     print("RECIEVED: " + e.data);
     var data = $.parseJSON(e.data);
     if (data.type == 'student_info') {
-     var student_info = data['arguments'];
+      var student_info = data['arguments'];
       if ($.isEmptyObject(student_info)) {
         $('#add_hint').attr("disabled", "disabled");        
         window.close_timer = setTimeout(function(){
@@ -602,9 +611,9 @@ $(document).ready(function() {
   
   // Get url params
   get_params();
-   
+  
   // Set up SockJS
-  setup_sockjs($('#port').val()); 
+  setup_sockjs($('#sockjs_port').val()); 
   
   // Set up hint table
   $('#hint_table').dataTable({
@@ -649,23 +658,24 @@ $(document).ready(function() {
     $('#hint_container').hide();
     window.scrollTo(0, 0);
   });
-                          
+  
   $("#create_hint").click(function() {
     var url = HINT_EDITOR;
     url += '?course_id=' + $('#course_id').val() +
       '&set_id=' + $('#set_id').val() +
       '&problem_id=' + $('#problem_id').val() +
       '&seed=' + $('#pg_seed').val() +
-      '&teacher_id=' + $('#teacher_id').val();
+      '&teacher_id=' + $('#teacher_id').val() +
+      '&port=' + $('#rest_port').val();
     window.open(url,'_blank');
   });
-    
+  
   $("#reload_hints").click(get_hints);
   
   // Auto send 'release_student' when closing window
   window.onbeforeunload = function() {
     console.log('what');
-     send_command(sock, 'release_student', {
+    send_command(sock, 'release_student', {
       'student_id': $('#student_id').val(),
       'course_id': $('#course_id').val(),
       'set_id': $('#set_id').val(),
