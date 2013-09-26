@@ -1,0 +1,15 @@
+# MySQL credential
+mysql_username: root
+mysql_password: balagan
+
+# Local Webwork configurations
+webwork_dir: /opt/webwork
+
+# Production
+sockjs_port: 4350
+rest_port:   4351
+
+# Staging
+#sockjs: 4349
+#rest:   4348
+
