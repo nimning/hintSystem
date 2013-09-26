@@ -9,11 +9,7 @@ from _base_handler import _BaseSockJSHandler
 from student_session import StudentSession
 from teacher_session import TeacherSession
 
-REST_SERVER = 'http://127.0.0.1:4351'
-CHECKANSWER_API = REST_SERVER + '/checkanswer'
-PROBLEM_SEED_API = REST_SERVER + '/problem_seed'
-PG_PATH_API = REST_SERVER + '/pg_path'
-HINTS_API = REST_SERVER + '/hint'
+HOSTNAME = "http://127.0.0.1"
 
 logger = logging.getLogger(__name__)
 
@@ -36,10 +32,24 @@ class StudentSockJSHandler(_BaseSockJSHandler):
       student_session : StudentSession
         The corresponding instance of StudentSession.
         
-    """        
+    """
+    rest_port = None
+    
     def __init__(self, *args, **kwargs):
         super(StudentSockJSHandler, self).__init__(*args, **kwargs)
         self.student_session = None
+
+        self.apis = {
+            'checkanswer' : "%s:%d/checkanswer"%(
+                HOSTNAME, StudentSockJSHandler.rest_port),
+            'problem_seed' : "%s:%d/problem_seed"%(
+                HOSTNAME, StudentSockJSHandler.rest_port),
+            'pg_path' : "%s:%d/pg_path"%(
+                HOSTNAME, StudentSockJSHandler.rest_port),
+            'hint' : "%s:%d/hint"%(
+                HOSTNAME, StudentSockJSHandler.rest_port)
+            }
+
 
         @self.add_handler('student_join')
         @gen.engine
@@ -177,7 +187,7 @@ class StudentSockJSHandler(_BaseSockJSHandler):
         
         # get PG file path
         if ss.pg_file is None:
-            url = url_concat(PG_PATH_API, {
+            url = url_concat(self.apis['pg_path'], {
                 'course': ss.course_id,
                 'set_id': ss.set_id,
                 'problem_id': ss.problem_id
@@ -187,7 +197,7 @@ class StudentSockJSHandler(_BaseSockJSHandler):
             
         # get problem seed
         if ss.pg_seed is None:
-            url = url_concat(PROBLEM_SEED_API, {
+            url = url_concat(self.apis['problem_seed'], {
                 'course': ss.course_id,
                 'set_id': ss.set_id,
                 'problem_id': ss.problem_id,
@@ -230,7 +240,7 @@ class StudentSockJSHandler(_BaseSockJSHandler):
         # check problem answer
         if boxname.startswith('AnSwEr'):
             
-            response = http_client.fetch(CHECKANSWER_API,
+            response = http_client.fetch(self.apis['checkanswer'],
                                          method='POST',
                                          headers=None,
                                          body=urllib.urlencode({
@@ -249,7 +259,7 @@ class StudentSockJSHandler(_BaseSockJSHandler):
         # check hint answer
         elif boxname.startswith('Hint'):
             # get hint pg
-            url = url_concat(HINTS_API, {
+            url = url_concat(self.apis['hint'], {
                 'course': ss.course_id,
                 'hint_id': int(boxname[4:])
                 })
@@ -261,7 +271,7 @@ class StudentSockJSHandler(_BaseSockJSHandler):
                 hint['pg_text'] + '\n' +
                 hint['pg_footer'])
             
-            response = http_client.fetch(CHECKANSWER_API,
+            response = http_client.fetch(self.apis['checkanswer'],
                                          method='POST',
                                          headers=None,
                                          body=urllib.urlencode({
