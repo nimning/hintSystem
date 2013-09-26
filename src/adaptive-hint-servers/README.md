@@ -8,7 +8,7 @@
 /etc/init.d/hint-rest-7254 {start|restart|stop}
 ```
 
-### Test servers
+### How to run test servers
 ```
 python rest_server/rest_server.py --port=1234
 python sockjs_server/sockjs_server.py --port=4321 --rest_port=1234
