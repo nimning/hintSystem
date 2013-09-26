@@ -10,12 +10,14 @@ import sockjs.tornado
 import logging
 import argparse
 
+from hint_rest_api import HintRestAPI
 from student_handler import StudentSockJSHandler
 from teacher_handler import TeacherSockJSHandler
 
 # Server Configurations 
 BIND_IP = '0.0.0.0'
 DEFAULT_PORT = 4350
+REST_SERVER = 'http://127.0.0.1'
 DEFAULT_REST_PORT = 4351
 LOG_PATH = '/var/log/hint'
 
@@ -29,7 +31,7 @@ if __name__ == "__main__":
     parser.add_argument("--rest_port",
                         type=int,
                         default=DEFAULT_REST_PORT,
-                        help="port to the ReST server")
+                        help="port of the ReST server")
 
     args = parser.parse_args()
 
@@ -47,8 +49,8 @@ if __name__ == "__main__":
     handler.setFormatter(formatter)
     logger.addHandler(handler)
 
-    # Set the ReST server port
-    StudentSockJSHandler.rest_port = args.rest_port
+    # Set the location of the ReSTful services
+    HintRestAPI.setBaseUrl("%s:%d"%(REST_SERVER, args.rest_port))
     
     # Create routers
     StudentRouter = sockjs.tornado.SockJSRouter(StudentSockJSHandler,
@@ -62,7 +64,7 @@ if __name__ == "__main__":
 
     # Make Tornado app listen on the specific port
     app.listen(args.port, address=BIND_IP)
-    logging.info(" [*] Listening on %s:%d"%(BIND_IP,args.port))
+    logging.info(" [*] Listening on %s:%d"%(BIND_IP, args.port))
     
     # Start IOLoop
     tornado.ioloop.IOLoop.instance().start()
