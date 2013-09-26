@@ -1,424 +1,78 @@
-
 <!DOCTYPE html>
 <html>
 <!--
   Created using jsbin.com
   Source can be edited via http://jsbin.com/UniciTu/60/edit
 -->
-  <head>
-    <link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-    <script src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
-    <script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
-    <meta charset=utf-8 />
-    <title>TA Console</title>
-  
-<style id="jsbin-css">
-.table_container {
-  height: 300px;
-  width: 800px;
-  margin: 20px;
-  padding: 5px;
-  clear: left;
-}
-
-.login_panel {
-  height: 60px;
-  margin: 10px;
-  padding: 5px;
-}
-</style>
+<head>
+  <meta charset=utf-8 />
+  <title>TA Console</title>
+  <link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css">
+  <link rel="stylesheet" type="text/css" href="css/console.css">
 </head>
-  
-  <body>
-    <input type="hidden" id="sockjs_port" value="4350"/>
-    <input type="hidden" id="rest_port" value="4351"/>
-     
-    <div class="login_panel">
-      TeacherID: <span id="teacher_id_label"></span>  
-      <select id="teacher_id">
-        <option value="yfreund">yfreund</option>
-        <option value="scheaman">scheaman</option>
-        <option value="melkherj">melkherj</option>
-        <option value="yuncong">yuncong</option>
-        <option value="tutor1">tutor1</option>
-        <option value="tutor2">tutor2</option>
-        <option value="tutor3">tutor3</option>
-      </select>
-      <button id="login_button">Login</button>
-      <button id="logout_button">Logout</button>
+<body>
+  <input type="hidden" id="sockjs_port" value="4350"/>
+  <input type="hidden" id="rest_port" value="4351"/>
+
+  <div class="login_panel">
+    TeacherID: <span id="teacher_id_label"></span>
+    <select id="teacher_id">
+      <option value="yfreund">yfreund</option>
+      <option value="scheaman">scheaman</option>
+      <option value="melkherj">melkherj</option>
+      <option value="yuncong">yuncong</option>
+      <option value="tutor1_rose">tutor1_rose</option>
+      <option value="tutor2_zhen">tutor2_zhen</option>
+      <option value="tutor3">tutor3</option>
+    </select>
+    <button id="login_button">Login</button>
+    <button id="logout_button">Logout</button>
+  </div>
+
+  <div id="after_login">
+    <div><h2>Unasssigned students</h2></div>
+    <div class="table_container">
+      <table id="unassigned_students">
+        <thead>
+          <tr>
+            <th>Student</th>
+            <th>Time spent (in min)</th>
+            <th>Set</th>
+            <th>Problem</th>
+            <th>Part</th>
+            <th>Tries</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
     </div>
-    
-    <div id="after_login">
-      <div><h2>Unasssigned students</h2></div>
-      <div class="table_container">
-        <table id="unassigned_students">
-          <thead>
-            <tr>
-              <th>Student</th>
-              <th>Time spent (in min)</th>
-              <th>Set</th>
-              <th>Problem</th>
-              <th>Part</th>
-              <th>Tries</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
-      </div>      
-      <div><h2>My students</h2></div>
-      <div class="table_container">
-        <table id="my_students">
-          <thead>
-            <tr>
-              <th>Student</th>
-              <th>Time spent (in min)</th>
-              <th>Set</th>
-              <th>Problem</th>
-              <th>Part</th>
-              <th>Time since last incorrect (in min)</th>
-              <th>Time since last hint (in min)</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>          
-          </tbody>
-        </table>
-      </div>
+
+    <div><h2>My students</h2></div>
+    <div class="table_container">
+      <table id="my_students">
+        <thead>
+          <tr>
+            <th>Student</th>
+            <th>Time spent (in min)</th>
+            <th>Set</th>
+            <th>Problem</th>
+            <th>Part</th>
+            <th>Time since last incorrect (in min)</th>
+            <th>Time since last hint (in min)</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
     </div>
-  <script>
-var HOST = 'http://webwork.cse.ucsd.edu';
-
-// Debug print
-function print(msg) {
-  console.log(msg);
-}
-
-function get_params() { 
-  // Get the query string params
-  var QueryString = function() {
-    // This function is anonymous, is executed immediately and 
-    // the return value is assigned to QueryString!
-    var query_string = {};
-    var query = window.location.search.substring(1);
-    var vars = query.split("&");
-    for (var i = 0; i < vars.length; i++) {
-      var pair = vars[i].split("=");
-      // If first entry with this name
-      if (typeof query_string[pair[0]] === "undefined") {
-        query_string[pair[0]] = pair[1];
-        // If second entry with this name
-      } else if (typeof query_string[pair[0]] === "string") {
-        var arr = [query_string[pair[0]], pair[1]];
-        query_string[pair[0]] = arr;
-        // If third or later entry with this name
-      } else {
-        query_string[pair[0]].push(pair[1]);
-      }
-    }
-    return query_string;
-  }();
-
-  if (QueryString.sockjs_port) {
-    $('#sockjs_port').val(QueryString.sockjs_port);
-  }
-  
-  if (QueryString.rest_port) {
-    $('#rest_port').val(QueryString.rest_port);
-  }
-}
-
-// Helper for sending a command to sockJS server
-function send_command(sock, cmd, args) {
-  sock.send(JSON.stringify({
-    "type" : cmd,
-    "arguments" : args
-  }));
-  print("SENT: " + cmd + ":" + JSON.stringify(args, null, 2));
-}
-
-// Open student_monitor page
-function open_student_view(student_id, course_id, set_id, problem_id) {
-  var url = HOST + "/teacher/student_monitor.html?" + 
-      "teacher_id=" + $('#teacher_id').val() + 
-      "&student_id=" + student_id + 
-      "&course_id=" + course_id + 
-      "&set_id=" + set_id + 
-      "&problem_id=" + problem_id + 
-      "&sockjs_port=" + $("#sockjs_port").val() + 
-      "&rest_port=" + $("#rest_port").val();
-  window.open(url, '_blank'); 
-}
-
-function take_student(student_id, course_id, set_id, problem_id) {
-  send_command(sock, 'request_student',
-               {'student_id':student_id,
-                'course_id': course_id,
-                'set_id': set_id,
-                'problem_id': problem_id});
-}
-
-function release_student(student_id, course_id, set_id, problem_id) {
-  send_command(sock, 'release_student',
-               {'student_id':student_id,
-                'course_id': course_id,
-                'set_id': set_id,
-                'problem_id': problem_id});
-}
-
-function parse_hints (hints) {
-  var len = hints.length;	
-  if (len > 0) { 
-    var d = new Date();
-    var time_temp = (Math.round(d.getTime()/1000) - 
-                     hints[len-1].timestamp)/(60);
-    
-    var min = Math.floor(time_temp);
-    //var sec = Math.floor((time_temp%1)*60);
-    
-    var time_lasthint = min;
-    
-    if (time_lasthint > 10) {
-      time_lasthint = '>10';
-    }
-    
-    return time_lasthint; 
-  }
-  else {
-    return 0;
-  }
-}
-
-// Calculate time spent in minutes
-// Returns: time spent in minutes
-function calc_time_spent(past_answers, part) {
-  var len = past_answers.length;
-  var sum_time = 0;  
-  for (var i = len-1; i >= 1; i--) {
-    if (past_answers[i].boxname == part) {
-      sum_time += past_answers[i].timestamp - past_answers[i-1].timestamp;
-      //print("sum="+sum_time);
-    }
-  }
-  var time_spent_temp = (Math.round(new Date().getTime()/1000) + 
-                         sum_time - past_answers[len-1].timestamp)/(60);
-  
-  //print(new Date().getTime()/1000);
-  //print(sum_time);
-  //print(past_answers[len-1].timestamp);
-  //print(time_spent_temp);
-  
-  return Math.round(time_spent_temp);
-}
-
-// Calculate the number of tries
-// Returns: number of tries or null if correct answer was given.
-function calc_tries(past_answers, part) {
-  var len = past_answers.length;
-  var tries = 0;
-  for (var j = len-1; j>=0; j--) {
-    // Count the incorrect tries only.
-    if (past_answers[j].boxname == part && 
-        past_answers[j].is_correct === false) {
-      tries++;
-    } 
-    else if (past_answers[j].boxname == part && 
-             past_answers[j].is_correct === true) {
-      // Found a correct answer.
-      return null;
-    }
-  }
-  return tries;
-}
-
-function calc_time_lastincorrect(past_answers, part) {
-  var len = past_answers.length;
-  var time_lastincorrect = 0;
-  if (past_answers[len-1].is_correct === false) {
-    var time_temp = (Math.round(new Date().getTime()/1000) -
-                     past_answers[len-1].timestamp)/(60);
-    //print(new Date().getTime()/1000 +" "+ past_answers[len-1].timestamp);  
-    time_lastincorrect = Math.round(time_temp);
-  }
-  return time_lastincorrect;
-}
-
-function add_row_my(stud_data) {
-  var past_answers = stud_data.answers;
-  var len = past_answers.length;
-  
-  // Answers are empty. Don't display in the table.
-  if (len === 0) {
-    return;
-  }
-  
-  var part = past_answers[len-1].boxname;
-  var time_spent = calc_time_spent(past_answers, part);
-  var time_lastincorrect = calc_time_lastincorrect(past_answers, part);
-  var time_lasthint = parse_hints(stud_data.hints);
-  
-  if (time_spent > 10) {
-    time_spent = '>10';
-  }
-  
-  if (time_lastincorrect > 10) {
-    time_lastincorrect = '>10';
-  }
-  
-  // Add the row
-  my.fnAddData([stud_data.student_id,
-                time_spent,
-                stud_data.set_id,
-                stud_data.problem_id,
-                parseInt(part.substr(6), 10).toString(), 
-                time_lastincorrect,
-                time_lasthint,
-                "<button onclick=open_student_view('" +
-                stud_data.student_id + "','" +
-                stud_data.course_id + "','" +
-                stud_data.set_id + "','" +
-                stud_data.problem_id +
-                "')>View</button>" + 
-                "<button onclick=release_student('" +
-                stud_data.student_id + "','" +
-                stud_data.course_id + "','" +
-                stud_data.set_id + "','" +
-                stud_data.problem_id + 
-                "')>Unassign</button>"]);
-}
-
-
-function add_rows_unassigned(stud_data) {
-  var past_answers = stud_data.answers;
-  var len = past_answers.length;
-  
-  // Answers are empty. Don't display in the table
-  if (len === 0) {
-    return;
-  }
-  
-  // Find out part names
-  var all_parts = {};
-  for (var ii = 0; ii < len; ii++) {
-    all_parts[past_answers[ii].boxname] = (
-      past_answers[ii].boxname.substr(6));
-  }
-  
-  for (var part in all_parts) {
-    var time_spent = calc_time_spent(past_answers, part);
-    var tries = calc_tries(past_answers, part);
-    
-    // Not enough tries. Don't display on the table.
-    if (tries === null || tries < 3) {
-      continue;
-    }
-    
-    if (time_spent > 10) {
-      time_spent = '>10';
-    }
-    
-    // Add the row    
-    unassigned.fnAddData([stud_data.student_id, 
-                          time_spent,
-                          stud_data.set_id, 
-                          stud_data.problem_id, 
-                          parseInt(part.substr(6), 10).toString(),
-                          tries,
-                          "<button id=take onclick=take_student('" +
-                          stud_data.student_id + "','" +
-                          stud_data.course_id + "','" +
-                          stud_data.set_id + "','" +
-                          stud_data.problem_id + 
-                          "')>Take</button>"]);	
-  }
-}
-
-
-function parse_my(data) {
-  my.fnClearTable();
-  for (var i = 0; i < data.length; i++) {    
-    var stud_data = data[i];
-    add_row_my(stud_data);
-  }
-}
-
-function parse_unassigned(data) {
-  unassigned.fnClearTable();
-  for (var i = 0; i < data.length; i++) {
-    var stud_data = data[i];
-    add_rows_unassigned(stud_data);
-  }
-}
-
-//////////////////////////////////////////////
-
-$(document).ready(function() {
-  
-  // Read URL params
-  get_params();
-  
-  $("#after_login").hide();
-  
-  $('#login_button').click(function (){
-    sock = new SockJS(HOST + ':' +
-                      $('#sockjs_port').val() +
-                      '/teacher');
-    
-    sock.onopen = function() {
-      print("INFO: connected");
-      teacher_id = $('#teacher_id').val();    
-      send_command(sock, 'teacher_join', 
-                   { 'teacher_id' : teacher_id });
-    };
-    
-    sock.onclose = function() {
-      print("INFO: disconnected");
-    };
-    
-    sock.onmessage = function(e) {
-      print("RECIEVED: " + e.data);
-      data = jQuery.parseJSON(e.data);
-      if(data.type == "my_students") {
-        parse_my(data["arguments"]);
-      }
-      else if (data.type=="unassigned_students") {	
-        parse_unassigned(data["arguments"]);
-      }
-    };
-    
-    // Set UIs
-    $("#login_button").hide();
-    $("#teacher_id").hide();
-    $("#teacher_id_label").html($("#teacher_id").val());
-    $("#after_login").show();
-    
-    // Create tables
-    unassigned = $('#unassigned_students').dataTable();
-    my = $('#my_students').dataTable();
-    
-    // Set up refresh interval
-    interval_id = window.setInterval(
-      function() { 
-        send_command(sock,'list_students',{});
-      }, 5000);        
-  });
-  
-  
-  $('#logout_button').click(function () {
-    clearInterval(interval_id);
-    unassigned.fnClearTable();
-    my.fnClearTable();
-    
-    $("#teacher_id_label").html("");
-    $("#after_login").hide();
-    $("#teacher_id").show();
-    $("#login_button").show();
-    sock.close();
-  });
-  
-});
-</script>
+  </div>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
+  <script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/console.js"></script>
 </body>
 </html>
