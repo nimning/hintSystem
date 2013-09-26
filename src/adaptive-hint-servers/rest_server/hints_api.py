@@ -75,7 +75,7 @@ class Hint(ProcessQuery):
     def _add_header_footer(self, response):
         self.args['set_id'] = response[0]['set_id']
         self.args['problem_id'] = response[0]['problem_id']
-        return self.add_header_footer(response)
+        return self.add_header_footer(response)[0]
     
     def get(self):
         '''  For helping the instructor read hints
