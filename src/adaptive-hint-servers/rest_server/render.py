@@ -46,7 +46,7 @@ class Render(tornado.web.RequestHandler):
             # check if the file actually exists
             if not os.path.isfile(pg_file):
                 response['error_msg'] = 'PG file not found'
-                self.write(response)
+                self._write_finish(response)
                 return
 
             # call the PG wrapper
@@ -56,14 +56,15 @@ class Render(tornado.web.RequestHandler):
             
             if rendered_html is None:
                 response['error_msg'] = 'PG service error'
-                self.write(response)
+                self._write_finish(response)
                 return
 
             # all good
             response = { 'rendered_html': rendered_html }
-            self.write(response)
+            self._write_finish(response)
+
+        # Case 2: pg_file is base64 encoded.
         else:
-            # Case 2: pg_file is base64 encoded.
             try:
                 # create a temp file and decode the pg to the file
                 temp = tempfile.NamedTemporaryFile(delete=False)
@@ -71,7 +72,7 @@ class Render(tornado.web.RequestHandler):
                 temp.close()
             except Exception:
                 response['error_msg'] = 'Unable to create a temporary file'
-                self.write(response)
+                self._write_finish(response)
                 return
                 
             rendered_html = yield tornado.gen.Task(task_render,
@@ -82,8 +83,13 @@ class Render(tornado.web.RequestHandler):
 
             if rendered_html is None:
                 response['error_msg'] = 'PG service error'
-                self.write(response)
+                self._write_finish(response)
                 return
         
             response = { 'rendered_html': rendered_html }
-            self.write(response)
+            self._write_finish(response)
+
+
+    def _write_finish(self, response):
+        self.write(response)
+        self.finish()
