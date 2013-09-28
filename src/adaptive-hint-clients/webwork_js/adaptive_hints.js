@@ -31,9 +31,11 @@
 
     // Create actions for a textbox.
     function create_textbox_actions(textbox) {
-
+	
 	// Initialize last answer to empty string.
-	this.last_answer = '';
+	textbox.each(function() {
+	    this.last_answer = '';	    
+	});
 
 	// When a textbox loses focus
 	textbox.blur(function() {
