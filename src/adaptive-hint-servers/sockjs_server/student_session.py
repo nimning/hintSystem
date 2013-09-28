@@ -2,7 +2,7 @@ import datetime
 import time
 from threading import Thread
 
-from fake_db import FakeDB
+from hint_rest_api import HintRestAPI
 
 def _datetime_to_timestamp(dt):
     return time.mktime(dt.timetuple())
@@ -70,19 +70,19 @@ class StudentSession(object):
     @property
     def hints(self):
         if self._hints is None:
-            self._hints = FakeDB.get_hints(self.student_id,
-                                           self.course_id,
-                                           self.set_id,
-                                           self.problem_id)
+            self._hints = HintRestAPI.get_user_problem_hints(self.student_id,
+                                                             self.course_id,
+                                                             self.set_id,
+                                                             self.problem_id)
         return self._hints
     
     @property
     def answers(self):
         if self._answers is None:
-            self._answers = FakeDB.get_answers(self.student_id,
-                                               self.course_id,
-                                               self.set_id,
-                                               self.problem_id)
+            self._answers = HintRestAPI.get_realtime_answers(self.student_id,
+                                                             self.course_id,
+                                                             self.set_id,
+                                                             self.problem_id)
         return self._answers
 
     @property
@@ -116,11 +116,11 @@ class StudentSession(object):
             datetime.datetime.now())
 
         # update current answer
-        FakeDB.add_answer(self.student_id,
-                          self.course_id,
-                          self.set_id,
-                          self.problem_id,
-                          answer_status)
+        HintRestAPI.post_realtime_answer(self.student_id,
+                                         self.course_id,
+                                         self.set_id,
+                                         self.problem_id,
+                                         answer_status)
 
         # invalidate internal cache
         self._answers = None
