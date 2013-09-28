@@ -1,5 +1,6 @@
 (function() {
 
+    // Debug print
     function print(msg) {
 	console.log(msg);
     }
@@ -11,57 +12,39 @@
 	print("SENT: " + msg + ":" + JSON.stringify(args, null, 2));
     }
 
-    // Send 'student_answer' message
+    // Send 'student_answer' message.
     function student_answer(box) {
-	var args = { 'boxname': box.attributes["name"].value,
-		     'value': box.value };
-	send_command(sock, 'student_answer', args);
+	if (box.value != box.last_answer) {
+	    var args = { 'boxname': box.attributes["name"].value,
+			 'value': box.value };
+	    send_command(sock, 'student_answer', args);
+	    box.last_answer = box.value;
+	}
     }
 
-    // Send 'hint_feedback' message
+    // Send 'hint_feedback' message.
     function hint_feedback(hintbox_id, feedback) {
 	var args = { 'hintbox_id': hintbox_id,
 		     'feedback': feedback };
 	send_command(sock, 'hint_feedback', args);
     }
 
-    // Create actions for a textbox
+    // Create actions for a textbox.
     function create_textbox_actions(textbox) {
+
+	// Initialize last answer to empty string.
+	this.last_answer = '';
+
 	// When a textbox loses focus
 	textbox.blur(function() {
-	    // invalidate existng timeout
-	    if (this.timer) {
-		window.clearTimeout(this.timer);
-	    }
-
-	    // Send 'student_answer' command if needed
-	    if (this.value.length > 0 && this.changed) {
-		student_answer(this);
-		this.changed = false;
-	    }
+	    student_answer(this);
 	});
 
-	// When a keypress is detected, remove box color
+	// Also send answer if the enter key is detected.
 	textbox.keydown(function(e) {
-	    $(this).css('background-color', 'white');
-	    this.changed = true;
-	});
-
-	// When a keyup is detected
-	textbox.keyup(function() {
-	    // invalidate existing timeout
-	    if (this.timer) {
-		window.clearTimeout(this.timer);
+	    if (e.which == 13) {
+		student_answer(this);
 	    }
-
-	    // create a new timeout
-	    this.timer = window.setTimeout(function(obj) {
-		// when the timeout is reached, send answer
-		if (obj.value.length > 0  && obj.changed) {
-		    student_answer(obj);
-		    obj.changed = false;
-		}
-	    }, 1500, this);
 	});
 
 	// Add Math button
