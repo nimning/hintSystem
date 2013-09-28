@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS {{course_name}}_hint;
 DROP TABLE IF EXISTS {{course_name}}_assigned_hint;
 DROP TABLE IF EXISTS {{course_name}}_hint_attempt;
+DROP TABLE IF EXISTS {{course_name}}_assigned_hint_feedback;
 
 CREATE TABLE {{course_name}}_hint (
     id int NOT NULL AUTO_INCREMENT,
@@ -28,6 +29,12 @@ CREATE TABLE {{course_name}}_assigned_hint (
 
     primary key (id),
     CONSTRAINT FOREIGN KEY (hint_id) REFERENCES {{course_name}}_hint(id)
+);
+
+CREATE TABLE {{course_name}}_assigned_hint_feedback (
+    assigned_hint_id int NOT NULL,
+    feedback varchar(255) NOT NULL,
+    CONSTRAINT FOREIGN KEY (assigned_hint_id) REFERENCES {{course_name}}_assigned_hint(id)
 );
 
 CREATE TABLE {{course_name}}_hint_attempt (
