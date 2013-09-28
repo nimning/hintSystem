@@ -3,18 +3,7 @@ import os.path
 from process_query import ProcessQuery, conn
 from webwork_config import webwork_dir
 from tornado.template import Template
-from tzlocal import get_localzone
-import time
-from datetime import datetime
-import pytz
-
-# MySQLDb returns utc timestamps without associated timezones
-def utc_to_systime(dt):
-    ''' Assume the given datetime object (without associated tzinfo)
-        is in utc.  Return it converted to the local system time.  '''
-
-    dt = dt.replace(tzinfo = pytz.utc)
-    return dt.astimezone(get_localzone())
+from convert_timestamp import utc_to_system_timestamp
 
 # GET /problem_seed?
 class ProblemSeed(ProcessQuery):
@@ -129,9 +118,7 @@ class RealtimeUserProblemAnswers(ProcessQuery):
     def serialize_timestamp(self, rows):
         for row in rows:
             # From utc to local system time
-            row['timestamp'] = utc_to_systime(row['timestamp'])
-            # To unix timestamp
-            row['timestamp'] = int( row['timestamp'].strftime('%s') )
+            row['timestamp'] = utc_to_system_timestamp(row['timestamp'])
         return rows
 
     def get(self):
