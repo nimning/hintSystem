@@ -81,18 +81,14 @@ class TeacherSession(object):
             TeacherSession.student_assignment[hashkey][0] == self.teacher_id):
             del TeacherSession.student_assignment[hashkey]
 
-    def add_hint(self, student_id, course_id, set_id, problem_id,
-                 location, hintbox_id, hint_html):
+    def add_hint(self, student_id, course_id, set_id, problem_id, location, hintbox_id, hint_html):
         """Add a hint to user_problem_hint DB
 
         *Blocked until complete*
         """
         timestamp = _datetime_to_timestamp(datetime.datetime.now())
-        hint = hint = { 'timestamp': timestamp,
-                        'hint_html': hint_html,
-                        'location': location,
-                        'hintbox_id': hintbox_id }
-        FakeDB.add_hint(student_id, course_id, set_id, problem_id, hint)
+        FakeDB.add_hint(student_id, course_id, set_id, problem_id, 
+            location, hintbox_id, hint_html)
         return timestamp
 
     def remove_hint(self, student_id, course_id, set_id, problem_id,

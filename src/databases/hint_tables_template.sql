@@ -25,6 +25,7 @@ CREATE TABLE {{course_name}}_assigned_hint (
     hint_id int NOT NULL,
     -- When the hint was assigned:
     assigned TIMESTAMP,
+    hint_html text NOT NULL,
 
     primary key (id),
     CONSTRAINT FOREIGN KEY (hint_id) REFERENCES {{course_name}}_hint(id)
