@@ -3,6 +3,7 @@ import os.path
 from process_query import ProcessQuery, conn
 from webwork_config import webwork_dir
 from tornado.template import Template
+from convert_timestamp import utc_to_system_timestamp
 
 # GET /problem_seed?
 class ProblemSeed(ProcessQuery):
@@ -116,8 +117,8 @@ class ProblemPGFile(ProcessQuery):
 class RealtimeUserProblemAnswers(ProcessQuery):
     def serialize_timestamp(self, rows):
         for row in rows:
-            # To unix timestamp
-            row['timestamp'] = int( row['timestamp'].strftime('%s') )
+            # From utc to local system time
+            row['timestamp'] = utc_to_system_timestamp(row['timestamp'])
         return rows
 
     def get(self):
@@ -178,16 +179,18 @@ class RealtimeProblemAnswer(ProcessQuery):
             user_id="melkherj", 
             correct=1
             answer_string="x^2+4x"
+            difficulty="too easy"
 
             Returning:
-       '''
+        '''
         query_template = '''
             insert into {{course}}_realtime_past_answer
                 (set_id, problem_id, pg_id, user_id, source_file, correct, 
-                    answer_string) values
+                    answer_string, difficulty) values
                 ( "{{set_id}}", {{problem_id}}, "{{pg_id}}", "{{user_id}}", 
                     "{{source_file}}", {{correct}}, 
-                    "{{answer_string}}" )
+                    "{{answer_string}}", 
+                    "{%try %}{{difficulty}}{%except%}<no response>{%end%}")
         '''
-        self.process_query(query_template, hydrate = self.add_problem_source,
-            verbose=True, write_response=False)
+        self.process_query(query_template, hydrate = 
+            self.add_problem_source, verbose=True, write_response=False)

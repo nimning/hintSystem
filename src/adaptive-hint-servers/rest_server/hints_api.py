@@ -2,7 +2,7 @@ import tornado
 import json
 import tornado.ioloop
 import tornado.web
-
+from convert_timestamp import utc_to_system_timestamp
 from process_query import ProcessQuery, conn
 
 # GET /user_problem_hints?
@@ -11,6 +11,14 @@ class UserProblemHints(ProcessQuery):
     def initialize(self):
         # Allows X-site requests
         self.set_header("Access-Control-Allow-Origin", "*")
+
+    def _add_header_footer(self, rows):
+        ''' Add header footer and convert timestamps '''
+        rows = self.add_header_footer(rows)
+        for row in rows:
+            row['timestamp'] = utc_to_system_timestamp(
+                row['timestamp'])
+        return rows
     
     def get(self):
         ''' For rendering assigned hints in the student page.  
@@ -38,7 +46,9 @@ class UserProblemHints(ProcessQuery):
             select 
                 {{course}}_hint.pg_text,
                 {{course}}_hint.id as hint_id,
+                {{course}}_assigned_hint.assigned as timestamp,
                 {{course}}_assigned_hint.pg_id,
+                {{course}}_assigned_hint.hint_html,
                 {{course}}_assigned_hint.id as assigned_hint_id,
                 {{course}}_hint.set_id as original_set_id,
                 {{course}}_hint.problem_id as original_problem_id
@@ -49,7 +59,7 @@ class UserProblemHints(ProcessQuery):
                 {{course}}_assigned_hint.set_id="{{set_id}}"          AND 
                 {{course}}_assigned_hint.problem_id={{problem_id}}'''
         self.process_query(query_template, 
-            dehydrate=self.add_header_footer, verbose=True)
+            dehydrate=self._add_header_footer, verbose=True)
        
 
 class Hint(ProcessQuery):
@@ -125,12 +135,13 @@ class AssignedHint(ProcessQuery):
             pg_id="a",
             hint_id=6,
             user_id="melkherj", 
+            hint_html="melkherj", 
 
             With return None '''
         query_template = '''insert into {{course}}_assigned_hint 
-            (set_id, problem_id, pg_id, hint_id, user_id) values
+            (set_id, problem_id, pg_id, hint_id, user_id, hint_html) values
             ("{{set_id}}", {{problem_id}}, 
-                    "{{pg_id}}", "{{hint_id}}", "{{user_id}}")
+                    "{{pg_id}}", "{{hint_id}}", "{{user_id}}", "{{hint_html}}")
             '''
         self.process_query(query_template, write_response=False)
 
