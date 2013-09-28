@@ -112,7 +112,8 @@ class HintRestAPI(object):
             hints.append({
                 'hintbox_id' : 'Hint%05d'%row['hint_id'],
                 'location' : row['pg_id'],
-                'hint_html' : p.unescape(row['hint_html']) })
+                'hint_html' : p.unescape(row['hint_html']),
+                'timestamp' : row['timestamp'] })
         return hints
  
     @staticmethod
