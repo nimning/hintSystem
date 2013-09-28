@@ -3,6 +3,18 @@ import os.path
 from process_query import ProcessQuery, conn
 from webwork_config import webwork_dir
 from tornado.template import Template
+from tzlocal import get_localzone
+import time
+from datetime import datetime
+import pytz
+
+# MySQLDb returns utc timestamps without associated timezones
+def utc_to_systime(dt):
+    ''' Assume the given datetime object (without associated tzinfo)
+        is in utc.  Return it converted to the local system time.  '''
+
+    dt = dt.replace(tzinfo = pytz.utc)
+    return dt.astimezone(get_localzone())
 
 # GET /problem_seed?
 class ProblemSeed(ProcessQuery):
@@ -116,6 +128,8 @@ class ProblemPGFile(ProcessQuery):
 class RealtimeUserProblemAnswers(ProcessQuery):
     def serialize_timestamp(self, rows):
         for row in rows:
+            # From utc to local system time
+            row['timestamp'] = utc_to_systime(row['timestamp'])
             # To unix timestamp
             row['timestamp'] = int( row['timestamp'].strftime('%s') )
         return rows
@@ -178,16 +192,18 @@ class RealtimeProblemAnswer(ProcessQuery):
             user_id="melkherj", 
             correct=1
             answer_string="x^2+4x"
+            difficulty="too easy"
 
             Returning:
-       '''
+        '''
         query_template = '''
             insert into {{course}}_realtime_past_answer
                 (set_id, problem_id, pg_id, user_id, source_file, correct, 
-                    answer_string) values
+                    answer_string, difficulty) values
                 ( "{{set_id}}", {{problem_id}}, "{{pg_id}}", "{{user_id}}", 
                     "{{source_file}}", {{correct}}, 
-                    "{{answer_string}}" )
+                    "{{answer_string}}", 
+                    "{%try %}{{difficulty}}{%except%}<no response>{%end%}")
         '''
-        self.process_query(query_template, hydrate = self.add_problem_source,
-            verbose=True, write_response=False)
+        self.process_query(query_template, hydrate = 
+            self.add_problem_source, verbose=True, write_response=False)

@@ -347,8 +347,8 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
         ts = self.teacher_session
 
         timestamp = ts.add_hint(
-            student_id, course_id, set_id, problem_id,
-            location, hintbox_id, hint_html)
+            student_id, course_id, set_id, problem_id, location, 
+                hintbox_id, hint_html)
 
         # Ask the client to update its view
         for ss in StudentSession.active_sessions:
