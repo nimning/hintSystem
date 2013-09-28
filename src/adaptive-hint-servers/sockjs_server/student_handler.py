@@ -272,7 +272,7 @@ class StudentSockJSHandler(_BaseSockJSHandler):
         #  and we will only send statuses of the 'Hint' boxes.
         clean_answer_statuses = []
         for answer in answer_statuses:
-            if answer.boxname.startswith('Hint'):
+            if answer['boxname'].startswith('Hint'):
                 answer = answer.copy()
                 answer.pop('correct_value', None)
                 clean_answer_statuses.append(answer)
