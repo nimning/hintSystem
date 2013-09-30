@@ -125,6 +125,17 @@ class AssignedHint(ProcessQuery):
     def initialize(self):
         # Allows X-site requests
         self.set_header("Access-Control-Allow-Origin", "*")
+
+    def replace_hint_html_id(self, assigned_id):
+        self.args['hint_html'] = self.args['hint_html'].replace('HINTBOXID', 'AssignedHint%05d'%assigned_id)
+        query_template = '''update {{course}}_assigned_hint
+            set hint_html="{{hint_html}}"
+            where id={{id}}'''
+        self.args['id'] = assigned_id
+        query_rendered = Template(query_template).generate(**self.args)
+        print query_rendered
+        conn.execute(query_rendered)
+        return assigned_hint_id
     
     def post(self):
         ''' For helping the instructor assign hints 
@@ -143,7 +154,8 @@ class AssignedHint(ProcessQuery):
             ("{{set_id}}", {{problem_id}}, 
                     "{{pg_id}}", "{{hint_id}}", "{{user_id}}", "{{hint_html}}")
             '''
-        self.process_query(query_template, write_response=False)
+        self.process_query(query_template, post_process=self.replace_hint_html_id, 
+            write_response=False)
 
 # GET /hint_answer?
 class HintAnswer(ProcessQuery):

@@ -34,17 +34,18 @@ function render_hint(idx) {
 	       // Clean up
 	       var clean_html = r.rendered_html.replace(/[\s\S]*?<div/m, '<div').trim();
 	       // Rename answer box
+	       assigned_hintbox_id = 'HINTBOXID'
 	       hintbox_id = 'Hint' + pad(hints[idx].hint_id, 5);
-	       clean_html = clean_html.replace(/AnSwEr0001/g, hintbox_id);
+	       clean_html = clean_html.replace(/AnSwEr0001/g, assigned_hintbox_id);
 	       // Include feedback?
 	       if ($('#feedback').is(':checked')) {
 		   clean_html += '<div style="clear:left;">' +
 		       '<input type="radio" name="feedback_' +
-		       hintbox_id + '" value="too hard">Too hard' +
+		       assigned_hintbox_id + '" value="too hard">Too hard' +
 		       '<input type="radio" name="feedback_' +
-		       hintbox_id + '" value="easy but unhelpful">Easy but unhelpful' +
+		       assigned_hintbox_id + '" value="easy but unhelpful">Easy but unhelpful' +
 		       '<input type="radio" name="feedback_' +
-		       hintbox_id + '" value="helpful">Helpful' +
+		       assigned_hintbox_id + '" value="helpful">Helpful' +
 		       '</div>';
 	       }
 	       $('#hint_status').html('Preview');

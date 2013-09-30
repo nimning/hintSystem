@@ -88,9 +88,9 @@ class TeacherSession(object):
         *Blocked until complete*
         """
         timestamp = _datetime_to_timestamp(datetime.datetime.now())
-        HintRestAPI.assign_hint(student_id, course_id, set_id, problem_id, 
+        assigned_hint_id = HintRestAPI.assign_hint(student_id, course_id, set_id, problem_id, 
                                 location, hintbox_id, hint_html)
-        return timestamp
+        return timestamp, assigned_hint_id
 
     def remove_hint(self, student_id, course_id, set_id, problem_id,
                     location, hintbox_id):
