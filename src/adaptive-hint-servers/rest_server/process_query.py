@@ -19,6 +19,7 @@ class ProcessQuery(tornado.web.RequestHandler):
                       query_template,
                       write_response=True,
                       dehydrate=None,
+                      post_process=None,
                       hydrate=None,
                       verbose=False):
         self.args = self.request.arguments
@@ -39,6 +40,8 @@ class ProcessQuery(tornado.web.RequestHandler):
             self.write(json.dumps(response))
         else:
             response = conn.execute(query_rendered)
+            if not post_process is None:
+                response = post_process(response)
             if not response is None:
                self.write(json.dumps(response))
 

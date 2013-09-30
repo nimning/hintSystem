@@ -346,7 +346,7 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
         # shorthand
         ts = self.teacher_session
 
-        timestamp = ts.add_hint(
+        timestamp, assigned_hint_id = ts.add_hint(
             student_id, course_id, set_id, problem_id, location, 
                 hintbox_id, hint_html)
 
@@ -357,7 +357,8 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
                 set_id == ss.set_id and
                 problem_id == ss.problem_id):
                 ss.reload_hints()
-                        
+                       
+         
         # Notify the teachers about the new hint
         ext_hint = {
             'student_id': student_id,
