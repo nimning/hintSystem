@@ -179,18 +179,16 @@ class RealtimeProblemAnswer(ProcessQuery):
             user_id="melkherj", 
             correct=1
             answer_string="x^2+4x"
-            difficulty="too easy"
 
             Returning:
         '''
         query_template = '''
             insert into {{course}}_realtime_past_answer
                 (set_id, problem_id, pg_id, user_id, source_file, correct, 
-                    answer_string, difficulty) values
+                    answer_string) values
                 ( "{{set_id}}", {{problem_id}}, "{{pg_id}}", "{{user_id}}", 
                     "{{source_file}}", {{correct}}, 
-                    "{{answer_string}}", 
-                    "{%try %}{{difficulty}}{%except%}<no response>{%end%}")
+                    "{{answer_string}}" )
         '''
         self.process_query(query_template, hydrate = 
             self.add_problem_source, verbose=True, write_response=False)
