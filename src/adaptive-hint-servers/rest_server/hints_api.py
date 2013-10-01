@@ -2,12 +2,13 @@ import tornado
 import json
 import tornado.ioloop
 import tornado.web
+from tornado.template import Template
 from convert_timestamp import utc_to_system_timestamp
 from process_query import ProcessQuery, conn
 
-# GET /user_problem_hints?
 class UserProblemHints(ProcessQuery):
-
+    """ /user_problem_hints """
+    
     def initialize(self):
         # Allows X-site requests
         self.set_header("Access-Control-Allow-Origin", "*")
@@ -35,7 +36,7 @@ class UserProblemHints(ProcessQuery):
                     "assigned_hint_id": 1, 
                     "pg_footer": "...",
                     "pg_header": "...",
-                    "pg_file_path": "/opt/webwork/courses/CompoundProblems/templates/setcompoundproblemexperiments/compoundProblem.pg",
+                    "pg_file_path": "/opt/path/compoundProblem.pg",
                     "pg_id": "a",
                     "pg_text": "This might help: what is 1+1? [____]{2}"
                 },
@@ -63,7 +64,8 @@ class UserProblemHints(ProcessQuery):
        
 
 class Hint(ProcessQuery):
-
+    """ /hint """
+    
     def initialize(self):
         # Allows X-site requests
         self.set_header("Access-Control-Allow-Origin", "*")
@@ -94,7 +96,7 @@ class Hint(ProcessQuery):
             hint_id=1
             course="CompoundProblems"
 
-            With return [{"pg_text": "This might help: what is 1+1?  [____]{2}", 
+            With return [{"pg_text": "what is 1+1?  [____]{2}", 
                 "author": "melkherj"}]
         '''
         query_template = '''
@@ -119,23 +121,26 @@ class Hint(ProcessQuery):
         '''
         self.process_query(query_template, write_response=False)
        
-# POST /assigned_hint?
-class AssignedHint(ProcessQuery):
 
-    def initialize(self):
-        # Allows X-site requests
-        self.set_header("Access-Control-Allow-Origin", "*")
+class AssignedHint(ProcessQuery):
+    """ /assigned_hint """
 
     def replace_hint_html_id(self, assigned_id):
-        self.args['hint_html'] = self.args['hint_html'].replace('HINTBOXID', 'AssignedHint%05d'%assigned_id)
+        assigned_hintbox_id = "AssignedHint%05d"%assigned_id
+
+        # replace 'HINTBOXID with the actual hintbox id
+        self.args['hint_html'] = self.args['hint_html_template'].replace(
+            'HINTBOXID',
+            assigned_hintbox_id)
+
+        self.args['id'] = assigned_id
         query_template = '''update {{course}}_assigned_hint
             set hint_html="{{hint_html}}"
             where id={{id}}'''
-        self.args['id'] = assigned_id
+        
         query_rendered = Template(query_template).generate(**self.args)
-        print query_rendered
         conn.execute(query_rendered)
-        return assigned_hint_id
+        return assigned_hintbox_id
     
     def post(self):
         ''' For helping the instructor assign hints 
@@ -146,24 +151,46 @@ class AssignedHint(ProcessQuery):
             pg_id="a",
             hint_id=6,
             user_id="melkherj", 
-            hint_html="melkherj", 
+            hint_html_template="melkherj", 
 
             With return None '''
         query_template = '''insert into {{course}}_assigned_hint 
             (set_id, problem_id, pg_id, hint_id, user_id, hint_html) values
             ("{{set_id}}", {{problem_id}}, 
-                    "{{pg_id}}", "{{hint_id}}", "{{user_id}}", "{{hint_html}}")
+            "{{pg_id}}", "{{hint_id}}", "{{user_id}}", "{{hint_html_template}}")
             '''
-        self.process_query(query_template, post_process=self.replace_hint_html_id, 
-            write_response=False)
+        self.process_query(query_template,
+                           post_process=self.replace_hint_html_id, 
+                           write_response=False)
 
-# GET /hint_answer?
+    def get(self):
+        ''' 
+            Sample arguments:
+            course="CompoundProblems",
+            set_id="compoundProblemExperiments",
+            problem_id=1,
+            assigned_hint_id=10
+            '''
+        query_template = '''
+            select {{course}}_hint.pg_text         
+            from {{course}}_hint, {{course}}_assigned_hint
+            where 
+                {{course}}_assigned_hint.id={{assigned_hint_id}}  AND
+                {{course}}_assigned_hint.hint_id={{course}}_hint.id'''
+        self.process_query(query_template,
+                           dehydrate=lambda x: self.add_header_footer(x)[0])
+        
+
+    def delete(self):
+        query_template = '''
+           delete from {{course}}_assigned_hint
+           where id={{assigned_hint_id}}'''
+        self.process_query(query_template, write_response=False, verbose=True)
+        
+
 class HintAnswer(ProcessQuery):
-
-    def initialize(self):
-        # Allows X-site requests
-        self.set_header("Access-Control-Allow-Origin", "*")
-
+    """ /hint_answer """
+    
     def post(self):
         ''' For logging student answers to hints
 
@@ -182,8 +209,30 @@ class HintAnswer(ProcessQuery):
         '''
         self.process_query(query_template, verbose=True, write_response=False)
 
-# GET /problem_hints?
+
+class HintFeedback(ProcessQuery):
+    """ /hint_feedback """
+    
+    def post(self):
+        ''' For logging student feedback of a hint
+
+            Sample arguments:
+            course="CompoundProblems",
+            assigned_hint_id=1,
+            feedback="very useful"
+
+            Returning: 
+       '''
+        query_template = '''
+            insert into {{course}}_assigned_hint_feedback
+                (assigned_hint_id, feedback) values
+                ( {{assigned_hint_id}}, "{{feedback}}" )
+        '''
+        self.process_query(query_template, verbose=True, write_response=False)
+    
+
 class ProblemHints(ProcessQuery):
+    """ /problem_hints """
 
     def initialize(self):
         # Allows X-site requests
@@ -191,7 +240,8 @@ class ProblemHints(ProcessQuery):
     
     def get(self):
         ''' 
-            For listing all hints for a problem (for instructors) that could be reused for other students:
+            For listing all hints for a problem (for instructors)
+            that could be reused for other students:
 
             Sample arguments:
             course="CompoundProblems", 
@@ -225,3 +275,5 @@ class ProblemHints(ProcessQuery):
             group by {{course}}_hint.id
         '''
         self.process_query(query_template, dehydrate=self.add_header_footer)
+
+

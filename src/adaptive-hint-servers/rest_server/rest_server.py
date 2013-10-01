@@ -8,7 +8,7 @@ from checkanswer import CheckAnswer
 from webwork import (ProblemSeed, ProblemPGPath, ProblemPGFile,
                      RealtimeUserProblemAnswers, RealtimeProblemAnswer)
 from hints_api import (UserProblemHints, Hint, AssignedHint,
-                       HintAnswer, ProblemHints)
+                       HintAnswer, ProblemHints, HintFeedback)
 
 # Server configuration
 BIND_IP = '0.0.0.0'
@@ -27,7 +27,8 @@ application = tornado.web.Application([
     (r"/realtime_user_problem_answers", RealtimeUserProblemAnswers),
     (r"/problem_hints", ProblemHints),
     (r"/realtime_problem_answer", RealtimeProblemAnswer),
-    (r"/hint_answer", HintAnswer)
+    (r"/hint_answer", HintAnswer),
+    (r"/hint_feedback", HintFeedback)
     ])
 
 if __name__ == "__main__":

@@ -105,11 +105,11 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
               location : string
                 Hint location
 
-              hintbox_id : string
-                Hint answer box ID
+              hint_id : string
+                Hint  ID
                 
-              hint_html : string
-                HTML snippet of the hint
+              hint_html_template : string
+                HTML template
               
             """
             try:
@@ -118,8 +118,8 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
                 set_id = args['set_id']
                 problem_id = args['problem_id']
                 location = args['location']
-                hintbox_id = args['hintbox_id']
-                hint_html = args['hint_html']
+                hint_id = args['hint_id']
+                hint_html_template = args['hint_html_template']
 
                 # shorthand
                 ts = self.teacher_session
@@ -130,8 +130,8 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
                                set_id,
                                problem_id,
                                location,
-                               hintbox_id,
-                               hint_html)
+                               hint_id,
+                               hint_html_template)
                 
                 logger.info("%s: add_hint"%ts.teacher_id)
                 
@@ -341,14 +341,18 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
 
     def _perform_add_hint(self, student_id, course_id,
                           set_id, problem_id, location,
-                          hintbox_id, hint_html, callback=None):
+                          hint_id, hint_html_template, callback=None):
 
         # shorthand
         ts = self.teacher_session
 
-        timestamp, assigned_hint_id = ts.add_hint(
-            student_id, course_id, set_id, problem_id, location, 
-                hintbox_id, hint_html)
+        (timestamp, assigned_hintbox_id) = ts.add_hint(student_id,
+                                                       course_id,
+                                                       set_id,
+                                                       problem_id,
+                                                       location, 
+                                                       hint_id,
+                                                       hint_html_template)
 
         # Ask the client to update its view
         for ss in StudentSession.active_sessions:
@@ -366,7 +370,7 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
             'set_id': set_id,
             'problem_id': problem_id,
             'timestamp': timestamp,
-            'hintbox_id': hintbox_id,
+            'hintbox_id': assigned_hintbox_id,
             'location': location }
         for ts in TeacherSession.active_sessions:
             ts.notify_hint_update(ext_hint)
