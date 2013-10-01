@@ -9,7 +9,6 @@ CREATE TABLE {{course_name}}_realtime_past_answer (
     source_file text,
     correct boolean,
     answer_string varchar(1024) DEFAULT NULL,
-    difficulty varchar(100),
     timestamp TIMESTAMP,
     primary key (id)    
 );
