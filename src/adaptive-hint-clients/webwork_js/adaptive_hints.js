@@ -14,6 +14,12 @@
 
     // Send 'student_answer' message.
     function student_answer(box) {
+	// invalidate existing timeout
+	if (box.timer) {
+	    window.clearTimeout(box.timer);
+	    box.timer = null;
+	}
+	
 	if (box.value != box.last_answer) {
 	    var args = { 'boxname': box.attributes["name"].value,
 			 'value': box.value };
@@ -31,7 +37,6 @@
 
     // Create actions for a textbox.
     function create_textbox_actions(textbox) {
-	
 	// Initialize last answer to empty string.
 	textbox.each(function() {
 	    this.last_answer = '';	    
@@ -47,6 +52,21 @@
 	    if (e.which == 13) {
 		student_answer(this);
 	    }
+	});
+
+	// Add a timer
+	textbox.keyup(function() {
+	    // invalidate existing timeout
+	    if (this.timer) {
+		window.clearTimeout(this.timer);
+		this.timer = null;
+	    }
+	    
+	    // create a new timeout
+	    this.timer = window.setTimeout(function(obj) {
+		// when the timeout is reached, send answer
+		student_answer(obj);
+	    }, 1500, this);
 	});
 
 	// Add Math button
