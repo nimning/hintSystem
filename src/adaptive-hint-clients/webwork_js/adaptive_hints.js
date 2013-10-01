@@ -2,7 +2,7 @@
 
     // Debug print
     function print(msg) {
-	console.log(msg);
+	//console.log(msg);
     }
 
     // Send a message to SockJS server.
@@ -144,7 +144,7 @@
 	// SockJS server for each course 
 	// Only courses listed here will be affected by this script.
 	var router = {
-	    'demo': 'http://webwork.cse.ucsd.edu:4350/student',
+	    'UCSD_CSE103': 'http://webwork.cse.ucsd.edu:4350/student',
 	    'CompoundProblems': 'http://webwork.cse.ucsd.edu:4349/student'
 	};
 
