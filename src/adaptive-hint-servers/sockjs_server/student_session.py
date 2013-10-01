@@ -97,6 +97,7 @@ class StudentSession(object):
         """Update the hints displayed on the client"""
         def _perform_send_hints():
             self._sockjs_handler.send_hints(self.hints)
+            self._sockjs_handler.send_answer_status(self.current_answers)
 
         # invalidate internal cache
         self._hints = None               
