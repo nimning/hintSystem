@@ -90,9 +90,10 @@
 	if (!box) return;
 
 	// Set value if the box is empty
-	if (box.val().length === 0) {
+	if (!box.val() || box.val().length === 0) {
 	    box.val(entered_value);
 	}
+
 	// Remove previous title
 	box.attr('title', '');
 	if (error_msg && error_msg.length > 0) {
