@@ -144,6 +144,12 @@ class StudentSockJSHandler(_BaseSockJSHandler):
 
                 # shorthand
                 ss = self.student_session
+
+                # extract assigned hint id and post the feedback
+                assigned_hint_id = int(hintbox_id[-5:])
+                HintRestAPI.post_hint_feedback(ss.course_id,
+                                               assigned_hint_id,
+                                               feedback)
                 
                 logger.info("%s updated feedback for %s to %s"%(
                     ss.student_id, hintbox_id, feedback))
@@ -216,9 +222,13 @@ class StudentSockJSHandler(_BaseSockJSHandler):
                                                     boxname,
                                                     value)         
         # check hint answer
-        elif boxname.startswith('Hint'):
+        elif boxname.startswith('AssignedHint'):
             # get hint pg
-            hint = HintRestAPI.hint(ss.course_id, int(boxname[4:]))
+            assigned_hint_id = int(boxname[-5:])
+            hint = HintRestAPI.hint(ss.course_id,
+                                    ss.set_id,
+                                    ss.problem_id,
+                                    assigned_hint_id)
             
             pg_file = base64.b64encode(
                 hint['pg_header'] + '\n' +
@@ -235,7 +245,7 @@ class StudentSockJSHandler(_BaseSockJSHandler):
             
         # unknown box name    
         else:
-            raise ValueError('Boxname must begin with AnSwEr or Hint')
+            raise ValueError('Boxname must begin with AnSwEr or AssignedHint')
 
         # post-process the answer status
         if len(answer_status) > 0:
@@ -272,7 +282,7 @@ class StudentSockJSHandler(_BaseSockJSHandler):
         #  and we will only send statuses of the 'Hint' boxes.
         clean_answer_statuses = []
         for answer in answer_statuses:
-            if answer['boxname'].startswith('Hint'):
+            if not answer['boxname'].startswith('AnSwEr'):
                 answer = answer.copy()
                 answer.pop('correct_value', None)
                 clean_answer_statuses.append(answer)

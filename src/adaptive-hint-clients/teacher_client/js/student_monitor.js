@@ -34,8 +34,8 @@ function render_hint(idx) {
 	       // Clean up
 	       var clean_html = r.rendered_html.replace(/[\s\S]*?<div/m, '<div').trim();
 	       // Rename answer box
+	       hint_id = hints[idx].hint_id;
 	       assigned_hintbox_id = 'HINTBOXID'
-	       hintbox_id = 'Hint' + pad(hints[idx].hint_id, 5);
 	       clean_html = clean_html.replace(/AnSwEr0001/g, assigned_hintbox_id);
 	       // Include feedback?
 	       if ($('#feedback').is(':checked')) {
@@ -418,16 +418,16 @@ $(document).ready(function() {
     $("#add_hint").click(function() {
 	var location = $('#hint_location').val();
 	if (location.length > 0 &&
-	    hintbox_id !== undefined &&
-	    hintbox_id !== null) {
+	    hint_id !== undefined &&
+	    hint_id !== null) {
 	    send_command(sock, 'add_hint', {
 		'student_id': $('#student_id').val(),
 		'course_id': $('#course_id').val(),
 		'set_id': $('#set_id').val(),
 		'problem_id': $('#problem_id').val(),
 		'location': $('#hint_location').val(),
-		'hintbox_id': hintbox_id,
-		'hint_html': $('#hint_html').html()
+		'hint_id': hint_id,
+		'hint_html_template': $('#hint_html').html()
 	    });
 	}
 	$("#cancel_hint").click();
@@ -437,7 +437,7 @@ $(document).ready(function() {
 	$('#hint_status').html('');
 	$('#hint_html').hide();
 	$('#hint_location').val('');
-	hintbox_id = null;
+	hint_id = null;
 	$('#hint_container').hide();
 	window.scrollTo(0, 0);
     });
