@@ -78,7 +78,7 @@ class HintRestAPI(object):
         return json.loads(response.body)
             
     @staticmethod
-    def hint(course_id, hint_id):
+    def hint(course_id, set_id, problem_id, assigned_hint_id):
         """
           Returns:
             {
@@ -91,9 +91,11 @@ class HintRestAPI(object):
         """
         http_client = httpclient.HTTPClient()
         baseurl = HintRestAPI._baseurl
-        url = url_concat(baseurl + '/hint',
+        url = url_concat(baseurl + '/assigned_hint',
                          { 'course': course_id,
-                           'hint_id': hint_id
+                           'set_id': set_id,
+                           'problem_id': problem_id,
+                           'assigned_hint_id': assigned_hint_id
                            })
         response = http_client.fetch(url)
         return json.loads(response.body)
@@ -110,7 +112,7 @@ class HintRestAPI(object):
         hints = []
         for row in rows:
             hints.append({
-                'hintbox_id' : 'Hint%05d'%row['hint_id'],
+                'hintbox_id' : 'AssignedHint%05d'%row['assigned_hint_id'],
                 'location' : row['pg_id'],
                 'hint_html' : p.unescape(row['hint_html']),
                 'timestamp' : row['timestamp'] })
@@ -118,18 +120,19 @@ class HintRestAPI(object):
  
     @staticmethod
     def assign_hint(student_id, course_id, set_id,
-                    problem_id, location, hintbox_id, hint_html):
+                    problem_id, location, hint_id, hint_html_template):
         base_url = HintRestAPI._baseurl
-        hint_id = int(hintbox_id[4:])
         params = {'user_id':student_id, 'course':course_id,
                   'set_id':set_id, 'problem_id':problem_id, 'pg_id':location, 
-                  'hint_id':hint_id, 'hint_html':hint_html}
+                  'hint_id':hint_id, 'hint_html_template':hint_html_template}
         r = requests.post(base_url+'/assigned_hint', data=params)
 
     @staticmethod
-    def unassign_hint(student_id, course_id, set_id, problem_id,
-                      location, hintbox_id):
-        pass
+    def unassign_hint(course_id, hintbox_id):
+        base_url = HintRestAPI._baseurl
+        params = {'course': course_id,
+                  'assigned_hint_id': int(hintbox_id[-5:])}
+        r = requests.delete(base_url+'/assigned_hint', params=params)
             
     @staticmethod
     def get_realtime_answers(student_id, course_id,
@@ -164,3 +167,12 @@ class HintRestAPI(object):
                   'answer_string': answer_status['entered_value']}
         r = requests.post(base_url+'/realtime_problem_answer',
                           data=params)
+
+    @staticmethod
+    def post_hint_feedback(course_id, assigned_hint_id, feedback):
+        base_url = HintRestAPI._baseurl
+        params = {'course': course_id,
+                  'assigned_hint_id': assigned_hint_id,
+                  'feedback': feedback}
+        r = requests.post(base_url+'/hint_feedback', data=params)
+        

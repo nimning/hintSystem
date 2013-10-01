@@ -82,15 +82,20 @@ class TeacherSession(object):
             del TeacherSession.student_assignment[hashkey]
 
     def add_hint(self, student_id, course_id, set_id, problem_id, location,
-                 hintbox_id, hint_html):
+                 hint_id, hint_html_template):
         """Add a hint to user_problem_hint DB
 
         *Blocked until complete*
         """
         timestamp = _datetime_to_timestamp(datetime.datetime.now())
-        assigned_hint_id = HintRestAPI.assign_hint(student_id, course_id, set_id, problem_id, 
-                                location, hintbox_id, hint_html)
-        return timestamp, assigned_hint_id
+        assigned_hintbox_id = HintRestAPI.assign_hint(student_id,
+                                                   course_id,
+                                                   set_id,
+                                                   problem_id, 
+                                                   location,
+                                                   hint_id,
+                                                   hint_html_template)
+        return timestamp, assigned_hintbox_id
 
     def remove_hint(self, student_id, course_id, set_id, problem_id,
                     location, hintbox_id):
@@ -98,8 +103,7 @@ class TeacherSession(object):
 
         *Blocked until complete*
         """
-        HintRestAPI.unassign_hint(student_id, course_id, set_id, problem_id,
-                                  location, hintbox_id)
+        HintRestAPI.unassign_hint(course_id, hintbox_id)
 
     def list_my_students(self):
         """List all my students"""
