@@ -188,28 +188,6 @@ class AssignedHint(ProcessQuery):
         self.process_query(query_template, write_response=False, verbose=True)
         
 
-class HintAnswer(ProcessQuery):
-    """ /hint_answer """
-    
-    def post(self):
-        ''' For logging student answers to hints
-
-            Sample arguments:
-            course="CompoundProblems",
-            assigned_hint_id=1,
-            correct=1
-            answer_string="x^2+2x"
-
-            Returning: 
-       '''
-        query_template = '''
-            insert into {{course}}_hint_attempt
-                (assigned_hint_id, correct, answer_string) values
-                ( {{assigned_hint_id}}, {{correct}}, "{{answer_string}}" )
-        '''
-        self.process_query(query_template, verbose=True, write_response=False)
-
-
 class HintFeedback(ProcessQuery):
     """ /hint_feedback """
     
