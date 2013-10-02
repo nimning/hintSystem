@@ -1,0 +1,30 @@
+<html>
+<body>
+<div>
+CourseID: <input type="text" disabled id="course_id" value="UCSD_CSE103"><br>
+SetID: <input type="text" id="set_id" value="Assignment1NoMultipart"><br>
+ProblemID: <input type="text" id="problem_id" value="5"><br>
+TeacherID: <input type="text" id="teacher_id" value=""><br>
+Seed: <input type="text" disabled id="seed" value="123"><br>
+<input type="hidden" id="port" value="4351">
+<button id="create">Create a new hint</button>
+</div>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script>
+
+$('#create').click(function() {
+    if ($('#teacher_id').val().length > 0) {
+	var url = 'hint_editor.html' +
+	    '?course_id=' + $('#course_id').val() + 
+	    '&set_id=' + $('#set_id').val() + 
+	    '&problem_id=' + $('#problem_id').val() + 
+	    '&seed=' + $('#seed').val() + 
+	    '&teacher_id=' + $('#teacher_id').val() + 
+	    '&port=' + $('#port').val();
+	window.open(url, '_blank');
+    }
+});
+
+</script>
+</body>
+</html>
