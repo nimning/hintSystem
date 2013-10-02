@@ -282,4 +282,11 @@ $(document).ready(function() {
     sock.close();
   });
 
+    $('#create_hint').click(function() {
+	var url = "add_hint.html" +
+	    "?teacher_id=" + $('#teacher_id').val() +
+	    "&port=" + $('#rest_port').val();
+	window.open(url, '_blank');
+    });
+
 });

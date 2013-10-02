@@ -2,18 +2,31 @@
 <body>
 <div>
 CourseID: <input type="text" disabled id="course_id" value="UCSD_CSE103"><br>
-SetID: <input type="text" id="set_id" value="Assignment1NoMultipart"><br>
-ProblemID: <input type="text" id="problem_id" value="5"><br>
-TeacherID: <input type="text" id="teacher_id" value=""><br>
-Seed: <input type="text" disabled id="seed" value="123"><br>
+TeacherID: <input type="text" disabled id="teacher_id" value=""><br>
+SetID: <input type="text" id="set_id" value=""><br>
+ProblemID: <input type="text" id="problem_id" value=""><br>
 <input type="hidden" id="port" value="4351">
-<button id="create">Create a new hint</button>
+<input type="hidden" id="seed" value="1234">
+<button id="create">Open hint editor</button>
 </div>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="js/common.js"></script>
 <script>
 
+function get_params() {
+  if (QueryString.port) {
+    $('#port').val(QueryString.port);
+  }
+
+  if (QueryString.teacher_id) {
+    $('#teacher_id').val(QueryString.teacher_id);
+  }
+}
+
+
 $('#create').click(function() {
-    if ($('#teacher_id').val().length > 0) {
+    if ($('#set_id').val().length > 0 && 
+        $('#problem_id').val().length > 0) {
 	var url = 'hint_editor.html' +
 	    '?course_id=' + $('#course_id').val() + 
 	    '&set_id=' + $('#set_id').val() + 
@@ -23,6 +36,10 @@ $('#create').click(function() {
 	    '&port=' + $('#port').val();
 	window.open(url, '_blank');
     }
+});
+
+$( document ).ready(function() {
+    get_params();
 });
 
 </script>
