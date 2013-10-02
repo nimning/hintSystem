@@ -93,11 +93,6 @@ function calc_tries(past_answers, part) {
         past_answers[j].is_correct === false) {
       tries++;
     }
-    else if (past_answers[j].boxname == part &&
-             past_answers[j].is_correct === true) {
-      // Found a correct answer.
-      return null;
-    }
   }
   return tries;
 }
