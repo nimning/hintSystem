@@ -4,6 +4,9 @@ from HTMLParser import HTMLParser
 import urllib
 import json
 import requests
+import logging
+
+logger = logging.getLogger(__name__)
 
 class HintRestAPI(object):
     """Provides an interface to the Hint ReSTful APIs"""
@@ -35,13 +38,26 @@ class HintRestAPI(object):
                                          'seed' : pg_seed,
                                          boxname : value 
                                          }))
-        result_json = json.loads(response.body)[boxname]
-        answer_status = { 'boxname': boxname,
-                          'is_correct': result_json['is_correct'],
-                          'error_msg': result_json['error_msg'],
-                          'entered_value': value,
-                          'correct_value': result_json['correct_value']
-                          }
+        
+        logger.debug({ 'pg_file':pg_file,
+                       'seed':pg_seed,
+                       'boxname':boxname,
+                       'value':value
+                       })
+        logger.debug(response.body)
+
+        result_json = json.loads(response.body)
+        answer_status = {}
+
+        if boxname in result_json:
+            result_json = result_json[boxname]
+            answer_status = { 'boxname': boxname,
+                              'is_correct': result_json['is_correct'],
+                              'error_msg': result_json['error_msg'],
+                              'entered_value': value,
+                              'correct_value': result_json['correct_value']
+                              }
+            
         return answer_status
 
     @staticmethod
