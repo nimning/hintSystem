@@ -47,6 +47,8 @@ class TeacherSession(object):
       teacher_id : string
         Teacher ID
 
+      student_session : StudentSesion
+
       _sockjs_handler : StudentSockJSHandler
         SockJS handler
         
@@ -54,16 +56,10 @@ class TeacherSession(object):
     active_sessions = set()
     student_assignment = {}
         
-    def __init__(self, teacher_id, sockjs_handler, student_id=None,
-                 course_id=None, set_id=None, problem_id=None):
+    def __init__(self, teacher_id, sockjs_handler, student_session=None)
         self.teacher_id = teacher_id
+        self.student_session = student_session
         self._sockjs_handler = sockjs_handler
-        
-        # student assigned to this instance
-        self.student_id = student_id
-        self.course_id = course_id
-        self.set_id = set_id
-        self.problem_id = problem_id
             
     def request_student(self, student_id, course_id, set_id, problem_id):
         """Try to add a student with the session id to the set"""
@@ -81,23 +77,26 @@ class TeacherSession(object):
             TeacherSession.student_assignment[hashkey][0] == self.teacher_id):
             del TeacherSession.student_assignment[hashkey]
 
-    def add_hint(self, student_id, course_id, set_id, problem_id, location,
-                 hint_id, hint_html_template):
+    def assign_hint(self, location, hint_id, hint_html_template):
         """Add a hint to user_problem_hint DB
 
         *Blocked until complete*
         """
-        timestamp = _datetime_to_timestamp(datetime.datetime.now())
-        assigned_hintbox_id = HintRestAPI.assign_hint(student_id,
-                                                   course_id,
-                                                   set_id,
-                                                   problem_id, 
-                                                   location,
-                                                   hint_id,
-                                                   hint_html_template)
-        return timestamp, assigned_hintbox_id
+        ss = self.student_session
+        if ss is not None:
+            timestamp = _datetime_to_timestamp(datetime.datetime.now())
+            assigned_hintbox_id = HintRestAPI.assign_hint(ss.student_id,
+                                                          ss.course_id,
+                                                          ss.set_id,
+                                                          ss.problem_id, 
+                                                          location,
+                                                          hint_id,
+                                                          hint_html_template)
+            return timestamp, assigned_hintbox_id
+        else:
+            
 
-    def remove_hint(self, student_id, course_id, set_id, problem_id,
+    def unassign_hint(self, student_id, course_id, set_id, problem_id,
                     location, hintbox_id):
         """Remove a hint to user_problem_hint DB
 

@@ -339,14 +339,14 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
         callback()
 
 
-    def _perform_add_hint(self, student_id, course_id,
+    def _perform_assign_hint(self, student_id, course_id,
                           set_id, problem_id, location,
                           hint_id, hint_html_template, callback=None):
 
         # shorthand
         ts = self.teacher_session
 
-        (timestamp, assigned_hintbox_id) = ts.add_hint(student_id,
+        (timestamp, assigned_hintbox_id) = ts.assign_hint(student_id,
                                                        course_id,
                                                        set_id,
                                                        problem_id,

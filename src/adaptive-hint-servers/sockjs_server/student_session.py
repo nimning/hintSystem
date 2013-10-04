@@ -1,8 +1,10 @@
 import datetime
 import time
-from threading import Thread
+import logging
 
 from hint_rest_api import HintRestAPI
+
+logger = logging.getLogger(__name__)
 
 def _datetime_to_timestamp(dt):
     return time.mktime(dt.timetuple())
@@ -93,15 +95,15 @@ class StudentSession(object):
             answer_dict[answer['boxname']] = answer        
         return answer_dict.values()
 
-    def reload_hints(self):
+    def update_hints(self):
         """Update the hints displayed on the client"""
-        def _perform_send_hints():
+        # invalidate internal cache
+        try:
+            self._hints = None
             self._sockjs_handler.send_hints(self.hints)
             self._sockjs_handler.send_answer_status(self.current_answers)
-
-        # invalidate internal cache
-        self._hints = None               
-        Thread(target=_perform_send_hints).start()
+        except:
+            logging.exception("Exception in update_hints()")
 
     def update_answer(self, boxname, answer_status):
         """Update an answer box

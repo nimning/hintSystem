@@ -306,15 +306,20 @@ class StudentSockJSHandler(_BaseSockJSHandler):
         """Callback for when a student is disconnected"""
         ss = self.student_session
 
-        # Remove the session from active list
-        StudentSession.active_sessions.remove(ss)
+        if ss is not None:
+            # Remove sockjs handler
+            ss._sockjs_handler = None
+            
+            # Remove the session from active list
+            if ss in StudentSession.active_sessions:
+                StudentSession.active_sessions.remove(ss)
 
-        # notify teachers
-        for ts in TeacherSession.active_sessions:
-            ts.notify_student_left(ss)
+            # Notify the teachers
+            for ts in TeacherSession.active_sessions:
+                ts.notify_student_left(ss)
 
-        if len(ss.student_id) > 0:
-            logger.info("%s left"%ss.student_id)
+            if len(ss.student_id) > 0:
+                logger.info("%s left"%ss.student_id)
                 
         logger.info("%s disconnected"%self.session.conn_info.ip)
             
