@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<!--
+    Created using jsbin.com
+    Source can be edited via http://jsbin.com/iCaVObU/38/edit
+  -->
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <base href="http://webwork.cse.ucsd.edu">
+  <title>Monitor</title>
+  <link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css">
+  <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/codemirror/3.14.0/codemirror.css">
+  <link rel="stylesheet" type="text/css" href="/teacher/css/student_monitor.css">
+</head>
+<body>
+
+  <input type="hidden" id="teacher_id" value="__TESTER__"/>
+  <input type="hidden" id="course_id" value="demo"/>
+  <input type="hidden" id="set_id" value="sandbox"/>
+  <input type="hidden" id="problem_id" value="1"/>
+  <input type="hidden" id="student_id" value="scheaman"/>
+  <input type="hidden" id="pg_file" value=""/>
+  <input type="hidden" id="pg_seed" value=""/>
+  <input type="hidden" id="sockjs_port" value="4350"/>
+  <input type="hidden" id="rest_port" value="4351"/>
+
+  <div id="page_container">
+    <div id="past_answers">
+      <h2>Past answers</h2>
+      <div id="answer_container" class="table_container">
+        <table id="AnSwEr0001_table">
+          <thead>
+            <tr>
+              <th>Timestamp_hidden</th>
+              <th>Last update</th>
+              <th>Answer</th>
+              <th>Correct</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="problem_container">
+      <h2>Student's view</h2>
+      <div id="problem_preview">
+      </div>
+    </div>
+
+    <div id="hint_container">
+      <h2>Hints</h2>
+      <button id="create_hint" style="height: 30px;">
+        Create a new hint
+      </button>
+      <button id="reload_hints" style="height: 30px;">
+        Reload hints
+      </button>
+      <div id="hints">
+        <div class="table_container">
+          <table id="hint_table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Hint PGML</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Hint: Blah</td>
+                <td>
+                  <button>Fork</button>
+                  <button>Select</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div id="hint_html_container">
+          <div id="hint_status"></div>
+          <div id="hint_html"></div>
+        </div>
+        <div style="float:left;">
+          <input type="checkbox" id="feedback" checked="on"/>
+          Include feedback
+        </div>
+        <div style="float:right; text-align:right; padding-right: 50px; margin-bottom: 100px;">
+          <input type="text" disabled id="hint_location" value=""/>
+          <button id="add_hint">Send</button>
+          <button id="cancel_hint">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="error_message"></div>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
+  <script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
+  <script src="/teacher/js/common.js"></script>
+  <script src="/teacher/js/student_monitor.js"></script>
+</body>
+</html>

@@ -1,54 +1,36 @@
 import tornado.ioloop
 import tornado.web
 import logging
+import argparse
 
 from render import Render 
 from checkanswer import CheckAnswer
+from webwork import (ProblemSeed, ProblemPGPath, ProblemPGFile,
+                     RealtimeUserProblemAnswers, RealtimeProblemAnswer)
+from hints_api import (UserProblemHints, Hint, AssignedHint,
+                       ProblemHints, HintFeedback)
 
 # Server configuration
 BIND_IP = '0.0.0.0'
 DEFAULT_PORT = 4351
+LOG_PATH = '/var/log/hint'
 
-class PG(tornado.web.RequestHandler):
-    """PG Resource (REST API)"""
-    def post(self):
-        """POST /pg"""
-        pg_path = self.get_argument('pg_path', '')
-        response = { 'pg_id': 1, 
-                     'pg_source': '' }
-        self.write(response)
- 
-class Hint(tornado.web.RequestHandler):
-    """Hint Resource (REST API)"""
-    def get(self, pg_id):
-        """GET /hints/:pg_id"""
-        response = { 'hint_id': 2,
-                     'pg': '',
-                     'html': '' }
-        self.write(response)
-
-    def post(self, pg_id):
-        """POST /hints/:pg_id"""
-        pg_source = self.get_argument('pg_source', '')
-        response = { 'result': 'done' }
-        self.write(response)
-        
-    def delete(self, pg_id):
-        """DELETE /hints/:pg_id"""
-        response = {'result': 'done' }
-        self.write(response)
-
- 
-    
 application = tornado.web.Application([
-        (r"/pg/([0-9]+)", PG),
-        (r"/hints/([0-9]+)", Hint),
-        (r"/render", Render),
-        (r"/checkanswer", CheckAnswer),
-        ])
- 
+    (r"/render", Render),
+    (r"/checkanswer", CheckAnswer),
+    (r"/problem_seed", ProblemSeed),
+    (r"/pg_path", ProblemPGPath),
+    (r"/pg_file", ProblemPGFile),
+    (r"/user_problem_hints", UserProblemHints),
+    (r"/hint", Hint),
+    (r"/assigned_hint", AssignedHint),
+    (r"/realtime_user_problem_answers", RealtimeUserProblemAnswers),
+    (r"/problem_hints", ProblemHints),
+    (r"/realtime_problem_answer", RealtimeProblemAnswer),
+    (r"/hint_feedback", HintFeedback)
+    ])
+
 if __name__ == "__main__":
-    import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument("--port",
                         type=int,
@@ -56,8 +38,20 @@ if __name__ == "__main__":
                         help="port to listen")
     args = parser.parse_args()
 
-    logging.getLogger().setLevel(logging.DEBUG)
+    # set up the root logger
+    logger = logging.getLogger()
+    logger.setLevel(logging.DEBUG)
 
+    formatter = logging.Formatter('%(asctime)s - %(name)s - '
+                                  '%(levelname)s - %(message)s')
+
+    log_filename =  LOG_PATH + "/rest-%d.log"%args.port
+    handler = logging.handlers.RotatingFileHandler(log_filename,
+                                                   maxBytes=2000000,
+                                                   backupCount=5)
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+    
     application.listen(args.port, address=BIND_IP)
     logging.info(" [*] Listening on %s:%d"%(BIND_IP,args.port))
     

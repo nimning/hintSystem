@@ -1,0 +1,81 @@
+#page_container {
+  width: 100%;
+  height: 100%;
+  display: none;
+}
+
+#past_answers {
+  position: absolute;
+  left: 0px;
+  width: 300px;
+  height: 95%;
+  overflow: scroll;
+  margin: 10px;
+  padding: 10px;
+  padding-right: 20px;
+  font-size: 14px;
+}
+
+#problem_container {
+  background-color: white;
+  margin-left: 350px;
+  overflow: auto;
+}
+
+#hint_container {
+  background-color: white;
+  margin-left: 350px;
+  display: none;
+  overflow: auto;
+}
+
+#problem_preview {
+  background-color: white;
+  border: 1px solid black;
+  border-radius:10px;
+  min-height: 100px;
+  width: 600px;
+  overflow: auto;
+  padding: 10px;
+  margin: 10px;
+  float: left;
+  font-size: 14px;
+}
+
+#hints {
+  width: 600px;
+}
+
+#hint_html_container {
+  padding: 20px;
+}
+
+.hint_html {
+  background-color: #E0FAC0;
+  clear:left;
+  margin:10px;
+  border:1px solid;
+  padding:5px;
+}
+
+.timestamp {
+  margin: 2px;
+}
+
+.dataTables_wrapper {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border:1px solid black;
+}
+
+.dataTables_wrapper .header {
+  text-align: left;
+  font-weight: bold;
+  font-size: 16px;
+  padding: 10px;
+}
+
+html, body {
+  width: 98%;
+  height: 100%;
+}
