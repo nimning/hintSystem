@@ -1,0 +1,71 @@
+<html>
+<!--
+  Created using jsbin.com
+  Source can be edited via http://jsbin.com/UFALiVA/10/edit
+-->
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>Hint Editor</title>
+  <base href="http://webwork.cse.ucsd.edu">
+  <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/codemirror/3.14.0/codemirror.css">
+  <link rel="stylesheet" type="text/css" href="/teacher/css/hint_editor.css">
+</head>
+  <body>
+
+    <input type="hidden" id="course_id" value="UCSD_CSE103" />
+    <input type="hidden" id="set_id" value="Assignment2" />
+    <input type="hidden" id="problem_id" value="2" />
+    <input type="hidden" id="seed" value="100" />
+    <input type="hidden" id="hint_id" value="" />
+    <input type="hidden" id="teacher_id" value="__unknown__" />
+    <input type="hidden" id="port" value="4351" />
+
+    <div id="container">
+      <div id="header">
+        <h1 style="margin-bottom:0;">Hint Editor</h1>
+      </div>
+      <div id="content">
+        <div id="hint_area">
+          <div class="heading">Hint PGML</div>
+          <div class="textarea_wrapper">
+          <textarea id="hint_body"></textarea>
+          </div>
+          <div style="text-align: center;">
+            <button id="render" class="big_button">Render</button>
+          </div>
+          <div class="heading">Hint Preview</div>
+          <div id="hint_preview"></div>
+          <div style="text-align: center;">
+            <button id="checkanswer" class="big_button">Check Answer</button>
+          </div>
+          <div class="heading">Hint Answer</div>
+          <div id="answer_status_wrapper">
+            <textarea id="answer_status" disabled></textarea>
+          </div>
+          <div style="text-align: center;">
+            <button id="save_hint" class="big_button">
+              Save hint to DB
+            </button>
+          </div>
+        </div>
+        <div id="problem_area">
+          <div class="heading">Problem PGML</div>
+          <div class="textarea_wrapper">
+          <textarea id="problem_pg"></textarea>
+          </div>
+          <div class="heading">Problem Preview</div>
+          <div id="problem_preview"></div>
+        </div>
+      </div>
+    </div>
+    <div id="error_report" style="display:none;"></div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="//cdn.jsdelivr.net/codemirror/3.14.0/codemirror.js"></script>
+    <script src="//cdn.jsdelivr.net/codemirror/3.14.0/mode/perl/perl.js"></script>
+    <script src="//cdn.jsdelivr.net/codemirror/3.14.0/mode/xml/xml.js"></script>
+    <script src="//cdn.jsdelivr.net/codemirror/3.14.0/mode/markdown/markdown.js"></script>
+    <script src="/teacher/js/common.js"></script>
+    <script src="/teacher/js/hint_editor.js"></script>
+</body>
+</html>

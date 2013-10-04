@@ -152,6 +152,12 @@ def test():
                         'AnSwEr0002' : '21'},
                       seed=42)
 
+    print '#'*50
+    print checkanswer(os.path.join(_SCRIPTDIR,'test.pg'),
+                      { 'AnSwEr0001' : '1' },
+                      seed=42)
+
+
 
 if __name__ == "__main__":
     test()

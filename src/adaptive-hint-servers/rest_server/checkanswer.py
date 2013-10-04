@@ -13,6 +13,9 @@ def task_checkanswer(pg_file, answers, seed, callback=None):
 class CheckAnswer(tornado.web.RequestHandler):
     """Interface with Webwork/PG for checking answers with a PG
     """
+    def initialize(self):
+        # Allows X-site requests
+        self.set_header("Access-Control-Allow-Origin", "*")
 
     @tornado.web.asynchronous
     @tornado.gen.coroutine
@@ -45,7 +48,7 @@ class CheckAnswer(tornado.web.RequestHandler):
             
         if len(answers) == 0:
             response = { 'error_msg': 'Need at least 1 answer' }
-            self.write(response)
+            self._write_finish(response)
             return
 
         # Case1: pg_file is a path
@@ -53,7 +56,7 @@ class CheckAnswer(tornado.web.RequestHandler):
             # check if the file actually exists
             if not os.path.isfile(pg_file):
                 response = { 'error_msg': 'PG file not found' }
-                self.write(response)
+                self._write_finish(response)
                 return
 
             # call the PG wrapper
@@ -64,13 +67,15 @@ class CheckAnswer(tornado.web.RequestHandler):
 
             if results is None:
                 response = { 'error_msg': 'PG service error' }
-                self.write(response)
+                self._write_finish(response)
                 return
 
             # all done
-            self.write(results)
+            self._write_finish(results)
+            
+        # Case 2: pg_file is base64 encoded.
         else:
-            # Case 2: pg_file is base64 encoded.
+            
             try:
                 # create a temp file and decode the pg to the file
                 temp = tempfile.NamedTemporaryFile(delete=False)
@@ -78,7 +83,7 @@ class CheckAnswer(tornado.web.RequestHandler):
                 temp.close()
             except Exception:
                 response = { 'error_msg': 'Unable to create a temporary file' }
-                self.write(response)
+                self._write_finish(response)
                 return
 
             # call the PG wrapper
@@ -92,8 +97,12 @@ class CheckAnswer(tornado.web.RequestHandler):
 
             if results is None:
                 response = { 'error_msg': 'PG service error' }
-                self.write(response)
+                self._write_finish(response)
                 return
 
             # all done
-            self.write(results)
+            self._write_finish(results)
+
+    def _write_finish(self, response):
+        self.write(response)
+        self.finish()

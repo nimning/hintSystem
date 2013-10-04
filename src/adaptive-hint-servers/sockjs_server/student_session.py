@@ -1,17 +1,18 @@
-from tornado import httpclient
-import logging
-import urllib
+import datetime
+import time
+from threading import Thread
 
-from session_storage import SessionStorage
+from hint_rest_api import HintRestAPI
 
-storage = SessionStorage(timeout=10)
+def _datetime_to_timestamp(dt):
+    return time.mktime(dt.timetuple())
 
 class StudentSession(object):
     """Provides an interface to each student session connected.
 
     Class variables
     ---------------
-      connected_students : set of StudentSession
+      active_sessions : set of StudentSession
         Set of all connected students
     
     Properties
@@ -32,17 +33,25 @@ class StudentSession(object):
        Webwork problem ID
               
      pg_file : string
-       PG file path on the server [PERSIST]
+       PG file path on the server
        
      pg_seed : int
-       Random seed [PERSIST]
-       
-     hints : set
-       Hints given in this session [PERSIST]
-       
-     answers : dict
-       Current answers on student's browser [PERSIST] 
+       Random seed
+
+     hints : list
+       Hints assigned to the student
+
+     answers : list
+       Student's answers (past and current) with timestamps
+
+     current_answers : list
+       Current answers on the student's browser
+
+     _sockjs_handler : StudentSockJSHandler
+       SockJS handler
+     
     """
+    active_sessions = set()
     
     def __init__(self, session_id, student_id, course_id,
                  set_id, problem_id, sockjs_handler):
@@ -51,78 +60,70 @@ class StudentSession(object):
         self.course_id = course_id
         self.set_id = set_id
         self.problem_id = problem_id
+        self.pg_file = None
+        self.pg_seed = None
         self._sockjs_handler = sockjs_handler
+        # internal cache
+        self._answers = None
+        self._hints = None
 
-        self.pg_file = storage.load('pg_file',
-                                    session_id,
-                                    course_id,
-                                    set_id,
-                                    problem_id)
+    @property
+    def hints(self):
+        if self._hints is None:
+            self._hints = HintRestAPI.get_user_problem_hints(self.student_id,
+                                                             self.course_id,
+                                                             self.set_id,
+                                                             self.problem_id)
+        return self._hints
+    
+    @property
+    def answers(self):
+        if self._answers is None:
+            self._answers = HintRestAPI.get_realtime_answers(self.student_id,
+                                                             self.course_id,
+                                                             self.set_id,
+                                                             self.problem_id)
+        return self._answers
+
+    @property
+    def current_answers(self):
+        answer_dict = {}
+        # recontruct the current answers
+        for answer in self.answers:
+            answer_dict[answer['boxname']] = answer        
+        return answer_dict.values()
+
+    def reload_hints(self):
+        """Update the hints displayed on the client"""
+        def _perform_send_hints():
+            self._sockjs_handler.send_hints(self.hints)
+            self._sockjs_handler.send_answer_status(self.current_answers)
+
+        # invalidate internal cache
+        self._hints = None               
+        Thread(target=_perform_send_hints).start()
+
+    def update_answer(self, boxname, answer_status):
+        """Update an answer box
+
+        *Blocked until complete*
+
+        Returns
+        -------
+          timestamp of the updated answer.
+        """
+        # Insert a timestamp
+        answer_status['timestamp'] = _datetime_to_timestamp(
+            datetime.datetime.now())
+
+        # update current answer
+        HintRestAPI.post_realtime_answer(self.student_id,
+                                         self.course_id,
+                                         self.set_id,
+                                         self.problem_id,
+                                         answer_status)
+
+        # invalidate internal cache
+        self._answers = None
         
-        self.pg_seed = storage.load('pg_seed',
-                                    session_id,
-                                    course_id,
-                                    set_id,
-                                    problem_id)
-        
-        self.hints = storage.load('hints',
-                                  session_id,
-                                  course_id,
-                                  set_id,
-                                  problem_id)
-        if self.hints is None:
-            self.hints = set()
-
-        self.answers = storage.load('answers',
-                                    session_id,
-                                    course_id,
-                                    set_id,
-                                    problem_id)
-        if self.answers is None:
-            self.answers = {}
-
-        
-    def save_session(self):
-        """Save session data to storage"""
-        storage.save('pg_file',
-                     session_id,
-                     course_id,
-                     set_id,
-                     problem_id,
-                     self.pg_file)
-
-        storage.save('pg_seed',
-                     session_id,
-                     course_id,
-                     set_id,
-                     problem_id,
-                     self.pg_seed)
-
-        storage.save('hints',
-                     session_id,
-                     course_id,
-                     set_id,
-                     problem_id,
-                     self.hints)
-
-        storage.save('answers',
-                     session_id,
-                     course_id,
-                     set_id,
-                     problem_id,
-                     self.answers)
-
-    def add_hint(self, hintbox_id, location, hint_html):
-        """Adds a hint"""
-        hint = { 'hint_html': hint_html,
-                 'location': location,
-                 'hintbox_id': hintbox_id }
-        self.hints.add(hint)
-        self._sockjs_handler.send_hints()
-        
-    def remove_hint(self, hintbox_id):
-        """Removes a hint"""
-        for hint in list(self.hints):
-            if hint['hintbox_id'] == hintbox_id:
-                self.hints.remove(hint)
-        self._sockjs_handler.send_hints()
+        return answer_status['timestamp']
