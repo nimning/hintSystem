@@ -88,26 +88,45 @@ function calc_tries(past_answers, part) {
   var len = past_answers.length;
   var tries = 0;
   for (var j = len-1; j>=0; j--) {
-    // Count the incorrect tries only.
-    if (past_answers[j].boxname == part &&
-        past_answers[j].is_correct === false) {
+    if (past_answers[j].boxname == part) {
       tries++;
     }
   }
   return tries;
 }
 
+function calc_recent_tries(past_answers, part) {
+  var len = past_answers.length;
+  var tries = 0;
+  // 15 mins
+  var time_window = (new Date().getTime()/1000.0) - (15 * 60);
+  for (var j = len-1; j>=0; j--) {
+    if (past_answers[j].boxname == part &&
+        past_answers[j].timestamp > time_window) {
+      tries++;
+    }
+  }
+  return tries;
+}
+
+
+// Returns null if the last answer is correct
 function calc_time_lastincorrect(past_answers, part) {
   var len = past_answers.length;
   var time_lastincorrect = 0;
-  if (past_answers[len-1].is_correct === false) {
-    var time_temp = (Math.round(new Date().getTime()/1000) -
-                     past_answers[len-1].timestamp)/(60);
-    //print(new Date().getTime()/1000 +" "+ past_answers[len-1].timestamp);
-    time_lastincorrect = Math.round(time_temp);
-  }
-  return time_lastincorrect;
+  for (var j = len-1; j>=0; j--) {
+    if (past_answers[j].is_correct === false &&
+        past_answers[j].boxname == part) {
+      var time_temp = (Math.round(new Date().getTime()/1000) -
+                       past_answers[len-1].timestamp)/(60);
+      //print(new Date().getTime()/1000 +" "+ past_answers[len-1].timestamp);
+      time_lastincorrect = Math.round(time_temp);
+      return time_lastincorrect;
+    }
+  }  
+  return null;
 }
+
 
 function add_row_my(stud_data) {
   var past_answers = stud_data.answers;
@@ -119,25 +138,29 @@ function add_row_my(stud_data) {
   }
 
   var part = past_answers[len-1].boxname;
-  var time_spent = calc_time_spent(past_answers, part);
   var time_lastincorrect = calc_time_lastincorrect(past_answers, part);
   var time_lasthint = parse_hints(stud_data.hints);
+  var tries = calc_tries(past_answers, part);
+  var recent_tries = calc_recent_tries(past_answers, part);
 
-  if (time_spent > 10) {
-    time_spent = '>10';
+  // Don't show if the current part is completed
+  if (time_lastincorrect === null) {
+    return;  
   }
 
   if (time_lastincorrect > 10) {
-    time_lastincorrect = '>10';
+    return;
+    //time_lastincorrect = '>10';
   }
 
   // Add the row
   my.fnAddData([stud_data.student_id,
-                time_spent,
+                time_lastincorrect,
                 stud_data.set_id,
                 stud_data.problem_id,
                 parseInt(part.substr(6), 10).toString(),
-                time_lastincorrect,
+                tries,
+		recent_tries,
                 time_lasthint,
                 "<button onclick=open_student_view('" +
                 stud_data.student_id + "','" +
@@ -171,25 +194,34 @@ function add_rows_unassigned(stud_data) {
   }
 
   for (var part in all_parts) {
-    var time_spent = calc_time_spent(past_answers, part);
     var tries = calc_tries(past_answers, part);
-
-    // Not enough tries. Don't display on the table.
-    if (tries === null || tries < 3) {
+    var recent_tries = calc_recent_tries(past_answers, part);
+    var time_lastincorrect = calc_time_lastincorrect(past_answers, part);
+    
+    // Already got correct answer, dont show.  
+    if (time_lastincorrect === null) {
       continue;
     }
 
-    if (time_spent > 10) {
-      time_spent = '>10';
+    // Idle too long, dont show.
+    if (time_lastincorrect > 10) {
+      continue;
+      //time_lastincorrect = '>10';
+    }
+
+    // Not enough tries. Don't display on the table.
+    if (tries === null || tries < 1) {
+      continue;
     }
 
     // Add the row
     unassigned.fnAddData([stud_data.student_id,
-                          time_spent,
+                          time_lastincorrect,
                           stud_data.set_id,
                           stud_data.problem_id,
                           parseInt(part.substr(6), 10).toString(),
                           tries,
+			  recent_tries,
                           "<button id=take onclick=take_student('" +
                           stud_data.student_id + "','" +
                           stud_data.course_id + "','" +
