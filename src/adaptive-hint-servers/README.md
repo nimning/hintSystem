@@ -1,3 +1,8 @@
+### System overview
+
+
+![Diagram of the system](https://www.lucidchart.com/publicSegments/view/52379d05-ad00-4779-8453-405a0a0089f5/image.png)
+
 ### Production
 ```
 /etc/init.d/hint-sockjs-4350 {start|restart|stop}
