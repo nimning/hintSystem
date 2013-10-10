@@ -10,7 +10,7 @@ function get_params() {
 
 // Open student_monitor page
 function open_student_view(student_id, course_id, set_id, problem_id) {
-  var url = "/teacher/student_monitor.html?" +
+  var url = "student_monitor.html?" +
       "teacher_id=" + $('#teacher_id').val() +
       "&student_id=" + student_id +
       "&course_id=" + course_id +

@@ -1,6 +1,5 @@
 var SOCKJS_SERVER = 'http://webwork.cse.ucsd.edu';
 var REST_SERVER = 'http://webwork.cse.ucsd.edu';
-var HINT_EDITOR = '/teacher/hint_editor.html';
 
 // Get the query string params
 var QueryString = function() {
@@ -39,4 +38,3 @@ function send_command(sock, cmd, args) {
   }));
   print("SENT: " + cmd + ":" + JSON.stringify(args, null, 2));
 }
-
