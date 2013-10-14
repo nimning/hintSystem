@@ -108,27 +108,29 @@ if __name__=='__main__':
     pickle_dir=os.environ['WWAH_PICKLE']
     B=BehaviourAnalysis(pickle_dir+'/ProcessedLogs.pkl')
 
-    key= ('djdawson', 'Assignment3')
-    Dtimes,Danswers,Dcorrect,Dproblem_no,Dpart_no = B.measure_effort(key)
-    correctness=[' - ','VVV']
-    print key
-    for k in sorted(Dtimes.keys()):
-        T=Dtimes[k]
-        A=Danswers[k]
-        C=Dcorrect[k]
-
-        if(len(T)<3): continue  # ignore parts where the student made at most 2 tries.
-
-        print '------------------------------------------- part no. ',k
-
-        for i in range(len(T)):
-            print '%3d: %s  time=%4.1f, answer=%s' % (i,correctness[C[i]],T[i],A[i])
-    
-        print 'Total time spent=%4.1f minutes' % sum(T[1:])
-
     print "-------------- Processing all ---------------------"
 
     B.analyze_all()
     import os
     pickle_dir=os.environ['WWAH_PICKLE']
     B.pickle(pickle_dir+'/BehavioralStatistics.pkl')
+
+    # OLD CODE
+
+    # key= ('djdawson', 'Assignment3')
+    # Dtimes,Danswers,Dcorrect,Dproblem_no,Dpart_no = B.measure_effort(key)
+    # correctness=[' - ','VVV']
+    # print key
+    # for k in sorted(Dtimes.keys()):
+    #     T=Dtimes[k]
+    #     A=Danswers[k]
+    #     C=Dcorrect[k]
+
+    #     if(len(T)<3): continue  # ignore parts where the student made at most 2 tries.
+
+    #     print '------------------------------------------- part no. ',k
+
+    #     for i in range(len(T)):
+    #         print '%3d: %s  time=%4.1f, answer=%s' % (i,correctness[C[i]],T[i],A[i])
+    
+    #     print 'Total time spent=%4.1f minutes' % sum(T[1:])
