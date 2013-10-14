@@ -1,6 +1,6 @@
 #!/bin/bash
 
-BACKUP_DIR=/opt/Webwork_AdaptiveHints/db_backups
+BACKUP_DIR=/opt/Webwork_AdaptiveHints/db_cse103_attempt_backups
 
 echo """ 
 ################################################################################
@@ -17,6 +17,8 @@ then run
 /etc/init.d/apparmor reload
 
 See stack overflow response http://stackoverflow.com/a/2986764
+
+Also chmod 777 ${BACKUP_DIR}
 ################################################################################
 """
 
