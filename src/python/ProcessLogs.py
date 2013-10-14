@@ -78,7 +78,7 @@ class ProcessLogs:
         """
         self.DataFrame=self.DataFrame.sort(['time'])
         self.DedupFrame=self.DataFrame.drop_duplicates(cols=['string_time','user'])
-        self.DedupFrame.ix[:,'time'] -= self.DedupFrame.ix[0,'time']
+        self.DedupFrame['time'] -= self.DedupFrame.ix[0,'time']
         # plot(DedupFrame.ix[start:,'time']) # useful in a notebook
 
     def expand_into_parts(self):
