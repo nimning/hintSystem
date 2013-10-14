@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-pwd=`PWD`
+pwd=`pwd`
 
 export WWAH_LOGS=${pwd}/data/cse103_original_data/WebWork/logs
 echo 'Webwork logs directory $WWAH_LOGS=' 
