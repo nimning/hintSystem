@@ -1,5 +1,6 @@
 import json
 import tornado
+from HTMLParser import HTMLParser
 from tornado.template import Template
 from tornado_database import Connection
 from tornado.web import RequestHandler
@@ -62,7 +63,9 @@ class ProcessQuery(tornado.web.RequestHandler):
             header = get_header(pg_file_str)
             footer = get_footer(pg_file_str)
 
+        p = HTMLParser()
         for row in response:
+            row['pg_text'] = p.unescape(row['pg_text'])
             row['pg_header'] = header
             row['pg_footer'] = footer
             row['pg_file_path'] = pg_file_path

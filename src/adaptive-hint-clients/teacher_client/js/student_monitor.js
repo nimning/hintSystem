@@ -59,7 +59,7 @@ function render_hint(idx) {
 }
 
 function fork_hint(idx) {
-    var url = HINT_EDITOR;
+    var url = 'hint_editor.html';
     url += '?course_id=' + $('#course_id').val() +
 	'&set_id=' + $('#set_id').val() +
 	'&problem_id=' + $('#problem_id').val() +
@@ -443,7 +443,7 @@ $(document).ready(function() {
     });
 
     $("#create_hint").click(function() {
-	var url = HINT_EDITOR;
+	var url = 'hint_editor.html';
 	url += '?course_id=' + $('#course_id').val() +
 	    '&set_id=' + $('#set_id').val() +
 	    '&problem_id=' + $('#problem_id').val() +
