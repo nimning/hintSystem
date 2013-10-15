@@ -2,6 +2,7 @@ from tornado import gen
 import logging
 
 from _base_handler import _BaseSockJSHandler
+from hint_rest_api import HintRestAPI
 from student_session import StudentSession
 from teacher_session import TeacherSession
 
@@ -10,7 +11,7 @@ logger = logging.getLogger(__name__)
 class TeacherSockJSHandler(_BaseSockJSHandler):
     """Teacher SockJS connection handler
 
-    This class handles messages received from the teacher clients.
+    This class handles messages received from each teacher client.
 
     A new handler for a message can be defined as follows:
 
@@ -90,18 +91,6 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
 
             args
             ----
-              student_id : string
-                Webwork student ID
-
-              course_id : string
-                Webwork course ID
-              
-              set_id : string
-                Webwork set ID
-                
-              problem_id : string
-                Webwork problem ID
-
               location : string
                 Hint location
 
@@ -113,10 +102,6 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
               
             """
             try:
-                student_id = args['student_id']
-                course_id = args['course_id']
-                set_id = args['set_id']
-                problem_id = args['problem_id']
                 location = args['location']
                 hint_id = args['hint_id']
                 hint_html_template = args['hint_html_template']
@@ -124,11 +109,7 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
                 # shorthand
                 ts = self.teacher_session
 
-                yield gen.Task(self._perform_add_hint,
-                               student_id,
-                               course_id,
-                               set_id,
-                               problem_id,
+                yield gen.Task(self._perform_assign_hint,
                                location,
                                hint_id,
                                hint_html_template)
@@ -147,18 +128,6 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
 
             args
             ----
-              student_id : string
-                Webwork student ID
-
-              course_id : string
-                Webwork course ID
-              
-              set_id : string
-                Webwork set ID
-                
-              problem_id : string
-                Webwork problem ID
-
               location : string
                 Hint location
 
@@ -167,21 +136,13 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
                 
             """
             try:
-                student_id = args['student_id']
-                course_id = args['course_id']
-                set_id = args['set_id']
-                problem_id = args['problem_id']
                 location = args['location']
                 hintbox_id = args['hintbox_id']
                 
                 # shorthand
                 ts = self.teacher_session
 
-                yield gen.Task(self._perform_remove_hint,
-                               student_id,
-                               course_id,
-                               set_id,
-                               problem_id,
+                yield gen.Task(self._perform_unassign_hint,
                                location,
                                hintbox_id)
                 
@@ -265,36 +226,10 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
         @self.add_handler('get_student_info')
         @gen.engine
         def handle_get_student_info(self, args):
-            """Handler for 'get_student_info'
-
-            args
-            ----
-              student_id : string
-                Webwork Session ID
-
-              course_id : string
-                Webwork course ID
-              
-              set_id : string
-                Webwork set ID
-                
-              problem_id : string
-                Webwork problem ID
-            """
+            """Handler for 'get_student_info' """
             try:
-                student_id = args['student_id']
-                course_id = args['course_id']
-                set_id = args['set_id']
-                problem_id = args['problem_id']
-
                 ts = self.teacher_session
-
-                yield gen.Task(self._perform_get_student_info,
-                               student_id,
-                               course_id,
-                               set_id,
-                               problem_id)
-                
+                yield gen.Task(self._perform_get_student_info)
                 logger.info("%s: get_student_info"%ts.teacher_id)    
             except:
                 logger.exception("Exception handling 'get_student_info'")
@@ -304,8 +239,7 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
     ################################################################
     def _perform_teacher_join(self, teacher_id, student_id,
                               course_id, set_id, problem_id,
-                              callback=None):
-        
+                              callback=None):     
         # create an instance of TeacherSession
         self.teacher_session = TeacherSession(teacher_id,
                                               self,
@@ -339,82 +273,72 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
         callback()
 
 
-    def _perform_add_hint(self, student_id, course_id,
-                          set_id, problem_id, location,
-                          hint_id, hint_html_template, callback=None):
+    def _perform_assign_hint(self, location, hint_id,
+                             hint_html_template, callback=None):
 
         # shorthand
         ts = self.teacher_session
 
-        (timestamp, assigned_hintbox_id) = ts.add_hint(student_id,
-                                                       course_id,
-                                                       set_id,
-                                                       problem_id,
-                                                       location, 
-                                                       hint_id,
-                                                       hint_html_template)
+        # get the student_id and other info
+        if ts.student_hashkey is not None:
+            (student_id, course_id, set_id, problem_id) = ts.student_hashkey
 
-        # Ask the client to update its view
-        for ss in StudentSession.active_sessions:
-            if (student_id == ss.student_id and
-                course_id == ss.course_id and
-                set_id == ss.set_id and
-                problem_id == ss.problem_id):
-                ss.reload_hints()
-                       
-         
-        # Notify the teachers about the new hint
-        ext_hint = {
-            'student_id': student_id,
-            'course_id': course_id,
-            'set_id': set_id,
-            'problem_id': problem_id,
-            'timestamp': timestamp,
-            'hintbox_id': assigned_hintbox_id,
-            'location': location }
-        for ts in TeacherSession.active_sessions:
-            ts.notify_hint_update(ext_hint)
+            # Call the rest api
+            assigned_hintbox_id = HintRestAPI.assign_hint(student_id,
+                                                          course_id,
+                                                          set_id,
+                                                          problem_id, 
+                                                          location,
+                                                          hint_id,
+                                                          hint_html_template)
+            
+            # Find the student session and update its view
+            ss = StudentSession.get_student_session(student_id,
+                                                    course_id,
+                                                    set_id,
+                                                    problem_id)
+            if ss is not None:
+                ss.update_hints()
+
+            # Update teacher's view
+            ts.update_hints()
 
         # done
         callback()
 
-    def _perform_remove_hint(self, student_id, course_id, set_id, problem_id,
-                               location, hintbox_id, callback=None):
+    def _perform_unassign_hint(self, location, hintbox_id,
+                               callback=None):
         # shorthand
         ts = self.teacher_session
 
-        ts.remove_hint(student_id, course_id, set_id, problem_id,
-                       location, hintbox_id)
+        if ts.student_hashkey is not None:
+            (student_id, course_id, set_id, problem_id) = ts.student_hashkey
+            HintRestAPI.unassign_hint(course_id, hintbox_id)
 
-        # Ask the clients to reload hints
-        for ss in StudentSession.active_sessions:
-            if (student_id == ss.student_id and
-                course_id == ss.course_id and
-                set_id == ss.set_id and
-                problem_id == ss.problem_id):
-                ss.reload_hints()
-                        
-        # notify the teachers about the update
-        ext_hint = {
-            'student_id': student_id,
-            'course_id': course_id,
-            'set_id': set_id,
-            'problem_id': problem_id }
-        
-        for ts in TeacherSession.active_sessions:
-            ts.notify_hint_update(ext_hint)
+            # Find the student session and update its view
+            ss = StudentSession.get_student_session(student_id,
+                                                    course_id,
+                                                    set_id,
+                                                    problem_id)            
+            if ss is not None:
+                ss.update_hints()
 
+            # Update teacher's view
+            ts.update_hints()
+                
         # done
         callback()
 
-    def _perform_get_student_info(self, student_id, course_id,
-                                  set_id, problem_id, callback=None):
-        
+    def _perform_get_student_info(self, callback=None):
         ts = self.teacher_session
-        info = ts.student_info(student_id, course_id,
-                               set_id, problem_id)
+        if ts.student_hashkey is not None:
+            (student_id, course_id, set_id, problem_id) = ts.student_hashkey
+            info = ts.student_info(student_id,
+                                   course_id,
+                                   set_id,
+                                   problem_id)
         
-        self.send_student_info(info)
+            self.send_student_info(info)
         
         # done
         callback()
