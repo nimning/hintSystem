@@ -39,6 +39,7 @@ function release_student(student_id, course_id, set_id, problem_id) {
 
 function add_rows_unassigned(stud_data) {
     var time_lastincorrect = stud_data.time_lastincorrect;
+    var time_lasthint = stud_data.time_lasthint;
     var tries = stud_data.total_tries;
     var recent_tries = stud_data.recent_tries;
     var is_online = stud_data.is_online;
@@ -47,6 +48,12 @@ function add_rows_unassigned(stud_data) {
     if (is_online) is_online = '<img src="green.png" alt="online">';
     else is_online = '<img src="gray.png" alt="offline">';
 
+    if (time_lasthint === null) {
+	time_lasthint = '<span title="-1"></span>--';
+    } else {
+	time_lasthint = secondsToString(time_lasthint);
+    }
+ 
     // Already got correct answer, dont show.  
     if (time_lastincorrect === null) {
 	return;
@@ -64,6 +71,7 @@ function add_rows_unassigned(stud_data) {
                           secondsToString(time_lastincorrect),
                           tries,
 			  recent_tries,
+			  time_lasthint,
 			  is_online,
                           "<button id=take onclick=take_student('" +
                           stud_data.student_id + "','" +
@@ -223,6 +231,7 @@ $(document).ready(function() {
 		{ "sType": "title-numeric" },
 		null,
 		null,
+		{ "sType": "title-numeric" },
 		{ "sType": "alt-string" },
 		null,
             ]
