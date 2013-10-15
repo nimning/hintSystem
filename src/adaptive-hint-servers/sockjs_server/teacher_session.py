@@ -178,12 +178,6 @@ class TeacherSession(object):
                                          problem_id)
                 self._sockjs_handler.send_student_info(info)
             
-        else:
-            # no student associated, must be the console
-            self._sockjs_handler.send_my_students(self.list_my_students())
-            self._sockjs_handler.send_unassigned_students(
-                self.list_unassigned_students())
-            
     def notify_student_left(self, ss):
         """Called when a student has left"""
         # do nothing
