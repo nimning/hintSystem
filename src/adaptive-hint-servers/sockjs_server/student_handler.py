@@ -2,8 +2,8 @@ from tornado import gen
 import logging
 import base64
 
-from hint_rest_api import HintRestAPI
 from _base_handler import _BaseSockJSHandler
+from hint_rest_api import HintRestAPI
 from student_session import StudentSession
 from teacher_session import TeacherSession
 
@@ -155,13 +155,13 @@ class StudentSockJSHandler(_BaseSockJSHandler):
                     ss.student_id, hintbox_id, feedback))
             except:
                 logger.exception('Exception in hint_feedback handler')
-                
 
+                
+    ###############################################################
+    # Tasks                                                       #
+    ###############################################################
     def _perform_student_join(self, session_id, student_id, course_id,
                               set_id, problem_id, callback=None):
-        """
-          Returns a new instance of StudentSession
-        """
         # create an instance of StudentSession
         self.student_session = StudentSession(session_id,
                                               student_id,
@@ -186,8 +186,8 @@ class StudentSockJSHandler(_BaseSockJSHandler):
                                                   ss.set_id,
                                                   ss.problem_id)
                                 
-        # add to active student list.
-        StudentSession.active_sessions.add(ss)
+        # update the student session mapping.
+        StudentSession.update_student_session(ss)
 
         # send assigned hints.
         self.send_hints(ss.hints)
@@ -204,14 +204,6 @@ class StudentSockJSHandler(_BaseSockJSHandler):
 
 
     def _perform_checkanswer(self, boxname, value, callback=None):
-        """
-          Returns 'answer_status' that contains the following arguments:
-            * boxname
-            * is_correct
-            * error_msg
-            * correct_value
-            * entered_value
-        """
         ss = self.student_session
         answer_status = {}
         
@@ -255,19 +247,9 @@ class StudentSockJSHandler(_BaseSockJSHandler):
             # send the status to client
             self.send_answer_status([answer_status,])
 
-            # also send status to teachers
-            ext_ans = {
-                'session_id': ss.session_id,
-                'student_id': ss.student_id,
-                'course_id': ss.course_id,
-                'set_id': ss.set_id,
-                'problem_id': ss.problem_id,
-                'timestamp': timestamp,
-                'boxname': boxname,
-                'is_correct': answer_status['is_correct'] }
-
+            # notify the teachers
             for ts in TeacherSession.active_sessions:
-                ts.notify_answer_update(ext_ans)
+                ts.notify_answer_update(ss)
 
         # done
         callback()
@@ -310,10 +292,6 @@ class StudentSockJSHandler(_BaseSockJSHandler):
             # Remove sockjs handler
             ss._sockjs_handler = None
             
-            # Remove the session from active list
-            if ss in StudentSession.active_sessions:
-                StudentSession.active_sessions.remove(ss)
-
             # Notify the teachers
             for ts in TeacherSession.active_sessions:
                 ts.notify_student_left(ss)
