@@ -118,7 +118,7 @@ function calc_time_lastincorrect(past_answers, part) {
     if (past_answers[j].is_correct === false &&
         past_answers[j].boxname == part) {
       var time_temp = (Math.round(new Date().getTime()/1000) -
-                       past_answers[len-1].timestamp)/(60);
+                       past_answers[j].timestamp)/(60);
       //print(new Date().getTime()/1000 +" "+ past_answers[len-1].timestamp);
       time_lastincorrect = Math.round(time_temp);
       return time_lastincorrect;
