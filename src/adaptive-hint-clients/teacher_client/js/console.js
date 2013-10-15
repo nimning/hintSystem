@@ -118,7 +118,7 @@ function calc_time_lastincorrect(past_answers, part) {
     if (past_answers[j].is_correct === false &&
         past_answers[j].boxname == part) {
       var time_temp = (Math.round(new Date().getTime()/1000) -
-                       past_answers[len-1].timestamp)/(60);
+                       past_answers[j].timestamp)/(60);
       //print(new Date().getTime()/1000 +" "+ past_answers[len-1].timestamp);
       time_lastincorrect = Math.round(time_temp);
       return time_lastincorrect;
@@ -142,7 +142,8 @@ function add_row_my(stud_data) {
   var time_lasthint = parse_hints(stud_data.hints);
   var tries = calc_tries(past_answers, part);
   var recent_tries = calc_recent_tries(past_answers, part);
-
+  var is_online = stud_data.is_online;
+ 
   // Don't show if the current part is completed
   if (time_lastincorrect === null) {
     return;  
@@ -162,6 +163,7 @@ function add_row_my(stud_data) {
                 tries,
 		recent_tries,
                 time_lasthint,
+		is_online,
                 "<button onclick=open_student_view('" +
                 stud_data.student_id + "','" +
                 stud_data.course_id + "','" +
@@ -197,7 +199,8 @@ function add_rows_unassigned(stud_data) {
     var tries = calc_tries(past_answers, part);
     var recent_tries = calc_recent_tries(past_answers, part);
     var time_lastincorrect = calc_time_lastincorrect(past_answers, part);
-    
+    var is_online = stud_data.is_online;
+
     // Already got correct answer, dont show.  
     if (time_lastincorrect === null) {
       continue;
@@ -222,6 +225,7 @@ function add_rows_unassigned(stud_data) {
                           parseInt(part.substr(6), 10).toString(),
                           tries,
 			  recent_tries,
+			  is_online,
                           "<button id=take onclick=take_student('" +
                           stud_data.student_id + "','" +
                           stud_data.course_id + "','" +
