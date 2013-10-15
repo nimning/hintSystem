@@ -38,37 +38,30 @@ function release_student(student_id, course_id, set_id, problem_id) {
 }
 
 function add_rows_unassigned(stud_data) {
-    var time_lastincorrect = Math.round(stud_data.time_lastincorrect / 60);
-    var time_lasthint = Math.round(stud_data.time_lasthint / 60);
+    var time_lastincorrect = stud_data.time_lastincorrect;
     var tries = stud_data.total_tries;
     var recent_tries = stud_data.recent_tries;
     var is_online = stud_data.is_online;
 
     // iconize
-    if (is_online) is_online = '<img src="green.png">';
-    else is_online = '<img src="gray.png">';
-
+    if (is_online) is_online = '<img src="green.png" alt="online">';
+    else is_online = '<img src="gray.png" alt="offline">';
 
     // Already got correct answer, dont show.  
     if (time_lastincorrect === null) {
 	return;
     }
 
-    // Idle too long, dont show.
-    if (time_lastincorrect > 10) {
-	return;
-    }
-
     // Not enough tries. Don't display on the table.
-    if (tries === null || tries < 1) {
-	//return;
+    if (tries === null || tries < 3) {
+	return;
     }
 
     // Add the row
     unassigned.fnAddData([stud_data.student_id,
                           stud_data.set_id,
                           stud_data.problem_id,
-                          time_lastincorrect,
+                          secondsToString(time_lastincorrect),
                           tries,
 			  recent_tries,
 			  is_online,
@@ -82,25 +75,31 @@ function add_rows_unassigned(stud_data) {
 
 
 function add_row_my(stud_data) {
-    var time_lastincorrect = Math.round(stud_data.time_lastincorrect / 60);
-    var time_lasthint = Math.round(stud_data.time_lasthint / 60);
+    var time_lastincorrect = stud_data.time_lastincorrect;
+    var time_lasthint = stud_data.time_lasthint;
     var tries = stud_data.total_tries;
     var recent_tries = stud_data.recent_tries;
     var is_online = stud_data.is_online;
     var solved = stud_data.problem_solved;
     
     // iconize
-    if (is_online) is_online = '<img src="green.png">';
-    else is_online = '<img src="gray.png">';
+    if (is_online) is_online = '<img src="green.png" alt="online">';
+    else is_online = '<img src="gray.png" alt="offline">';
 
-    if (solved) solved = '<img src="green.png">';
-    else solved = '<img src="gray.png">';
+    if (solved) solved = '<img src="green.png" alt="solved">';
+    else solved = '<img src="gray.png" alt="unsolved">';
+
+    if (time_lasthint === null) {
+	time_lasthint = '<span title="-1"></span>--';
+    } else {
+	time_lasthint = secondsToString(time_lasthint);
+    }
     
     // Add the row
     my.fnAddData([stud_data.student_id,
                   stud_data.set_id,
                   stud_data.problem_id,
-                  time_lastincorrect,
+                  secondsToString(time_lastincorrect),
                   tries,
 		  recent_tries,
                   time_lasthint,
@@ -121,22 +120,59 @@ function add_row_my(stud_data) {
 }
 
 function parse_unassigned(data) {
+    var oSettings = unassigned.fnSettings();
+    var page = Math.floor(oSettings._iDisplayStart / oSettings._iDisplayLength);
     unassigned.fnClearTable();
     for (var i = 0; i < data.length; i++) {
 	var stud_data = data[i];
 	add_rows_unassigned(stud_data);
     }
+    unassigned.fnPageChange(page);
 }
 
 function parse_my(data) {
+    var oSettings = my.fnSettings();
+    var page = Math.floor(oSettings._iDisplayStart / oSettings._iDisplayLength);
     my.fnClearTable();
     for (var i = 0; i < data.length; i++) {
 	var stud_data = data[i];
 	add_row_my(stud_data);
     }
+    my.fnPageChange(page);
 }
 
 //////////////////////////////////////////////
+
+jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+    "title-numeric-pre": function ( a ) {
+        var x = a.match(/title="*(-?[0-9\.]+)/)[1];
+        return parseFloat( x );
+    },
+ 
+    "title-numeric-asc": function ( a, b ) {
+        return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+    },
+ 
+    "title-numeric-desc": function ( a, b ) {
+        return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+    }
+} );
+
+jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+    "alt-string-pre": function ( a ) {
+        return a.match(/alt="(.*?)"/)[1].toLowerCase();
+    },
+     
+    "alt-string-asc": function( a, b ) {
+        return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+    },
+ 
+    "alt-string-desc": function(a,b) {
+        return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+    }
+} );
+
+//////////////////////////////////////////////////
 
 $(document).ready(function() {
 
@@ -179,8 +215,32 @@ $(document).ready(function() {
 	$("#after_login").show();
 
 	// Create tables
-	unassigned = $('#unassigned_students').dataTable();
-	my = $('#my_students').dataTable();
+	unassigned = $('#unassigned_students').dataTable( {
+            "aoColumns": [
+                null,
+                null,
+		null,
+		{ "sType": "title-numeric" },
+		null,
+		null,
+		{ "sType": "alt-string" },
+		null,
+            ]
+        } );
+	my = $('#my_students').dataTable( {
+            "aoColumns": [
+                null,
+                null,
+		null,
+		{ "sType": "title-numeric" },
+		null,
+		null,
+		{ "sType": "title-numeric" },
+		{ "sType": "alt-string" },
+		{ "sType": "alt-string" },
+		null,
+            ]
+        } );
 
 	// Set up refresh interval
 	interval_id = window.setInterval(
