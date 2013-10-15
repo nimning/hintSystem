@@ -121,14 +121,7 @@ function parse_past_answers(answers, boxname, dtable) {
 function update_timestamp() {
     var ts = Math.round((new Date()).getTime() / 1000);
     $('.timestamp').each(function() {
-	var min = Math.floor((ts - $(this).attr('value')) / 60);
-	if (min < 0) {
-	    min = 0;
-	}
-	if (min > 10) {
-	    min = '>10';
-	}
-	$(this).html(min + ' min ago');
+	$(this).html(secondsToString((ts - $(this).attr('value'))));
     });
 }
 

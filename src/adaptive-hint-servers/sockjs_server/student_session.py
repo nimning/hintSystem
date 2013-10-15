@@ -1,13 +1,8 @@
-import datetime
-import time
 import logging
 
 from hint_rest_api import HintRestAPI
 
 logger = logging.getLogger(__name__)
-
-def _datetime_to_timestamp(dt):
-    return time.mktime(dt.timetuple())
 
 class StudentSession(object):
     """Provides an interface to each student session connected.
@@ -107,8 +102,8 @@ class StudentSession(object):
 
     def update_hints(self):
         """Update the hints displayed on the client"""
-        # invalidate internal cache
         try:
+            # invalidate internal cache
             self._hints = None
             if self._sockjs_handler is not None:
                 self._sockjs_handler.send_hints(self.hints)
@@ -117,18 +112,7 @@ class StudentSession(object):
             logging.exception("Exception in update_hints()")
 
     def update_answer(self, boxname, answer_status):
-        """Update an answer box
-
-        *Blocked until complete*
-
-        Returns
-        -------
-          timestamp of the updated answer.
-        """
-        # Insert a timestamp
-        answer_status['timestamp'] = _datetime_to_timestamp(
-            datetime.datetime.now())
-
+        """Update an answer box """
         # update current answer
         HintRestAPI.post_realtime_answer(self.student_id,
                                          self.course_id,
@@ -139,4 +123,3 @@ class StudentSession(object):
         # invalidate internal cache
         self._answers = None
         
-        return answer_status['timestamp']

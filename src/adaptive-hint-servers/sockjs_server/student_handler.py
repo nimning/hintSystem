@@ -96,10 +96,6 @@ class StudentSockJSHandler(_BaseSockJSHandler):
             'student_answer' is sent from the client when one of the answer
             boxes is updated.
 
-            When a 'newstring' is received, the following tasks are performed.
-              * Forward the message to active teachers.
-              * Initiate answer checking routines.
-
             More detail:
               https://github.com/yoavfreund/Webwork_AdaptiveHints/tree/master/
               src/adaptive-hint-servers/sockjs_server#student-client---server
@@ -242,7 +238,7 @@ class StudentSockJSHandler(_BaseSockJSHandler):
         # post-process the answer status
         if len(answer_status) > 0:
             # update the database
-            timestamp = ss.update_answer(boxname, answer_status)
+            ss.update_answer(boxname, answer_status)
         
             # send the status to client
             self.send_answer_status([answer_status,])
