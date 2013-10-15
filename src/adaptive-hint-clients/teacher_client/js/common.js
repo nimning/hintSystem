@@ -38,3 +38,18 @@ function send_command(sock, cmd, args) {
   }));
   print("SENT: " + cmd + ":" + JSON.stringify(args, null, 2));
 }
+
+// Helper for translating seconds to string
+function secondsToString(seconds) {
+    var numdays = Math.floor(seconds / 86400); 
+    var numhours = Math.floor((seconds % 86400) / 3600);
+    var numminutes = Math.floor(((seconds % 86400) % 3600) / 60);
+    var ret = '<span title="' + seconds + '"></span>' + numminutes + "m";
+    if (numhours > 0 || numdays > 0) {
+	ret = numhours + "h " + ret;
+    }
+    if (numdays > 0) {
+	ret = numdays + "d " + ret;
+    }
+    return ret;
+}
