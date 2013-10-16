@@ -1,19 +1,16 @@
-import datetime
-import time
-from threading import Thread
+import logging
 
 from hint_rest_api import HintRestAPI
 
-def _datetime_to_timestamp(dt):
-    return time.mktime(dt.timetuple())
+logger = logging.getLogger(__name__)
 
 class StudentSession(object):
     """Provides an interface to each student session connected.
 
     Class variables
     ---------------
-      active_sessions : set of StudentSession
-        Set of all connected students
+     all_sessions : dict of StudentSession
+        All student sessions
     
     Properties
     ----------
@@ -51,8 +48,18 @@ class StudentSession(object):
        SockJS handler
      
     """
-    active_sessions = set()
-    
+    all_sessions = dict()
+
+    @staticmethod
+    def get_student_session(student_id, course_id, set_id, problem_id):
+        hashkey = (student_id, course_id, set_id, problem_id)
+        return StudentSession.all_sessions.get(hashkey, None) 
+
+    @staticmethod
+    def update_student_session(ss):
+        hashkey = (ss.student_id, ss.course_id, ss.set_id, ss.problem_id)
+        StudentSession.all_sessions[hashkey] = ss
+
     def __init__(self, session_id, student_id, course_id,
                  set_id, problem_id, sockjs_handler):
         self.session_id = session_id
@@ -93,29 +100,19 @@ class StudentSession(object):
             answer_dict[answer['boxname']] = answer        
         return answer_dict.values()
 
-    def reload_hints(self):
+    def update_hints(self):
         """Update the hints displayed on the client"""
-        def _perform_send_hints():
-            self._sockjs_handler.send_hints(self.hints)
-            self._sockjs_handler.send_answer_status(self.current_answers)
-
-        # invalidate internal cache
-        self._hints = None               
-        Thread(target=_perform_send_hints).start()
+        try:
+            # invalidate internal cache
+            self._hints = None
+            if self._sockjs_handler is not None:
+                self._sockjs_handler.send_hints(self.hints)
+                self._sockjs_handler.send_answer_status(self.current_answers)
+        except:
+            logging.exception("Exception in update_hints()")
 
     def update_answer(self, boxname, answer_status):
-        """Update an answer box
-
-        *Blocked until complete*
-
-        Returns
-        -------
-          timestamp of the updated answer.
-        """
-        # Insert a timestamp
-        answer_status['timestamp'] = _datetime_to_timestamp(
-            datetime.datetime.now())
-
+        """Update an answer box """
         # update current answer
         HintRestAPI.post_realtime_answer(self.student_id,
                                          self.course_id,
@@ -126,4 +123,3 @@ class StudentSession(object):
         # invalidate internal cache
         self._answers = None
         
-        return answer_status['timestamp']
