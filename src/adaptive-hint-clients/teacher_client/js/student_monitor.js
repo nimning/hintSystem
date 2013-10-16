@@ -59,7 +59,7 @@ function render_hint(idx) {
 }
 
 function fork_hint(idx) {
-    var url = HINT_EDITOR;
+    var url = 'hint_editor.html';
     url += '?course_id=' + $('#course_id').val() +
 	'&set_id=' + $('#set_id').val() +
 	'&problem_id=' + $('#problem_id').val() +
@@ -121,14 +121,7 @@ function parse_past_answers(answers, boxname, dtable) {
 function update_timestamp() {
     var ts = Math.round((new Date()).getTime() / 1000);
     $('.timestamp').each(function() {
-	var min = Math.floor((ts - $(this).attr('value')) / 60);
-	if (min < 0) {
-	    min = 0;
-	}
-	if (min > 10) {
-	    min = '>10';
-	}
-	$(this).html(min + ' min ago');
+	$(this).html(secondsToString((ts - $(this).attr('value'))));
     });
 }
 
@@ -189,8 +182,10 @@ function onRenderComplete(student_info) {
 		.css('border','1px solid black');
 	    var target_answer = $('div[id^="' + boxid +'"]');
 	    target_answer.css('border','2px solid red');
-	    var p =  target_answer.position().top;
-	    $('#past_answers').scrollTop(p);
+	    var p = target_answer.offset().top;
+	    var current_scroll = $('#past_answers').scrollTop();
+	    var offset_top = $('#past_answers').offset().top;
+	    $('#past_answers').scrollTop(p + current_scroll - offset_top);
 	});
 
 	// Add hint button
@@ -443,7 +438,7 @@ $(document).ready(function() {
     });
 
     $("#create_hint").click(function() {
-	var url = HINT_EDITOR;
+	var url = 'hint_editor.html';
 	url += '?course_id=' + $('#course_id').val() +
 	    '&set_id=' + $('#set_id').val() +
 	    '&problem_id=' + $('#problem_id').val() +

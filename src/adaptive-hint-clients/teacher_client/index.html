@@ -32,17 +32,19 @@
   <div id="after_login">
     <div><button id="create_hint">Create new hints</button></div>
     <div><h2>Unasssigned students</h2></div>
+    <div>Assignment Filter: <span id="course_filter"></span></div>
     <div class="table_container">
       <table id="unassigned_students">
         <thead>
           <tr>
             <th>Student</th>
-            <th>Time since last incorrect (in min)</th>
             <th>Set</th>
             <th>Problem</th>
-            <th>Part</th>
-            <th>Total Tries</th>
-            <th>Tries (last 15 mins)</th>
+            <th>Time since last incorrect</th>
+            <th>Total incorrect tries</th>
+            <th>Incorrect tries (last 15 mins)</th>
+            <th>Time since last hint</th>
+	    <th>Online</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -57,13 +59,14 @@
         <thead>
           <tr>
             <th>Student</th>
-            <th>Time since last incorrect (in min)</th>
             <th>Set</th>
             <th>Problem</th>
-            <th>Part</th>
-            <th>Total Tries</th>
-            <th>Tries (last 15 mins)</th>
-            <th>Time since last hint (in min)</th>
+            <th>Time since last incorrect</th>
+            <th>Total incorrect tries</th>
+            <th>Incorrect tries (last 15 mins)</th>
+            <th>Time since last hint</th>
+	    <th>Online</th>
+	    <th>Solved</th>
             <th>Actions</th>
           </tr>
         </thead>
