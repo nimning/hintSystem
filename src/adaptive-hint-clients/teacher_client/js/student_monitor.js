@@ -275,6 +275,11 @@ function update_answers(student_info) {
 	    var box = $('#problem_preview input#'+ans.boxname);
 	    box.val(ans.entered_value);
 	    box.attr('title', 'Correct answer is ' + ans.correct_value);
+	    if (ans.is_correct) {
+		box.css('background-color', 'green');
+	    } else {
+		box.css('background-color', 'red');
+	    }
 	}
     }
 }
