@@ -201,7 +201,7 @@ $(function () {
     $('#save_hint').click(function() {
 	var hint = {
 	    'author': $('#teacher_id').val(),
-	    'pg_text': hint_body.getValue(),
+	    'pg_text': hint_body.getValue().replace(/\\/g,"\\\\"),
 	    'course': $('#course_id').val(),
 	    'set_id': $('#set_id').val(),
 	    'problem_id': $('#problem_id').val()
