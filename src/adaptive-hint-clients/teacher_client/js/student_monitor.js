@@ -182,8 +182,10 @@ function onRenderComplete(student_info) {
 		.css('border','1px solid black');
 	    var target_answer = $('div[id^="' + boxid +'"]');
 	    target_answer.css('border','2px solid red');
-	    var p =  target_answer.position().top;
-	    $('#past_answers').scrollTop(p);
+	    var p = target_answer.offset().top;
+	    var current_scroll = $('#past_answers').scrollTop();
+	    var offset_top = $('#past_answers').offset().top;
+	    $('#past_answers').scrollTop(p + current_scroll - offset_top);
 	});
 
 	// Add hint button
