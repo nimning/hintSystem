@@ -3,6 +3,7 @@ Directories and Files
 
 * README.md:    This file  
 * setup.sh    A script for setting the environmental variables. Run _source setup.sh_ at root direcotry.
+* `setup_mysql_dump.sh`     A script for setting up environment variables to point to a directory containing mysql dumps.  Run `source setup_mysql_dump.sh` as root
 * src         **DIR** All of the code
 * data        **DIR** All of the data
 
@@ -18,6 +19,8 @@ Directories and Files
 * webwork
 
 #### src/python
+* ProcessRealtimeMysqlDump.py: input= directory containing dumps of realtime and 
+    standard webwork tables  output= ProcessedLogs.pkl
 * ProcessLogs.py: input= log file directory output= ProcessedLogs.pkl
 * ProcessingErrors.txt: lines that failed to parse in the log files.
 * ParsingPGfiles.py: Translate a directory with PG files into a pickle file (problemTexts.pkl) which contains the 
