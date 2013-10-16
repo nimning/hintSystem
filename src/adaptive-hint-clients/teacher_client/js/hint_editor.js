@@ -53,7 +53,7 @@ function initialize_codemirror() {
     });
 
     problem_pg.setSize('100%', 400);
-    hint_body.setSize('100%', 400);
+    hint_body.setSize('100%', 150);
 }
 
 
