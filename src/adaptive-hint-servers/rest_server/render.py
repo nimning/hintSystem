@@ -1,7 +1,6 @@
 import tornado.ioloop
 import tornado.web
 import tornado.gen
-import logging
 import pg_wrapper
 import os
 import tempfile
@@ -14,7 +13,7 @@ class Render(tornado.web.RequestHandler):
     """Interface with Webwork/PG for rendering a PG
     """
 
-    def initialize(self):
+    def set_default_headers(self):
         # Allows X-site requests
         self.set_header("Access-Control-Allow-Origin", "*")
         

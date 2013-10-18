@@ -33,6 +33,8 @@ except ImportError:
     # which has limitations on third-party modules)
     MySQLdb = None
 
+logger = logging.getLogger(__name__)
+
 class Connection(object):
     """A lightweight wrapper around MySQLdb DB-API connections.
 
@@ -82,7 +84,7 @@ class Connection(object):
         try:
             self.reconnect()
         except Exception:
-            logging.error("Cannot connect to MySQL on %s", self.host,
+            logger.error("Cannot connect to MySQL on %s", self.host,
                           exc_info=True)
 
     def __del__(self):
@@ -207,7 +209,7 @@ class Connection(object):
         try:
             return cursor.execute(query, parameters)
         except OperationalError:
-            logging.error("Error connecting to MySQL on %s", self.host)
+            logger.error("Error connecting to MySQL on %s", self.host)
             self.close()
             raise
 
