@@ -58,7 +58,8 @@ class UserProblemHints(ProcessQuery):
                 {{course}}_assigned_hint.user_id="{{user_id}}"        AND
                 {{course}}_assigned_hint.hint_id={{course}}_hint.id   AND
                 {{course}}_assigned_hint.set_id="{{set_id}}"          AND 
-                {{course}}_assigned_hint.problem_id={{problem_id}}'''
+                {{course}}_assigned_hint.problem_id={{problem_id}}    AND
+                (NOT {{course}}_hint.deleted) '''
         self.process_query(query_template, 
             dehydrate=self._add_header_footer, verbose=True)
        
@@ -80,8 +81,8 @@ class Hint(ProcessQuery):
             With return 0
         '''
         query_template = '''
-            delete from {{course}}_hint 
-            where id={{hint_id}} '''
+            update {{course}}_hint set deleted=true where
+                id={{hint_id}} '''
         self.process_query(query_template, write_response=False)
 
     def _add_header_footer(self, response):
@@ -102,7 +103,7 @@ class Hint(ProcessQuery):
         query_template = '''
             select pg_text, author, set_id, problem_id
             from {{course}}_hint 
-            where id={{hint_id}} '''
+            where id={{hint_id}} and (NOT deleted)'''
         self.process_query(query_template, dehydrate=self._add_header_footer)
 
     def post(self):
@@ -176,7 +177,8 @@ class AssignedHint(ProcessQuery):
             from {{course}}_hint, {{course}}_assigned_hint
             where 
                 {{course}}_assigned_hint.id={{assigned_hint_id}}  AND
-                {{course}}_assigned_hint.hint_id={{course}}_hint.id'''
+                {{course}}_assigned_hint.hint_id={{course}}_hint.id AND
+                (NOT {{course}}_hint.deleted) '''
         self.process_query(query_template,
                            dehydrate=lambda x: self.add_header_footer(x)[0])
         
@@ -243,13 +245,17 @@ class ProblemHints(ProcessQuery):
                    {{course}}_hint.problem_id
             from {{course}}_hint left outer join {{course}}_assigned_hint
             on {{course}}_assigned_hint.hint_id={{course}}_hint.id
-            where (
+            where 
+            (
+              (
                 {{course}}_assigned_hint.set_id="{{set_id}}"        AND
                 {{course}}_assigned_hint.problem_id={{problem_id}}
-            ) OR (
+              ) OR (
                 {{course}}_hint.set_id="{{set_id}}"                 AND
                 {{course}}_hint.problem_id={{problem_id}}
+              )
             )
+            AND (NOT {{course}}_hint.deleted )
             group by {{course}}_hint.id
         '''
         self.process_query(query_template, dehydrate=self.add_header_footer)
