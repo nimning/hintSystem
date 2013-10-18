@@ -254,10 +254,6 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
         # add to the active session list
         TeacherSession.active_sessions.add(ts)
 
-        # send student lists
-        self.send_unassigned_students(ts.list_unassigned_students())
-        self.send_my_students(ts.list_my_students())
-
         # done
         callback()
 
