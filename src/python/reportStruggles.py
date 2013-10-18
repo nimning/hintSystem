@@ -156,6 +156,7 @@ if __name__=='__main__':
     import argparse
 
     parser = argparse.ArgumentParser(description='Create a org file detailing the actions of students that struggled with a problem')
+    parser.add_argument('-g','--generate_all',help='Generate data on struggling students for every part/problem', action='store_true')
     parser.add_argument('-a','--assignment',help='Assignment name, if this does not exist top strugglers for all assignments are listed')
     parser.add_argument('-m','--mintries', type=int, default=3
                         ,help='the minimal number of tries for a user/part to be considered (default=3)')
@@ -169,10 +170,14 @@ if __name__=='__main__':
 
     R=reportStruggles()
 
-    if args['assignment']==None:
+    if 'generate_all' in args:
         print 'Generating Everything'
-        Assignments=['Assignment1','Assignment2','Assignment3','Assignment4','Assignment5'
-            ,'Assignment6','Assignment7','Assignment8','Assignment9']
+        
+        if args['assignment'] is None:
+            Assignments=['Assignment1','Assignment2','Assignment3','Assignment4','Assignment5'
+                ,'Assignment6','Assignment7','Assignment8','Assignment9']
+        else:
+            Assignments = [args['assignment']]
 
         for A in Assignments:
             print '----------------------------------------------------------------------------------'

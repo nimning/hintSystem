@@ -17,7 +17,7 @@ class PlotTiming:
         self.__dict__=Dict
         print 'finished loading, loaded',self.__dict__.keys()
 
-    def plot(self,user='',assignment='',filename='plots.pdf',legend=2):
+    def plot(self,user='',assignment='',out_dir='./',legend=2):
         """
         create a plot file of a subset of the (user,assignment) pairs.
         user= restrict to plots for this user (default='' corresponds to no restriction)
@@ -34,7 +34,6 @@ class PlotTiming:
             keyList=[g for g in keyList if g[1]==assignment]
 
         count=0
-        pp=PdfPages(filename)
 
         for key in keyList:
             print 'plotting',key
@@ -109,9 +108,9 @@ class PlotTiming:
 
             if legend>0: pl.legend(loc=legend)
             pl.title('Attempt times for %s / %s'% key)
-            pp.savefig(fig)
-
-        pp.close()
+    
+            output_file = key[0]+'.'+key[1]+'.svg'    
+            fig.savefig(os.path.join(out_dir, output_file))
 
 
 if __name__=='__main__':
@@ -124,14 +123,12 @@ if __name__=='__main__':
                         help='restrict to a specific student (default = no restriction)')
 
     args = vars(parser.parse_args())
-    output_file=args['student']+'.'+args['assignment']+'.pdf'
     
     if 'WWAH_PICKLE' in os.environ.keys() and 'WWAH_OUTPUT' in os.environ.keys():
         pickle_dir=os.environ['WWAH_PICKLE']
-        output_dir=os.environ['WWAH_OUTPUT']
         P=PlotTiming(pickle_dir+'/ProcessedLogs.pkl')
-        filename=os.path.join(output_dir,output_file)
-        P.plot(user=args['student'], assignment=args['assignment'],filename=filename)
+        P.plot(user=args['student'], assignment=args['assignment'],
+            out_dir=os.environ['WWAH_OUTPUT'])
         print 'output file is ',filename
     else:
         print 'source setup.sh first'
