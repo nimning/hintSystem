@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from datetime import datetime
 import pandas as pd
 from collections import defaultdict
