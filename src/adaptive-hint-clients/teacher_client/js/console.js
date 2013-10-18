@@ -277,6 +277,7 @@ $(document).ready(function() {
 	    teacher_id = $('#teacher_id').val();
 	    send_command(sock, 'teacher_join',
 			 { 'teacher_id' : teacher_id });
+	    send_command(sock,'list_students',{});
 	};
 
 	sock.onclose = function() {
