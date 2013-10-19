@@ -143,7 +143,8 @@ function parse_past_answers(answers, boxname, dtable) {
 function update_timestamp() {
     var ts = Math.round((new Date()).getTime() / 1000);
     $('.timestamp').each(function() {
-	$(this).html(secondsToString((ts - $(this).attr('value'))));
+	$(this).html(secondsToString(
+	    Math.max(ts - $(this).attr('value'), 0)));
     });
 }
 
@@ -185,8 +186,8 @@ function onRenderComplete(student_info) {
 	    //"bAutoWidth": false,
 	    "aoColumns": [
 		/* timestamp */ { "sWidth": "0%",  "bVisible": false },
-		/* sec. ago */  { "sWidth": "10%" },
-		/* answer */ { "sWidth": "80%" },
+		/* sec. ago */  { "sWidth": "12%" },
+		/* answer */ { "sWidth": "78%" },
 		/* correct */  { "sWidth": "10%" }
 	    ]
 	});
