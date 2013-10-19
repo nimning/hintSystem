@@ -1,64 +1,11 @@
 import logging
 import datetime
-import time
 
 from student_session import StudentSession
 from hint_rest_api import HintRestAPI
 
 DEFAULT_TIMEOUT = 60 # minutes
 logger = logging.getLogger(__name__)
-
-def _datetime_to_timestamp(dt):
-    return time.mktime(dt.timetuple())
-
-def _summarize_student_session(ss):
-    try:
-        solved = {}
-        total_tries = {}
-        recent_tries = {}
-        time_lastincorrect = None
-        current_time = _datetime_to_timestamp(datetime.datetime.now())
-        for answer in ss.answers:
-            if answer['boxname'].startswith('AnSwEr'):
-                part = answer['boxname']
-                solved[part] = answer['is_correct']
-                if not answer['is_correct']:
-                    time_lastincorrect = (current_time - answer['timestamp'])
-                    total_tries[part] = total_tries.get(part, 0) + 1
-                    # recent = 15 minute
-                    if ((current_time - answer['timestamp']) < 15 * 60):
-                        recent_tries[part] = recent_tries.get(part, 0) + 1
-
-        problem_solved = all(solved.values())
-        sum_total_tries = 0
-        sum_recent_tries = 0
-        for part in solved:
-            if not solved[part]:
-                sum_total_tries += total_tries.get(part, 0)
-                sum_recent_tries += recent_tries.get(part, 0)
-
-        time_lasthint = None
-        if len(ss.hints) > 0:
-            time_lasthint = (current_time - ss.hints[-1]['timestamp'])
-
-        if problem_solved:
-            time_lastincorrect = None
-            sum_total_tries = None
-            sum_recent_tries = None
-
-        return {
-            'student_id': ss.student_id,
-            'course_id': ss.course_id,
-            'set_id': ss.set_id,
-            'problem_id': ss.problem_id,
-            'is_online': (ss._sockjs_handler is not None),
-            'problem_solved' : problem_solved,
-            'total_tries' : sum_total_tries,
-            'recent_tries' : sum_recent_tries,
-            'time_lastincorrect' : time_lastincorrect,
-            'time_lasthint' : time_lasthint }
-    except:
-        logger.exception("Exception in summarizing session")
     
 def _extract_student_info(ss):
     return { 'student_id': ss.student_id,
@@ -146,8 +93,8 @@ class TeacherSession(object):
                                                         course_id,
                                                         set_id,
                                                         problem_id)
-                if ss is not None:
-                    student_list.append(_summarize_student_session(ss))
+                if (ss is not None) and (ss.summary is not None):
+                    student_list.append(ss.summary)
         return student_list
 
     def list_unassigned_students(self):
@@ -160,8 +107,8 @@ class TeacherSession(object):
                                                         course_id,
                                                         set_id,
                                                         problem_id)
-                if ss is not None:
-                    student_list.append(_summarize_student_session(ss))
+                if (ss is not None) and (ss.summary is not None):
+                    student_list.append(ss.summary)
                     
         # filter out students who already solved the problems
         student_list = [student for student in student_list
