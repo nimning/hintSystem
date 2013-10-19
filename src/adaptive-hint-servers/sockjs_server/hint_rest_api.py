@@ -1,12 +1,11 @@
-from tornado import httpclient
-from tornado.httputil import url_concat
 from HTMLParser import HTMLParser
-import urllib
 import json
 import requests
 import logging
 
 logger = logging.getLogger(__name__)
+requests_log = logging.getLogger("requests")
+requests_log.setLevel(logging.WARNING)
 
 class HintRestAPI(object):
     """Provides an interface to the Hint ReSTful APIs"""
@@ -28,36 +27,20 @@ class HintRestAPI(object):
               'correct_value' : '567'
             }
         """
-        http_client = httpclient.HTTPClient()
-        baseurl = HintRestAPI._baseurl
-        response = http_client.fetch(baseurl + '/checkanswer',
-                                     method='POST',
-                                     headers=None,
-                                     body=urllib.urlencode({
-                                         'pg_file' : pg_file,
-                                         'seed' : pg_seed,
-                                         boxname : value 
-                                         }))
-        
-        logger.debug({ 'pg_file':pg_file,
-                       'seed':pg_seed,
-                       'boxname':boxname,
-                       'value':value
-                       })
-        logger.debug(response.body)
-
-        result_json = json.loads(response.body)
+        base_url = HintRestAPI._baseurl
+        params = { 'pg_file' : pg_file,
+                   'seed' : pg_seed,
+                   boxname : value }
+        result_json = requests.post(base_url + '/checkanswer',
+                                    data=params).json()
         answer_status = {}
-
         if boxname in result_json:
             result_json = result_json[boxname]
             answer_status = { 'boxname': boxname,
                               'is_correct': result_json['is_correct'],
                               'error_msg': result_json['error_msg'],
                               'entered_value': value,
-                              'correct_value': result_json['correct_value']
-                              }
-            
+                              'correct_value': result_json['correct_value'] }
         return answer_status
 
     @staticmethod
@@ -66,16 +49,14 @@ class HintRestAPI(object):
           Returns:
             An integer of the random seed.
         """
-        http_client = httpclient.HTTPClient()
-        baseurl = HintRestAPI._baseurl
-        url = url_concat(baseurl + '/problem_seed',
-                         { 'course': course_id,
-                           'set_id': set_id,
-                           'problem_id': problem_id,
-                           'user_id': student_id
-                           })
-        response = http_client.fetch(url)
-        return int(response.body)
+        base_url = HintRestAPI._baseurl
+        params = { 'course': course_id,
+                   'set_id': set_id,
+                   'problem_id': problem_id,
+                   'user_id': student_id }
+        seed = requests.get(base_url + '/problem_seed',
+                            params=params).text
+        return int(seed)
     
     @staticmethod
     def pg_path(course_id, set_id, problem_id):
@@ -83,15 +64,12 @@ class HintRestAPI(object):
           Returns:
             A string representing the path to the pg file.
         """
-        http_client = httpclient.HTTPClient()
-        baseurl = HintRestAPI._baseurl
-        url = url_concat(baseurl + '/pg_path',
-                         { 'course': course_id,
-                           'set_id': set_id,
-                           'problem_id': problem_id
-                           })
-        response = http_client.fetch(url)
-        return json.loads(response.body)
+        base_url = HintRestAPI._baseurl
+        params = { 'course': course_id,
+                   'set_id': set_id,
+                   'problem_id': problem_id }
+        return requests.get(base_url + '/pg_path',
+                            params=params).json()
             
     @staticmethod
     def hint(course_id, set_id, problem_id, assigned_hint_id):
@@ -105,16 +83,13 @@ class HintRestAPI(object):
               ...
             }
         """
-        http_client = httpclient.HTTPClient()
-        baseurl = HintRestAPI._baseurl
-        url = url_concat(baseurl + '/assigned_hint',
-                         { 'course': course_id,
-                           'set_id': set_id,
-                           'problem_id': problem_id,
-                           'assigned_hint_id': assigned_hint_id
-                           })
-        response = http_client.fetch(url)
-        return json.loads(response.body)
+        base_url = HintRestAPI._baseurl
+        params =  { 'course': course_id,
+                    'set_id': set_id,
+                    'problem_id': problem_id,
+                    'assigned_hint_id': assigned_hint_id }
+        return requests.get(base_url + '/assigned_hint',
+                            params=params).json()
 
     @staticmethod
     def get_user_problem_hints(student_id, course_id, set_id, problem_id):
