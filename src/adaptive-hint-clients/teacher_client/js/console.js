@@ -38,8 +38,10 @@ function release_student(student_id, course_id, set_id, problem_id) {
 }
 
 function add_rows_unassigned(stud_data) {
-    var time_lastincorrect = stud_data.time_lastincorrect;
-    var time_lasthint = stud_data.time_lasthint;
+    var time_lastincorrect = Math.max(Date.now()/1000.0 - 
+				      stud_data.time_lastincorrect, 0.0);
+    var time_lasthint = Math.max(Date.now()/1000.0 -
+				 stud_data.time_lasthint, 0.0);
     var tries = stud_data.total_tries;
     var recent_tries = stud_data.recent_tries;
     var is_online = stud_data.is_online;
@@ -83,8 +85,10 @@ function add_rows_unassigned(stud_data) {
 
 
 function add_row_my(stud_data) {
-    var time_lastincorrect = stud_data.time_lastincorrect;
-    var time_lasthint = stud_data.time_lasthint;
+    var time_lastincorrect = Math.max(Date.now()/1000.0 - 
+				      stud_data.time_lastincorrect, 0.0);
+    var time_lasthint = Math.max(Date.now()/1000.0 -
+				 stud_data.time_lasthint, 0.0);
     var tries = stud_data.total_tries;
     var recent_tries = stud_data.recent_tries;
     var is_online = stud_data.is_online;
