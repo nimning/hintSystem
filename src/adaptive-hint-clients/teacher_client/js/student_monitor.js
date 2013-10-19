@@ -72,6 +72,9 @@ function delete_hint(idx) {
 	    url: (REST_SERVER + ':' + $('#rest_port').val() + 
 		  '/hint?course=' + $('#course_id').val() +
 		  '&hint_id=' + hints[idx].hint_id),
+	    success: function() {
+		get_hints();
+	    }
 	});
     }
 }
