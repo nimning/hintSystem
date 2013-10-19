@@ -93,7 +93,7 @@ class TeacherSession(object):
                                                         course_id,
                                                         set_id,
                                                         problem_id)
-                if (ss is not None) and (ss.summary is not None):
+                if ss is not None:
                     student_list.append(ss.summary)
         return student_list
 
@@ -107,7 +107,7 @@ class TeacherSession(object):
                                                         course_id,
                                                         set_id,
                                                         problem_id)
-                if (ss is not None) and (ss.summary is not None):
+                if ss is not None:
                     student_list.append(ss.summary)
                     
         # filter out students who already solved the problems

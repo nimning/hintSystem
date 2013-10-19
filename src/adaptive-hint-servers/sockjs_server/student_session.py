@@ -75,13 +75,12 @@ class StudentSession(object):
         self.problem_id = problem_id
         self.pg_file = None
         self.pg_seed = None
-        self.summary = None
         self._sockjs_handler = sockjs_handler
         # internal cache
         self._answers = None
-        self._hints = None
-        
-
+        self._hints = None 
+        self._summary = None
+       
     @property
     def hints(self):
         if self._hints is None:
@@ -99,6 +98,15 @@ class StudentSession(object):
                                                              self.set_id,
                                                              self.problem_id)
         return self._answers
+
+    @property
+    def summary(self):
+        if self._summary is None:
+            self.update_summary()
+            
+        _summary = self._summary
+        _summary['is_online'] = (self._sockjs_handler is not None)
+        return _summary
 
     @property
     def current_answers(self):
@@ -172,14 +180,13 @@ class StudentSession(object):
             sum_total_tries = None
             sum_recent_tries = None
 
-        self.summary = { 'student_id': self.student_id,
-                         'course_id': self.course_id,
-                         'set_id': self.set_id,
-                         'problem_id': self.problem_id,
-                         'is_online': (self._sockjs_handler is not None),
-                         'problem_solved' : problem_solved,
-                         'total_tries' : sum_total_tries,
-                         'recent_tries' : sum_recent_tries,
-                         'time_lastincorrect' : time_lastincorrect,
-                         'time_lasthint' : time_lasthint }
+        self._summary = { 'student_id': self.student_id,
+                          'course_id': self.course_id,
+                          'set_id': self.set_id,
+                          'problem_id': self.problem_id,
+                          'problem_solved' : problem_solved,
+                          'total_tries' : sum_total_tries,
+                          'recent_tries' : sum_recent_tries,
+                          'time_lastincorrect' : time_lastincorrect,
+                          'time_lasthint' : time_lasthint }
 
