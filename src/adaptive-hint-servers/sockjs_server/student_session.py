@@ -103,8 +103,13 @@ class StudentSession(object):
     def summary(self):
         if self._summary is None:
             self.update_summary()
+
+        _summary = self._summary.copy()
+
+        # update recent tries
+        if _summary['recent_tries'] > 0:
+            Thread(target=self.update_summary).start()
             
-        _summary = self._summary
         _summary['is_online'] = (self._sockjs_handler is not None)
         return _summary
 
