@@ -153,6 +153,7 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
 
 
         @self.add_handler('request_student')
+        @gen.engine
         def handle_request_student(self, args):
             """Handler for 'request_student'
 
@@ -173,14 +174,11 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
                 set_id = args['set_id']
                 problem_id = args['problem_id']
                 
-                self.teacher_session.request_student(student_id,
-                                                     course_id,
-                                                     set_id,
-                                                     problem_id)
-
-                # send student lists
-                self.send_unassigned_students(ts.list_unassigned_students())
-                self.send_my_students(ts.list_my_students())
+                yield gen.Task(self._perform_request_student,
+                               student_id,
+                               course_id,
+                               set_id,
+                               problem_id)
 
                 logger.info("%s: request_student"%ts.teacher_id)
                 
@@ -188,6 +186,7 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
                 logger.exception("Exception handling 'request_student'")
 
         @self.add_handler('release_student')
+        @gen.engine
         def handle_release_student(self, args):
             """Handler for 'release_student'
 
@@ -209,14 +208,11 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
                 set_id = args['set_id']
                 problem_id = args['problem_id']
 
-                self.teacher_session.release_student(student_id,
-                                                     course_id,
-                                                     set_id,
-                                                     problem_id)
-
-                # send student lists
-                self.send_unassigned_students(ts.list_unassigned_students())
-                self.send_my_students(ts.list_my_students())
+                yield gen.Task(self._perform_release_student,
+                               student_id,
+                               course_id,
+                               set_id,
+                               problem_id)
 
                 logger.info("%s: release_student"%ts.teacher_id)
                 
@@ -338,6 +334,37 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
         
         # done
         callback()
+
+    def _perform_request_student(self, student_id, course_id,
+                                 set_id, problem_id, callback=None):
+        ts = self.teacher_session
+        ts.request_student(student_id,
+                           course_id,
+                           set_id,
+                           problem_id)
+        
+        # send student lists
+        self.send_unassigned_students(ts.list_unassigned_students())
+        self.send_my_students(ts.list_my_students())
+
+        # done
+        callback()
+
+    def _perform_release_student(self, student_id, course_id,
+                                 set_id, problem_id, callback=None):
+        ts = self.teacher_session
+        ts.release_student(student_id,
+                           course_id,
+                           set_id,
+                           problem_id)
+
+        # send student lists
+        self.send_unassigned_students(ts.list_unassigned_students())
+        self.send_my_students(ts.list_my_students())
+
+        # done
+        callback()
+
 
     ################################################################
     # SockJS helpers                                               #
