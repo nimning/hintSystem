@@ -414,6 +414,17 @@ function setup_sockjs(port) {
     };
 }
 
+function populate_hint_filters() {
+    $.get(REST_SERVER + ':' + $('#rest_port').val() + '/hint_filters',
+	  function(data) {
+	      var filters = $.parseJSON(data);
+	      var r = '<option value=""></option>';
+	      for (var i = 0; i < filters.length; i++ ) {
+		  r += '<option value="'+filters[i]+'">'+filters[i]+'</option>';
+	      }
+	      $('#hint_filters').html(r);
+	  });
+}
 
 //////////////////////////////////////////////////////
 
@@ -440,6 +451,8 @@ $(document).ready(function() {
     // Get available hints
     get_hints();
 
+    populate_hint_filters();
+
     // Hide the preview box
     $('#hint_html').hide();
 
@@ -457,7 +470,19 @@ $(document).ready(function() {
 		'hint_id': hint_id,
 		'hint_html_template': $('#hint_html').html()
 	    });
+
+	    // make a post to assigned_hint_filter
+	    var selected_filter = $('#hint_filters').val();
+	    if (selected_filter != "") {
+		var post_data = {
+		    'hint_filter': selected_filter,
+		    'hint_id': hint_id
+		};
+		$.post(REST_SERVER + ':' + $('#rest_port').val() + '/assigned_hint_filter',
+		       post_data);
+	    }
 	}
+	
 	$("#cancel_hint").click();
     });
 
