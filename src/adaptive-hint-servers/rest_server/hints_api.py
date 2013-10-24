@@ -326,9 +326,16 @@ class RunHintFilters(ProcessQuery):
         self.process_query(query_template, dehydrate=self.check_hint_assignment)
 
 class HintFilter(ProcessQuery):
+    def set_default_headers(self):
+        # Allows X-site requests
+        self.set_header("Access-Control-Allow-Origin", "*")
+    
+    def filter_names_to_list(self, rows):
+        return [row['filter_name'] for row in rows]
+
     def get(self):
         query_template = ''' select filter_name from {{course}}_hint_filter '''
-        self.process_query(query_template)
+        self.process_query(query_template, dehydrate=self.filter_names_to_list)
     
     def post(self):
         query_template = ''' insert into {{course}}_hint_filter 
@@ -336,6 +343,10 @@ class HintFilter(ProcessQuery):
         self.process_query(query_template, write_response=False)
 
 class AssignedHintFilter(ProcessQuery):
+    def set_default_headers(self):
+        # Allows X-site requests
+        self.set_header("Access-Control-Allow-Origin", "*")
+
     def get(self):
         query_template = ''' select {{course}}_hint_filter.filter_name, 
             {{course}}_assigned_hint_filter.hint_id

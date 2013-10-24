@@ -53,6 +53,7 @@ function render_hint(idx) {
 		   .html(clean_html)
 		   .addClass('hint_html')
 		   .show();
+            $('#hint_buttons').show()
 	       // Scroll to buttom of the page
 	       window.scrollTo(0, document.body.scrollHeight);
 	   });
@@ -415,7 +416,8 @@ function setup_sockjs(port) {
 }
 
 function populate_hint_filters() {
-    $.get(REST_SERVER + ':' + $('#rest_port').val() + '/hint_filters',
+    $.get(REST_SERVER + ':' + $('#rest_port').val() + '/hint_filter',
+      { 'course': $('#course_id').val() }, 
 	  function(data) {
 	      var filters = $.parseJSON(data);
 	      var r = '<option value=""></option>';
@@ -456,6 +458,9 @@ $(document).ready(function() {
     // Hide the preview box
     $('#hint_html').hide();
 
+    // Hide the filters dropdown, until "preview" is clicked
+    $('#hint_buttons').hide();
+
     $("#add_hint").click(function() {
 	var location = $('#hint_location').val();
 	if (location.length > 0 &&
@@ -475,7 +480,8 @@ $(document).ready(function() {
 	    var selected_filter = $('#hint_filters').val();
 	    if (selected_filter != "") {
 		var post_data = {
-		    'hint_filter': selected_filter,
+	        'course': $('#course_id').val(),
+		    'filter_name': selected_filter,
 		    'hint_id': hint_id
 		};
 		$.post(REST_SERVER + ':' + $('#rest_port').val() + '/assigned_hint_filter',
@@ -489,6 +495,7 @@ $(document).ready(function() {
     $("#cancel_hint").click(function() {
 	$('#hint_status').html('');
 	$('#hint_html').hide();
+	$('#hint_buttons').hide();
 	$('#hint_location').val('');
 	hint_id = null;
 	$('#hint_container').hide();
