@@ -58,6 +58,28 @@ function render_hint(idx) {
 	   });
 }
 
+function delete_hint(idx) {
+    // Check ownership
+    if (hints[idx].author != $('#teacher_id').val()) {
+	alert("You can only delete hints that you created.");
+	return;
+    }
+    // Confirmation
+    var result = confirm("Delete hint_id=" + hints[idx].hint_id + "?");
+    if (result == true) {
+	$.ajax({
+	    type: 'DELETE',
+	    url: (REST_SERVER + ':' + $('#rest_port').val() + 
+		  '/hint?course=' + $('#course_id').val() +
+		  '&hint_id=' + hints[idx].hint_id),
+	    success: function() {
+		get_hints();
+	    }
+	});
+    }
+}
+
+
 function fork_hint(idx) {
     var url = 'hint_editor.html';
     url += '?course_id=' + $('#course_id').val() +
@@ -121,7 +143,8 @@ function parse_past_answers(answers, boxname, dtable) {
 function update_timestamp() {
     var ts = Math.round((new Date()).getTime() / 1000);
     $('.timestamp').each(function() {
-	$(this).html(secondsToString((ts - $(this).attr('value'))));
+	$(this).html(secondsToString(
+	    Math.max(ts - $(this).attr('value'), 0)));
     });
 }
 
@@ -160,11 +183,12 @@ function onRenderComplete(student_info) {
 	    'bFilter': false,
 	    'sScrollY': '120px',
 	    "sDom": '<"header">frtip',
+	    //"bAutoWidth": false,
 	    "aoColumns": [
-		/* timestamp */ { "bVisible":    false },
-		/* sec. ago */  null,
-		/* answer */ null,
-		/* correct */  null
+		/* timestamp */ { "sWidth": "0%",  "bVisible": false },
+		/* sec. ago */  { "sWidth": "12%" },
+		/* answer */ { "sWidth": "78%" },
+		/* correct */  { "sWidth": "10%" }
 	    ]
 	});
 	var this_id = $(this).attr('id');
@@ -302,10 +326,13 @@ function parse_hints(dtable) {
 	dtable.fnAddData([
 	    hints[i].hint_id,
 	    hints[i].pg_text,
+	    hints[i].author,
 	    "<button onclick=\"render_hint(" + i + 
 		")\">Preview</button>" +
 		"<button onclick=\"fork_hint(" + i + 
-		")\">Fork</button>"]);
+		")\">Fork</button>" + 
+		"<button onclick=\"delete_hint(" + i + 
+		")\">Delete</button>"]);
     }
 }
 
@@ -405,7 +432,8 @@ $(document).ready(function() {
 	'bFilter': false,
 	"aoColumns": [
 	    { "sWidth": "10%", "sClass": "center"  },
-	    { "sWidth": "70%" },
+	    { "sWidth": "60%" },
+	    { "sWidth": "10%" },
 	    { "sWidth": "20%", "sClass": "center", "bSortable": false }]
     });
 
