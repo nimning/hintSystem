@@ -2,6 +2,8 @@ import tornado
 import json
 import tornado.ioloop
 import tornado.web
+import logging
+
 from tornado.template import Template
 from convert_timestamp import utc_to_system_timestamp
 from process_query import ProcessQuery, conn
@@ -9,10 +11,12 @@ from hint_filters.AllFilters import hint_filters
 from operator import itemgetter
 import pandas as pd
 
+logger = logging.getLogger(__name__)
+
 class UserProblemHints(ProcessQuery):
     """ /user_problem_hints """
     
-    def initialize(self):
+    def set_default_headers(self):
         # Allows X-site requests
         self.set_header("Access-Control-Allow-Origin", "*")
 
@@ -61,18 +65,22 @@ class UserProblemHints(ProcessQuery):
                 {{course}}_assigned_hint.user_id="{{user_id}}"        AND
                 {{course}}_assigned_hint.hint_id={{course}}_hint.id   AND
                 {{course}}_assigned_hint.set_id="{{set_id}}"          AND 
-                {{course}}_assigned_hint.problem_id={{problem_id}}    AND
-                (NOT {{course}}_hint.deleted) '''
+                {{course}}_assigned_hint.problem_id={{problem_id}}  '''
         self.process_query(query_template, 
             dehydrate=self._add_header_footer)
        
 
 class Hint(ProcessQuery):
     """ /hint """
-    
-    def initialize(self):
+
+    def set_default_headers(self):
         # Allows X-site requests
         self.set_header("Access-Control-Allow-Origin", "*")
+        self.set_header("Access-Control-Allow-Methods", "GET, POST, DELETE")
+        
+    def options(self):
+        # Needed for X-site pre-flight checking. 
+        pass
 
     def delete(self):
         '''  For helping the instructor delete hints
@@ -84,8 +92,8 @@ class Hint(ProcessQuery):
             With return 0
         '''
         query_template = '''
-            update {{course}}_hint set deleted=true where
-                id={{hint_id}} '''
+           update {{course}}_hint set deleted=true
+             where id={{hint_id}} '''
         self.process_query(query_template, write_response=False)
 
     def _add_header_footer(self, response):
@@ -180,8 +188,7 @@ class AssignedHint(ProcessQuery):
             from {{course}}_hint, {{course}}_assigned_hint
             where 
                 {{course}}_assigned_hint.id={{assigned_hint_id}}  AND
-                {{course}}_assigned_hint.hint_id={{course}}_hint.id AND
-                (NOT {{course}}_hint.deleted) '''
+                {{course}}_assigned_hint.hint_id={{course}}_hint.id '''
         self.process_query(query_template,
                            dehydrate=lambda x: self.add_header_footer(x)[0])
         
@@ -217,7 +224,7 @@ class HintFeedback(ProcessQuery):
 class ProblemHints(ProcessQuery):
     """ /problem_hints """
 
-    def initialize(self):
+    def set_default_headers(self):
         # Allows X-site requests
         self.set_header("Access-Control-Allow-Origin", "*")
     

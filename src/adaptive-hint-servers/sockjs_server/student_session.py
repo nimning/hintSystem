@@ -1,8 +1,14 @@
 import logging
+import datetime
+import time
+from threading import Thread
 
 from hint_rest_api import HintRestAPI
 
 logger = logging.getLogger(__name__)
+
+def _datetime_to_timestamp(dt):
+    return time.mktime(dt.timetuple())
 
 class StudentSession(object):
     """Provides an interface to each student session connected.
@@ -72,8 +78,9 @@ class StudentSession(object):
         self._sockjs_handler = sockjs_handler
         # internal cache
         self._answers = None
-        self._hints = None
-
+        self._hints = None 
+        self._summary = None
+       
     @property
     def hints(self):
         if self._hints is None:
@@ -93,6 +100,20 @@ class StudentSession(object):
         return self._answers
 
     @property
+    def summary(self):
+        if self._summary is None:
+            self.update_summary()
+
+        _summary = self._summary.copy()
+
+        # update recent tries
+        if _summary['recent_tries'] > 0:
+            Thread(target=self.update_summary).start()
+            
+        _summary['is_online'] = (self._sockjs_handler is not None)
+        return _summary
+
+    @property
     def current_answers(self):
         answer_dict = {}
         # recontruct the current answers
@@ -102,12 +123,16 @@ class StudentSession(object):
 
     def update_hints(self):
         """Update the hints displayed on the client"""
-        try:
+        try:            
             # invalidate internal cache
             self._hints = None
             if self._sockjs_handler is not None:
                 self._sockjs_handler.send_hints(self.hints)
                 self._sockjs_handler.send_answer_status(self.current_answers)
+
+            # update summary in another thread
+            Thread(target=self.update_summary).start()
+
         except:
             logging.exception("Exception in update_hints()")
 
@@ -127,4 +152,51 @@ class StudentSession(object):
 
         # invalidate internal cache
         self._answers = None
-        
+
+        # update summary in another thread
+        Thread(target=self.update_summary).start()
+
+    def update_summary(self):
+        solved = {}
+        total_tries = {}
+        recent_tries = {}
+        time_lastincorrect = None
+        current_time = _datetime_to_timestamp(datetime.datetime.now())
+        for answer in self.answers:
+            if answer['boxname'].startswith('AnSwEr'):
+                part = answer['boxname']
+                solved[part] = answer['is_correct']
+                if not answer['is_correct']:
+                    time_lastincorrect = answer['timestamp']
+                    total_tries[part] = total_tries.get(part, 0) + 1
+                    # recent = 15 minute
+                    if ((current_time - answer['timestamp']) < 15 * 60):
+                        recent_tries[part] = recent_tries.get(part, 0) + 1
+
+        problem_solved = all(solved.values())
+        sum_total_tries = 0
+        sum_recent_tries = 0
+        for part in solved:
+            if not solved[part]:
+                sum_total_tries += total_tries.get(part, 0)
+                sum_recent_tries += recent_tries.get(part, 0)
+
+        time_lasthint = None
+        if len(self.hints) > 0:
+            time_lasthint = self.hints[-1]['timestamp']
+
+        if problem_solved:
+            time_lastincorrect = None
+            sum_total_tries = None
+            sum_recent_tries = None
+
+        self._summary = { 'student_id': self.student_id,
+                          'course_id': self.course_id,
+                          'set_id': self.set_id,
+                          'problem_id': self.problem_id,
+                          'problem_solved' : problem_solved,
+                          'total_tries' : sum_total_tries,
+                          'recent_tries' : sum_recent_tries,
+                          'time_lastincorrect' : time_lastincorrect,
+                          'time_lasthint' : time_lasthint }
+

@@ -1,7 +1,6 @@
 import tornado.ioloop
 import tornado.web
 import tornado.gen
-import logging
 import pg_wrapper
 import os
 import tempfile
@@ -13,7 +12,7 @@ def task_checkanswer(pg_file, answers, seed, callback=None):
 class CheckAnswer(tornado.web.RequestHandler):
     """Interface with Webwork/PG for checking answers with a PG
     """
-    def initialize(self):
+    def set_default_headers(self):
         # Allows X-site requests
         self.set_header("Access-Control-Allow-Origin", "*")
 
