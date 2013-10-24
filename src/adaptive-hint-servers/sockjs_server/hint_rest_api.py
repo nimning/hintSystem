@@ -5,6 +5,8 @@ import urllib
 import json
 import requests
 import logging
+import base64
+import re
 
 logger = logging.getLogger(__name__)
 
@@ -192,3 +194,51 @@ class HintRestAPI(object):
                   'feedback': feedback}
         r = requests.post(base_url+'/hint_feedback', data=params)
         
+    @staticmethod
+    def apply_hint_filters(user_id, course, set_id, problem_id, pg_id):
+        ''' Call the "run_hint_filters" API call.  This determines what
+            hints should be assigned to this particular user/box.  
+            Then call a function to assign the hint to this user at the given
+            box (given by course/set/problem/pg id) '''
+        base_url = HintRestAPI._baseurl
+        params = {'user_id':user_id, 
+            'course':course, 
+            'set_id':set_id, 
+            'problem_id':problem_id, 
+            'pg_id':pg_id
+        }
+        r = requests.get(base_url+'/run_hint_filters', params=params)
+        hint_ids = r.json()
+        # Assign hints that pass some filter
+        for hint_id in hint_ids:
+            HintRestAPI.render_html_assign_hint(user_id, course, set_id,
+                    problem_id, pg_id, hint_id)
+
+    @staticmethod
+    def render_html_assign_hint(user_id, course, set_id,
+                    problem_id, pg_id, hint_id):
+        ''' rows in the assigned hint table store the rendered html associated
+            with the hint.  
+            here we call REST API's to render the hint with the given id,
+            then send the rendered hint along with its location to the 
+            assign_hint API '''
+        base_url = HintRestAPI._baseurl
+        # GET /hint
+        r = requests.get(base_url+'/hint', params={'course':course,  'hint_id':hint_id}).json()
+        pg_text = '%s\n%s\n%s'%(r['pg_header'], r['pg_text'], r['pg_footer'])
+        # GET /problem_seed
+        seed = requests.get(base_url+'/problem_seed', params={'course':course,
+            'set_id':set_id, 'problem_id': problem_id, 'user_id':user_id}).json()
+        pg_text = base64.b64encode(pg_text)
+        params={'pg_file':pg_text, 'seed':seed}
+        # GET /render
+        r = requests.post(base_url+'/render', data={'pg_file':pg_text,
+            'seed':seed}).json()
+        h = r['rendered_html']
+        div_match = re.compile(r'[\s\S]*?<div',flags=re.MULTILINE)
+        h = div_match.sub(h, '<div').strip().replace('AnSwEr0001', 'HINTBOXID')
+        # POST to /assigned_hint
+        params = {'user_id':user_id, 'course':course,
+                  'set_id':set_id, 'problem_id':problem_id, 'pg_id':pg_id, 
+                  'hint_id':hint_id, 'hint_html_template':h}
+        r = requests.post(base_url+'/assigned_hint', data=params)
