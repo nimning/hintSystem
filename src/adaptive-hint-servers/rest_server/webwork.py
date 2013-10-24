@@ -191,4 +191,4 @@ class RealtimeProblemAnswer(ProcessQuery):
                     "{{answer_string}}" )
         '''
         self.process_query(query_template, hydrate = 
-            self.add_problem_source, verbose=True, write_response=False)
+            self.add_problem_source, write_response=False)
