@@ -188,6 +188,7 @@ class HintRestAPI(object):
         for hint_id in hint_ids:
             HintRestAPI.render_html_assign_hint(user_id, course, set_id,
                     problem_id, pg_id, hint_id)
+        return hint_ids
 
     @staticmethod
     def render_html_assign_hint(user_id, course, set_id,

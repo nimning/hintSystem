@@ -38,7 +38,7 @@ def struggling_student_filter(args, df, previous_hint_assignments):
 
     # Check that the user has spent a minimum amount of time struggling
     break_threshold = 1
-    minutes_struggling_threshold = 5
+    minutes_struggling_threshold = 2
     td = df['timestamp'].order()
     td = td.diff().dropna()
     td = td[td < timedelta(minutes=break_threshold) \
@@ -52,6 +52,7 @@ def struggling_student_filter(args, df, previous_hint_assignments):
     # Check that the user doesn't have the correct answer
     if (df['correct'].max() == 1): # Student has correctly answered the question
         return False
+    
   
     # The student has passed all the above criteria, he/she is probably struggling
     return True

@@ -144,11 +144,13 @@ class StudentSession(object):
                                          self.set_id,
                                          self.problem_id,
                                          answer_status)
-        HintRestAPI.apply_hint_filters(self.student_id, 
+        hint_ids = HintRestAPI.apply_hint_filters(self.student_id, 
                                        self.course_id,
                                        self.set_id, 
                                        self.problem_id, 
                                        boxname)
+        if len(hint_ids) > 0:
+            self.update_hints()
 
         # invalidate internal cache
         self._answers = None
