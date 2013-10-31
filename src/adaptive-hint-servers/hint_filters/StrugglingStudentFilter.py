@@ -46,7 +46,7 @@ def struggling_student_filter(args, df, previous_hint_assignments):
     total_time_spent = td.sum()
     if total_time_spent < \
         timedelta(minutes=minutes_struggling_threshold).total_seconds()*10**9:
-        return False
+        pass #return False
         
     
     # Check that the user doesn't have the correct answer

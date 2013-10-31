@@ -211,8 +211,17 @@ class HintRestAPI(object):
         r = requests.post(base_url+'/render', data={'pg_file':pg_text,
             'seed':seed}).json()
         h = r['rendered_html']
-        div_match = re.compile(r'[\s\S]*?<div',flags=re.MULTILINE)
-        h = div_match.sub(h, '<div').strip().replace('AnSwEr0001', 'HINTBOXID')
+        # Clean up rendering
+        div_match = re.compile(r'^.*<div',flags=re.MULTILINE)
+        h = div_match.sub('<div', h).strip().replace('AnSwEr0001', 'HINTBOXID')
+        h = h + '<div style="clear:left;">' + \
+            '<input type="radio" name="feedback_' + \
+            'HINTBOXID' + '" value="too hard">Too hard' + \
+            '<input type="radio" name="feedback_' + \
+            'HINTBOXID'  + '" value="easy but unhelpful">Easy but unhelpful' + \
+            '<input type="radio" name="feedback_' + \
+            'HINTBOXID' + '" value="helpful">Helpful' + \
+            '</div>'
         # POST to /assigned_hint
         params = {'user_id':user_id, 'course':course,
                   'set_id':set_id, 'problem_id':problem_id, 'pg_id':pg_id, 
