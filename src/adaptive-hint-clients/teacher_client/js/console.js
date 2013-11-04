@@ -144,10 +144,16 @@ function parse_unassigned(data) {
     unassigned.fnPageChange(page);
     if (typeof(already_created_dropdown) === 'undefined') {
 	/* Add a select menu for each TH element in the table footer */
-	$("#course_filter").each( function () {
+	$("#assignment_filter").each( function () {
 	    this.innerHTML = fnCreateSelect( unassigned.fnGetColumnData(1) );
 	    $('select', this).change( function () {
 		unassigned.fnFilter( $(this).val(), 1 );
+	    } );
+	} );
+	$("#problem_filter").each( function () {
+	    this.innerHTML = fnCreateSelect( unassigned.fnGetColumnData(2) );
+	    $('select', this).change( function () {
+		unassigned.fnFilter( $(this).val(), 2 );
 	    } );
 	} );
 	already_created_dropdown = true;
