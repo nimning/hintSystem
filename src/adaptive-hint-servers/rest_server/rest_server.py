@@ -6,7 +6,8 @@ import argparse
 from render import Render 
 from checkanswer import CheckAnswer
 from webwork import (ProblemSeed, ProblemPGPath, ProblemPGFile,
-                     RealtimeUserProblemAnswers, RealtimeProblemAnswer)
+                     RealtimeUserProblemAnswers, RealtimeProblemAnswer,
+                     SetIds)
 from hints_api import (UserProblemHints, Hint, AssignedHint,
                        ProblemHints, HintFeedback, RunHintFilters,
                        HintFilter, AssignedHintFilter)
@@ -31,7 +32,8 @@ application = tornado.web.Application([
     (r"/hint_feedback", HintFeedback),
     (r"/run_hint_filters", RunHintFilters),
     (r"/hint_filter", HintFilter),
-    (r"/assigned_hint_filter", AssignedHintFilter)
+    (r"/assigned_hint_filter", AssignedHintFilter),
+    (r"/set_ids", SetIds),
     ])
 
 if __name__ == "__main__":

@@ -27,7 +27,7 @@ var QueryString = function() {
 
 // Debug print
 function print(msg) {
-  console.log(msg);
+   //console.log(msg);
 }
 
 // Helper for sending a command to sockJS server

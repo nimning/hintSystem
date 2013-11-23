@@ -80,7 +80,9 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
             Requests a list of all active students.
 
             """
-            yield gen.Task(self._perform_list_students)
+            set_id = args.get('set_id', None)
+            
+            yield gen.Task(self._perform_list_students, set_id)
             
         @self.add_handler('add_hint')
         @gen.engine
@@ -254,11 +256,11 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
         callback()
 
 
-    def _perform_list_students(self, callback=None):
+    def _perform_list_students(self, set_id, callback=None):
         ts = self.teacher_session
         
         # send student lists
-        self.send_unassigned_students(ts.list_unassigned_students())
+        self.send_unassigned_students(ts.list_unassigned_students(set_id))
         self.send_my_students(ts.list_my_students())
 
         # done
