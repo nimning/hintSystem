@@ -192,3 +192,28 @@ class RealtimeProblemAnswer(ProcessQuery):
         '''
         self.process_query(query_template, hydrate = 
             self.add_problem_source, write_response=False)
+
+
+# GET /set_ids?
+class SetIds(ProcessQuery):
+    def set_default_headers(self):
+        # Allows X-site requests
+        self.set_header("Access-Control-Allow-Origin", "*")
+
+    def get(self):
+        ''' 
+            List set ids.  
+
+            Sample arguments:
+            course="CompoundProblems", 
+
+            Response: 
+                ["set_1", "set_2", ...]
+            '''
+        query_template = '''
+            select set_id from {{course}}_set
+            order by open_date desc; 
+        '''
+        self.process_query(query_template,
+                           dehydrate=lambda rows: [x['set_id'] for x in rows])
+
