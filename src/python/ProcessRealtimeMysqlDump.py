@@ -37,7 +37,10 @@ with open(mysql_dump_abspath, 'r') as f:
 rows = defaultdict(list)
 
 for line in lines:
-    _, set_id, problem_id, pg_id, user_id, _, correct, answer_string, timestamp = line.split('\t')
+    try:
+        _, set_id, problem_id, pg_id, user_id, _, correct, answer_string, timestamp = line.split('\t')
+    except ValueError:
+        continue
     timestamp = datetime.strptime(timestamp.strip(), '%Y-%m-%d %H:%M:%S')
 #    webwork_timestamp = timestamp.strftime('%a %b %d %H:%M:%S %Y')
 #    unix_timestamp = int(timestamp.strftime('%s'))
@@ -68,7 +71,8 @@ with open(pickle_out_abspath, 'w') as f:
     pickle.dump(
         {'GroupedDataFrame':G,
          'time_gap_threshold':time_gap_threshold,
-         'Problem_parts':C},
+         'Problem_parts':C,
+         'FullRealtimeDataFrame':df},
         f,
         protocol=pickle.HIGHEST_PROTOCOL
     )
