@@ -52,19 +52,37 @@ class StudentSession(object):
 
      _sockjs_handler : StudentSockJSHandler
        SockJS handler
-     
+
+     solved  : boolean
+       Whether this problem is solved
+       
     """
     all_sessions = dict()
 
     @staticmethod
     def get_student_session(student_id, course_id, set_id, problem_id):
         hashkey = (student_id, course_id, set_id, problem_id)
-        return StudentSession.all_sessions.get(hashkey, None) 
+        if hashkey in StudentSession.all_sessions:
+            ss, last_update = StudentSession.all_sessions[hashkey]
+            # If the session is too old, remove it from the hash
+            if (last_update < datetime.datetime.now() -
+                datetime.timedelta(days=14)):
+                del StudentSession.all_sessions[hashkey]
+                return None
+            # If the session is already solved, remove it as well
+            elif ss.solved:
+                del StudentSession.all_sessions[hashkey]
+                return None
+            # Otherwise returns the session
+            else:
+                return ss
+        else:
+            return None
 
     @staticmethod
     def update_student_session(ss):
         hashkey = (ss.student_id, ss.course_id, ss.set_id, ss.problem_id)
-        StudentSession.all_sessions[hashkey] = ss
+        StudentSession.all_sessions[hashkey] = ss, datetime.datetime.now()
 
     def __init__(self, session_id, student_id, course_id,
                  set_id, problem_id, sockjs_handler):
@@ -75,6 +93,7 @@ class StudentSession(object):
         self.problem_id = problem_id
         self.pg_file = None
         self.pg_seed = None
+        self.solved = False
         self._sockjs_handler = sockjs_handler
         # internal cache
         self._answers = None
@@ -188,6 +207,7 @@ class StudentSession(object):
             time_lasthint = self.hints[-1]['timestamp']
 
         if problem_solved:
+            self.solved = True
             time_lastincorrect = None
             sum_total_tries = None
             sum_recent_tries = None
