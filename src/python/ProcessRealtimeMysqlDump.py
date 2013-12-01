@@ -8,13 +8,15 @@ import sys; sys.path.append('/opt/Webwork_AdaptiveHints/src/python')
 from PlotTiming import PlotTiming
 import numpy as np
 
-
-mysql_dump_filename = 'UCSD_CSE103_realtime_past_answer.txt'
-pickle_out_filename = 'ProcessedLogs.pkl'
-mysql_dump_dir = os.environ['WWAH_LOGS']
-pickle_out_dir = os.environ['WWAH_PICKLE']
-mysql_dump_abspath = os.path.join(mysql_dump_dir, mysql_dump_filename)
-pickle_out_abspath = os.path.join(pickle_out_dir, pickle_out_filename)
+if len(sys.argv) > 1 and ('MYSQL_DUMP_DIR' in os.environ.keys()):
+    mysql_dump_abspath = os.path.join(os.environ['MYSQL_DUMP_DIR'],sys.argv[1])
+else:
+    print 'Execute "source setup.sh" from the root directory'
+    sys.exit(0)
+if len(sys.argv) > 2:
+    pickle_out_abspath = os.path.join(os.environ['WWAH_PICKLE'],sys.argv[2])
+else:
+    pickle_out_abspath = os.environ['WWAH_PICKLE']+'/ProcessedLogs.pkl'
 
 ### TODO DELETEME
 ### THIS IS A DUPLICATE OF THE FUNCTION IN ProcessLogs.py
@@ -46,6 +48,8 @@ for line in lines:
 #    unix_timestamp = int(timestamp.strftime('%s'))
     problem_id = int(problem_id)
     # Remove non-digits, then convert to int
+    if 'hint' in pg_id.lower():
+        continue
     pg_id = int(  ''.join( (c for c in pg_id if c.isdigit()))   )
     rows['Assignment'].append(set_id)
     rows['problem_no'].append(problem_id)
