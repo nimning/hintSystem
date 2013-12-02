@@ -19,20 +19,25 @@ class ProcessLogs:
     directory with the log files (they need to have the extension
     '.txt')
     """
-    def __init__(self,dir):
+    def __init__(self,path,is_dir=True):
         """read all of the log files in a given directory, parse their
-        content, and concatanate them into a single DataFrame.  dir: a
+        content, and concatanate them into a single DataFrame.  path: a
         path to the directory where all the log files reside. The
         current assumption is that the log files are all those whose
         extension is '.txt'
+        is_dir=True means the given path <path> is to a directory
+        else the path refers to a single file
         """
         self.time_gap_threshold=1200  # 20 minutes in seconds
         self.DataFrame=pandas.DataFrame()     # raw data
 
         Table={'string_time':[],'user':[],'Assignment':[],'problem_no':[],'correctness':[],'time':[],'answers':[]}
-        filenames=glob.glob(dir+'/*.txt')
+        if is_dir:
+            filenames=glob.glob(path+'/*.txt')
+        else:
+            filenames = [path]
         if len(filenames)==0:
-            sys.exit('Found no files matching '+dir+'/*.txt')
+            sys.exit('Found no files matching '+path+'/*.txt')
         errors=open('ProcessingErrors.txt','wb')
         for filename in filenames:
             lines=0
@@ -225,11 +230,19 @@ class ProcessLogs:
         print 'finished pickle'
 
 if __name__=='__main__':
-    if 'WWAH_LOGS' in os.environ.keys():
-        Dir=os.environ['WWAH_LOGS']
-        print 'Dir=',Dir
-        P=ProcessLogs(Dir) # instantiatiate a class object and read in the log files.
-        P.process()
-        P.pickle(os.environ['WWAH_PICKLE']+'/ProcessedLogs.pkl')
+    if (len(sys.argv) == 1) and ('WWAH_LOGS' in os.environ.keys()):
+        input_path=os.environ['WWAH_LOGS']
+        P=ProcessLogs(input_path) # instantiatiate a class object and read in the log files.
+    elif len(sys.argv) > 1 and ('MYSQL_DUMP_DIR' in os.environ.keys()):
+        input_path = os.path.join(os.environ['MYSQL_DUMP_DIR'],sys.argv[1])
+        P=ProcessLogs(input_path, is_dir=False) # instantiatiate a class object and read in the log files.
     else:
         print 'Execute "source setup.sh" from the root directory'
+        sys.exit(0)
+    print 'Log input path=',input_path
+    P.process()
+    if len(sys.argv) > 2:
+        output_path = os.path.join(os.environ['WWAH_PICKLE'],sys.argv[2])
+    else:
+        output_path = os.environ['WWAH_PICKLE']+'/ProcessedLogs.pkl'
+    P.pickle(output_path)

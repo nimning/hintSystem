@@ -142,22 +142,6 @@ function parse_unassigned(data) {
 	add_rows_unassigned(stud_data);
     }
     unassigned.fnPageChange(page);
-    if (typeof(already_created_dropdown) === 'undefined') {
-	/* Add a select menu for each TH element in the table footer */
-	$("#assignment_filter").each( function () {
-	    this.innerHTML = fnCreateSelect( unassigned.fnGetColumnData(1) );
-	    $('select', this).change( function () {
-		unassigned.fnFilter( $(this).val(), 1 );
-	    } );
-	} );
-	$("#problem_filter").each( function () {
-	    this.innerHTML = fnCreateSelect( unassigned.fnGetColumnData(2) );
-	    $('select', this).change( function () {
-		unassigned.fnFilter( $(this).val(), 2 );
-	    } );
-	} );
-	already_created_dropdown = true;
-    }
 }
 
 function parse_my(data) {
@@ -289,7 +273,7 @@ $(document).ready(function() {
 	    teacher_id = $('#teacher_id').val();
 	    send_command(sock, 'teacher_join',
 			 { 'teacher_id' : teacher_id });
-	    send_command(sock,'list_students',{});
+	    send_command(sock,'list_students',{ 'set_id': $('#current_set_id').val() });
 	};
 
 	sock.onclose = function() {
@@ -317,7 +301,7 @@ $(document).ready(function() {
 	// Set up refresh interval
 	interval_id = window.setInterval(
 	    function() {
-		send_command(sock,'list_students',{});
+		send_command(sock,'list_students',{ 'set_id': $('#current_set_id').val() });
 	    }, 5000);
 
     });
@@ -371,4 +355,31 @@ $(document).ready(function() {
         ]
     } );
 
+    $("#assignment_filter").each( function () {
+	var url = REST_SERVER + ':' + $('#rest_port').val() + 
+	    '/set_ids?course=UCSD_CSE103';
+	var assn_filter = this;
+	$.getJSON(url, function (data) {
+	    assn_filter.innerHTML = fnCreateSelect(data);
+	    $('select', assn_filter).change( function () {
+		$('#current_set_id').val($(this).val());
+		send_command(sock,'list_students',
+			     { 'set_id': $('#current_set_id').val() });
+		unassigned.fnFilter( $(this).val(), 1 );
+	    } );
+	});
+    } );
+
+    /* Add a select menu for each TH element in the table footer */
+    $("#problem_filter").each( function () {
+	var problems = []
+	for (var i=1; i<=20; i++) {
+	    problems.push(i);
+	}
+	this.innerHTML = fnCreateSelect(problems);
+	$('select', this).change( function () {
+	    unassigned.fnFilter( $(this).val(), 2 );
+	} );
+    } );
+ 
 });
