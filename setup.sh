@@ -10,7 +10,7 @@ export WWAH_PG=${pwd}/data/course_webwork_data
 echo 'Problem source files (def file pointing to .pg files) $WWAH_PG=' 
 echo $WWAH_PG
 
-export WWAH_PICKLE=${pwd}/data/PickleFiles
+export WWAH_PICKLE=${pwd}/data/PickleFilesOnGoogleDrive
 echo 'Pickle files containing processed information $WWAH_PICKLE=' 
 echo $WWAH_PICKLE
 
