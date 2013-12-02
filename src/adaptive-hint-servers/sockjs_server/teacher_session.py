@@ -97,18 +97,20 @@ class TeacherSession(object):
                     student_list.append(ss.summary)
         return student_list
 
-    def list_unassigned_students(self):
+    def list_unassigned_students(self, target_set_id):
         """List all unassigned students"""
         student_list = []
+        print target_set_id
         for hashkey in StudentSession.all_sessions.keys():
             if hashkey not in TeacherSession.student_assignment:
                 (student_id, course_id, set_id, problem_id) = hashkey
-                ss = StudentSession.get_student_session(student_id,
-                                                        course_id,
-                                                        set_id,
-                                                        problem_id)
-                if ss is not None:
-                    student_list.append(ss.summary)
+                if set_id == target_set_id:
+                    ss = StudentSession.get_student_session(student_id,
+                                                            course_id,
+                                                            set_id,
+                                                            problem_id)
+                    if ss is not None:
+                        student_list.append(ss.summary)
                     
         # filter out students who already solved the problems
         student_list = [student for student in student_list

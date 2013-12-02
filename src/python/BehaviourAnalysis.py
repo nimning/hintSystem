@@ -42,17 +42,19 @@ class BehaviourAnalysis:
                 correct=int(correct)
                 # ignore entries where the answer did not change.
                 if answer!=prev_answer:
-                    prev_answer=answer
-                    if i==0:
-                        times.append(time)
-                    else:
-                        times.append(time-prev_time)
-                    prev_time=time
 
-                    answers.append(answer)
-                    corrects.append(correct)
-                    if correct==1: 
-                        break
+                    if i==0:
+                        timedelta = time
+                    else:
+                        timedelta = time - prev_time
+                    if timedelta > 2: #Ignore changes within 2 seconds
+                        times.append(timedelta)
+                        answers.append(answer)
+                        corrects.append(correct)
+                        if correct==1: 
+                            break
+                    prev_answer=answer
+                    prev_time=time
             l=len(times)
             if l>0:
                 times = np.array(times)
@@ -106,14 +108,20 @@ class BehaviourAnalysis:
         
 if __name__=='__main__':
     pickle_dir=os.environ['WWAH_PICKLE']
-    B=BehaviourAnalysis(pickle_dir+'/ProcessedLogs.pkl')
+    if len(sys.argv) > 1:
+        input_path = os.path.join(pickle_dir,sys.argv[1])
+    else:
+        input_path = pickle_dir+'/ProcessedLogs.pkl'
+    B=BehaviourAnalysis(input_path)
 
     print "-------------- Processing all ---------------------"
 
     B.analyze_all()
-    import os
-    pickle_dir=os.environ['WWAH_PICKLE']
-    B.pickle(pickle_dir+'/BehavioralStatistics.pkl')
+    if len(sys.argv) > 2:
+        output_path = os.path.join(pickle_dir,sys.argv[2])
+    else:
+        output_path = pickle_dir+'/BehavioralStatistics.pkl'
+    B.pickle(output_path)
 
     # OLD CODE
 
