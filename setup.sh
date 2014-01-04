@@ -28,7 +28,7 @@ echo 'Files edited by instructor to add hints $WWAH_HINTS='
 echo $WWAH_HINTS
 
 echo '------------------------------------'
-export WWAH_SRC=${pwd}/src/python
+export WWAH_SRC=${pwd}/src
 echo 'mature python code: $WWAH_SRC=' 
 echo $WWAH_SRC
 

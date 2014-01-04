@@ -48,12 +48,12 @@ for line in lines:
 #    unix_timestamp = int(timestamp.strftime('%s'))
     problem_id = int(problem_id)
     # Remove non-digits, then convert to int
+    pg_id_index = int(  ''.join( (c for c in pg_id if c.isdigit()))   )
     if 'hint' in pg_id.lower():
-        continue
-    pg_id = int(  ''.join( (c for c in pg_id if c.isdigit()))   )
+        pg_id_index += 1000 
     rows['Assignment'].append(set_id)
     rows['problem_no'].append(problem_id)
-    rows['part_no'].append(pg_id)
+    rows['part_no'].append(pg_id_index)
     rows['user'].append(user_id)
     rows['correct'].append(correct == '1')
     rows['answer'].append(answer_string)

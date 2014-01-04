@@ -36,10 +36,12 @@ def problem_attempt_to_part_attempt(line):
     return part_attempt_lines
 
 if __name__ == '__main__':
+    if len(sys.argv) > 1:
+        course = sys.argv[1]
     if not 'MYSQL_DUMP_DIR' in os.environ:
         print 'Run source setup_mysql_dump.sh in the src root dir'
-    past_answers_path = os.path.join(os.environ['MYSQL_DUMP_DIR'],'UCSD_CSE103_past_answer.txt')
-    part_attempt_output_path = os.path.join(os.environ['MYSQL_DUMP_DIR'],'UCSD_CSE103_part_attempt.txt')
+    past_answers_path = os.path.join(os.environ['MYSQL_DUMP_DIR'],'%s_past_answer.txt'%course)
+    part_attempt_output_path = os.path.join(os.environ['MYSQL_DUMP_DIR'],'%s_part_attempt.txt'%course)
     with open(past_answers_path,'r') as in_f:
         with open(part_attempt_output_path,'w') as out_f:
             for line in in_f:
