@@ -15,7 +15,7 @@ export WWAH_PG=${pwd}/opt/webwork/courses/UCSD_CSE103/templates
 echo 'Problem source files (def file pointing to .pg files) $WWAH_PG=' 
 echo $WWAH_PG
 
-export WWAH_PICKLE=${pwd}/data/PickleFiles
+export WWAH_PICKLE=${pwd}/data/PickleFilesOnGoogleDrive
 echo 'Pickle files containing processed information $WWAH_PICKLE=' 
 echo $WWAH_PICKLE
 
