@@ -25,3 +25,13 @@ if [ -a "$realtime_log_txt" ]; then
     ./src/python/ProcessRealtimeMysqlDump.py $realtime_log_txt $realtime_log_pkl
     ./src/python/BehaviourAnalysis.py $realtime_log_pkl $realtime_behavior_pkl
 fi
+#./src/databases/backup_just_attempts.sh
+# Process Past Answer Logs
+./src/python/PastAnswerToRealtimeDump.py
+./src/python/ProcessRealtimeMysqlDump.py UCSD_CSE103_part_attempt.txt \
+    ProcessedLogsPastAnswer.pkl
+./src/python/BehaviourAnalysis.py ProcessedLogsPastAnswer.pkl BehavioralStatisticsPastAnswer.pkl
+# Process Realtime Past Answer logs
+#./src/python/ProcessRealtimeMysqlDump.py UCSD_CSE103_realtime_past_answer.txt \
+#    ProcessedLogsRealtime.pkl
+#./src/python/BehaviourAnalysis.py ProcessedLogsRealtime.pkl BehavioralStatisticsRealtime.pkl
