@@ -90,7 +90,7 @@ def preprocessor_ngram(expr):
 def preprocessor_parsing(expr):
     try:
         tree = parse_webwork(expr)
-        return list(tree_paths(tree,n,type_leaf_mapper)) #list(tree_paths(tree,n,trivial_leaf_mapper)) + \
+        return list(tree_paths(tree,n,type_leaf_mapper))+ list(tree_paths(tree,n,trivial_leaf_mapper))
             
     except WebworkParseException:
         return []
