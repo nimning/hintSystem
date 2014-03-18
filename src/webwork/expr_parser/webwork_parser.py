@@ -9,6 +9,32 @@ from webwork.preprocess_webwork_logs import WebWork
 # A simple calculator with variables -- all in one file.
 # -----------------------------------------------------------------------------
 
+associative_ops = ['*','+']
+
+def reduce_associative(tree):
+    ''' Given a tree of nested operations, group nested associative operations into a single tuple.  
+        For example:
+
+        >> reduce_associative(  ('*',('*',1,2),3)  )
+        ('*', 1, 2, 3)
+        '''
+    if type(tree) == tuple:
+        #reduce subtrees
+        subtrees = list(map(reduce_associative, tree[1:]))
+        op = tree[0]
+        if op in associative_ops:
+            subtrees2 = [op]
+            for t in subtrees:
+                if (type(t) == tuple) and (t[0] == op):
+                    subtrees2 += list(t[1:])
+                else:
+                    subtrees2.append(t)
+            return tuple(subtrees2)
+        else:
+            return tuple([op]+subtrees)
+    else:
+        return tree
+
 class WebworkParseException(Exception):
     pass
 
@@ -31,7 +57,7 @@ def handle_comma_separated_number(expr):
 def parse_webwork(expr):
     parsed = handle_comma_separated_number(expr)
     if not parsed is None:
-        return parsed        
+        return reduce_associative(parsed)
 
     tokens = (
         'VARIABLE', 'NUMBER', 'PLUS','MINUS','TIMES','DIVIDE', 'LPAREN','RPAREN','FACTORIAL', 'LSET', 'RSET','COMMA','EXP', 'LBRACKET', 'RBRACKET'
@@ -162,7 +188,7 @@ def parse_webwork(expr):
     yacc.yacc()
     yacc.parse(expr)
 
-    return parse_webwork.expr_tree
+    return reduce_associative(parse_webwork.expr_tree)
 
 if __name__ == '__main__':
     webwork = pickle.load(open(os.path.join(sys.argv[1],'pickled_data'),'rb'))
