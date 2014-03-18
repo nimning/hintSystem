@@ -1,6 +1,7 @@
 import sys,os
 import pickle
-from webwork.preprocess_webwork_logs import WebWork
+import ply.lex as lex
+import ply.yacc as yacc
 
 
 # -----------------------------------------------------------------------------
@@ -60,10 +61,11 @@ def parse_webwork(expr):
         return reduce_associative(parsed)
 
     tokens = (
-        'VARIABLE', 'NUMBER', 'PLUS','MINUS','TIMES','DIVIDE', 'LPAREN','RPAREN','FACTORIAL', 'LSET', 'RSET','COMMA','EXP', 'LBRACKET', 'RBRACKET'
+        'CHOOSE', 'VARIABLE', 'NUMBER', 'PLUS','MINUS','TIMES','DIVIDE', 'LPAREN','RPAREN','FACTORIAL', 'LSET', 'RSET','COMMA','EXP', 'LBRACKET', 'RBRACKET'
         )
     
     # Tokens
+    t_CHOOSE    = r'C'
     t_PLUS      = r'\+'
     t_MINUS     = r'-'
     t_FACTORIAL = r'!'
@@ -77,7 +79,7 @@ def parse_webwork(expr):
     t_LSET      = r'\{'
     t_RSET      = r'\}'
     t_COMMA     = r'\,'
-    t_VARIABLE  = r'[A-Za-z]+[0-9]*'
+    t_VARIABLE  = r'[A-BD-Za-z]+[0-9]*'
     
     def t_NUMBER(t):
         r'\d*\.?\d+'
@@ -102,7 +104,6 @@ def parse_webwork(expr):
             "Illegal character '%s'" % t.value[0])
         
     # Build the lexer
-    import ply.lex as lex
     lex.lex()
     
     parse_webwork.expr_tree = None
@@ -115,6 +116,7 @@ def parse_webwork(expr):
         ('left','EXP'),
         ('left','FACTORIAL'),
         ('right','UMINUS'),
+        ('right','CHOOSE')
         )
     
     def p_statement_expr_list(t):
@@ -145,6 +147,11 @@ def parse_webwork(expr):
         'expression : expression FACTORIAL %prec FACTORIAL'
         t[0] = ('!',t[1])
     
+    def p_expression_choose(t):
+        'expression : CHOOSE LPAREN list RPAREN %prec CHOOSE'
+        lst = t[3]
+        t[0] = tuple(['C']+lst)
+    
     def p_expression_group(t):
         '''expression : LPAREN expression RPAREN
                       | LBRACKET expression RBRACKET '''
@@ -171,7 +178,7 @@ def parse_webwork(expr):
             t[0] = [t[1],]
         elif len(t) == 4 or len(t) == 3:               #eg ...1, or ...1
             t[0] = t[1] + [t[2],]
-
+    
     def p_expression_number_variable(t):
         '''expression : NUMBER
                       | VARIABLE '''
@@ -184,7 +191,6 @@ def parse_webwork(expr):
             raise WebworkParseException(
                 "Syntax error at '%s'" % t.value)
     
-    import ply.yacc as yacc
     yacc.yacc()
     yacc.parse(expr)
 
