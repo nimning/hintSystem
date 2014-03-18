@@ -56,7 +56,7 @@ def ngrams(s, n):
 
 def trivial_leaf_mapper(leaf):
     if type(leaf) == list:
-        return list
+        return tuple([',']+leaf)
     else:
         return leaf
 
@@ -91,7 +91,6 @@ def preprocessor_parsing(expr):
     try:
         tree = parse_webwork(expr)
         return list(tree_paths(tree,n,type_leaf_mapper))+ list(tree_paths(tree,n,trivial_leaf_mapper))
-            
     except WebworkParseException:
         return []
 
