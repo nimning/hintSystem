@@ -106,78 +106,95 @@ expr_tree = None
 # Parsing rules
 precedence = (
     ('left','LIST'),
-    ('left','PLUS','MINUS'),
-    ('left','TIMES','DIVIDE'),
+    ('left','PLUS'),
+    ('nonassoc','UMINUS'),
+    ('left','TIMES'),
+    ('left','IMPL_TIMES'),
     ('left','EXP'),
     ('left','FACTORIAL'),
-    ('right','UMINUS'),
     ('right','CHOOSE')
     )
 
 def p_statement_expr_list(t):
     '''statement : expression
-                 | list '''
+                 | factor
+                 | list
+                 '''
     global expr_tree
     expr_tree = t[1]
 
 def p_expression_ops(t):
-    '''expression : expression PLUS expression
-                  | expression MINUS expression
-                  | expression TIMES expression
-                  | expression DIVIDE expression
-                  | expression EXP expression
-                  | expression expression '''
-    if len(t) == 3: #last case, eg (1)(2)
-        t[0] = ('*',t[1],t[2])
-    elif t[2] == '+'  : t[0] = ('+',t[1],t[3])
-    elif t[2] == '-': t[0] = ('-',t[1],t[3])
-    elif t[2] == '*': t[0] = ('*',t[1],t[3])
-    elif t[2] == '/': t[0] = ('/',t[1],t[3])
+    '''expression : expression PLUS factor  %prec PLUS
+                  | factor PLUS factor      %prec PLUS
+                  | expression MINUS factor %prec PLUS
+                  | factor MINUS factor     %prec PLUS
+                  '''
+    if t[2] == '+'  : t[0] = ('+',t[1],t[3])
+    elif t[2] == '-': t[0] = ('+',t[1],('-',t[3]))
+
+def p_factor_ops(t):
+    '''factor : factor TIMES factor    %prec TIMES
+                | factor DIVIDE factor %prec TIMES
+                | factor EXP factor    %prec EXP
+                  '''
+    if t[2] == '*': t[0] = ('*',t[1],t[3])
+    elif t[2] == '/': t[0] = ('*',t[1],('/',t[3]))
     elif t[2] == '^' or t[2] == '**': t[0] = ('^',t[1],t[3])
 
+def p_expression_implicit_times(t):
+    '''factor : factor factor %prec IMPL_TIMES'''
+    t[0] = ('*',t[1],t[2])
+
 def p_expression_uminus(t):
-    'expression : MINUS expression %prec UMINUS'
-    t[0] = ('-',0,t[2])
+    'factor : MINUS factor %prec UMINUS'
+    t[0] = ('-',t[2])
 
 def p_expression_factorial(t):
-    'expression : expression FACTORIAL %prec FACTORIAL'
+    'factor : factor FACTORIAL %prec FACTORIAL'
     t[0] = ('!',t[1])
 
 def p_expression_choose(t):
-    'expression : CHOOSE LPAREN list RPAREN %prec CHOOSE'
+    'factor : CHOOSE LPAREN list RPAREN %prec CHOOSE'
     lst = t[3]
     t[0] = tuple(['C']+lst)
 
 def p_expression_group(t):
-    '''expression : LPAREN expression RPAREN
-                  | LBRACKET expression RBRACKET '''
+    '''factor : LPAREN expression RPAREN
+              | LBRACKET expression RBRACKET 
+              | LPAREN factor RPAREN
+              | LBRACKET factor RBRACKET 
+              '''
     t[0] = t[2]
 
 def p_expression_set(t):
-    '''expression : LSET list RSET
-                  | LSET expression RSET
-                  | LSET RSET '''
+    '''factor : LSET list RSET
+                | LSET expression RSET
+                | LSET RSET '''
     if len(t) == 4:
         t[0] = ('{}',t[2])
     else:
         t[0] = ('{}',[])
 
 def p_expression_tuple(t):
-    'expression : LPAREN list RPAREN'
+    'factor : LPAREN list RPAREN'
     t[0] = ('()',t[2])
+
 
 def p_nonempty_list(t):
     ''' list  : expression COMMA
               | list expression COMMA
-              | list expression %prec LIST '''
+              | list expression 
+              | factor COMMA
+              | list factor COMMA
+              | list factor %prec LIST '''
     if len(t) == 3 and t[2] == ',':                #eg 1,
         t[0] = [t[1],]
     elif len(t) == 4 or len(t) == 3:               #eg ...1, or ...1
         t[0] = t[1] + [t[2],]
 
 def p_expression_number_variable(t):
-    '''expression : NUMBER
-                  | VARIABLE '''
+    '''factor    : NUMBER
+                 | VARIABLE '''
     t[0] = t[1]
 
 def p_error(t):

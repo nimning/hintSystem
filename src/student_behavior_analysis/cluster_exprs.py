@@ -63,20 +63,23 @@ def trivial_leaf_mapper(leaf):
 def type_leaf_mapper(leaf):
     return type(leaf)
 
-def tree_paths(tree,n,leaf_mapper):
-    paths = set([])
+def tree_paths(tree, leaf_mapper):
+    A = set([])
+    B = set([])
     if type(tree) != tuple: #leaf node
-        paths.add( (leaf_mapper(tree), ) ) #Just the node forms a path    
+        A.add( (leaf_mapper(tree), ) ) #Just the node forms a path    
     else:
-        child_paths = set([])
-        for child_tree in tree[1:]:
-            child_paths |= tree_paths(child_tree,n,leaf_mapper)
-        for child_path in child_paths:
-            if len(child_path) < n:
-                paths.add( (tree[0],) + child_path)
-        paths.add( (tree[0],) )
-        paths |= child_paths
-    return paths
+        op = tree[0]
+        subtrees = tree[1:]
+        for sub in subtrees:
+            (a,b) = tree_paths(sub, leaf_mapper)
+            B |= b
+            for path in a:
+                if len(path) < n:
+                    A.add( (op,) + path)
+        A.add((op,))
+    B |= A
+    return (A,B)
 
 def clean_expr(expr):
     for c in ['(',')',' ']: #Remove theses characters
@@ -90,10 +93,9 @@ def preprocessor_ngram(expr):
 def preprocessor_parsing(expr):
     try:
         tree = parse_webwork(expr)
-        return list(tree_paths(tree,n,type_leaf_mapper))+ list(tree_paths(tree,n,trivial_leaf_mapper))
+        return list(tree_paths(tree,type_leaf_mapper)[1])+ list(tree_paths(tree,trivial_leaf_mapper)[1])
     except WebworkParseException:
         return []
-
 
 def preprocess_expr(expr, vocab_hash):
     '''Map a mathematical expression to a bag-of-words vector of ngram counts
@@ -114,7 +116,7 @@ def preprocess_exprs(exprs):
     X = np.zeros(shape=(len(exprs),len(vocab_list)))
     for i,expr in enumerate(exprs):
         X[i,:] = preprocess_expr(expr,vocab_hash)
-    return X
+    return vocab_list, vocab_hash, X
 
 def kmeans_cluster_var(X, model):
     ''' Same as model.score '''
