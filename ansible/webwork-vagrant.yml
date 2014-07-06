@@ -1,6 +1,6 @@
 ---
-- hosts: webwork-test
-  user: ibrahim
+- hosts: webwork-dev
+  user: vagrant
   vars:
     webwork_version: "WeBWorK-2.7"
     pg_version: "PG-2.7"
