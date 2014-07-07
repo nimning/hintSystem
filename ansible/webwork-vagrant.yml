@@ -2,7 +2,7 @@
 - hosts: webwork-dev
   user: vagrant
   vars:
-    webwork_version: "WeBWorK-2.7"
+    webwork_version: "WeBWorK-2.7-adaptive-hints"
     pg_version: "PG-2.7"
   tasks:
     - name: Install Webwork dependencies
@@ -49,7 +49,18 @@
         - preview-latex-style
         - texlive
         - unzip
+    - name: Install other dependencies
+      apt:
+        name: "{{ item }}"
+        state: "installed"
+      with_items:
         - cpanminus
+        - python-mysqldb
+        - nginx
+        - python-pip
+        - build-essential
+        - subversion
+        - python-dev
     - name: Install perl dependencies from CPAN
       cpanm:
         name: "{{ item }}"
@@ -60,7 +71,7 @@
         - Pod::WSDL
     - name: Check out webwork from github
       git:
-        repo: "https://github.com/openwebwork/webwork2"
+        repo: "https://github.com/ibrahima/webwork2"
         version: "{{ webwork_version }}"
         dest: /opt/webwork/webwork2
     - name: Check out pg from github
@@ -77,17 +88,16 @@
         name: wwdata
         state: present
     - name: Create courses directory
-      file:
-        path: /opt/webwork/courses
-        state: directory
-        owner: vagrant
-        group: wwdata
+      command: "cp -r courses.dist /opt/webwork/courses"
+      args:
+        chdir: /opt/webwork/webwork2
+        creates: /opt/webwork/courses
     - name: Apache2 configuration
       command: a2enmod apreq
-    - name: Restart Apache2
-      service:
-        name: apache2
-        state: restarted
+      args:
+        creates: /etc/apache2/mods-enabled/apreq.load
+      notify:
+        - restart apache
     - name: Add vagrant user to wwdata group
       user:
         name: vagrant
@@ -135,7 +145,33 @@
         src: /opt/webwork/webwork2/conf/webwork.apache2-config
         state: link
         path: /etc/apache2/conf.d/webwork.apache2-config
-    - name: Reload Apache2
+      notify:
+        - restart apache
+    - name: Create Webwork MySQL database
+      mysql_db:
+        name: webwork
+        state: present
+    - name: Create MySQL user
+      mysql_user:
+        name: webworkWrite
+        state: present
+        priv: webwork.*:SELECT,INSERT,UPDATE,DELETE,CREATE,ALTER,DROP,LOCK TABLES
+        password: "webwork"
+    - name: Install dependencies for python servers
+      pip:
+        name: "{{ item }}"
+      with_items:
+        - tornado
+        - pandas
+        - tzlocal
+        - sockjs-tornado
+    # - name: Start SockJS server
+    #   command: python /vagrant/src/adaptive-hints-servers/sockjs_server/sockjs_server.py
+    # - name: Start ReST server
+    #   command: python /vagrant/src/adaptive-hints-servers/rest_server/rest_server.py
+
+  handlers:
+    - name: restart apache
       service:
         name: apache2
-        state: reloaded
+        state: restarted
