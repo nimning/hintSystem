@@ -58,8 +58,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # information on available options.
 
   config.vm.provision :ansible do |a|
-    a.playbook = "webwork-vagrant.yml"
-    a.inventory_path = "inventory"
+    a.playbook = "ansible/webwork-vagrant.yml"
+    a.inventory_path = "ansible/inventory"
     a.verbose = "v"
     #a.verbose = "vvvv"
     a.sudo = true
