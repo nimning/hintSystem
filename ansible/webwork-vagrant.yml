@@ -72,5 +72,56 @@
       git:
         repo: "https://github.com/openwebwork/webwork-open-problem-library"
         dest: /opt/webwork/libraries/webwork-open-problem-library
+    - name: Create wwdata group for Webwork files
+      group:
+        name: wwdata
+        state: present
+    - name: Create courses directory
+      file:
+        path: /opt/webwork/courses
+        state: directory
+        owner: vagrant
+        group: wwdata
     - name: Apache2 configuration
       command: a2enmod apreq
+    - name: Restart Apache2
+      service:
+        name: apache2
+        state: restarted
+    - name: Add vagrant user to wwdata group
+      user:
+        name: vagrant
+        append: yes
+        groups: wwdata
+    - name: Add www-data user to wwdata group
+      user:
+        name: www-data
+        append: yes
+        groups: wwdata
+    - name: Set ownership on Webwork files
+      file:
+        path: /opt/webwork
+        state: directory
+        recurse: yes
+        owner: vagrant
+        group: wwdata
+    - name: Set permissions on Webwork files
+      command: "chmod -R u+rwX,go+rX /opt/webwork"
+    - name: Set writable directories
+      command: "chmod -R g+w DATA ../courses htdocs/tmp logs tmp"
+      args:
+        chdir: /opt/webwork/webwork2
+    - name: Set sticky bits
+      command: "find DATA/ ../courses/ htdocs/tmp logs/ tmp/ -type d -a -exec chmod g+s {} \\;"
+      args:
+        chdir: /opt/webwork/webwork2
+    # - name: Check dependencies
+    #   command: /opt/webwork/webwork2/bin/check_modules.pl apache2
+    - name: Copy Webwork site.conf
+      copy:
+        src: conf/site.conf
+        dest: /opt/webwork/webwork2/conf/
+    - name: Copy Webwork conf files
+      copy:
+        src: conf/localOverrides.conf
+        dest: /opt/webwork/webwork2/conf/
