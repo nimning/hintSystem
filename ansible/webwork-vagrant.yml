@@ -125,3 +125,17 @@
       copy:
         src: conf/localOverrides.conf
         dest: /opt/webwork/webwork2/conf/
+    - name: Copy webwork apache configuration
+      command: "cp webwork.apache2-config.dist webwork.apache2-config"
+      args:
+        chdir: /opt/webwork/webwork2/conf
+        creates: /opt/webwork/webwork2/conf/webwork.apache2-config
+    - name: Symlink apache2 configuration
+      file:
+        src: /opt/webwork/webwork2/conf/webwork.apache2-config
+        state: link
+        path: /etc/apache2/conf.d/webwork.apache2-config
+    - name: Reload Apache2
+      service:
+        name: apache2
+        state: reloaded
