@@ -61,6 +61,7 @@
         - build-essential
         - subversion
         - python-dev
+        - curl
     - name: Install perl dependencies from CPAN
       cpanm:
         name: "{{ item }}"
@@ -165,10 +166,25 @@
         - pandas
         - tzlocal
         - sockjs-tornado
+        - requests
     # - name: Start SockJS server
     #   command: python /vagrant/src/adaptive-hints-servers/sockjs_server/sockjs_server.py
     # - name: Start ReST server
     #   command: python /vagrant/src/adaptive-hints-servers/rest_server/rest_server.py
+    - name: Make hints log directory
+      file:
+        path: /var/log/hints
+        state: directory
+    - name: Symlink teacher client
+      file:
+        src: /vagrant/src/adaptive-hint-clients/teacher_client
+        path: /var/www/teacher
+        state: link
+    - name: Symlink adaptive hints JS
+      file:
+        src: /vagrant/src/adaptive-hint-clients/webwork_js/adaptive_hints.js
+        path: /opt/webwork/webwork2/htdocs/js/
+        state: link
 
   handlers:
     - name: restart apache
