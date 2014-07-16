@@ -62,6 +62,7 @@
         - subversion
         - python-dev
         - curl
+        - ipython
     - name: Install perl dependencies from CPAN
       cpanm:
         name: "{{ item }}"
@@ -160,13 +161,7 @@
         password: "webwork"
     - name: Install dependencies for python servers
       pip:
-        name: "{{ item }}"
-      with_items:
-        - tornado
-        - pandas
-        - tzlocal
-        - sockjs-tornado
-        - requests
+        requirements: /vagrant/requirements.txt
     # - name: Start SockJS server
     #   command: python /vagrant/src/adaptive-hints-servers/sockjs_server/sockjs_server.py
     # - name: Start ReST server
