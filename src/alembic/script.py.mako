@@ -15,8 +15,12 @@ import sqlalchemy as sa
 ${imports if imports else ""}
 
 def upgrade():
+    context = op.get_context()
+    course_name = context.opts.get('course_name')
     ${upgrades if upgrades else "pass"}
 
 
 def downgrade():
+    context = op.get_context()
+    course_name = context.opts.get('course_name')
     ${downgrades if downgrades else "pass"}
