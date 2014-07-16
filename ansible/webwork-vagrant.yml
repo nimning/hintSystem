@@ -180,6 +180,21 @@
         src: /vagrant/src/adaptive-hint-clients/webwork_js/adaptive_hints.js
         path: /opt/webwork/webwork2/htdocs/js/
         state: link
+    - name: Download PhantomJS
+      command: "wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.7-linux-x86_64.tar.bz2"
+      args:
+        chdir: /opt
+        creates: /opt/phantomjs-1.9.7-linux-x86_64.tar.bz2
+    - name: Unpack PhantomJS
+      command: "tar xf /opt/phantomjs-1.9.7-linux-x86_64.tar.bz2"
+      args:
+        chdir: /opt
+        creates: /opt/phantomjs-1.9.7-linux-x86_64/
+    - name: Symlink PhantomJS
+      file:
+        src: /opt/phantomjs-1.9.7-linux-x86_64/bin/phantomjs
+        path: /usr/local/bin/phantomjs
+        state: link
 
   handlers:
     - name: restart apache

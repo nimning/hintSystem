@@ -4,3 +4,4 @@ tzlocal
 sockjs-tornado
 requests
 sqlalchemy
+selenium
