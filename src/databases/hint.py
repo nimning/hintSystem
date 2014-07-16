@@ -9,4 +9,4 @@ class Hint(TableBase):
     problem_id = Column(Integer, nullable=False)
     created = Column(DateTime, nullable=False)
     deleted = Column(Boolean)
-
+    approved = Column(Boolean, nullable=False)
