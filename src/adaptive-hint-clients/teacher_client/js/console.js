@@ -357,7 +357,7 @@ $(document).ready(function() {
 
     $("#assignment_filter").each( function () {
 	var url = REST_SERVER + ':' + $('#rest_port').val() + 
-	    '/set_ids?course=UCSD_CSE103';
+	    '/set_ids?course=CSE103_Fall14';
 	var assn_filter = this;
 	$.getJSON(url, function (data) {
 	    assn_filter.innerHTML = fnCreateSelect(data);
