@@ -3,7 +3,7 @@ import tornado.web
 import logging
 import argparse
 
-from render import Render 
+from render import Render
 from checkanswer import CheckAnswer
 from webwork import (ProblemSeed, ProblemPGPath, ProblemPGFile,
                      RealtimeUserProblemAnswers, RealtimeProblemAnswer,
@@ -11,6 +11,8 @@ from webwork import (ProblemSeed, ProblemPGPath, ProblemPGFile,
 from hints_api import (UserProblemHints, Hint, AssignedHint,
                        ProblemHints, HintFeedback, RunHintFilters,
                        HintFilter, AssignedHintFilter)
+
+from auth import (Login)
 
 # Server configuration
 BIND_IP = '0.0.0.0'
@@ -34,6 +36,7 @@ application = tornado.web.Application([
     (r"/hint_filter", HintFilter),
     (r"/assigned_hint_filter", AssignedHintFilter),
     (r"/set_ids", SetIds),
+    (r"/login", Login),
     ])
 
 if __name__ == "__main__":
