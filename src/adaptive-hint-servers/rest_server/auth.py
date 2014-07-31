@@ -29,6 +29,8 @@ class Login(tornado.web.RequestHandler):
     def set_default_headers(self):
         # Allows X-site requests
         self.set_header("Access-Control-Allow-Origin", "*")
+        self.set_header("Access-Control-Allow-Methods", "POST, OPTIONS")
+        self.set_header("Access-Control-Allow-Headers", "X-Requested-With, content-type")
 
     def _add_header_footer(self, rows):
         ''' Add header footer and convert timestamps '''
@@ -37,9 +39,10 @@ class Login(tornado.web.RequestHandler):
             row['timestamp'] = utc_to_system_timestamp(
                 row['timestamp'])
         return rows
-    
+    def options(self):
+        return
     def post(self):
-        ''' For authenticating users against a Webwork course.  
+        ''' For authenticating users against a Webwork course.
 
             Sample arguments:
             course="CompoundProblems",
@@ -53,9 +56,10 @@ class Login(tornado.web.RequestHandler):
                 ...
             ]
         '''
-        course = self.get_argument("course")
-        user_id = self.get_argument("user_id")
-        password = self.get_argument("password")
+        data = tornado.escape.json_decode(self.request.body)
+        course = data.get("course")
+        user_id = data.get("username")
+        password = data.get("password")
         query = 'SELECT * from {0}_password WHERE user_id=%s'.format(course)
         result = conn.query(query, user_id)[0]
         salt = result['password']
@@ -65,7 +69,7 @@ class Login(tornado.web.RequestHandler):
                     }
             jwt_string = jwt.encode(userdata, jwt_key)
             response = {"message": "Successfully logged in",
-                        "JWT": jwt_string
+                        "token": jwt_string
                     }
         else:
             response = {"message": "Incorrect username or password"}
