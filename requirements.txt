@@ -4,4 +4,7 @@ tzlocal
 sockjs-tornado
 requests
 sqlalchemy
+alembic
 selenium
+PyJWT
+PyCrypto

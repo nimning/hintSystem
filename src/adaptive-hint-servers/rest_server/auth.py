@@ -11,7 +11,7 @@ from process_query import ProcessQuery, conn
 from hint_filters.AllFilters import hint_filters
 from operator import itemgetter
 import pandas as pd
-from webwork_config import mysql_username, mysql_password
+from webwork_config import mysql_username, mysql_password, jwt_key
 from tornado_database import Connection
 from crypt import crypt
 import jwt
@@ -59,11 +59,17 @@ class Login(tornado.web.RequestHandler):
         query = 'SELECT * from {0}_password WHERE user_id=%s'.format(course)
         result = conn.query(query, user_id)[0]
         salt = result['password']
-        if crypt(password, salt) == salt:
-            response = {"success": True}
+        if crypt(password, salt) == salt: # Password is correct
+            # TODO: Send along access levels too
+            userdata = {"user_id": user_id,
+                    }
+            jwt_string = jwt.encode(userdata, jwt_key)
+            response = {"message": "Successfully logged in",
+                        "JWT": jwt_string
+                    }
         else:
-            response = {"success": False}
-            self.send_error(401)
+            response = {"message": "Incorrect username or password"}
+            self.set_status(401)
         self.write(json.dumps(response))
         self.flush()
         return
