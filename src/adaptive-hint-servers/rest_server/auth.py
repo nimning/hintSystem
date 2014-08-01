@@ -32,13 +32,6 @@ class Login(tornado.web.RequestHandler):
         self.set_header("Access-Control-Allow-Methods", "POST, OPTIONS")
         self.set_header("Access-Control-Allow-Headers", "X-Requested-With, content-type")
 
-    def _add_header_footer(self, rows):
-        ''' Add header footer and convert timestamps '''
-        rows = self.add_header_footer(rows)
-        for row in rows:
-            row['timestamp'] = utc_to_system_timestamp(
-                row['timestamp'])
-        return rows
     def options(self):
         return
     def post(self):
