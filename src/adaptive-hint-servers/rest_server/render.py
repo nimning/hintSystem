@@ -5,18 +5,25 @@ import pg_wrapper
 import os
 import tempfile
 import base64
+import json
+from json_request_handler import JSONRequestHandler
 
 def task_render(pg_file, seed, callback=None):
     callback(pg_wrapper.render_pg(pg_file, int(seed)))
  
-class Render(tornado.web.RequestHandler):
+class Render(JSONRequestHandler, tornado.web.RequestHandler):
     """Interface with Webwork/PG for rendering a PG
     """
 
     def set_default_headers(self):
         # Allows X-site requests
         self.set_header("Access-Control-Allow-Origin", "*")
+        self.set_header("Access-Control-Allow-Methods", "POST, OPTIONS")
+        self.set_header("Access-Control-Allow-Headers", "X-Requested-With, content-type, Authorization")
         
+    def options(self):
+        return
+
     @tornado.web.asynchronous
     @tornado.gen.coroutine
     def post(self):

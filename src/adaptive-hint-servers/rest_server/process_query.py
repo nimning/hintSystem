@@ -5,7 +5,7 @@ from tornado.template import Template
 from tornado_database import Connection
 from tornado.web import RequestHandler
 from get_header_footer import get_header, get_footer
-
+from json_request_handler import JSONRequestHandler
 
 from webwork_config import mysql_username, mysql_password
 
@@ -15,7 +15,7 @@ conn = Connection('localhost',
                   user=mysql_username,
                   password=mysql_password)
 
-class ProcessQuery(tornado.web.RequestHandler):
+class ProcessQuery(JSONRequestHandler, tornado.web.RequestHandler):
     def process_query(self,
                       query_template,
                       write_response=True,
