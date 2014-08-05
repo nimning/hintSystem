@@ -26,15 +26,10 @@ App.config(
                  templateUrl: 'partials/login.html',
                  controller: 'LoginCtrl'
              }).
-             when('/analyze_problem', {
-                 templateUrl: 'partials/analyze_problem.html',
-                 controller: 'AnalyzeProblemCtrl'
-             }).
              when('/:course/console', {
                  templateUrl: 'partials/console.html',
                  controller: 'TAConsoleCtrl'
              }).
-
              otherwise({
                  redirectTo: '/'
              });
