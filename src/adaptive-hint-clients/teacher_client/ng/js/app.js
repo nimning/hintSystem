@@ -18,6 +18,10 @@ App.config(
                  templateUrl: 'partials/set.html',
                  controller: 'SetCtrl'
              }).
+             when('/:course/sets/:set_id/problems/:problem_id', {
+                 templateUrl: 'partials/problem.html',
+                 controller: 'ProblemCtrl'
+             }).
              when('/:course/login', {
                  templateUrl: 'partials/login.html',
                  controller: 'LoginCtrl'
