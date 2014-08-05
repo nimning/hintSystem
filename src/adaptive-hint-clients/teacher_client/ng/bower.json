@@ -22,6 +22,10 @@
     "angular-resource": "~1.2.21",
     "angular-route": "~1.2.21",
     "angular-sanitize": "~1.2.21",
+    "datatables": "~1.10.2",
+    "angular-datatables": "~0.0.3"
+  },
+  "resolutions": {
     "datatables": "~1.10.2"
   }
 }

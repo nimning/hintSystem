@@ -1,6 +1,5 @@
-// Code goes here
-
-var App = angular.module('ta-console', ['ngRoute', 'ngSanitize']);
+console.log("App!");
+var App = angular.module('ta-console', ['ngRoute', 'ngSanitize', 'datatables']);
 
 App.config(
     ['$routeProvider', '$httpProvider',
@@ -11,6 +10,10 @@ App.config(
          $httpProvider.interceptors.push('authInterceptor');
 
          $routeProvider.
+             when('/:course', {
+                 templateUrl: 'partials/course.html',
+                 controller: 'CourseCtrl'
+             }).
              when('/:course/login', {
                  templateUrl: 'partials/login.html',
                  controller: 'LoginCtrl'

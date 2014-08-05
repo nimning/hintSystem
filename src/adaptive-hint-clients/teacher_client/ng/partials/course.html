@@ -1,0 +1,19 @@
+<h1>{{course}}</h1>
+
+<h3>Assignments</h3>
+<table class="table" id="assignments_table" datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs">
+  <thead>
+    <tr>
+      <th>Set ID</th>
+      <th>Open Date</th>
+      <th>Due Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="set in sets" dt-rows="">
+      <td>{{set.set_id}}</td>
+      <td><time datetime="{{set.open_date*1000|date:'yyyy-MM-ddTHH:mm:ss.sssZ'}}">{{set.open_date*1000|date : "yyyy-MM-ddTHH:mm"}}</time></td>
+      <td><time datetime="{{set.due_date*1000|date:'yyyy-MM-ddTHH:mm:ss.sssZ'}}">{{set.due_date*1000|date : "yyyy-MM-ddTHH:mm"}}</time></td>
+    </tr>
+  </tbody>
+</table>

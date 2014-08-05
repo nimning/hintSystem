@@ -2,9 +2,9 @@ var App = angular.module('ta-console');
 
 App.factory('WebworkService', function($http, $window, $rootScope, $location) {
     return {
-        setIds: function(course, fn) {
+        sets: function(course, fn) {
             $http
-                .get('http://192.168.33.10:4351/set_ids',
+                .get('http://192.168.33.10:4351/sets',
                      {params: {course: course}})
                 .success(function (data, status, headers, config) {
                     fn(data);

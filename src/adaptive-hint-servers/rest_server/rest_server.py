@@ -7,7 +7,7 @@ from render import Render
 from checkanswer import CheckAnswer
 from webwork import (ProblemSeed, ProblemPGPath, ProblemPGFile,
                      RealtimeUserProblemAnswers, RealtimeProblemAnswer,
-                     SetIds)
+                     SetIds, Sets, ExportProblemData)
 from hints_api import (UserProblemHints, Hint, AssignedHint,
                        ProblemHints, HintFeedback, RunHintFilters,
                        HintFilter, AssignedHintFilter)
@@ -36,8 +36,10 @@ application = tornado.web.Application([
     (r"/hint_filter", HintFilter),
     (r"/assigned_hint_filter", AssignedHintFilter),
     (r"/set_ids", SetIds),
+    (r"/sets", Sets),
     (r"/login", Login),
-    ])
+    (r"/export_problem_data", ExportProblemData),
+    ], gzip=True)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

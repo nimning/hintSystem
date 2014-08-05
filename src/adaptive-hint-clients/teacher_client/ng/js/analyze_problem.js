@@ -1,6 +1,6 @@
 var App = angular.module('ta-console');
 
-App.controller('AnalyzeProblemCtrl', function($scope, $location, $window, $routeParams, $http, $sce, PGService){
+App.controller('AnalyzeProblemCtrl', function($scope, $location, $window, $routeParams, $http, $sce, WebworkService){
     $scope.problem_data = {};
     $scope.attempts = {};
     $scope.problem_data.pg_file = "PG Text here";
