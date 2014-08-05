@@ -1,10 +1,12 @@
 import json
 import tornado.web
+import logging
+logger = logging.getLogger(__name__)
 
 class JSONRequestHandler(object):
     def prepare(self):
         '''Incorporate request JSON into arguments dictionary.'''
-        if self.request.body:
+        if self.request.body and self.request.headers['content-type'].startswith('application/json'):
             try:
                 print "Parsing JSON args"
                 json_data = json.loads(self.request.body)
@@ -17,5 +19,6 @@ class JSONRequestHandler(object):
                 self.request.arguments.update(json_data)
                 print self.request.arguments
             except ValueError, e:
+                logger.warn("Failed to parse JSON")
                 message = 'Unable to parse JSON.'
-                self.send_error(400, message=message) # Bad Request
+                # self.send_error(400, message=message) # Bad Request
