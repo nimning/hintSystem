@@ -1,7 +1,15 @@
 var App = angular.module('ta-console');
 
-App.factory('PGService', function($http, $window, $rootScope, $location) {
+App.factory('WebworkService', function($http, $window, $rootScope, $location) {
     return {
+        setIds: function(course, fn) {
+            $http
+                .get('http://192.168.33.10:4351/set_ids',
+                     {params: {course: course}})
+                .success(function (data, status, headers, config) {
+                    fn(data);
+                });
+        },
         render: function(pg_file, seed, fn) {
             $http
                 .post('http://192.168.33.10:4351/render',
