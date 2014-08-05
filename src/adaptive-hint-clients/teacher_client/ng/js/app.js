@@ -14,6 +14,10 @@ App.config(
                  templateUrl: 'partials/course.html',
                  controller: 'CourseCtrl'
              }).
+             when('/:course/sets/:set_id', {
+                 templateUrl: 'partials/set.html',
+                 controller: 'SetCtrl'
+             }).
              when('/:course/login', {
                  templateUrl: 'partials/login.html',
                  controller: 'LoginCtrl'
@@ -28,7 +32,7 @@ App.config(
              }).
 
              otherwise({
-                 redirectTo: '/login'
+                 redirectTo: '/'
              });
      }]);
 

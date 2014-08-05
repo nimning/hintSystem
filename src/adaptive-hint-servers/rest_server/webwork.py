@@ -249,6 +249,29 @@ class Sets(ProcessQuery):
         '''
         self.process_query(query_template)
 
+# GET /problems?
+class Problems(ProcessQuery):
+    def set_default_headers(self):
+        # Allows X-site requests
+        self.set_header("Access-Control-Allow-Origin", "*")
+
+    def get(self):
+        ''' 
+            List problems.  
+
+            Sample arguments:
+            course="CompoundProblems", 
+            set_id="Assignment1"
+            Response: 
+
+            '''
+        query_template = '''
+            select problem_id, source_file, value from {{course}}_problem
+            where set_id = '{{set_id}}'
+            order by problem_id desc; 
+        '''
+        self.process_query(query_template)
+
 # GET /export_problem_data?
 class ExportProblemData(JSONRequestHandler, tornado.web.RequestHandler):
     def set_default_headers(self):
