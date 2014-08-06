@@ -35,3 +35,4 @@ App.config(
              });
      }]);
 
+App.constant('APIHost', 'http://webwork.cse.ucsd.edu');

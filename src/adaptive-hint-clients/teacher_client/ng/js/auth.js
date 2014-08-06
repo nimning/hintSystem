@@ -8,11 +8,11 @@ App.controller('LoginCtrl', function($scope, $location, $window, $routeParams, A
 }
 );
 
-App.factory('AuthService', function($http, $window, $rootScope, $location) {
+App.factory('AuthService', function($http, $window, $rootScope, $location, APIHost) {
     return {
         logIn: function(course, username, password) {
             $http
-                .post('http://192.168.33.10:4351/login',
+                .post('http://'+APIHost+':4351/login',
                       {course: course, username: username, password: password})
                 .success(function (data, status, headers, config) {
                     $window.sessionStorage.token = data.token;
