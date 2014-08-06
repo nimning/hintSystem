@@ -15,15 +15,11 @@ from webwork_config import mysql_username, mysql_password, jwt_key
 from tornado_database import Connection
 from crypt import crypt
 import jwt
+from json_request_handler import JSONRequestHandler
 
 logger = logging.getLogger(__name__)
 
-conn = Connection('localhost',
-                  'webwork',
-                  user=mysql_username,
-                  password=mysql_password)
-
-class Login(tornado.web.RequestHandler):
+class Login(JSONRequestHandler, tornado.web.RequestHandler):
     """ /login """
     def post(self):
         ''' For authenticating users against a Webwork course.
