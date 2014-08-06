@@ -8,7 +8,7 @@ App.controller('LoginCtrl', function($scope, $location, $window, $routeParams, A
 }
 );
 
-App.factory('AuthService', function($http, $window, $rootScope, $location, APIHost) {
+App.factory('AuthService', function($http, $window, $rootScope, $location, APIHost, CurrentCourse) {
     return {
         logIn: function(course, username, password) {
             $http
@@ -17,10 +17,10 @@ App.factory('AuthService', function($http, $window, $rootScope, $location, APIHo
                 .success(function (data, status, headers, config) {
                     $window.sessionStorage.token = data.token;
                     var user = angular.fromJson($window.atob(data.token.split('.')[1]));
-
+                    CurrentCourse.name = course;
                     $window.sessionStorage.userId = user.user_id;
                     $rootScope.$emit("LoginController.login");
-                    $location.path('/console');
+                    $location.path('/'+course);
                 })
                 .error(function (data, status, headers, config) {
                     // Erase the token if the user fails to login

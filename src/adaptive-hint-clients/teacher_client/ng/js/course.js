@@ -1,11 +1,11 @@
 var App = angular.module('ta-console');
 
 App.controller('CourseCtrl', function($scope, $location, $window, $routeParams,
-                                      WebworkService, DTOptionsBuilder, DTColumnDefBuilder){
+                                      WebworkService, DTOptionsBuilder, DTColumnDefBuilder, CurrentCourse){
     $scope.course = $routeParams.course;
+    CurrentCourse.name = $scope.course;
     WebworkService.sets($scope.course, function(data){
         $scope.sets = data;
-        console.log(data);
     });
 
     $scope.dtOptions = DTOptionsBuilder.newOptions()

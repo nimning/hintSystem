@@ -36,3 +36,9 @@ App.config(
      }]);
 
 App.constant('APIHost', 'webwork.cse.ucsd.edu');
+
+App.value('CurrentCourse', {name: 'Course'});
+
+App.controller('ApplicationCtrl', function($routeParams, CurrentCourse){
+
+});
