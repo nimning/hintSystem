@@ -74,12 +74,12 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $routeParams,
 
         var start = performance.now();
         console.log("Start collecting students");
-        for( attempt of data.past_answers){
+        data.past_answers.forEach( function(attempt){
             if(!$scope.attempts[attempt.user_id]){
                 $scope.attempts[attempt.user_id] = [];
             }
             $scope.attempts[attempt.user_id].push(attempt);
-        }
+        });
         var time = performance.now() - start;
         console.log("Done collecting students in "+time+" ms");
 
