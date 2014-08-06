@@ -5,16 +5,10 @@ import tornado.web
 import logging
 import jwt
 
-from tornado.template import Template
-from convert_timestamp import utc_to_system_timestamp
-from process_query import ProcessQuery, conn
-from hint_filters.AllFilters import hint_filters
-from operator import itemgetter
-import pandas as pd
-from webwork_config import mysql_username, mysql_password, jwt_key
-from tornado_database import Connection
+from process_query import conn
+from webwork_config import jwt_key
 from crypt import crypt
-import jwt
+
 from json_request_handler import JSONRequestHandler
 
 logger = logging.getLogger(__name__)
