@@ -1,0 +1,12 @@
+<h3>Problem {{problem_id}}</h3>
+<div ng-bind-html="rendered_problem"></div>
+<h3>Attempts</h3>
+<div class="row">
+  <div class="col-md-3 panel panel-default" ng-repeat="(student, attempt) in attempts">{{student}}, {{attempt.length}}</div>
+</div>
+<h3>Hints</h3>
+<div class="container">
+  <div class="row" ng-repeat = "hint in problem_data.hints">
+    <p ng-bind-html="hint.rendered_html"></p>
+    by {{hint.author}}</div>
+</div>

@@ -1,0 +1,19 @@
+<h1>{{set_id}}</h1>
+
+<h3>Problems</h3>
+<table class="table" id="problems_table" datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs">
+  <thead>
+    <tr>
+      <th>Problem ID</th>
+      <th>Source File</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="problem in problems" dt-rows="">
+      <td><a ng-href="#/{{course}}/sets/{{set_id}}/problems/{{problem.problem_id}}">{{problem.problem_id}}</a></td>
+      <td>{{problem.source_file}}</td>
+      <td>{{problem.value}}</td>
+    </tr>
+  </tbody>
+</table>
