@@ -66,9 +66,7 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $routeParams,
             hint_text = pg_header + '\n' + $scope.problem_data.hints[i].pg_text +
                 '\n' + pg_footer;
             WebworkService.render(hint_text, "1234", function(idx, result){
-                // $scope.$apply(function(){
                 $scope.problem_data.hints[idx].rendered_html = result.rendered_html;
-                // });
             }.bind(this, i));
         }
 

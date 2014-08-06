@@ -254,10 +254,11 @@ class Problems(ProcessQuery):
 
             '''
         query_template = '''
-            select problem_id, source_file, value from {{course}}_problem
-            where set_id = '{{set_id}}'
-            order by problem_id desc; 
-        '''
+            SELECT p.problem_id, p.source_file, p.value, COUNT(a.answer_id) AS attempt_count
+            FROM {{course}}_problem AS p
+            LEFT JOIN {{course}}_past_answer AS a ON a.set_id = p.set_id AND a.problem_id = p.problem_id
+            WHERE p.set_id = '{{set_id}}' GROUP BY a.problem_id
+            ORDER BY problem_id desc; '''
         self.process_query(query_template)
 
 # GET /export_problem_data?

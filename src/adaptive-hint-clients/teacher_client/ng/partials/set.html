@@ -7,6 +7,7 @@
       <th>Problem ID</th>
       <th>Source File</th>
       <th>Value</th>
+      <th>Total Attempts</th>
     </tr>
   </thead>
   <tbody>
@@ -14,6 +15,7 @@
       <td><a ng-href="#/{{course}}/sets/{{set_id}}/problems/{{problem.problem_id}}">{{problem.problem_id}}</a></td>
       <td>{{problem.source_file}}</td>
       <td>{{problem.value}}</td>
+      <td>{{problem.attempt_count}}</td>
     </tr>
   </tbody>
 </table>
