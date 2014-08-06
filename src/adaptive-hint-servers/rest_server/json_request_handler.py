@@ -7,7 +7,6 @@ class JSONRequestHandler(object):
     def set_default_headers(self):
         # Allows X-site requests
         self.set_header("Access-Control-Allow-Origin", "*")
-        self.add_header("Access-Control-Allow-Methods", "OPTIONS")
         self.set_header("Access-Control-Allow-Headers", "X-Requested-With, content-type, Authorization")
     def options(self):
         return

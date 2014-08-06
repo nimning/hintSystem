@@ -206,10 +206,6 @@ class RealtimeProblemAnswer(ProcessQuery):
 
 # GET /set_ids?
 class SetIds(ProcessQuery):
-    def set_default_headers(self):
-        # Allows X-site requests
-        self.set_header("Access-Control-Allow-Origin", "*")
-
     def get(self):
         ''' 
             List set ids.  
@@ -229,10 +225,6 @@ class SetIds(ProcessQuery):
 
 # GET /sets?
 class Sets(ProcessQuery):
-    def set_default_headers(self):
-        # Allows X-site requests
-        self.set_header("Access-Control-Allow-Origin", "*")
-
     def get(self):
         ''' 
             List sets.  
@@ -251,10 +243,6 @@ class Sets(ProcessQuery):
 
 # GET /problems?
 class Problems(ProcessQuery):
-    def set_default_headers(self):
-        # Allows X-site requests
-        self.set_header("Access-Control-Allow-Origin", "*")
-
     def get(self):
         ''' 
             List problems.  
@@ -274,10 +262,6 @@ class Problems(ProcessQuery):
 
 # GET /export_problem_data?
 class ExportProblemData(JSONRequestHandler, tornado.web.RequestHandler):
-    def set_default_headers(self):
-        # Allows X-site requests
-        self.set_header("Access-Control-Allow-Origin", "*")
-
     def get(self):
         '''
         Export all data about a problem

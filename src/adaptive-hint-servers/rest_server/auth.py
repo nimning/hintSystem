@@ -25,15 +25,6 @@ conn = Connection('localhost',
 
 class Login(tornado.web.RequestHandler):
     """ /login """
-    
-    def set_default_headers(self):
-        # Allows X-site requests
-        self.set_header("Access-Control-Allow-Origin", "*")
-        self.set_header("Access-Control-Allow-Methods", "POST, OPTIONS")
-        self.set_header("Access-Control-Allow-Headers", "X-Requested-With, content-type")
-
-    def options(self):
-        return
     def post(self):
         ''' For authenticating users against a Webwork course.
 

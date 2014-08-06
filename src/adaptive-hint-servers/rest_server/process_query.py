@@ -16,6 +16,12 @@ conn = Connection('localhost',
                   password=mysql_password)
 
 class ProcessQuery(JSONRequestHandler, tornado.web.RequestHandler):
+    def set_default_headers(self):
+        # Allows X-site requests
+        self.set_header("Access-Control-Allow-Origin", "*")
+        self.set_header("Access-Control-Allow-Headers", "X-Requested-With, content-type, Authorization")
+    def options(self):
+        return
     def process_query(self,
                       query_template,
                       write_response=True,
