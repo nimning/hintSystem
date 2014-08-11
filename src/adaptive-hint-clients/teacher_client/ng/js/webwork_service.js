@@ -19,23 +19,14 @@ App.factory('WebworkService', function($http, $window, $rootScope, $location, AP
                 });
         },
         exportProblemData: function(course, set_id, problem_id, fn) {
-            $http
+            return $http
                 .get('http://'+APIHost+':4351/export_problem_data',
-                     {params: {course: course, set_id: set_id, problem_id: problem_id}})
-                .success(function (data, status, headers, config) {
-                    fn(data);
-                });
+                     {params: {course: course, set_id: set_id, problem_id: problem_id}});
         },
         render: function(pg_file, seed, fn) {
-            $http
+            return $http
                 .post('http://'+APIHost+':4351/render',
-                      {pg_file: btoa(pg_file), seed: seed})
-                .success(function (data, status, headers, config) {
-                    fn(data);
-                })
-                .error(function (data, status, headers, config) {
-
-                });
+                      {pg_file: btoa(pg_file), seed: seed});
         },
         logOut: function() {
         }

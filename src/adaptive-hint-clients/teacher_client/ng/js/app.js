@@ -1,6 +1,5 @@
-console.log("App!");
-var App = angular.module('ta-console', ['ngRoute', 'ngSanitize', 'datatables']);
-
+var App = angular.module('ta-console', ['ngRoute', 'ngSanitize', 'datatables', 'ta-console.directives']);
+var directives = angular.module('ta-console.directives', []);
 App.config(
     ['$routeProvider', '$httpProvider',
      function($routeProvider, $httpProvider) {

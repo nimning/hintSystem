@@ -1,8 +1,10 @@
 <h3>Problem {{problem_id}}</h3>
-<div ng-bind-html="rendered_problem"></div>
+<div pg-file-preview pg-file="problem_data.pg_file" seed="1234" student-data="studentData"></div>
 <h3>Attempts</h3>
 <div class="row">
-  <div class="col-md-3 panel panel-default" ng-repeat="(student, attempt) in attempts">{{student}}, {{attempt.length}}</div>
+  <div class="col-md-12 panel panel-default" ng-repeat="(student, activity) in attempts">{{student}}, {{activity.length}}
+    <div student-timeline activity="activity" student="student" student-data="studentData"></div>
+  </div>
 </div>
 <h3>Hints</h3>
 <div class="container">

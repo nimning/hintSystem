@@ -1,7 +1,21 @@
-/* Styles go here */
-
 .btn-full {
     width: 100%;
     min-height: 10em;
     margin-bottom: 0.5em;
+}
+
+.raw-pg-file {
+    color: #ffffff;
+}
+
+svg circle.border{
+    cursor: pointer;
+}
+
+input.correct{
+    background-color: #88ff88;
+}
+
+input.incorrect{
+    background-color: #FF9494;
 }

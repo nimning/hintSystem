@@ -43,12 +43,11 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $routeParams,
     $scope.set_id = $routeParams.set_id;
     $scope.problem_id = $routeParams.problem_id;
     $scope.attempts = {};
-    WebworkService.exportProblemData($scope.course, $scope.set_id, $scope.problem_id, function(data){
-        $scope.problem_data = data;
-        WebworkService.render(data.pg_file, "1234", function(result){
-            $scope.rendered_problem = $sce.trustAsHtml(result.rendered_html);
-        });
+    $scope.problem_data = {};
+    $scope.studentData = {answers: []};
 
+    WebworkService.exportProblemData($scope.course, $scope.set_id, $scope.problem_id).success(function(data){
+        $scope.problem_data = data;
         pg_text = data.pg_file;
         var re_header = /^[\s]*(TEXT\(PGML|BEGIN_PGML)[\s]+/gm;
 	    var re_footer = /^[\s]*END_PGML[\s]+/gm;
@@ -61,26 +60,24 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $routeParams,
 	        // Remove Solution section
 	        pg_footer = pg_footer.replace(/^(BEGIN_PGML_SOLUTION|BEGIN_PGML_HINT)[\s\S]*END_PGML_SOLUTION/m,'');
 	    }
-        var i=0;
-        for(i=0; i<data.hints.length; i++){
+
+        for(var i=0; i<data.hints.length; i++){
             hint_text = pg_header + '\n' + $scope.problem_data.hints[i].pg_text +
                 '\n' + pg_footer;
-            WebworkService.render(hint_text, "1234", function(idx, result){
+            WebworkService.render(hint_text, "1234").success(function(idx, result){
                 $scope.problem_data.hints[idx].rendered_html = result.rendered_html;
-            }.bind(this, i));
+            }.bind(this, i))
+            .error(function(){
+                console.log('boo');
+            });
         }
 
-        var start = performance.now();
-        console.log("Start collecting students");
         data.past_answers.forEach( function(attempt){
             if(!$scope.attempts[attempt.user_id]){
                 $scope.attempts[attempt.user_id] = [];
             }
             $scope.attempts[attempt.user_id].push(attempt);
         });
-        var time = performance.now() - start;
-        console.log("Done collecting students in "+time+" ms");
-
     });
 
 
@@ -92,4 +89,5 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $routeParams,
         DTColumnDefBuilder.newColumnDef(1),
         DTColumnDefBuilder.newColumnDef(2)
     ];
+
 });
