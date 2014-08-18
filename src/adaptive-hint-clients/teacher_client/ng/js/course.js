@@ -78,6 +78,33 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $routeParams,
             }
             $scope.attempts[attempt.user_id].push(attempt);
         });
+        var attemptsByPart = [];
+        
+        for(i=0; i<data.past_answers[0].scores.length; i++){
+            attemptsByPart[i]=0;
+        }
+        // Calculate number of attempts per part: A past answer counts
+        // for a part if it was not previously answered correctly and
+        // the answer for the part is nonempty
+        angular.forEach($scope.attempts, function(value, user_id){
+            var scores = []; // Keep track of student's score per part
+            angular.forEach(value, function(past_answer){
+                var part_answers = past_answer.answer_string.split('\t');
+                for(var j=0; j<part_answers.length; j++){
+                    if(!scores[j]){ // Student has not yet answered correctly
+                        if(part_answers[j].length>0){ // Answer is nonempty
+                            attemptsByPart[j]++;
+                        }
+                        if(past_answer.scores[j]=="1"){
+                            scores[j]=true;
+                        }
+                    }
+                }
+            });
+        });
+
+        console.log(attemptsByPart);
+
     });
 
 

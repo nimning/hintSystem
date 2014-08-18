@@ -46,7 +46,6 @@ angular.module('ta-console.directives')
                     radius=10,
                     border=2;
                 $scope.render = function(data) {
-                    // our custom d3 code
                     // svg.selectAll('*').remove();
 
                     // If we don't pass any data, return out of the element
