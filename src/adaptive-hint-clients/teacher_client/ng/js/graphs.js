@@ -54,10 +54,10 @@ angular.module('ta-console.directives')
                     // setup variables
                     var width = d3.select(element[0]).node().offsetWidth - margin,
                         height = 100,
-                        // Use the category20() scale function for multicolor support
-                        color = d3.scale.category20(),
                         spacing = (width-(radius+border)*2)/(data.length-1);
-
+                    var color = d3.scale.linear()
+                            .domain([0, 0.5, 1])
+                            .range(["red", "yellow", "green"]);
                     svg.attr('height', height);
                     svg.selectAll('rect.timeline')
                         .data([width]).enter()
@@ -81,7 +81,7 @@ angular.module('ta-console.directives')
                         .attr('r', radius)
                         .attr('cy', Math.round(height/2))
                         .attr('cx', border+radius)
-                        .attr('fill', function(d) { return color(countScore(d.scores)*20); })
+                        .attr('fill', function(d) { return color(countScore(d.scores)); })
                     ;
 
                     svg.selectAll('circle')
