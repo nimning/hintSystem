@@ -45,25 +45,21 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $routeParams,
     $scope.attempts = {};
     $scope.problem_data = {};
     $scope.studentData = {answers: []};
+    $scope.attemptsByPart={};
+    $scope.dtOptions = DTOptionsBuilder.newOptions()
+        .withDOM('rtip')
+        .withBootstrap()
+        ;
+    $scope.dtOptions['dom'] = 'rtip';
 
+    console.log($scope.dtOptions);
     WebworkService.exportProblemData($scope.course, $scope.set_id, $scope.problem_id).success(function(data){
         $scope.problem_data = data;
-        pg_text = data.pg_file;
-        var re_header = /^[\s]*(TEXT\(PGML|BEGIN_PGML)[\s]+/gm;
-	    var re_footer = /^[\s]*END_PGML[\s]+/gm;
-	    var pg_header = re_header.exec(pg_text);
-	    var pg_footer = re_footer.exec(pg_text);
-	    if (pg_header && pg_footer) {
-	        // reconstruct the footer
-	        pg_header = pg_text.substr(0, pg_header.index) + '\nBEGIN_PGML\n';
-	        pg_footer = pg_text.substr(pg_footer.index);
-	        // Remove Solution section
-	        pg_footer = pg_footer.replace(/^(BEGIN_PGML_SOLUTION|BEGIN_PGML_HINT)[\s\S]*END_PGML_SOLUTION/m,'');
-	    }
+        var headerFooter = WebworkService.extractHeaderFooter(data.pg_file);
 
         for(var i=0; i<data.hints.length; i++){
-            hint_text = pg_header + '\n' + $scope.problem_data.hints[i].pg_text +
-                '\n' + pg_footer;
+            var hint_text = headerFooter.pg_header + '\n' + $scope.problem_data.hints[i].pg_text +
+                '\n' + headerFooter.pg_footer;
             WebworkService.render(hint_text, "1234").success(function(idx, result){
                 $scope.problem_data.hints[idx].rendered_html = result.rendered_html;
             }.bind(this, i))
@@ -78,9 +74,9 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $routeParams,
             }
             $scope.attempts[attempt.user_id].push(attempt);
         });
-        var attemptsByPart = [];
+        var attemptsByPart = {};
         
-        for(i=0; i<data.past_answers[0].scores.length; i++){
+        for(i=1; i<=data.past_answers[0].scores.length; i++){
             attemptsByPart[i]=0;
         }
         // Calculate number of attempts per part: A past answer counts
@@ -93,7 +89,7 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $routeParams,
                 for(var j=0; j<part_answers.length; j++){
                     if(!scores[j]){ // Student has not yet answered correctly
                         if(part_answers[j].length>0){ // Answer is nonempty
-                            attemptsByPart[j]++;
+                            attemptsByPart[j+1]++;
                         }
                         if(past_answer.scores[j]=="1"){
                             scores[j]=true;
@@ -104,6 +100,7 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $routeParams,
         });
 
         console.log(attemptsByPart);
+        $scope.attemptsByPart = attemptsByPart;
 
     });
 
