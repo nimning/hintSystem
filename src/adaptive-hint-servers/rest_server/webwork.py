@@ -8,7 +8,8 @@ from json_request_handler import JSONRequestHandler
 import tornado.web
 import json
 from datetime import datetime
-
+import logging
+logger = logging.getLogger(__name__)
 
 def serialize_datetime(obj):
     if isinstance(obj, datetime):
@@ -169,7 +170,6 @@ class RealtimeProblemAnswer(ProcessQuery):
             where {{course}}_problem.set_id     = "{{set_id}}" AND
                   {{course}}_problem.problem_id = {{problem_id}} '''
         query_rendered = Template(query_template).generate(**args) 
-        print query_rendered
         rows = conn.query(query_rendered)
         if len(rows) == 1:
             args['source_file'] = rows[0]['source_file']
@@ -242,7 +242,7 @@ class Sets(ProcessQuery):
         self.process_query(query_template)
 
 # GET /problems?
-class Problems(ProcessQuery):
+class Problems(JSONRequestHandler, tornado.web.RequestHandler):
     def get(self):
         ''' 
             List problems.  
@@ -253,13 +253,34 @@ class Problems(ProcessQuery):
             Response: 
 
             '''
-        query_template = '''
-            SELECT p.problem_id, p.source_file, p.value, COUNT(a.answer_id) AS attempt_count
-            FROM {{course}}_problem AS p
-            LEFT JOIN {{course}}_past_answer AS a ON a.set_id = p.set_id AND a.problem_id = p.problem_id
-            WHERE p.set_id = '{{set_id}}' GROUP BY a.problem_id
-            ORDER BY problem_id desc; '''
-        self.process_query(query_template)
+        course = self.get_argument('course')
+        set_id = self.get_argument('set_id')
+
+        query = '''
+            SELECT p.problem_id, p.source_file, p.value,
+            COUNT(a.answer_id) AS attempt_count
+            FROM {0}_problem AS p
+            LEFT OUTER JOIN {0}_past_answer AS a
+            ON a.set_id = p.set_id AND a.problem_id = p.problem_id
+            WHERE p.set_id = %s
+            GROUP BY COALESCE(a.problem_id, p.problem_id)
+            ORDER BY problem_id ASC; '''.format(course)
+        logger.debug(query)
+        result = conn.query(query, set_id)
+
+        hints_query = ''' SELECT p.problem_id, COUNT(h.id) as hint_count
+        FROM {0}_problem as p LEFT OUTER JOIN {0}_hint as h
+        ON h.set_id = p.set_id AND h.problem_id = p.problem_id AND h.deleted = 0
+        WHERE p.set_id = %s
+        GROUP BY COALESCE(h.problem_id, p.problem_id)
+        ORDER BY problem_id ASC;
+        '''.format(course)
+        hints = conn.query(hints_query, set_id)
+        logger.debug(hints)
+        for i in range(len(result)):
+            result[i]['hint_count'] = hints[i]['hint_count']
+        logger.debug(result)
+        self.write(json.dumps(result))
 
 # GET /export_problem_data?
 class ExportProblemData(JSONRequestHandler, tornado.web.RequestHandler):
