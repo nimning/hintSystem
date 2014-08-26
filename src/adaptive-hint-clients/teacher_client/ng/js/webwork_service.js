@@ -26,9 +26,12 @@ App.factory('WebworkService', function($http, $window, $rootScope, $location, AP
                      {params: {course: course, set_id: set_id, problem_id: problem_id}});
         },
         render: function(pg_file, seed) {
+            if(pg_file[0]!=='/'){ // Don't base64 encode absolute paths
+                pg_file = btoa(pg_file);
+            }
             return $http
                 .post('http://'+APIHost+':4351/render',
-                      {pg_file: btoa(pg_file), seed: seed});
+                      {pg_file: pg_file, seed: seed});
         },
         extractHeaderFooter: function(pg_text) {
             var re_header = /^[\s]*(TEXT\(PGML|BEGIN_PGML)[\s]+/gm;
