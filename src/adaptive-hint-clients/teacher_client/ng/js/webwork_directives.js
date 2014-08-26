@@ -25,17 +25,20 @@ angular.module('ta-console.directives')
               });
 
               $scope.$watch('studentData.answers', function(answers, oldAnswers, scope){
-                  var inputs = element.find('input[type=text]');
-                  for(var i=0; i< answers.length; i++){
-                      var $el=$(inputs[i]);
-                      $el.val(answers[i]);
-                      if(scope.studentData.scores[i]==="1"){
-                          $el.removeClass('incorrect');
-                          $el.addClass('correct');
-                      }else{
-                          $el.removeClass('correct');
-                          $el.addClass('incorrect');
+                  if(!!answers){
+                      var inputs = element.find('input[type=text]');
+                      for(var i=0; i< answers.length; i++){
+                          var $el=$(inputs[i]);
+                          $el.val(answers[i]);
+                          if(scope.studentData.scores[i]==="1"){
+                              $el.removeClass('incorrect');
+                              $el.addClass('correct');
+                          }else{
+                              $el.removeClass('correct');
+                              $el.addClass('incorrect');
+                          }
                       }
+
                   }
               });
 
