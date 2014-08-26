@@ -25,6 +25,17 @@ App.factory('WebworkService', function($http, $window, $rootScope, $location, AP
                 .get('http://'+APIHost+':4351/export_problem_data',
                      {params: {course: course, set_id: set_id, problem_id: problem_id}});
         },
+        problemPGFile: function(course, set_id, problem_id) {
+            return $http
+                .get('http://'+APIHost+':4351/pg_file',
+                     {params: {course: course, set_id: set_id, problem_id: problem_id}});
+        },
+        problemSeed: function(course, set_id, problem_id, user_id) {
+            return $http
+                .get('http://'+APIHost+':4351/problem_seed',
+                     {params: {course: course, set_id: set_id,
+                               problem_id: problem_id, user_id: user_id}});
+        },
         render: function(pg_file, seed) {
             if(pg_file[0]!=='/'){ // Don't base64 encode absolute paths
                 pg_file = btoa(pg_file);

@@ -24,6 +24,11 @@ App.config(
                  controller: 'ProblemCtrl',
                  title: '{{set_id}} #{{problem_id}}'
              }).
+             when('/:course/sets/:set_id/problems/:problem_id/users/:user_id', {
+                 templateUrl: 'partials/problem_user.html',
+                 controller: 'ProblemUserCtrl',
+                 title: '{{set_id}} #{{problem_id}} - {{user_id}}'
+             }).
              when('/:course/login', {
                  templateUrl: 'partials/login.html',
                  controller: 'LoginCtrl',

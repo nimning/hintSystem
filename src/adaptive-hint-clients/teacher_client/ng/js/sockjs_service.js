@@ -51,6 +51,32 @@ App.factory('SockJSService', function($http, $window, $rootScope, $location, $in
 
     };
 
+    factory.teacher_join = function(teacher_id, course_id, set_id, problem_id, student_id){
+        factory.send_command('teacher_join', {
+            teacher_id: teacher_id, course_id: course_id, set_id: set_id,
+            problem_id: problem_id, student_id: student_id
+        });
+    };
 
+    factory.request_student = function(course_id, set_id, problem_id, student_id){
+        factory.send_command('request_student', {
+            course_id: course_id, set_id: set_id, problem_id: problem_id,
+            student_id: student_id
+        });
+    };
+
+    factory.release_student = function(course_id, set_id, problem_id, student_id){
+        factory.send_command('release_student', {
+            course_id: course_id, set_id: set_id, problem_id: problem_id,
+            student_id: student_id
+        });
+    };
+
+    factory.get_student_info = function(course_id, set_id, problem_id, student_id){
+        factory.send_command('get_student_info', {
+            course_id: course_id, set_id: set_id, problem_id: problem_id,
+            student_id: student_id
+        });
+    };
     return factory;
 });
