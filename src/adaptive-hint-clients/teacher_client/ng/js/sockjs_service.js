@@ -4,7 +4,7 @@ var App = angular.module('ta-console');
 function print(msg) {
    // console.log(msg);
 }
-App.factory('SockJSService', function($http, $window, $rootScope, $location, $interval, APIHost) {
+App.factory('SockJSService', function($http, $window, $rootScope, $location, $interval, $timeout, APIHost) {
     var factory = {};
     var sock;
     var connected = false;
@@ -16,7 +16,10 @@ App.factory('SockJSService', function($http, $window, $rootScope, $location, $in
     };
     factory.send_command = function (cmd, args) {
         if(!connected){
-            print("SockJS not connected")
+            print("SockJS not connected");
+            $timeout(function(){
+                factory.send_command(cmd, args);
+            }, 100);
         }else{
             sock.send(JSON.stringify({
                 "type" : cmd,
@@ -35,7 +38,6 @@ App.factory('SockJSService', function($http, $window, $rootScope, $location, $in
 	    sock.onopen = function() {
 	        print("INFO: connected");
             connected = true;
-            console.log(this);
 	        factory.send_command('teacher_join',
 			                     { 'teacher_id' : teacher_id });
 	    };

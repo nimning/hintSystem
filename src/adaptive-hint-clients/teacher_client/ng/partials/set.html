@@ -16,12 +16,12 @@
   </thead>
   <tbody>
     <tr st-select-row="row" st-select-mode="multiple" ng-repeat="student in displayed_students">
-      <td><a ng-href="#/{{course}}/sets/{{set_id}}/problems/{{problem.problem_id}}/users/{{student.student_id}}">{{student.student_id}}</a></td>
+      <td><a ng-href="#/{{course}}/sets/{{set_id}}/problems/{{student.problem_id}}/users/{{student.student_id}}">{{student.student_id}}</a></td>
       <td>{{student.problem_id}}</td>
       <td am-time-ago="student.time_lastincorrect" am-preprocess="unix"></td>
       <td>{{student.total_tries}}</td>
       <td>{{student.recent_tries}}</td>
-      <td>{{student.time_lasthint}}</td>
+      <td am-time-ago="student.time_lasthint" am-preprocess="unix"></td>
       <td>{{student.is_online}}</td>
       <td></td>
     </tr>

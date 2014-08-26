@@ -20,7 +20,7 @@ App.controller('CourseCtrl', function($scope, $location, $window, $routeParams, 
 
 });
 
-App.controller('SetCtrl', function($scope, $location, $window, $routeParams, $interval,
+App.controller('SetCtrl', function($scope, $location, $window, $routeParams, $interval, $timeout,
                                    WebworkService, SockJSService, DTOptionsBuilder, DTColumnDefBuilder){
     $scope.course = $routeParams.course;
     $scope.set_id = $routeParams.set_id;
@@ -29,9 +29,6 @@ App.controller('SetCtrl', function($scope, $location, $window, $routeParams, $in
         console.log(data);
 
     });
-
-    $scope.dtOptions = DTOptionsBuilder.newOptions()
-        .withBootstrap();
 
     $scope.unassigned_students = [];
     $scope.displayed_students = [];
@@ -48,11 +45,18 @@ App.controller('SetCtrl', function($scope, $location, $window, $routeParams, $in
         }
     };
 
+    // Angular Smart-table is weird about updating the first time
+    $timeout(function(){
+        SockJSService.send_command('list_students', {'set_id': $scope.set_id});
+    }, 500);
+
     $interval(function(){
         SockJSService.send_command('list_students', {'set_id': $scope.set_id});
     }, 1000);
 
 
+    $scope.dtOptions = DTOptionsBuilder.newOptions()
+        .withBootstrap();
 
     $scope.dtColumnDefs = [
         DTColumnDefBuilder.newColumnDef(0),
