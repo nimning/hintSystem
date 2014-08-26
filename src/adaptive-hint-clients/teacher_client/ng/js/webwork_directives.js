@@ -6,9 +6,22 @@ angular.module('ta-console.directives')
               pgFile: '=',
               seed: '=',
               studentData: '=',
-              sockAnswers: '='
+              sockAnswers: '=',
+              box: '='
           },
           controller: function($scope){
+              $scope.choose_box = function(boxname, b){
+                  $scope.box = boxname;
+
+                  console.log(boxname);
+              };
+
+              $scope.box_class = function(boxname){
+                  if($scope.box === boxname){
+                      return 'btn-success';
+                  }
+                  return '';
+              };
           },
           link: function($scope, element, attrs){
               $scope.hidePreview="";
@@ -21,7 +34,11 @@ angular.module('ta-console.directives')
                               s = '<div>'+$.trim(s)+'</div>';
                               var e = $compile(s)($scope);
                               element.append(e);
-                              // $scope.pgFileRendered = $sce.trustAsHtml(s);
+                              $(element).find('input[name^=AnSwEr]').each(function(i,el){
+                                  var boxname = $(el).attr('name');
+	                              var button = $compile('<button class="btn" ng-class="box_class(\''+boxname+'\')" ng-click="choose_box(\''+boxname+'\')"><span class="glyphicon glyphicon-plus"></span></button>')($scope);
+                                  $(el).after(button);
+                              });
                               $scope.hidePreview="hidden";
                           })
                           .error(function(){
