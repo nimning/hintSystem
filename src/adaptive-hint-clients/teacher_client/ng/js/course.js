@@ -50,7 +50,7 @@ App.controller('SetCtrl', function($scope, $location, $window, $routeParams, $in
         SockJSService.send_command('list_students', {'set_id': $scope.set_id});
     }, 500);
 
-    $interval(function(){
+    var list_students =$interval(function(){
         SockJSService.send_command('list_students', {'set_id': $scope.set_id});
     }, 1000);
 
@@ -63,6 +63,10 @@ App.controller('SetCtrl', function($scope, $location, $window, $routeParams, $in
         DTColumnDefBuilder.newColumnDef(1),
         DTColumnDefBuilder.newColumnDef(2)
     ];
+
+    $scope.$on('$destroy', function(event){
+        $interval.cancel(list_students);
+    });
 });
 
 App.controller('ProblemCtrl', function($scope, $location, $window, $routeParams, $sce,
