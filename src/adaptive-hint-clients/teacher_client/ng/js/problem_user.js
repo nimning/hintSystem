@@ -2,10 +2,10 @@ var App = angular.module('ta-console');
 
 App.controller('ProblemUserCtrl', function($scope, $location, $window, $routeParams, $sce, $interval,
                                            WebworkService, SockJSService){
-    $scope.course = $routeParams.course;
-    $scope.set_id = $routeParams.set_id;
-    $scope.problem_id = $routeParams.problem_id;
-    $scope.user_id = $routeParams.user_id;
+    var course = $scope.course = $routeParams.course;
+    var set_id = $scope.set_id = $routeParams.set_id;
+    var problem_id = $scope.problem_id = $routeParams.problem_id;
+    var user_id = $scope.user_id = $routeParams.user_id;
     $scope.student_data = {answers: []};
 
     var sock = SockJSService.get_sock();
@@ -39,5 +39,16 @@ App.controller('ProblemUserCtrl', function($scope, $location, $window, $routePar
     //     console.log(data);
     //     $scope.problem_seed = data;
     // });
+
+    // Auto send 'release_student' when closing window
+    $scope.$on('$destroy', function(event){
+        SockJSService.release_student(course, set_id, problem_id, user_id);
+    });
+
+    window.onbeforeunload = function() {
+        SockJSService.release_student(course, set_id, problem_id, user_id);
+    };
+
+
 
 });
