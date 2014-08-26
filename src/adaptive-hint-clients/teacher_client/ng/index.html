@@ -46,7 +46,7 @@
     <script src="js/nav.js"></script>
 
     <link rel="stylesheet" href="style.css" />
-    <title>TA Console NG</title>
+    <title ng-bind="'TA Console NG - ' + $root.title">TA Console NG</title>
   </head>
 
   <body ng-controller="ApplicationCtrl">
@@ -86,7 +86,7 @@
     <div class="container">
       <div ng-view></div>
     </div>
-    
+
 
   </body>
 </html>

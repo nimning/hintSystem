@@ -11,19 +11,23 @@ App.config(
          $routeProvider.
              when('/:course', {
                  templateUrl: 'partials/course.html',
-                 controller: 'CourseCtrl'
+                 controller: 'CourseCtrl',
+                 title: '{{course}}'
              }).
              when('/:course/sets/:set_id', {
                  templateUrl: 'partials/set.html',
-                 controller: 'SetCtrl'
+                 controller: 'SetCtrl',
+                 title: '{{set_id}}'
              }).
              when('/:course/sets/:set_id/problems/:problem_id', {
                  templateUrl: 'partials/problem.html',
-                 controller: 'ProblemCtrl'
+                 controller: 'ProblemCtrl',
+                 title: '{{set_id}} #{{problem_id}}'
              }).
              when('/:course/login', {
                  templateUrl: 'partials/login.html',
-                 controller: 'LoginCtrl'
+                 controller: 'LoginCtrl',
+                 title: 'Log In'
              }).
              when('/:course/console', {
                  templateUrl: 'partials/console.html',
@@ -34,10 +38,17 @@ App.config(
              });
      }]);
 
-App.constant('APIHost', 'webwork.cse.ucsd.edu');
+App.constant('APIHost', '192.168.33.10');
 
 App.value('CurrentCourse', {name: 'Course'});
 
-App.controller('ApplicationCtrl', function($routeParams, SockJSService, CurrentCourse){
+App.controller('ApplicationCtrl', function($routeParams, $route, $rootScope, $interpolate,
+                                           SockJSService, CurrentCourse){
     var sock = SockJSService.connect(4350, 'teacher');
+
+    $rootScope.$on("$routeChangeSuccess", function(currentRoute, previousRoute){
+        //Change page title, based on Route information
+        var titleExp = $interpolate($route.current.title);
+        $rootScope.title = titleExp($route.current.params);
+    });
 });
