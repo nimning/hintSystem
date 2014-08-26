@@ -26,6 +26,11 @@ App.controller('ProblemUserCtrl', function($scope, $location, $window, $routePar
     SockJSService.teacher_join('teacher', $scope.course, $scope.set_id, $scope.problem_id, $scope.user_id);
     SockJSService.request_student($scope.course, $scope.set_id, $scope.problem_id, $scope.user_id);
     SockJSService.get_student_info($scope.course, $scope.set_id, $scope.problem_id, $scope.user_id);
+    $scope.displayed_hints = [];
+    $scope.hints = [];
+    WebworkService.problemHints(course, set_id, problem_id).success(function(data){
+        $scope.hints = data;
+    });
     // $interval(function(){
     //     SockJSService.get_student_info($scope.course, $scope.set_id, $scope.problem_id, $scope.user_id);
     // }, 1000);

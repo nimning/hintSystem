@@ -7,8 +7,21 @@
   </div>
 </div>
 <h3>Hints</h3>
-<div class="container">
-  <div class="row" ng-repeat = "hint in problem_data.hints">
-    <p ng-bind-html="hint.rendered_html"></p>
-    by {{hint.author}}</div>
-</div>
+<table class="table" id="hints_table" st-table="displayed_hints" st-safe-src="hints">
+  <thead>
+    <tr>
+      <th class="st-sortable" st-sort="hint_id">ID</th>
+      <th class="st-sortable" st-sort="pg_text">PG Text</th>
+      <th class="st-sortable" st-sort="author">Author</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="hint in displayed_hints">
+      <td>{{hint.hint_id}}</td>
+      <td>{{hint.pg_text}}</td>
+      <td>{{hint.author}}</td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>

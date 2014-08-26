@@ -17,8 +17,8 @@ App.factory('WebworkService', function($http, $window, $rootScope, $location, AP
         },
         problemHints: function(course, set_id, problem_id) {
             return $http
-                .get('http://'+APIHost+':4351/problems',
-                     {params: {course: course, set_id: set_id}});
+                .get('http://'+APIHost+':4351/problem_hints',
+                     {params: {course: course, set_id: set_id, problem_id: problem_id}});
         },
         exportProblemData: function(course, set_id, problem_id) {
             return $http
