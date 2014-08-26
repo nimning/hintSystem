@@ -9,7 +9,7 @@ App.controller('ProblemUserCtrl', function($scope, $location, $window, $routePar
     $scope.student_data = {answers: []};
 
     var sock = SockJSService.get_sock();
-    
+    $scope.current_answers = [];
     sock.onmessage = function(e) {
 	    print("RECIEVED: " + e.data);
 	    var data = JSON.parse(e.data);
@@ -19,6 +19,7 @@ App.controller('ProblemUserCtrl', function($scope, $location, $window, $routePar
                 $scope.pg_file = student_info.pg_file;
                 $scope.problem_seed = student_info.pg_seed;
                 $scope.student_id = student_info.student_id;
+                $scope.current_answers = student_info.current_answers;
             });
 	    }
     };

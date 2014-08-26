@@ -1,11 +1,12 @@
 angular.module('ta-console.directives')
-  .directive('pgFilePreview', function($window, $sce, WebworkService) {
+  .directive('pgFilePreview', function($window, $sce, $compile, WebworkService) {
       return {
           restrict: 'EA',
           scope: {
               pgFile: '=',
               seed: '=',
-              studentData: '='
+              studentData: '=',
+              sockAnswers: '='
           },
           controller: function($scope){
           },
@@ -15,7 +16,12 @@ angular.module('ta-console.directives')
                   if($scope.pgFile && $scope.pgFile.length > 0){
                       WebworkService.render($scope.pgFile, String($scope.seed))
                           .success(function(data){
-                              $scope.pgFileRendered = $sce.trustAsHtml(data.rendered_html);
+                              // Insert ng-model directive and disable the input
+                              var s = data.rendered_html.replace(/name=('|")(AnSwEr\d+)('|")/g, "$& ng-model='$2' disabled=''");
+                              s = '<div>'+$.trim(s)+'</div>';
+                              var e = $compile(s)($scope);
+                              element.append(e);
+                              // $scope.pgFileRendered = $sce.trustAsHtml(s);
                               $scope.hidePreview="hidden";
                           })
                           .error(function(){
@@ -42,6 +48,24 @@ angular.module('ta-console.directives')
                   }
               });
 
+              $scope.$watch('sockAnswers', function(answers, oldAnswers, scope){
+                  if(!!answers){
+                      for(var i=0; i< answers.length; i++){
+                          var ans = answers[i];
+                          scope[ans.boxname] = ans.answer_string;
+                          var $el=$('input[name='+ans.boxname+']');
+                          // $el.val(ans.answer_string);
+                          // Should probably do this in a more 'Angular' way, but meh
+                          if(ans.correct===1){
+                              $el.removeClass('incorrect');
+                              $el.addClass('correct');
+                          }else{
+                              $el.removeClass('correct');
+                              $el.addClass('incorrect');
+                          }
+                      }
+                  }
+              });
 
           },
           templateUrl: 'partials/directives/pgFilePreview.html'
