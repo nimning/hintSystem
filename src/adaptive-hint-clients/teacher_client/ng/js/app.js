@@ -1,4 +1,4 @@
-var App = angular.module('ta-console', ['ngRoute', 'ngSanitize', 'datatables', 'ta-console.directives']);
+var App = angular.module('ta-console', ['ngRoute', 'ngSanitize', 'datatables', 'ta-console.directives', 'smart-table', 'angularMoment']);
 var directives = angular.module('ta-console.directives', []);
 App.config(
     ['$routeProvider', '$httpProvider',
@@ -38,6 +38,6 @@ App.constant('APIHost', 'webwork.cse.ucsd.edu');
 
 App.value('CurrentCourse', {name: 'Course'});
 
-App.controller('ApplicationCtrl', function($routeParams, CurrentCourse){
-
+App.controller('ApplicationCtrl', function($routeParams, SockJSService, CurrentCourse){
+    var sock = SockJSService.connect(4350, 'teacher');
 });

@@ -1,7 +1,8 @@
 var App = angular.module('ta-console');
 
-App.controller('CourseCtrl', function($scope, $location, $window, $routeParams,
-                                      WebworkService, DTOptionsBuilder, DTColumnDefBuilder, CurrentCourse){
+App.controller('CourseCtrl', function($scope, $location, $window, $routeParams, $interval,
+                                      WebworkService, SockJSService,
+                                      DTOptionsBuilder, DTColumnDefBuilder, CurrentCourse){
     $scope.course = $routeParams.course;
     CurrentCourse.name = $scope.course;
     WebworkService.sets($scope.course, function(data){
@@ -16,19 +17,42 @@ App.controller('CourseCtrl', function($scope, $location, $window, $routeParams,
         DTColumnDefBuilder.newColumnDef(1),
         DTColumnDefBuilder.newColumnDef(2)
     ];
+
 });
 
-App.controller('SetCtrl', function($scope, $location, $window, $routeParams,
-                                   WebworkService, DTOptionsBuilder, DTColumnDefBuilder){
+App.controller('SetCtrl', function($scope, $location, $window, $routeParams, $interval,
+                                   WebworkService, SockJSService, DTOptionsBuilder, DTColumnDefBuilder){
     $scope.course = $routeParams.course;
     $scope.set_id = $routeParams.set_id;
-    WebworkService.problems($scope.course, $scope.set_id, function(data){
+    WebworkService.problems($scope.course, $scope.set_id).success(function(data){
         $scope.problems = data;
         console.log(data);
+
     });
 
     $scope.dtOptions = DTOptionsBuilder.newOptions()
         .withBootstrap();
+
+    $scope.unassigned_students = [];
+    $scope.displayed_students = [];
+
+    $scope.my_students = [];
+    var sock = SockJSService.get_sock();
+    sock.onmessage = function(event) {
+        print("RECEIVED: " + event.data);
+        var data = JSON.parse(event.data);
+        if (data.type === "my_students"){
+            $scope.my_students = data.arguments;
+        }else if (data.type === "unassigned_students"){
+            $scope.unassigned_students = data.arguments;
+        }
+    };
+
+    $interval(function(){
+        SockJSService.send_command('list_students', {'set_id': $scope.set_id});
+    }, 1000);
+
+
 
     $scope.dtColumnDefs = [
         DTColumnDefBuilder.newColumnDef(0),
@@ -48,8 +72,7 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $routeParams,
     $scope.attemptsByPart={};
     $scope.dtOptions = DTOptionsBuilder.newOptions()
         .withDOM('rtip')
-        .withBootstrap()
-        ;
+        .withBootstrap();
     $scope.dtOptions['dom'] = 'rtip';
 
     console.log($scope.dtOptions);
@@ -99,7 +122,6 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $routeParams,
             });
         });
 
-        console.log(attemptsByPart);
         $scope.attemptsByPart = attemptsByPart;
 
     });

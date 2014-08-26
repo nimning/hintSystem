@@ -11,19 +11,21 @@ App.factory('WebworkService', function($http, $window, $rootScope, $location, AP
                 });
         },
         problems: function(course, set_id, fn) {
-            $http
+            return $http
                 .get('http://'+APIHost+':4351/problems',
-                     {params: {course: course, set_id: set_id}})
-                .success(function (data, status, headers, config) {
-                    fn(data);
-                });
+                     {params: {course: course, set_id: set_id}});
         },
-        exportProblemData: function(course, set_id, problem_id, fn) {
+        problemHints: function(course, set_id, problem_id) {
+            return $http
+                .get('http://'+APIHost+':4351/problems',
+                     {params: {course: course, set_id: set_id}});
+        },
+        exportProblemData: function(course, set_id, problem_id) {
             return $http
                 .get('http://'+APIHost+':4351/export_problem_data',
                      {params: {course: course, set_id: set_id, problem_id: problem_id}});
         },
-        render: function(pg_file, seed, fn) {
+        render: function(pg_file, seed) {
             return $http
                 .post('http://'+APIHost+':4351/render',
                       {pg_file: btoa(pg_file), seed: seed});

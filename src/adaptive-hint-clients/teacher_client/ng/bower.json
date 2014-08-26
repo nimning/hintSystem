@@ -23,7 +23,10 @@
     "angular-route": "~1.2.21",
     "angular-sanitize": "~1.2.21",
     "datatables": "~1.10.2",
-    "angular-datatables": "~0.0.3"
+    "angular-datatables": "~0.0.3",
+    "sockjs": "~0.3.4",
+    "angular-smart-table": "*",
+    "angular-moment": "~0.8.0"
   },
   "resolutions": {
     "datatables": "~1.10.2"
