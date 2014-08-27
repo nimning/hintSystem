@@ -106,8 +106,8 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $routeParams,
             $scope.attempts[attempt.user_id].push(attempt);
         });
         var attemptsByPart = {};
-        
-        for(i=1; i<=data.past_answers[0].scores.length; i++){
+        var part_count = data.pg_file.match(/\[_+\]/g).length;
+        for(i=1; i<=part_count; i++){
             attemptsByPart[i]=0;
         }
         // Calculate number of attempts per part: A past answer counts
