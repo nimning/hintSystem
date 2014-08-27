@@ -1,4 +1,5 @@
 <h3>Problem {{problem_id}}</h3>
+<a class="btn btn-info" ng-href="{{download_json_url}}">Download Problem Data (JSON)</a>
 <div pg-file-preview pg-file="problem_data.pg_file" seed="1234" student-data="studentData" show-hint-buttons="false"></div>
 <h3>Attempts</h3>
 <table class="table table-striped" id="attempts_by_part" datatable="ng" dt-options="dtOptions">
@@ -27,7 +28,6 @@
       <th class="st-sortable" st-sort="recent_tries">Incorrect tries (last 15 mins)</th>
       <th class="st-sortable" >Time since last hint</th>
 	  <th class="st-sortable" >Online</th>
-      <th>Actions</th>
     </tr>
   </thead>
   <tbody>

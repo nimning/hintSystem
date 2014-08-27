@@ -70,10 +70,10 @@ App.controller('SetCtrl', function($scope, $location, $window, $routeParams, $in
 });
 
 App.controller('ProblemCtrl', function($scope, $location, $window, $routeParams, $sce,
-                                       WebworkService, DTOptionsBuilder, DTColumnDefBuilder){
-    $scope.course = $routeParams.course;
-    $scope.set_id = $routeParams.set_id;
-    $scope.problem_id = $routeParams.problem_id;
+                                       WebworkService, APIHost, DTOptionsBuilder, DTColumnDefBuilder){
+    var course = $scope.course = $routeParams.course;
+    var set_id = $scope.set_id = $routeParams.set_id;
+    var problem_id = $scope.problem_id = $routeParams.problem_id;
     $scope.attempts = {};
     $scope.problem_data = {};
     $scope.studentData = {answers: []};
@@ -82,7 +82,7 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $routeParams,
         .withDOM('rtip')
         .withBootstrap();
     $scope.dtOptions['dom'] = 'rtip';
-
+    $scope.download_json_url = 'http://'+APIHost+':4351/export_problem_data?course='+course+'&set_id='+set_id+'&problem_id='+problem_id;
     console.log($scope.dtOptions);
     WebworkService.exportProblemData($scope.course, $scope.set_id, $scope.problem_id).success(function(data){
         $scope.problem_data = data;
