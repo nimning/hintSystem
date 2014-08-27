@@ -1,4 +1,4 @@
-var App = angular.module('ta-console', ['ngRoute', 'ngSanitize', 'datatables', 'ta-console.directives', 'smart-table', 'angularMoment']);
+var App = angular.module('ta-console', ['ngRoute', 'ngSanitize', 'datatables', 'ta-console.directives', 'smart-table', 'angularMoment', 'ui.codemirror']);
 var directives = angular.module('ta-console.directives', []);
 App.config(
     ['$routeProvider', '$httpProvider',

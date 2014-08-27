@@ -72,7 +72,7 @@ class Hint(ProcessQuery):
     def set_default_headers(self):
         # Allows X-site requests
         super(ProcessQuery, self).set_default_headers()
-        self.add_header("Access-Control-Allow-Methods", "DELETE")
+        self.add_header("Access-Control-Allow-Methods", "PUT,DELETE")
 
     def delete(self):
         '''  For helping the instructor delete hints
@@ -124,6 +124,20 @@ class Hint(ProcessQuery):
             ("{{pg_text}}", "{{author}}", "{{set_id}}", "{{problem_id}}") 
         '''
         self.process_query(query_template, write_response=False)
+
+    def put(self):
+        ''' For helping the instructor update hints 
+            Sample arguments:
+            course="CompoundProblems"
+            pg_text="This might help you.  3+3=? [____]{6}"
+            hint_id=6
+
+            With return 6   (the id of the row created)'''
+        query_template = '''UPDATE {{course}}_hint 
+            SET pg_text="{{pg_text}}" WHERE id={{hint_id}}
+        '''
+        self.process_query(query_template, write_response=False)
+
        
 
 class AssignedHint(ProcessQuery):

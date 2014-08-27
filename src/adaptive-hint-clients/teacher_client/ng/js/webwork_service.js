@@ -71,6 +71,10 @@ App.factory('WebworkService', function($http, $window, $rootScope, $location, $q
             });
             return deferred.promise;
         },
+        updateHint: function(course, hint_id, pg_text){
+            return $http.put('http://'+APIHost+':4351/hint',
+                     {course: course, hint_id: hint_id, pg_text: pg_text});
+        },
         extractHeaderFooter: function(pg_text) {
             var re_header = /^[\s]*(TEXT\(PGML|BEGIN_PGML)[\s]+/gm;
 	        var re_footer = /^[\s]*END_PGML[\s]+/gm;

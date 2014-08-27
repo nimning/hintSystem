@@ -90,3 +90,10 @@ a.ng-binding{
   border:1px solid;
   padding:5px;
 }
+
+/* Hint editor stuff*/
+.CodeMirror-wrap {
+  border: 1px solid black;
+  margin: 10px;
+}
+

@@ -1,6 +1,7 @@
 var App = angular.module('ta-console');
 
-App.controller('ProblemUserCtrl', function($scope, $location, $window, $routeParams, $sce, $interval,
+App.controller('ProblemUserCtrl', function($scope, $location, $window, $routeParams,
+                                           $sce, $interval, $timeout,
                                            WebworkService, SockJSService){
     var course = $scope.course = $routeParams.course;
     var set_id = $scope.set_id = $routeParams.set_id;
@@ -26,6 +27,11 @@ App.controller('ProblemUserCtrl', function($scope, $location, $window, $routePar
     SockJSService.teacher_join('teacher', $scope.course, $scope.set_id, $scope.problem_id, $scope.user_id);
     SockJSService.request_student($scope.course, $scope.set_id, $scope.problem_id, $scope.user_id);
     SockJSService.get_student_info($scope.course, $scope.set_id, $scope.problem_id, $scope.user_id);
+
+    WebworkService.problemPGFile(course, set_id, problem_id).success(function(data){
+        $scope.pg_text = JSON.parse(data);
+    });
+
     $scope.displayed_hints = [];
     $scope.hints = [];
     WebworkService.problemHints(course, set_id, problem_id).success(function(data){
@@ -51,6 +57,54 @@ App.controller('ProblemUserCtrl', function($scope, $location, $window, $routePar
     $scope.cancel_hint = function(){
         $scope.rendered_hint = "";
     };
+
+    $scope.editorOptions = {
+        lineWrapping : true,
+        lineNumbers: true,
+        mode: 'markdown',
+	    styleActiveLine: true,
+	    matchBrackets: true
+    };
+
+    $scope.pgFileEditorOptions = {
+        lineWrapping : true,
+        lineNumbers: true,
+        mode: 'perl',
+	    styleActiveLine: true,
+	    matchBrackets: true,
+        readOnly: true
+    };
+
+    
+    $scope.edit_hint = function(hint){
+        $scope.edited_hint = hint;
+    };
+
+    $scope.save_hint = function(hint){
+        WebworkService.updateHint(course, hint.hint_id, hint.pg_text).
+            success(function(data){
+                $scope.edited_hint="";
+            });
+    };
+
+    $scope.cancel_edit_hint = function(){
+        $scope.edited_hint="";
+    };
+    // Periodically preview hint so as to avoid jitter
+    var previewHintTimer;
+    $scope.$watch('edited_hint.pg_text', function(newVal, oldVal){
+        if($scope.edited_hint){
+            if(previewHintTimer){
+                $timeout.cancel(previewHintTimer);
+            }
+            previewHintTimer = $timeout(function(){
+                WebworkService.previewHint($scope.edited_hint, $scope.problem_seed, false).
+                    then(function(rendered_html){
+                        $scope.hint_editor_preview = $sce.trustAsHtml(rendered_html);
+                    });
+            }, 500);
+        }
+    });
     // $interval(function(){
     //     SockJSService.get_student_info($scope.course, $scope.set_id, $scope.problem_id, $scope.user_id);
     // }, 1000);

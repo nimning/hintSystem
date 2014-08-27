@@ -23,7 +23,7 @@
       <td>{{hint.author}}</td>
       <td>
         <button type="button" class="btn btn-primary" ng-click="preview_hint(hint)" title="Preview Hint"><span class="glyphicon glyphicon-eye-open"></span></button>
-        <button type="button" class="btn btn-primary" title="Edit Hint"><span class="glyphicon glyphicon-pencil"></span></button>
+        <button type="button" class="btn btn-primary" ng-click="edit_hint(hint)" title="Edit Hint"><span class="glyphicon glyphicon-pencil"></span></button>
         <button type="button" class="btn btn-danger" title="Delete Hint"><span class="glyphicon glyphicon-trash"></span></button>
       </td>
     </tr>
@@ -43,3 +43,23 @@
   </div>
 </div>
 
+<div id="hint_editor" ng-if="edited_hint">
+  <div class="row">
+    <div class="col-md-6">
+      <div ng-model="edited_hint.pg_text" ui-codemirror="" ui-codemirror-opts="editorOptions"></div>
+      <div class="hint_html" ng-bind-html="hint_editor_preview"></div>
+    </div>
+    <div class="col-md-6">
+      <div ng-model="pg_text" ui-codemirror="" ui-codemirror-opts="pgFileEditorOptions"></div>
+    <button type="button" class="btn btn-primary" ng-click="save_hint(edited_hint)">
+      Save Hint
+    </button>
+    <button type="button" class="btn" ng-click="cancel_edit_hint()">
+      Cancel
+    </button>
+
+    </div>
+  </div>
+  <div class="row">
+  </div>
+</div>
