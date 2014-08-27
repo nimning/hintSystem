@@ -71,6 +71,11 @@ App.factory('WebworkService', function($http, $window, $rootScope, $location, $q
             });
             return deferred.promise;
         },
+        createHint: function(course, set_id, problem_id, author, pg_text){
+            return $http.post('http://'+APIHost+':4351/hint',
+                     {course: course, set_id: set_id, problem_id: problem_id,
+                      author: author, pg_text: pg_text});
+        },
         updateHint: function(course, hint_id, pg_text){
             return $http.put('http://'+APIHost+':4351/hint',
                      {course: course, hint_id: hint_id, pg_text: pg_text});

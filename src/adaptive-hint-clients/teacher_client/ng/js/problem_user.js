@@ -30,6 +30,9 @@ App.controller('ProblemUserCtrl', function($scope, $location, $window, $routePar
 
     WebworkService.problemPGFile(course, set_id, problem_id).success(function(data){
         $scope.pg_text = JSON.parse(data);
+        var hf = WebworkService.extractHeaderFooter($scope.pg_text);
+        $scope.pg_header = hf.pg_header;
+        $scope.pg_footer = hf.pg_footer;
     });
 
     $scope.displayed_hints = [];
@@ -75,16 +78,39 @@ App.controller('ProblemUserCtrl', function($scope, $location, $window, $routePar
         readOnly: true
     };
 
-    
+    $scope.new_hint = function(){
+        $scope.edited_hint = {
+            pg_header: $scope.pg_header,
+            pg_footer: $scope.pg_footer,
+            author: 'teacher',
+            set_id: set_id,
+            problem_id: problem_id
+        };
+    };
     $scope.edit_hint = function(hint){
         $scope.edited_hint = hint;
     };
 
     $scope.save_hint = function(hint){
-        WebworkService.updateHint(course, hint.hint_id, hint.pg_text).
-            success(function(data){
-                $scope.edited_hint="";
-            });
+        if(hint.hint_id){ // Hint is already in DB
+            WebworkService.updateHint(course, hint.hint_id, hint.pg_text).
+                success(function(data){
+                    $scope.edited_hint="";
+                    WebworkService.problemHints(course, set_id, problem_id).success(function(data){
+                        $scope.hints = data;
+                    });
+
+                });
+        }else{
+            WebworkService.createHint(course, set_id, problem_id, 'teacher', hint.pg_text).
+                success(function(data){
+                    $scope.edited_hint="";
+                    WebworkService.problemHints(course, set_id, problem_id).success(function(data){
+                        $scope.hints = data;
+                    });
+
+                });
+        }
     };
 
     $scope.cancel_edit_hint = function(){
