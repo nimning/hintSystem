@@ -30,7 +30,7 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $routeParams,
                 console.log('boo');
             });
         }
-        $scope.realtime_attempts = {};
+
         data.past_answers.forEach( function(attempt){
             if(!$scope.attempts[attempt.user_id]){
                 $scope.attempts[attempt.user_id] = [];
@@ -38,6 +38,7 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $routeParams,
             $scope.attempts[attempt.user_id].push(attempt);
         });
 
+        $scope.realtime_attempts = {};
         var realtime_attempts = {};
         data.realtime_past_answers.forEach( function(attempt){
             if(!realtime_attempts[attempt.user_id]){
@@ -52,10 +53,13 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $routeParams,
             attemptsByPart[i]=0;
             $scope.attemptsByPart[i] = {};
         }
-        // Calculate number of attempts per part: A past answer counts
-        // for a part if it was not previously answered correctly and
-        // the answer for the part is nonempty
+
+        $scope.historical_students = [];
+        $scope.displayed_historical_students = [];
         angular.forEach($scope.attempts, function(value, user_id){
+            // Calculate number of attempts per part: A past answer counts
+            // for a part if it was not previously answered correctly and
+            // the answer for the part is nonempty
             var scores = []; // Keep track of student's score per part
             angular.forEach(value, function(past_answer){
                 var part_answers = past_answer.answer_string.split('\t');
@@ -70,6 +74,26 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $routeParams,
                     }
                 }
             });
+            var last_answer;
+            var realtime_tries;
+            if(realtime_attempts[user_id]){
+                realtime_tries = realtime_attempts[user_id].length;
+                last_answer = realtime_attempts[user_id][realtime_tries-1];
+            }else{
+                realtime_tries = 0;
+                last_answer = {};
+            }
+            var student_summary = {
+                student_id: user_id,
+                realtime_past_answers: realtime_attempts[user_id] || [],
+                past_answers: $scope.attempts[user_id],
+                total_tries: $scope.attempts[user_id].length,
+                realtime_tries: realtime_tries,
+                last_answer: last_answer,
+                last_attempt_time: last_answer.timestamp,
+                is_online: false
+            };
+            $scope.historical_students.push(student_summary);
         });
         var realtimeAttemptsByPart = {};
         angular.forEach(data.realtime_past_answers, function(value, key){
@@ -84,7 +108,8 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $routeParams,
         angular.forEach(attemptsByPart, function(value, key){
             $scope.attemptsByPart[key].submitted = value;
         });
-    });
+
+    }); // End exportProblemData promise resolver
 
 
     var sock = SockJSService.get_sock();

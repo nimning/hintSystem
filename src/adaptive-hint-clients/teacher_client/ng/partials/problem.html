@@ -56,12 +56,38 @@
 </section>
 
 <section id="historical_data">
+  <h3>All Students</h3>
+  <table class="table" id="all_students_table" st-table="displayed_historical_students" st-safe-src="historical_students">
+    <thead>
+      <tr>
+        <th class="st-sortable" st-sort="student_id">Student</th>
+        <th class="st-sortable" st-sort="last_attempt_time">Time since last incorrect</th>
+        <th class="st-sortable" st-sort="total_tries">Total incorrect tries</th>
+        <th class="st-sortable" st-sort="realtime_tries">Realtime Tries</th>
+        <th class="st-sortable" >Time since last hint</th>
+	    <th class="st-sortable" >Online</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="student in displayed_historical_students">
+        <td><a ng-href="#/{{course}}/sets/{{set_id}}/problems/{{problem_id}}/users/{{student.student_id}}">{{student.student_id}}</a></td>
+        <td am-time-ago="student.last_attempt_time"></td>
+        <td>{{student.total_tries}}</td>
+        <td>{{student.realtime_tries}}</td>
+        <td am-time-ago="student.last_answer.timestamp"></td>
+        <td>{{student.is_online}}</td>
+        <td></td>
+      </tr>
+    </tbody>
+    <tfoot>
+	  <tr>
+	    <td colspan="6">
+		  <div st-pagination="" st-items-by-page="10" st-displayed-pages="7"></div>
+	    </td>
+	  </tr>
+    </tfoot>
+  </table>
 </section>
-<div class="row">
-  <div class="col-md-12 panel panel-default" ng-repeat="(student, activity) in attempts">{{student}}, {{activity.length}} attempts
-    <div student-timeline activity="activity" student="student" student-data="studentData"></div>
-  </div>
-</div>
 
 <section id="hints">
   <h3>Hints</h3>
@@ -90,3 +116,9 @@
   </div>
 
 </section>
+
+<!-- <div class="row">
+<div class="col-md-12 panel panel-default" ng-repeat="(student, activity) in attempts">{{student}}, {{activity.length}} attempts
+<div student-timeline activity="activity" student="student" student-data="studentData"></div>
+</div>
+</div> -->
