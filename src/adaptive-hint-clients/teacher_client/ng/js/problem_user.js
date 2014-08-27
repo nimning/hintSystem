@@ -132,20 +132,6 @@ App.controller('ProblemUserCtrl', function($scope, $location, $window, $routePar
             }, 500);
         }
     });
-    // $interval(function(){
-    //     SockJSService.get_student_info($scope.course, $scope.set_id, $scope.problem_id, $scope.user_id);
-    // }, 1000);
-
-    // WebworkService.problemPGFile($scope.course, $scope.set_id, $scope.problem_id).success(function(data){
-    //     console.log(data);
-    //     window.pg_file = data;
-    //     $scope.pg_text = data;
-    // });
-
-    // WebworkService.problemSeed($scope.course, $scope.set_id, $scope.problem_id, $scope.user_id).success(function(data){
-    //     console.log(data);
-    //     $scope.problem_seed = data;
-    // });
 
     // Auto send 'release_student' when closing window
     $scope.$on('$destroy', function(event){
