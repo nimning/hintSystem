@@ -37,9 +37,14 @@ App.controller('ProblemUserCtrl', function($scope, $location, $window, $routePar
 
     $scope.displayed_hints = [];
     $scope.hints = [];
-    WebworkService.problemHints(course, set_id, problem_id).success(function(data){
-        $scope.hints = data;
-    });
+
+    $scope.reload_hints = function(){
+        WebworkService.problemHints(course, set_id, problem_id).success(function(data){
+            $scope.hints = data;
+        });
+    };
+
+    $scope.reload_hints();
     $scope.rendered_hint="";
     $scope.box="";
     $scope.preview_hint = function(hint){
@@ -87,32 +92,28 @@ App.controller('ProblemUserCtrl', function($scope, $location, $window, $routePar
             problem_id: problem_id
         };
     };
+
     $scope.edit_hint = function(hint){
         $scope.edited_hint = hint;
     };
-
     $scope.save_hint = function(hint){
         if(hint.hint_id){ // Hint is already in DB
             WebworkService.updateHint(course, hint.hint_id, hint.pg_text).
                 success(function(data){
                     $scope.edited_hint="";
-                    WebworkService.problemHints(course, set_id, problem_id).success(function(data){
-                        $scope.hints = data;
-                    });
-
+                    $scope.reload_hints();
                 });
         }else{
             WebworkService.createHint(course, set_id, problem_id, 'teacher', hint.pg_text).
                 success(function(data){
                     $scope.edited_hint="";
-                    WebworkService.problemHints(course, set_id, problem_id).success(function(data){
-                        $scope.hints = data;
-                    });
-
+                    $scope.reload_hints();
                 });
         }
     };
-
+    $scope.delete_hint = function(hint){
+        WebworkService.deleteHint(course, hint.hint_id).success($scope.reload_hints);
+    };
     $scope.cancel_edit_hint = function(){
         $scope.edited_hint="";
     };
