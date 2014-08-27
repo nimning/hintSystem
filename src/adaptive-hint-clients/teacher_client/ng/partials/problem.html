@@ -82,7 +82,7 @@
     <tfoot>
 	  <tr>
 	    <td colspan="6">
-		  <div st-pagination="" st-items-by-page="10" st-displayed-pages="7"></div>
+		  <div st-pagination="" st-items-by-page="10" st-displayed-pages="10"></div>
 	    </td>
 	  </tr>
     </tfoot>
@@ -91,19 +91,27 @@
 
 <section id="hints">
   <h3>Hints</h3>
-  <table class="table table-bordered" id="hints_table" st-table="displayed_hints" st-safe-src="problem_data.hints">
+  <table class="table table-bordered" id="hints_table" st-table="displayed_hints" st-safe-src="hints">
     <thead>
       <tr>
         <th class="st-sortable" st-sort="id">ID</th>
         <th class="st-sortable" st-sort="pg_text">PG Text</th>
         <th class="st-sortable" st-sort="author">Author</th>
+        <th class="st-sortable" st-sort="assigned_hints.length">Times Assigned</th>
+        <th class="st-sortable" st-sort="feedback_counts['helpful']">Helpful</th>
+        <th class="st-sortable" st-sort="feedback_counts['easy but unhelpful']">Easy</th>
+        <th class="st-sortable" st-sort="feedback_counts['too hard']">Too Hard</th>
       </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="hint in displayed_hints">
+      <tr ng-repeat="(hint_id, hint) in displayed_hints">
         <td>{{hint.id}}</td>
         <td>{{hint.pg_text}}</td>
         <td>{{hint.author}}</td>
+        <td>{{hint.assigned_hints.length}}</td>
+        <td>{{hint.feedback_counts.helpful}}</td>
+        <td>{{hint.feedback_counts['easy but unhelpful']}}</td>
+        <td>{{hint.feedback_counts['too hard']}}</td>
       </tr>
     </tbody>
   </table>

@@ -109,6 +109,30 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $routeParams,
             $scope.attemptsByPart[key].submitted = value;
         });
 
+        // Gather hint statistics
+        var hints = {};
+        angular.forEach(data.hints, function(value){
+            hints[value.id] = value;
+            hints[value.id].assigned_hints = [];
+            hints[value.id].feedback = [];
+            hints[value.id].feedback_counts = {
+                helpful: 0, 'easy but unhelpful': 0, 'too hard': 0
+            };
+        });
+        var assigned_hints = {};
+        angular.forEach(data.assigned_hints, function(value){
+            hints[value.hint_id].assigned_hints.push(value);
+            assigned_hints[value.id] = value;
+        });
+        angular.forEach(data.hint_feedback, function(value){
+            var hint_id = assigned_hints[value.assigned_hint_id].hint_id;
+            hints[hint_id].feedback.push(value);
+            hints[hint_id].feedback_counts[value.feedback]++;
+        });
+        $scope.hints = [];
+        angular.forEach(hints, function(value, key){
+            $scope.hints.push(value);
+        });
     }); // End exportProblemData promise resolver
 
 
