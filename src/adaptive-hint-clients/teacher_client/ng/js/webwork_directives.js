@@ -7,7 +7,8 @@ angular.module('ta-console.directives')
               seed: '=',
               studentData: '=',
               sockAnswers: '=',
-              box: '='
+              box: '=?',
+              showHintButtons: '@'
           },
           controller: function($scope){
               $scope.choose_box = function(boxname, b){
@@ -36,11 +37,14 @@ angular.module('ta-console.directives')
                               s = '<div>'+$.trim(s)+'</div>';
                               var e = $compile(s)($scope);
                               element.append(e);
-                              $(element).find('input[name^=AnSwEr]').each(function(i,el){
-                                  var boxname = $(el).attr('name');
-	                              var button = $compile('<button class="btn" ng-class="box_class(\''+boxname+'\')" ng-click="choose_box(\''+boxname+'\')"><span class="glyphicon glyphicon-plus"></span></button>')($scope);
-                                  $(el).after(button);
-                              });
+                              if ($scope.showHintButtons !== "false"){
+                                  $(element).find('input[name^=AnSwEr]').each(function(i,el){
+                                      var boxname = $(el).attr('name');
+	                                  var button = $compile('<button class="btn" ng-class="box_class(\''+boxname+'\')" ng-click="choose_box(\''+boxname+'\')"><span class="glyphicon glyphicon-plus"></span></button>')($scope);
+                                      $(el).after(button);
+                                  });
+
+                              }
                               $scope.hidePreview="hidden";
                           })
                           .error(function(){
