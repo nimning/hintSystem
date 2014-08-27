@@ -11,9 +11,11 @@ angular.module('ta-console.directives')
           },
           controller: function($scope){
               $scope.choose_box = function(boxname, b){
-                  $scope.box = boxname;
-
-                  console.log(boxname);
+                  if($scope.box !== boxname){
+                      $scope.box = boxname;
+                  }else{
+                      $scope.box = "";
+                  }
               };
 
               $scope.box_class = function(boxname){

@@ -78,5 +78,13 @@ App.factory('SockJSService', function($http, $window, $rootScope, $location, $in
             student_id: student_id
         });
     };
+
+    factory.add_hint = function(course_id, set_id, problem_id, student_id, location, hint_id, hint_html_template){
+        factory.send_command('add_hint', {
+            student_id: student_id, course_id: course_id, set_id: set_id,
+            problem_id: problem_id, location: location, hint_id: hint_id,
+            hint_html_template: hint_html_template
+        });
+    };
     return factory;
 });

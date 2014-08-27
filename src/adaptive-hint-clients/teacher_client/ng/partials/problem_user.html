@@ -22,10 +22,24 @@
       <td>{{hint.pg_text}}</td>
       <td>{{hint.author}}</td>
       <td>
-        <button type="button" class="btn btn-primary" ng-click="send_hint(hint)"><span class="glyphicon glyphicon-send"></span></button>
-        <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></button>
-        <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span></button>
+        <button type="button" class="btn btn-primary" ng-click="preview_hint(hint)" title="Preview Hint"><span class="glyphicon glyphicon-eye-open"></span></button>
+        <button type="button" class="btn btn-primary" title="Edit Hint"><span class="glyphicon glyphicon-pencil"></span></button>
+        <button type="button" class="btn btn-danger" title="Delete Hint"><span class="glyphicon glyphicon-trash"></span></button>
       </td>
     </tr>
   </tbody>
 </table>
+
+<div id="hint_preview_container" ng-if="rendered_hint">
+  <h4>Preview</h4>
+  <div class="row">
+    <div class="col-md-8">
+      <div id="hint_html" class="hint_html" ng-bind-html="rendered_hint"></div>
+    </div>
+    <div class="col-md-4">
+      <button type="button" class="btn btn-primary" ng-click="send_hint()">Send Hint</button>
+      <button type="button" class="btn" ng-click="cancel_hint()">Cancel</button>
+    </div>
+  </div>
+</div>
+

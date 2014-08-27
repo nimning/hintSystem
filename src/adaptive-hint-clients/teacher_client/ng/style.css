@@ -82,3 +82,11 @@ a.ng-binding{
         -webkit-transform: rotate(180deg);
         -moz-transform: rotate(180deg);
         transform: rotate(180deg); } }
+
+.hint_html {
+  background-color: #E0FAC0;
+  clear:left;
+  margin:10px;
+  border:1px solid;
+  padding:5px;
+}

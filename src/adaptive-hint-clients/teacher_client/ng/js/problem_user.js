@@ -31,10 +31,25 @@ App.controller('ProblemUserCtrl', function($scope, $location, $window, $routePar
     WebworkService.problemHints(course, set_id, problem_id).success(function(data){
         $scope.hints = data;
     });
+    $scope.rendered_hint="";
     $scope.box="";
-    $scope.send_hint = function(hint){
-        console.log(hint.hint_id);
-        console.log($scope.box);
+    $scope.preview_hint = function(hint){
+        $scope.hint = hint;
+        WebworkService.previewHint(hint, $scope.problem_seed, true).
+            then(function(rendered_html){
+                $scope.hint_html_template = rendered_html;
+                $scope.rendered_hint = $sce.trustAsHtml(rendered_html);
+            }, function(error){
+                console.log(error);
+            });
+    };
+
+    $scope.send_hint = function(){
+        SockJSService.add_hint(
+            course, set_id, problem_id, user_id, $scope.box, $scope.hint.hint_id, $scope.hint_html_template);
+    };
+    $scope.cancel_hint = function(){
+        $scope.rendered_hint = "";
     };
     // $interval(function(){
     //     SockJSService.get_student_info($scope.course, $scope.set_id, $scope.problem_id, $scope.user_id);

@@ -1,7 +1,7 @@
 var App = angular.module('ta-console');
 
-App.factory('WebworkService', function($http, $window, $rootScope, $location, APIHost) {
-    return {
+App.factory('WebworkService', function($http, $window, $rootScope, $location, $q, APIHost) {
+    var factory = {
         sets: function(course, fn) {
             $http
                 .get('http://'+APIHost+':4351/sets',
@@ -42,7 +42,34 @@ App.factory('WebworkService', function($http, $window, $rootScope, $location, AP
             }
             return $http
                 .post('http://'+APIHost+':4351/render',
-                      {pg_file: pg_file, seed: seed});
+                      {pg_file: pg_file, seed: seed.toString()});
+        },
+        previewHint: function(hint, seed, feedback){
+            var deferred = $q.defer();
+            factory.render(hint.pg_header+hint.pg_text+hint.pg_footer, seed).success(function (data){
+	            var err = data.error_msg;
+	            // Clean up
+	            var clean_html = data.rendered_html.replace(/[\s\S]*?<div/m, '<div').trim();
+	            // Rename answer box
+	            var hint_id = hint.hint_id;
+	            var assigned_hintbox_id = 'HINTBOXID';
+	            clean_html = clean_html.replace(/AnSwEr0001/g, assigned_hintbox_id);
+	            // Include feedback?
+	            if (feedback) {
+		            clean_html += '<div style="clear:left;">' +
+		                '<input type="radio" name="feedback_' +
+		                assigned_hintbox_id + '" value="too hard">Too hard' +
+		                '<input type="radio" name="feedback_' +
+		                assigned_hintbox_id + '" value="easy but unhelpful">Easy but unhelpful' +
+		                '<input type="radio" name="feedback_' +
+		                assigned_hintbox_id + '" value="helpful">Helpful' +
+		                '</div>';
+	            }
+                deferred.resolve(clean_html);
+            }).error(function(err){
+                deferred.reject(err);
+            });
+            return deferred.promise;
         },
         extractHeaderFooter: function(pg_text) {
             var re_header = /^[\s]*(TEXT\(PGML|BEGIN_PGML)[\s]+/gm;
@@ -63,4 +90,5 @@ App.factory('WebworkService', function($http, $window, $rootScope, $location, AP
 
         }
     };
+    return factory;
 });
