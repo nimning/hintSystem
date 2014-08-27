@@ -10,6 +10,7 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $routeParams,
     $scope.problem_data = {};
     $scope.studentData = {answers: []};
     $scope.attemptsByPart={};
+    $scope.displayed_hints = [];
     $scope.dtOptions = DTOptionsBuilder.newOptions()
         .withDOM('rtip')
         .withBootstrap();

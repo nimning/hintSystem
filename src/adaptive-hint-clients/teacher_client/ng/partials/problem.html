@@ -63,9 +63,30 @@
   </div>
 </div>
 
-<h3>Hints</h3>
-<div class="container">
-  <div class="row" ng-repeat = "hint in problem_data.hints">
-    <p ng-bind-html="hint.rendered_html"></p>
-    by {{hint.author}}</div>
-</div>
+<section id="hints">
+  <h3>Hints</h3>
+  <table class="table table-bordered" id="hints_table" st-table="displayed_hints" st-safe-src="problem_data.hints">
+    <thead>
+      <tr>
+        <th class="st-sortable" st-sort="id">ID</th>
+        <th class="st-sortable" st-sort="pg_text">PG Text</th>
+        <th class="st-sortable" st-sort="author">Author</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="hint in displayed_hints">
+        <td>{{hint.id}}</td>
+        <td>{{hint.pg_text}}</td>
+        <td>{{hint.author}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="row">
+    <div class="col-md-12">
+      <button type="button" class="btn btn-primary btn-lg" ng-click="new_hint()">
+        Create New Hint
+      </button>
+    </div>
+  </div>
+
+</section>
