@@ -53,7 +53,11 @@ App.controller('ApplicationCtrl', function($routeParams, $route, $rootScope, $in
 
     $rootScope.$on("$routeChangeSuccess", function(currentRoute, previousRoute){
         //Change page title, based on Route information
-        var titleExp = $interpolate($route.current.title);
-        $rootScope.title = titleExp($route.current.params);
+        if($route.current.title){
+            var titleExp = $interpolate($route.current.title);
+            $rootScope.title = titleExp($route.current.params);
+        }else{
+            $rootScope.title="";
+        }
     });
 });
