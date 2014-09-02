@@ -6,32 +6,44 @@ from zss import simple_distance
 import random
 from collections import defaultdict
 
-class TupleNode(object):
+class ExpressionNode(object):
+    """An expression tree class with proper getters for the zss module to
+    function.
+
+    """
     def __init__(self, tp):
         self.data = tp
         try:
             self.label = tp[0]
-            self.children = [TupleNode(x) for x in tp[1:]]
+            self.children = [ExpressionNode(x) for x in tp[1:]]
         except TypeError:
             self.label = tp
             self.children = []
 
-    @staticmethod
-    def get_children(node):
-        return node.children
-
-    @staticmethod
-    def get_label(node):
-        return node.label
-
-    def edit_distance(self, other_tree):
-        return simple_distance(self, other_tree,
-                               TupleNode.get_children, TupleNode.get_label)
     def __str__(self):
         return str(self.data)
 
     def __repr__(self):
-        return '<TupleNode %s>' % str(self.data)
+        return '<ExpressionNode %s>' % str(self.data)
+
+    @staticmethod
+    def get_children(node):
+        """Getter method for zss"""
+        return node.children
+
+    @staticmethod
+    def get_label(node):
+        """Getter method for zss"""
+        return node.label
+
+    def edit_distance(self, other_tree):
+        """
+        Returns the Zhang-Sasha edit distance between another tree, as
+        implemented in zss
+        """
+        return simple_distance(self, other_tree,
+                               ExpressionNode.get_children, ExpressionNode.get_label)
+
 with open('poker_cond2_1.pg.json', 'r') as f:
     data = json.load(f)
 
@@ -55,15 +67,16 @@ for i, a in answers.iteritems():
         # Only consider incorrect answers
         try:
             expr = webwork_parser.parse_webwork(a[part])
-            n = TupleNode(expr)
+            n = ExpressionNode(expr)
             trees.append(n)
         except webwork_parser.WebworkParseException:
             pass
 
-print len(trees)
+print len(trees), 'incorrect expressions parsed'
 
-# K Medoids Algorithm
 """
+K Medoids Algorithm
+
 1. Initialize: randomly select k of the n data points as the medoids
 2. Associate each data point to the closest medoid.
 3. For each medoid m
@@ -77,6 +90,11 @@ Repeat steps 2 to 4 until there is no change in the medoid.
 k = 10
 
 def cluster_cost(medoid, cluster):
+    """
+    Computes the total edit distance from a medoid to the elements in
+    its cluster
+
+    """
     costs = [x.edit_distance(medoid) for x in cluster]
     return sum(costs)
 
@@ -86,7 +104,7 @@ while medoids_changed:
     medoids_changed = False
     clusters = defaultdict(list)
     # Assign each data point to closest cluster
-    print '=== Start round ==='
+    print '=== Start Loop ==='
     for expr in trees:
         if expr not in medoids:
             dists = [x.edit_distance(expr) for x in medoids]
@@ -111,6 +129,6 @@ while medoids_changed:
             print medoid, new_medoid
             print costs[min_cost_i]
     medoids = clusters.keys()
-    print '=== End round ===', medoids_changed
+    print '=== End Loop ===', medoids_changed
     print medoids
 print clusters
