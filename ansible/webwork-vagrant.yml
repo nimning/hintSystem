@@ -1,0 +1,203 @@
+---
+- hosts: webwork-dev
+  user: vagrant
+  vars:
+    webwork_version: "WeBWorK-2.7-adaptive-hints"
+    pg_version: "PG-2.7"
+  tasks:
+    - name: Install Webwork dependencies
+      apt:
+        name: "{{ item }}"
+        state: "installed"
+      with_items:
+        - apache2
+        - apache2-mpm-prefork
+        - dvipng
+        - gcc
+        - git
+        - libapache2-request-perl
+        - libdatetime-perl
+        - libdbd-mysql-perl
+        - libemail-address-perl
+        - libexception-class-perl
+        - libextutils-xsbuilder-perl
+        - libfile-find-rule-perl
+        - libgd-gd2-perl
+        - libhtml-scrubber-perl
+        - libjson-perl
+        - liblocale-maketext-lexicon-perl
+        - libmail-sender-perl
+        - libmime-perl
+        - libnet-ip-perl
+        - libnet-ldap-perl
+        - libnet-oauth-perl
+        - libossp-uuid-perl
+        - libpadwalker-perl
+        - libphp-serialization-perl
+        - libsoap-lite-perl
+        - libsql-abstract-perl
+        - libstring-shellquote-perl
+        - libtext-csv-perl
+        - libtimedate-perl
+        - libuuid-tiny-perl
+        - libxml-parser-perl
+        - libxml-writer-perl
+        - make
+        - mysql-server
+        - netpbm
+        - openssh-server
+        - preview-latex-style
+        - texlive
+        - unzip
+    - name: Install other dependencies
+      apt:
+        name: "{{ item }}"
+        state: "installed"
+      with_items:
+        - cpanminus
+        - python-mysqldb
+        - nginx
+        - python-pip
+        - build-essential
+        - subversion
+        - python-dev
+        - curl
+        - ipython
+    - name: Install perl dependencies from CPAN
+      cpanm:
+        name: "{{ item }}"
+      with_items:
+        - XML::Parser::EasyTree
+        - Iterator
+        - Iterator::Util
+        - Pod::WSDL
+    - name: Check out webwork from github
+      git:
+        repo: "https://github.com/ibrahima/webwork2"
+        version: "{{ webwork_version }}"
+        dest: /opt/webwork/webwork2
+    - name: Check out pg from github
+      git:
+        repo: "https://github.com/openwebwork/pg"
+        version: "{{ pg_version }}"
+        dest: /opt/webwork/pg
+    - name: Checkout OPL from github
+      git:
+        repo: "https://github.com/openwebwork/webwork-open-problem-library"
+        dest: /opt/webwork/libraries/webwork-open-problem-library
+    - name: Create wwdata group for Webwork files
+      group:
+        name: wwdata
+        state: present
+    - name: Create courses directory
+      command: "cp -r courses.dist /opt/webwork/courses"
+      args:
+        chdir: /opt/webwork/webwork2
+        creates: /opt/webwork/courses
+    - name: Apache2 configuration
+      command: a2enmod apreq
+      args:
+        creates: /etc/apache2/mods-enabled/apreq.load
+      notify:
+        - restart apache
+    - name: Add vagrant user to wwdata group
+      user:
+        name: vagrant
+        append: yes
+        groups: wwdata
+    - name: Add www-data user to wwdata group
+      user:
+        name: www-data
+        append: yes
+        groups: wwdata
+    - name: Set ownership on Webwork files
+      file:
+        path: /opt/webwork
+        state: directory
+        recurse: yes
+        owner: vagrant
+        group: wwdata
+    - name: Set permissions on Webwork files
+      command: "chmod -R u+rwX,go+rX /opt/webwork"
+    - name: Set writable directories
+      command: "chmod -R g+w DATA ../courses htdocs/tmp logs tmp"
+      args:
+        chdir: /opt/webwork/webwork2
+    - name: Set sticky bits
+      command: "find DATA/ ../courses/ htdocs/tmp logs/ tmp/ -type d -a -exec chmod g+s {} \\;"
+      args:
+        chdir: /opt/webwork/webwork2
+    # - name: Check dependencies
+    #   command: /opt/webwork/webwork2/bin/check_modules.pl apache2
+    - name: Copy Webwork site.conf
+      copy:
+        src: conf/site.conf
+        dest: /opt/webwork/webwork2/conf/
+    - name: Copy Webwork conf files
+      copy:
+        src: conf/localOverrides.conf
+        dest: /opt/webwork/webwork2/conf/
+    - name: Copy webwork apache configuration
+      command: "cp webwork.apache2-config.dist webwork.apache2-config"
+      args:
+        chdir: /opt/webwork/webwork2/conf
+        creates: /opt/webwork/webwork2/conf/webwork.apache2-config
+    - name: Symlink apache2 configuration
+      file:
+        src: /opt/webwork/webwork2/conf/webwork.apache2-config
+        state: link
+        path: /etc/apache2/conf.d/webwork.apache2-config
+      notify:
+        - restart apache
+    - name: Create Webwork MySQL database
+      mysql_db:
+        name: webwork
+        state: present
+    - name: Create MySQL user
+      mysql_user:
+        name: webworkWrite
+        state: present
+        priv: webwork.*:SELECT,INSERT,UPDATE,DELETE,CREATE,ALTER,DROP,LOCK TABLES
+        password: "webwork"
+    - name: Install dependencies for python servers
+      pip:
+        requirements: /vagrant/requirements.txt
+    # - name: Start SockJS server
+    #   command: python /vagrant/src/adaptive-hints-servers/sockjs_server/sockjs_server.py
+    # - name: Start ReST server
+    #   command: python /vagrant/src/adaptive-hints-servers/rest_server/rest_server.py
+    - name: Make hints log directory
+      file:
+        path: /var/log/hints
+        state: directory
+    - name: Symlink teacher client
+      file:
+        src: /vagrant/src/adaptive-hint-clients/teacher_client
+        path: /var/www/teacher
+        state: link
+    - name: Symlink adaptive hints JS
+      file:
+        src: /vagrant/src/adaptive-hint-clients/webwork_js/adaptive_hints.js
+        path: /opt/webwork/webwork2/htdocs/js/
+        state: link
+    - name: Download PhantomJS
+      command: "wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.7-linux-x86_64.tar.bz2"
+      args:
+        chdir: /opt
+        creates: /opt/phantomjs-1.9.7-linux-x86_64.tar.bz2
+    - name: Unpack PhantomJS
+      command: "tar xf /opt/phantomjs-1.9.7-linux-x86_64.tar.bz2"
+      args:
+        chdir: /opt
+        creates: /opt/phantomjs-1.9.7-linux-x86_64/
+    - name: Symlink PhantomJS
+      file:
+        src: /opt/phantomjs-1.9.7-linux-x86_64/bin/phantomjs
+        path: /usr/local/bin/phantomjs
+        state: link
+
+  handlers:
+    - name: restart apache
+      service:
+        name: apache2
+        state: restarted

@@ -15,10 +15,6 @@ logger = logging.getLogger(__name__)
 
 class UserProblemHints(ProcessQuery):
     """ /user_problem_hints """
-    
-    def set_default_headers(self):
-        # Allows X-site requests
-        self.set_header("Access-Control-Allow-Origin", "*")
 
     def _add_header_footer(self, rows):
         ''' Add header footer and convert timestamps '''
@@ -75,12 +71,8 @@ class Hint(ProcessQuery):
 
     def set_default_headers(self):
         # Allows X-site requests
-        self.set_header("Access-Control-Allow-Origin", "*")
-        self.set_header("Access-Control-Allow-Methods", "GET, POST, DELETE")
-        
-    def options(self):
-        # Needed for X-site pre-flight checking. 
-        pass
+        super(ProcessQuery, self).set_default_headers()
+        self.add_header("Access-Control-Allow-Methods", "PUT,DELETE")
 
     def delete(self):
         '''  For helping the instructor delete hints
@@ -132,6 +124,20 @@ class Hint(ProcessQuery):
             ("{{pg_text}}", "{{author}}", "{{set_id}}", "{{problem_id}}") 
         '''
         self.process_query(query_template, write_response=False)
+
+    def put(self):
+        ''' For helping the instructor update hints 
+            Sample arguments:
+            course="CompoundProblems"
+            pg_text="This might help you.  3+3=? [____]{6}"
+            hint_id=6
+
+            With return 6   (the id of the row created)'''
+        query_template = '''UPDATE {{course}}_hint 
+            SET pg_text="{{pg_text}}" WHERE id={{hint_id}}
+        '''
+        self.process_query(query_template, write_response=False)
+
        
 
 class AssignedHint(ProcessQuery):
@@ -224,10 +230,6 @@ class HintFeedback(ProcessQuery):
 class ProblemHints(ProcessQuery):
     """ /problem_hints """
 
-    def set_default_headers(self):
-        # Allows X-site requests
-        self.set_header("Access-Control-Allow-Origin", "*")
-    
     def get(self):
         ''' 
             For listing all hints for a problem (for instructors)
@@ -326,9 +328,6 @@ class RunHintFilters(ProcessQuery):
         self.process_query(query_template, dehydrate=self.check_hint_assignment)
 
 class HintFilter(ProcessQuery):
-    def set_default_headers(self):
-        # Allows X-site requests
-        self.set_header("Access-Control-Allow-Origin", "*")
     
     def filter_names_to_list(self, rows):
         return [row['filter_name'] for row in rows]
@@ -343,9 +342,6 @@ class HintFilter(ProcessQuery):
         self.process_query(query_template, write_response=False)
 
 class AssignedHintFilter(ProcessQuery):
-    def set_default_headers(self):
-        # Allows X-site requests
-        self.set_header("Access-Control-Allow-Origin", "*")
 
     def get(self):
         query_template = ''' select {{course}}_hint_filter.filter_name, 

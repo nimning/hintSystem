@@ -1,0 +1,76 @@
+---
+- hosts: webwork-test
+  user: ibrahim
+  vars:
+    webwork_version: "WeBWorK-2.7"
+    pg_version: "PG-2.7"
+  tasks:
+    - name: Install Webwork dependencies
+      apt:
+        name: "{{ item }}"
+        state: "installed"
+      with_items:
+        - apache2
+        - apache2-mpm-prefork
+        - dvipng
+        - gcc
+        - git
+        - libapache2-request-perl
+        - libdatetime-perl
+        - libdbd-mysql-perl
+        - libemail-address-perl
+        - libexception-class-perl
+        - libextutils-xsbuilder-perl
+        - libfile-find-rule-perl
+        - libgd-gd2-perl
+        - libhtml-scrubber-perl
+        - libjson-perl
+        - liblocale-maketext-lexicon-perl
+        - libmail-sender-perl
+        - libmime-perl
+        - libnet-ip-perl
+        - libnet-ldap-perl
+        - libnet-oauth-perl
+        - libossp-uuid-perl
+        - libpadwalker-perl
+        - libphp-serialization-perl
+        - libsoap-lite-perl
+        - libsql-abstract-perl
+        - libstring-shellquote-perl
+        - libtext-csv-perl
+        - libtimedate-perl
+        - libuuid-tiny-perl
+        - libxml-parser-perl
+        - libxml-writer-perl
+        - make
+        - mysql-server
+        - netpbm
+        - openssh-server
+        - preview-latex-style
+        - texlive
+        - unzip
+        - cpanminus
+    - name: Install perl dependencies from CPAN
+      cpanm:
+        name: "{{ item }}"
+      with_items:
+        - XML::Parser::EasyTree
+        - Iterator
+        - Iterator::Util
+        - Pod::WSDL
+    - name: Check out webwork from github
+      git:
+        repo: "https://github.com/openwebwork/webwork2"
+        version: "{{ webwork_version }}"
+        dest: /opt/webwork/webwork2
+    - name: Check out pg from github
+      git:
+        repo: "https://github.com/openwebwork/pg"
+        version: "{{ pg_version }}"
+        dest: /opt/webwork/pg
+    - name: Checkout OPL from github
+      git:
+        repo: "https://github.com/openwebwork/webwork-open-problem-library"
+        dest: /opt/webwork/libraries/webwork-open-problem-library
+    - name: Apache2 configuration
+      command: a2enmod apreq

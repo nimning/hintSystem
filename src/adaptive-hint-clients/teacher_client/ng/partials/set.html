@@ -1,0 +1,57 @@
+<h1>{{set_id}}</h1>
+
+<h3>Students</h3>
+<table class="table" id="students_table" st-table="displayed_students" st-safe-src="unassigned_students">
+  <thead>
+    <tr>
+      <th class="st-sortable" st-sort="student_id">Student</th>
+      <th class="st-sortable" st-sort="problem_id">Problem</th>
+      <th class="st-sortable" st-sort="time_lastincorrect">Time since last incorrect</th>
+      <th class="st-sortable" st-sort="total_tries">Total incorrect tries</th>
+      <th class="st-sortable" st-sort="recent_tries">Incorrect tries (last 15 mins)</th>
+      <th class="st-sortable" >Time since last hint</th>
+	  <th class="st-sortable" >Online</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr st-select-row="row" st-select-mode="multiple" ng-repeat="student in displayed_students">
+      <td><a ng-href="#/{{course}}/sets/{{set_id}}/problems/{{student.problem_id}}/users/{{student.student_id}}">{{student.student_id}}</a></td>
+      <td>{{student.problem_id}}</td>
+      <td am-time-ago="student.time_lastincorrect" am-preprocess="unix"></td>
+      <td>{{student.total_tries}}</td>
+      <td>{{student.recent_tries}}</td>
+      <td am-time-ago="student.time_lasthint" am-preprocess="unix"></td>
+      <td>{{student.is_online}}</td>
+      <td></td>
+    </tr>
+  </tbody>
+  <tfoot>
+	<tr>
+	  <td colspan="7">
+		<div st-pagination="" st-items-by-page="10" st-displayed-pages="7"></div>
+	  </td>
+	</tr>
+  </tfoot>
+</table>
+
+<h3>Problems</h3>
+<table class="table" id="problems_table" datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs">
+  <thead>
+    <tr>
+      <th>Problem ID</th>
+      <th>Source File</th>
+      <th>Value</th>
+      <th>Total Attempts</th>
+      <th>Hints</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="problem in problems" dt-rows="">
+      <td><a ng-href="#/{{course}}/sets/{{set_id}}/problems/{{problem.problem_id}}">{{problem.problem_id}}</a></td>
+      <td>{{problem.source_file}}</td>
+      <td>{{problem.value}}</td>
+      <td>{{problem.attempt_count}}</td>
+      <td>{{problem.hint_count}}</td>
+    </tr>
+  </tbody>
+</table>

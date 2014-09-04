@@ -1,0 +1,37 @@
+<h1>TA Console</h1>
+
+<h2>Assignments</h2>
+<div id="sort-options">
+  Sort by:
+  <ul id="assignment-sort-opts" class="nav nav-pills">
+    <li id="assignment-sort-students" ng-class="{active: orderKey == 'students'}"><a ng-click="orderKey='students'; reverse=true;">Students</a></li>
+    <li id="assignment-sort-duedate" ng-class="{active: orderKey == 'due'}"><a ng-click="orderKey='due'; reverse=false;">Due Date</a></li>
+  </ul>
+</div>
+<label class="checkbox-inline">
+  <input type="checkbox" id="inlineCheckbox1" ng-model="assignmentsWoStudents"> Show assignments without students
+</label>
+<!-- <label class="checkbox-inline">
+     <input type="checkbox" id="inlineCheckbox2" ng-model="pastDueAssignments"> Show past-due assignments
+</label> -->
+
+<div class="row">
+  <div class="col-md-3" ng-repeat="assignment in assignments | filter : assignmentFilter | orderBy : orderKey : reverse">
+    <button type="button" class="btn btn-primary btn-full" ng-click="showAssignment(assignment);" ng-class="{active: assignment.name === currentAssignment.name}">
+      <p class="lead">{{assignment.name}}</p>
+      <p>{{assignment.students}} students</p>
+      <time datetime="{{assignment.due}}">{{assignment.due}}</time>
+    </button>
+  </div>
+</div>
+
+
+<h2>{{currentAssignment.name}} Problems</h2>
+<div class="row">
+  <div class="col-md-2" ng-repeat="problem in problems">
+    <button type="button" class="btn btn-primary btn-full" ng-click="showProblem(problem);" ng-class="{active: currentProblem.number == problem.number}">
+      <p class="lead">{{problem.number}}</p>
+      <p>{{problem.students}} students</p>
+    </button>
+  </div>
+</div>

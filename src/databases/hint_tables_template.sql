@@ -9,6 +9,7 @@ CREATE TABLE {{course_name}}_hint (
     set_id varchar(255) NOT NULL,
     problem_id int NOT NULL,
     created TIMESTAMP,
+    deleted boolean default false,
 
     primary key (id)
 );
@@ -26,7 +27,6 @@ CREATE TABLE {{course_name}}_assigned_hint (
     -- When the hint was assigned:
     assigned TIMESTAMP,
     hint_html text NOT NULL,
-    deleted boolean default false,
 
     primary key (id),
     CONSTRAINT FOREIGN KEY (hint_id) REFERENCES {{course_name}}_hint(id)

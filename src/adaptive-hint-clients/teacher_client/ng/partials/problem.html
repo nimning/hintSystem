@@ -1,0 +1,132 @@
+<h3>Problem {{problem_id}}</h3>
+<a class="btn btn-info" ng-href="{{download_json_url}}">Download Problem Data (JSON)</a>
+<div pg-file-preview pg-file="problem_data.pg_file" seed="1234" student-data="studentData" show-hint-buttons="false"></div>
+<h3>Attempts</h3>
+<table class="table table-striped" id="attempts_by_part" datatable="ng" dt-options="dtOptions">
+  <thead>
+    <tr>
+      <th>Part</th>
+      <th>Number of Submissions</th>
+      <th>Realtime Answers</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="(part, attempts) in attemptsByPart" dt-rows="">
+      <td>{{part}}</td>
+      <td>{{attempts.submitted}}</td>
+      <td>{{attempts.realtime}}</td>
+    </tr>
+  </tbody>
+</table>
+
+<section id="active_students">
+  <h3>Active Students</h3>
+  <table class="table" id="students_table" st-table="displayed_students" st-safe-src="unassigned_students">
+    <thead>
+      <tr>
+        <th class="st-sortable" st-sort="student_id">Student</th>
+        <th class="st-sortable" st-sort="problem_id">Current Problem</th>
+        <th class="st-sortable" >Time since last incorrect</th>
+        <th class="st-sortable" st-sort="total_tries">Total incorrect tries</th>
+        <th class="st-sortable" st-sort="recent_tries">Incorrect tries (last 15 mins)</th>
+        <th class="st-sortable" >Time since last hint</th>
+	    <th class="st-sortable" >Online</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr st-select-row="row" st-select-mode="multiple" ng-repeat="student in displayed_students">
+        <td><a ng-href="#/{{course}}/sets/{{set_id}}/problems/{{student.problem_id}}/users/{{student.student_id}}">{{student.student_id}}</a></td>
+        <td>{{student.problem_id}}</td>
+        <td am-time-ago="student.time_lastincorrect" am-preprocess="unix"></td>
+        <td>{{student.total_tries}}</td>
+        <td>{{student.recent_tries}}</td>
+        <td am-time-ago="student.time_lasthint" am-preprocess="unix"></td>
+        <td>{{student.is_online}}</td>
+        <td></td>
+      </tr>
+    </tbody>
+    <tfoot>
+	  <tr>
+	    <td colspan="7">
+		  <div st-pagination="" st-items-by-page="20" st-displayed-pages="7"></div>
+	    </td>
+	  </tr>
+    </tfoot>
+  </table>
+</section>
+
+<section id="historical_data">
+  <h3>All Students</h3>
+  <table class="table" id="all_students_table" st-table="displayed_historical_students" st-safe-src="historical_students">
+    <thead>
+      <tr>
+        <th class="st-sortable" st-sort="student_id">Student</th>
+        <th class="st-sortable" st-sort="last_attempt_time">Time since last incorrect</th>
+        <th class="st-sortable" st-sort="total_tries">Total incorrect tries</th>
+        <th class="st-sortable" st-sort="realtime_tries">Realtime Tries</th>
+        <th class="st-sortable" >Time since last hint</th>
+	    <th class="st-sortable" >Online</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="student in displayed_historical_students">
+        <td><a ng-href="#/{{course}}/sets/{{set_id}}/problems/{{problem_id}}/users/{{student.student_id}}">{{student.student_id}}</a></td>
+        <td am-time-ago="student.last_attempt_time"></td>
+        <td>{{student.total_tries}}</td>
+        <td>{{student.realtime_tries}}</td>
+        <td am-time-ago="student.last_answer.timestamp"></td>
+        <td>{{student.is_online}}</td>
+        <td></td>
+      </tr>
+    </tbody>
+    <tfoot>
+	  <tr>
+	    <td colspan="6">
+		  <div st-pagination="" st-items-by-page="10" st-displayed-pages="10"></div>
+	    </td>
+	  </tr>
+    </tfoot>
+  </table>
+</section>
+
+<section id="hints">
+  <h3>Hints</h3>
+  <table class="table table-bordered" id="hints_table" st-table="displayed_hints" st-safe-src="hints">
+    <thead>
+      <tr>
+        <th class="st-sortable" st-sort="id">ID</th>
+        <th class="st-sortable" st-sort="pg_text">PG Text</th>
+        <th class="st-sortable" st-sort="author">Author</th>
+        <th class="st-sortable" st-sort="assigned_hints.length">Times Assigned</th>
+        <th class="st-sortable" st-sort="feedback_counts['helpful']">Helpful</th>
+        <th class="st-sortable" st-sort="feedback_counts['easy but unhelpful']">Easy</th>
+        <th class="st-sortable" st-sort="feedback_counts['too hard']">Too Hard</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="(hint_id, hint) in displayed_hints">
+        <td>{{hint.id}}</td>
+        <td>{{hint.pg_text}}</td>
+        <td>{{hint.author}}</td>
+        <td>{{hint.assigned_hints.length}}</td>
+        <td>{{hint.feedback_counts.helpful}}</td>
+        <td>{{hint.feedback_counts['easy but unhelpful']}}</td>
+        <td>{{hint.feedback_counts['too hard']}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="row">
+    <div class="col-md-12">
+      <button type="button" class="btn btn-primary btn-lg" ng-click="new_hint()">
+        Create New Hint
+      </button>
+    </div>
+  </div>
+
+</section>
+
+<!-- <div class="row">
+<div class="col-md-12 panel panel-default" ng-repeat="(student, activity) in attempts">{{student}}, {{activity.length}} attempts
+<div student-timeline activity="activity" student="student" student-data="studentData"></div>
+</div>
+</div> -->

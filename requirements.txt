@@ -1,0 +1,12 @@
+tornado
+pandas
+tzlocal
+sockjs-tornado
+requests
+sqlalchemy
+alembic
+selenium
+PyJWT
+PyCrypto
+matplotlib
+

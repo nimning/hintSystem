@@ -1,0 +1,76 @@
+<h3>Student {{user_id}} - Problem {{problem_id}}</h3>
+<div pg-file-preview pg-file="pg_file" seed="problem_seed" student-data="studentData" sock-answers="current_answers" box="box"></div>
+
+<div class="row">
+  <div class="col-md-12 panel panel-default" ng-repeat="(student, activity) in attempts">{{student}}, {{activity.length}} attempts
+    <div student-timeline activity="activity" student="student" student-data="studentData"></div>
+  </div>
+</div>
+
+<div id="hints_area" collapse="edited_hint">
+  <h3>Hints</h3>
+  <table class="table table-bordered" id="hints_table" st-table="displayed_hints" st-safe-src="hints">
+    <thead>
+      <tr>
+        <th class="st-sortable" st-sort="hint_id">ID</th>
+        <th class="st-sortable" st-sort="pg_text">PG Text</th>
+        <th class="st-sortable" st-sort="author">Author</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="hint in displayed_hints">
+        <td>{{hint.hint_id}}</td>
+        <td>{{hint.pg_text}}</td>
+        <td>{{hint.author}}</td>
+        <td>
+          <button type="button" class="btn btn-primary" ng-click="preview_hint(hint)" title="Preview Hint"><span class="glyphicon glyphicon-eye-open"></span></button>
+          <button type="button" class="btn btn-primary" ng-click="edit_hint(hint)" title="Edit Hint"><span class="glyphicon glyphicon-pencil"></span></button>
+          <button type="button" class="btn btn-danger" title="Delete Hint" ng-click="delete_hint(hint)"><span class="glyphicon glyphicon-trash"></span></button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="row">
+    <div class="col-md-12">
+      <button type="button" class="btn btn-primary btn-lg" ng-click="new_hint()">
+        Create New Hint
+      </button>
+    </div>
+  </div>
+</div>
+<div id="hint_preview_container" ng-if="rendered_hint">
+  <h4>Preview</h4>
+  <div class="row">
+    <div class="col-md-8">
+      <div id="hint_html" class="hint_html" ng-bind-html="rendered_hint"></div>
+    </div>
+    <div class="col-md-4">
+      <div class="alert alert-warning" ng-show="!box"><strong>Select part to send hint to!</strong></div>
+      <button type="button" class="btn btn-primary" ng-click="send_hint()" ng-disabled="!box">Send Hint</button>
+      <button type="button" class="btn" ng-click="cancel_hint()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div id="hint_editor" collapse="!edited_hint">
+  <h3>Edit Hint</h3>
+  <div class="row">
+    <div class="col-md-6">
+      <div ng-model="edited_hint.pg_text" ui-codemirror="" ui-codemirror-opts="editorOptions"></div>
+      <div class="hint_html" ng-bind-html="hint_editor_preview"></div>
+    </div>
+    <div class="col-md-6">
+      <div ng-model="pg_text" ui-codemirror="" ui-codemirror-opts="pgFileEditorOptions"></div>
+    <button type="button" class="btn btn-primary" ng-click="save_hint(edited_hint)">
+      Save Hint
+    </button>
+    <button type="button" class="btn" ng-click="cancel_edit_hint()">
+      Cancel
+    </button>
+
+    </div>
+  </div>
+  <div class="row">
+  </div>
+</div>

@@ -4,6 +4,17 @@ from process_query import ProcessQuery, conn
 from webwork_config import webwork_dir
 from tornado.template import Template
 from convert_timestamp import utc_to_system_timestamp
+from json_request_handler import JSONRequestHandler
+import tornado.web
+import json
+from datetime import datetime
+import logging
+logger = logging.getLogger(__name__)
+
+def serialize_datetime(obj):
+    if isinstance(obj, datetime):
+        serial = obj.isoformat()
+        return serial
 
 # GET /problem_seed?
 class ProblemSeed(ProcessQuery):
@@ -159,7 +170,6 @@ class RealtimeProblemAnswer(ProcessQuery):
             where {{course}}_problem.set_id     = "{{set_id}}" AND
                   {{course}}_problem.problem_id = {{problem_id}} '''
         query_rendered = Template(query_template).generate(**args) 
-        print query_rendered
         rows = conn.query(query_rendered)
         if len(rows) == 1:
             args['source_file'] = rows[0]['source_file']
@@ -196,10 +206,6 @@ class RealtimeProblemAnswer(ProcessQuery):
 
 # GET /set_ids?
 class SetIds(ProcessQuery):
-    def set_default_headers(self):
-        # Allows X-site requests
-        self.set_header("Access-Control-Allow-Origin", "*")
-
     def get(self):
         ''' 
             List set ids.  
@@ -217,3 +223,107 @@ class SetIds(ProcessQuery):
         self.process_query(query_template,
                            dehydrate=lambda rows: [x['set_id'] for x in rows])
 
+# GET /sets?
+class Sets(ProcessQuery):
+    def get(self):
+        ''' 
+            List sets.  
+
+            Sample arguments:
+            course="CompoundProblems", 
+
+            Response: 
+                [{"set_1"}, {"set_2"}, ...]
+            '''
+        query_template = '''
+            select set_id, open_date, due_date, answer_date  from {{course}}_set
+            order by open_date desc; 
+        '''
+        self.process_query(query_template)
+
+# GET /problems?
+class Problems(JSONRequestHandler, tornado.web.RequestHandler):
+    def get(self):
+        ''' 
+            List problems.  
+
+            Sample arguments:
+            course="CompoundProblems", 
+            set_id="Assignment1"
+            Response: 
+
+            '''
+        course = self.get_argument('course')
+        set_id = self.get_argument('set_id')
+
+        query = '''
+            SELECT p.problem_id, p.source_file, p.value,
+            COUNT(a.answer_id) AS attempt_count
+            FROM {0}_problem AS p
+            LEFT OUTER JOIN {0}_past_answer AS a
+            ON a.set_id = p.set_id AND a.problem_id = p.problem_id
+            WHERE p.set_id = %s
+            GROUP BY COALESCE(a.problem_id, p.problem_id)
+            ORDER BY problem_id ASC; '''.format(course)
+        logger.debug(query)
+        result = conn.query(query, set_id)
+
+        hints_query = ''' SELECT p.problem_id, COUNT(h.id) as hint_count
+        FROM {0}_problem as p LEFT OUTER JOIN {0}_hint as h
+        ON h.set_id = p.set_id AND h.problem_id = p.problem_id AND h.deleted = 0
+        WHERE p.set_id = %s
+        GROUP BY COALESCE(h.problem_id, p.problem_id)
+        ORDER BY problem_id ASC;
+        '''.format(course)
+        hints = conn.query(hints_query, set_id)
+        logger.debug(hints)
+        for i in range(len(result)):
+            result[i]['hint_count'] = hints[i]['hint_count']
+        logger.debug(result)
+        self.write(json.dumps(result))
+
+# GET /export_problem_data?
+class ExportProblemData(JSONRequestHandler, tornado.web.RequestHandler):
+    def get(self):
+        '''
+        Export all data about a problem
+        '''
+        course = self.get_argument('course')
+        set_id = self.get_argument('set_id')
+        problem_id = self.get_argument('problem_id')
+        query = 'SELECT * from {0}_problem WHERE set_id = %s AND problem_id = %s'.format(course)
+        result = conn.query(query, set_id, problem_id)[0]
+        pg_path = result['source_file']
+        with open(os.path.join(webwork_dir, 'courses', course, 'templates', pg_path), 'r') as f:
+            pg_file_contents = f.read()
+
+        out = {}
+        out['pg_file'] = pg_file_contents
+        out['filename'] = pg_path
+        past_answers = conn.query(
+            'SELECT * from {0}_past_answer where set_id = %s AND problem_id = %s'.format(course),
+            set_id, problem_id)
+
+        out['past_answers'] = past_answers
+
+        realtime_past_answers = conn.query(
+            'SELECT * from {0}_realtime_past_answer where set_id = %s AND problem_id = %s'.format(course),
+            set_id, problem_id)
+
+        out['realtime_past_answers'] = realtime_past_answers
+
+        hints = conn.query(
+            'SELECT * from {0}_hint where set_id = %s AND problem_id = %s'.format(course),
+            set_id, problem_id)
+        out['hints'] = hints
+
+        assigned_hints = conn.query(
+            'SELECT * from {0}_assigned_hint where set_id = %s AND problem_id = %s'.format(course),
+            set_id, problem_id)
+        out['assigned_hints'] = assigned_hints
+
+        hint_feedback = conn.query(
+            'SELECT {0}_assigned_hint_feedback.* from {0}_assigned_hint_feedback INNER JOIN {0}_assigned_hint ON {0}_assigned_hint_feedback.assigned_hint_id = {0}_assigned_hint.id WHERE {0}_assigned_hint.set_id = %s AND {0}_assigned_hint.problem_id = %s'.format(course),
+            set_id, problem_id)
+        out['hint_feedback'] = hint_feedback
+        self.write(json.dumps(out, default=serialize_datetime))
