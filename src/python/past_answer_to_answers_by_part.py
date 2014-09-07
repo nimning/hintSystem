@@ -44,12 +44,12 @@ if __name__ == '__main__':
 
     answers_by_part = Table("{0}_answers_by_part".format(args.course), metadata,
                             Column('id', Integer, primary_key=True),
-                            Column('user_id', String(100), nullable=False),
+                            Column('user_id', String(100), nullable=False, index=True),
                             Column('answer_id', Integer, nullable=False),
                             Column('answer_string', String(1024)),
                             Column('score', String(1), nullable=False),
-                            Column('problem_id', Integer, nullable=False),
-                            Column('set_id', String(100), nullable=False),
+                            Column('problem_id', Integer, nullable=False, index=True),
+                            Column('set_id', String(100), nullable=False, index=True),
                             Column('part_id', Integer, nullable=False),
                             Column('timestamp', DateTime, nullable=False)
     )
@@ -69,7 +69,7 @@ if __name__ == '__main__':
         print "Starting from", start_id
     else:
         start_id= 0
-    limit = 1000
+    limit = 1000000
     pa = pd.read_sql_query('SELECT user_id, answer_id, answer_string, scores, problem_id, set_id, timestamp from {0}_past_answer WHERE answer_id >= {1} LIMIT {2}'.format(args.course, start_id, limit), engine, parse_dates={'timestamp': {'unit': 's'}})
 
     last_pa_by_user_q ="SELECT answer_string from {0}_past_answer WHERE answer_id < {1} \
@@ -114,15 +114,18 @@ if __name__ == '__main__':
                 for part in range(len(answers)):
                     if len(prev_answers)<=part or len(prev_answers[part])==0 \
                        or answers[part] != prev_answers[part]:
-                        part_answer_c += 1
-                        ans_by_part['user_id'].append(row['user_id'])
-                        ans_by_part['answer_id'].append(row['answer_id'])
-                        ans_by_part['answer_string'].append(answers[part])
-                        ans_by_part['score'].append(row['scores'][part])
-                        ans_by_part['problem_id'].append(row['problem_id'])
-                        ans_by_part['set_id'].append(row['set_id'])
-                        ans_by_part['part_id'].append(part)
-                        ans_by_part['timestamp'].append(row['timestamp'])
+                        if  len(row.scores) <= part: # This is a weird error case
+                            print row
+                        else:
+                            part_answer_c += 1
+                            ans_by_part['user_id'].append(row['user_id'])
+                            ans_by_part['answer_id'].append(row['answer_id'])
+                            ans_by_part['answer_string'].append(answers[part])
+                            ans_by_part['score'].append(row['scores'][part])
+                            ans_by_part['problem_id'].append(row['problem_id'])
+                            ans_by_part['set_id'].append(row['set_id'])
+                            ans_by_part['part_id'].append(part)
+                            ans_by_part['timestamp'].append(row['timestamp'])
                     else:
                         if len(prev_answers) > part and answers[part] == prev_answers[part]:
                             duplicate_answer_c += 1
