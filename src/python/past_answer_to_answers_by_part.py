@@ -65,25 +65,24 @@ if __name__ == '__main__':
     # for row in res2:
     #     print row
     if res1:
-        start_id = res1.answer_id
+        start_id = res1.answer_id+1
         print "Starting from", start_id
     else:
         start_id= 0
     limit = 1000
     pa = pd.read_sql_query('SELECT user_id, answer_id, answer_string, scores, problem_id, set_id, timestamp from {0}_past_answer WHERE answer_id >= {1} LIMIT {2}'.format(args.course, start_id, limit), engine, parse_dates={'timestamp': {'unit': 's'}})
 
-    last_pa_by_user_q ="SELECT user_id, answer_id, answer_string, scores, \
-    problem_id,set_id, timestamp from {0}_past_answer WHERE answer_id < {1} \
+    last_pa_by_user_q ="SELECT answer_string from {0}_past_answer WHERE answer_id < {1} \
     AND user_id = '{2}' AND problem_id = '{3}' AND set_id='{4}' \
     ORDER BY answer_id DESC LIMIT 1"
 
     def last_answer_before(user_id, set_id, problem_id):
         query = last_pa_by_user_q.format(args.course, start_id, user_id, problem_id, set_id)
-        result = pd.read_sql_query(query, engine, parse_dates={'timestamp': {'unit': 's'}})
-        if result.empty:
-            return []
+        result = conn.execute(query).fetchone()
+        if result and result[0]:
+            return result[0].split('\t')
         else:
-            return result.iloc[0].answer_string.split('\t')
+            return []
     ans_by_part={'user_id':[],
                  'answer_id':[],
                  'answer_string':[],
@@ -104,7 +103,7 @@ if __name__ == '__main__':
 
         for user, user_pa in pas.sort('timestamp').groupby('user_id'):
             # user_pa = pas[pas['user_id']==user].sort(columns='timestamp') # get all rows for this user and sort by time
-            prev_answers = [] # last_answer_before(user, set_id, problem_id)
+            prev_answers = last_answer_before(user, set_id, problem_id)
             for i in range(len(user_pa)):
                 row=user_pa.iloc[i]
                 if not row['answer_string']:
@@ -135,4 +134,4 @@ if __name__ == '__main__':
     Answer_DF=pd.DataFrame(ans_by_part)
     print Answer_DF.sort(columns=['part_id','user_id','timestamp'])
     Answer_DF.to_sql('{0}_answers_by_part'.format(args.course), engine, if_exists='append', index=False)
-    embed()
+
