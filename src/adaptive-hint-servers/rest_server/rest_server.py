@@ -7,7 +7,7 @@ from render import Render
 from checkanswer import CheckAnswer
 from webwork import (ProblemSeed, ProblemPGPath, ProblemPGFile,
                      RealtimeUserProblemAnswers, RealtimeProblemAnswer,
-                     SetIds, Sets, Problems, ExportProblemData)
+                     SetIds, Sets, Problems, ExportProblemData, AnswersByPart)
 from hints_api import (UserProblemHints, Hint, AssignedHint,
                        ProblemHints, HintFeedback, RunHintFilters,
                        HintFilter, AssignedHintFilter)

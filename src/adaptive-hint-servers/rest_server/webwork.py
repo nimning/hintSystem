@@ -265,7 +265,6 @@ class Problems(JSONRequestHandler, tornado.web.RequestHandler):
             WHERE p.set_id = %s
             GROUP BY COALESCE(a.problem_id, p.problem_id)
             ORDER BY problem_id ASC; '''.format(course)
-        logger.debug(query)
         result = conn.query(query, set_id)
 
         hints_query = ''' SELECT p.problem_id, COUNT(h.id) as hint_count
@@ -327,3 +326,31 @@ class ExportProblemData(JSONRequestHandler, tornado.web.RequestHandler):
             set_id, problem_id)
         out['hint_feedback'] = hint_feedback
         self.write(json.dumps(out, default=serialize_datetime))
+
+# GET /answers_by_part?
+class AnswersByPart(ProcessQuery):
+    def get(self):
+        '''
+            List answers by part.
+
+            Sample arguments:
+            course="CompoundProblems",
+            set_id="Assignment1",
+            problem_id=1
+
+            Response:
+                [{"set_1"}, {"set_2"}, ...]
+            '''
+        query_parts = ['select *  from {0}_answers_by_part'.format(
+            self.get_argument('course'))]
+        if self.get_argument('set_id', False):
+            query_parts.append('WHERE set_id = "{0}"'.format(
+                self.get_argument('set_id')))
+        if self.get_argument('problem_id', False):
+            query_parts.append('AND problem_id = {0}'.format(
+                self.get_argument('problem_id')))
+        query_parts.append('ORDER BY timestamp ASC;')
+        query = ' '.join(query_parts)
+        result = conn.query(query)
+        self.write(json.dumps(result, default=serialize_datetime))
+
