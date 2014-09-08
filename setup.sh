@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-pwd=`pwd`
+pwd="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P)"
+echo $pwd
 
 export MYSQL_DUMP_DIR=${pwd}/data/db_backups
 echo 'Directory where the full mysql backup is dumped' 
@@ -36,4 +37,4 @@ export WWAH_NOTEBOOKS=${pwd}/src/notebooks
 echo 'ipython notebooks $WWAH_NOTEBOOKS=' 
 echo $WWAH_NOTEBOOKS
 
-export PYTHONPATH=$WWAH_SRC:$PYTHONPATH
+export PYTHONPATH=$WWAH_SRC/adaptive-hint-servers/:$WWAH_SRC:$PYTHONPATH
