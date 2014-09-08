@@ -1,0 +1,110 @@
+---
+- Orientation:
+    open_date: 2014-10-6 12:00:00 -7
+    close_date: 2014-10-13 12:00:00 -7
+    problems:
+      - setOrientation/prob01.pg
+      - setOrientation/prob02.pg
+      - setOrientation/prob03.pg
+      - setOrientation/prob04.pg
+      - setOrientation/prob05.pg
+      - setOrientation/prob06.pg
+      - setOrientation/prob07.pg
+      - setOrientation/prob08.pg
+      - setOrientation/prob09.pg
+      - setOrientation/prob10.pg
+      - setOrientation/prob11.pg
+      - setOrientation/prob12.pg
+      - setOrientation/prob13.pg
+      - setOrientation/prob14.pg
+      - setOrientation/prob15.pg
+- Sets and Combinatorics:
+    open_date: 2014-10-6 12:00:00 -7
+    close_date: 2014-10-13 12:00:00 -7
+    problems:
+      - setCombinatorics/BasicSets_1.pg
+      - setCombinatorics/BasicSets_2.pg
+      - setCombinatorics/BasicSets_3.pg
+      - yuncong_class0/q2.pg
+      - setCombinatorics/BasicSets1.pg
+      - setCombinatorics/ClassSize.pg
+- Uniform Discrete Probability Spaces and Combinatorics:
+    open_date: 2014-10-13 12:00:00 -7
+    close_date: 2014-10-20 12:00:00 -7
+    problems:
+      - setCombinatorics/UniformDist.pg
+      - yuncong_class0/q4.pg
+      - setCombinatorics/UniformDist1.pg
+      - local/setCombinatorics/p10.pg
+      - local/Library/ASU-topics/setCount/sw10_2_14_PGML.pg
+      - local/setCombinatorics/p11.pg
+      - local/Library/ASU-topics/setCount/sw10_1_33.pg
+      - local/Library/ASU-topics/setCount/sw10_2_21_PGML.pg
+      - local/Library/ASU-topics/setCount/sw10_1_7.pg
+      - local/Library/ASU-topics/setCount/p12.pg
+      - local/Library/ASU-topics/setCount/sw10_1_21_pgml.pg
+      - local/Library/ASU-topics/setCount/sw10_2_22.pg
+      - local/Library/ASU-topics/setCount/sw10_2_52.pg
+      - setCombinatorics/UniformDist2.pg
+      - setCombinatorics/UniformDist3.pg
+- Poker:
+    open_date: 2014-10-13 12:00:00 -7
+    close_date: 2014-10-20 12:00:00 -7
+    problems:
+      - local/setAssignment3Rerandomized/q4_1.pg
+      - local/setAssignment3Rerandomized/q4_4.pg
+      - local/setAssignment3Rerandomized/q4_5.pg
+      - local/setAssignment3/q4_0.pg
+      - local/setAssignment3/q4_9.pg
+      - setAssignment3/q1.pg
+      - setAssignemnt3/q2.pg
+      - setAssignment3/q3.pg
+      - local/setAssignment3/q4_1.pg
+      - local/setAssignment3/q4_2.pg
+      - local/setAssignment3/q4_3.pg
+      - local/setAssignment3/q4_4.pg
+      - local/setAssignment3/q4_5.pg
+      - local/setAssignment3/q4_6.pg
+      - local/setAssignment3/q4_7.pg
+      - local/setAssignment3/q4_8.pg
+- Infinite Sums:
+    open_date: 2014-10-13 12:00:00 -7
+    close_date: 2014-10-20 12:00:00 -7
+    problems:
+      - local/setIntro.readingTest/Reading5.Matching.pg
+      - local/setIntro.readingTest/Reading5.trueFalse.pg
+
+- CDF
+    open_date: 2014-10-13 12:00:00 -7
+    close_date: 2014-10-20 12:00:00 -7
+    problems:
+      - setAssignment10.23.13/cdf_rs.pg
+      - setmelkherj/cumulative_uniform_masses_1.pg
+      - setmelkherj/cumulative_uniform_masses_2.pg
+      - setmelkherj/cumulative_uniform_masses_5.pg
+      - setCDF/cdf_random.pg
+      - setCDF/cdf_random.pg
+      - setCDF/cdf_random.pg
+
+- Week 4 (Combinatorics?) (or is this week 2?):
+    open_date: 2014-10-20 12:00:00 -7
+    close_date: 2014-10-27 12:00:00 -7
+    problems:
+      - setProbability/coinProblems.pg
+      - setCombinatorics/ChoosingCandies.pg
+      - setCombinatorics/ShareCandy_ZZ.pg:
+          topic: SB
+      - setCombinatorics/TreatBags_ZZ.pg
+      - setexperimentalProblems/balls_bins_1_rs.pg
+      - setexperimentalProblems/balls_bins_2_rs.pg
+      - local/setCombinatorics/GrinsteadSnell3.2.10.pg
+      - local/setCombinatorics/GrinsteadSnell3.2.18.pg
+      - local/setCombinatorics/DiscreteProb1.pg
+      - setCombinatorics/Cards1.pg
+      - local/yuncong_class0/q1.pg
+      - local/yuncong_class0/q5.pg
+      - setCombinatorics/withoutReplacementExplanation.pg
+      - local/setCombinatorics/PigeonHole_PGML_ZZ.pg
+      - setCombinatorics/BinomialCoeffExplanation.pg
+      - local/yncong_class0/q6.pg
+      - setCombinatorics/Envelopes1.pg
