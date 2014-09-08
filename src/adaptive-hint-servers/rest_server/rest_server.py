@@ -39,6 +39,7 @@ application = tornado.web.Application([
     (r"/sets", Sets),
     (r"/problems", Problems),
     (r"/login", Login),
+    (r"/answers_by_part", AnswersByPart),
     (r"/export_problem_data", ExportProblemData),
     ], gzip=True)
 
