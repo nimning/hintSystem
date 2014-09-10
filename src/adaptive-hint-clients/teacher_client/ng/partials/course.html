@@ -7,6 +7,7 @@
       <th>Set ID</th>
       <th>Open Date</th>
       <th>Due Date</th>
+      <th>Attempts</th>
     </tr>
   </thead>
   <tbody>
@@ -14,6 +15,7 @@
       <td><a ng-href="#/{{course}}/sets/{{set.set_id}}">{{set.set_id}}</a></td>
       <td><time datetime="{{set.open_date*1000|date:'yyyy-MM-ddTHH:mm:ss.sssZ'}}">{{set.open_date*1000|date : "yyyy-MM-ddTHH:mm"}}</time></td>
       <td><time datetime="{{set.due_date*1000|date:'yyyy-MM-ddTHH:mm:ss.sssZ'}}">{{set.due_date*1000|date : "yyyy-MM-ddTHH:mm"}}</time></td>
+      <td>{{set.answer_count}}</td>
     </tr>
   </tbody>
 </table>
