@@ -341,10 +341,11 @@ class AnswersByPart(ProcessQuery):
             Sample arguments:
             course="CompoundProblems",
             set_id="Assignment1",
-            problem_id=1
+            problem_id=1,
+            user_id=iawwal
 
             Response:
-                [{"set_1"}, {"set_2"}, ...]
+                [{"answer_id": 123..., "answer_string":"42"}, ...]
             '''
         query_parts = ['select *  from {0}_answers_by_part'.format(
             self.get_argument('course'))]
@@ -354,6 +355,10 @@ class AnswersByPart(ProcessQuery):
         if self.get_argument('problem_id', False):
             query_parts.append('AND problem_id = {0}'.format(
                 self.get_argument('problem_id')))
+        if self.get_argument('user_id', False):
+            query_parts.append('AND user_id = "{0}"'.format(
+                self.get_argument('user_id')))
+
         query_parts.append('ORDER BY timestamp ASC;')
         query = ' '.join(query_parts)
         result = conn.query(query)
