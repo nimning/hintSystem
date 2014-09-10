@@ -7,14 +7,12 @@
     <tr>
       <th>Part</th>
       <th>Number of Submissions</th>
-      <th>Realtime Answers</th>
     </tr>
   </thead>
   <tbody>
     <tr ng-repeat="(part, attempts) in attemptsByPart" dt-rows="">
       <td>{{part}}</td>
       <td>{{attempts.submitted}}</td>
-      <td>{{attempts.realtime}}</td>
     </tr>
   </tbody>
 </table>

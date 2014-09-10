@@ -103,7 +103,9 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $routeParams,
         $scope.realtimeAttemptsByPart = {};
         angular.forEach(realtimeAttemptsByPart, function(value, key){
             var idx = parseInt(key.match(/\d+/));
-            $scope.attemptsByPart[idx].realtime = value;
+            if($scope.attemptsByPart[idx]){
+                $scope.attemptsByPart[idx].realtime = value;
+            }
         });
         angular.forEach(attemptsByPart, function(value, key){
             $scope.attemptsByPart[key].submitted = value;
