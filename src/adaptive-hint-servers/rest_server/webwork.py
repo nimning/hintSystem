@@ -239,9 +239,9 @@ class Sets(ProcessQuery):
             select s.set_id, s.open_date, s.due_date, s.answer_date,
             count(pa.answer_id) as answer_count
             from {{course}}_set as s
-            INNER JOIN {{course}}_past_answer AS pa
+            LEFT OUTER JOIN {{course}}_past_answer AS pa
             ON pa.set_id = s.set_id
-            GROUP BY pa.set_id
+            GROUP BY s.set_id
             order by open_date desc; 
         '''
         self.process_query(query_template)
