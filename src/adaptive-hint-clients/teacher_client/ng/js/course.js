@@ -26,8 +26,6 @@ App.controller('SetCtrl', function($scope, $location, $window, $routeParams, $in
     $scope.set_id = $routeParams.set_id;
     WebworkService.problems($scope.course, $scope.set_id).success(function(data){
         $scope.problems = data;
-        console.log(data);
-
     });
 
     $scope.unassigned_students = [];
