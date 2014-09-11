@@ -7,6 +7,29 @@
   </div>
 </div>
 
+<div id="attempts_area">
+  <h3>Attempts</h3>
+  <ul class="nav nav-pills" id="switch_parts">
+    <li class="part_button" ng-class="{active: part == current_part}" ng-repeat="(part, answers) in answersByPart" ng-click="showPart(part)"><a>Part {{part}}<hr>{{answers.length}} Tries</a></li>
+  </ul>
+
+  <table class="table table-bordered" id="part_{{part}}" st-table="displayed_answers" st-safe-src="answersByPart[current_part]">
+    <thead>
+      <tr>
+        <th class="st-sortable" st-sort="timestamp">Timestamp</th>
+        <th class="st-sortable" st-sort="answer_string">Answer</th>
+        <th class="st-sortable" st-sort="score">Correct</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="answer in displayed_answers">
+        <td class="nostretch">{{answer.timestamp}}</td>
+        <td  >{{answer.answer_string}}</td>
+        <td class="nostretch">{{answer.score}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 <div id="hints_area" collapse="edited_hint">
   <h3>Hints</h3>
   <table class="table table-bordered" id="hints_table" st-table="displayed_hints" st-safe-src="hints">

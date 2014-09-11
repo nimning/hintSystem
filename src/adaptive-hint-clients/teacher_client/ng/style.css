@@ -97,3 +97,10 @@ a.ng-binding{
   margin: 10px;
 }
 
+td.nostretch {
+    width:1%;
+    white-space:nowrap;
+}
+.part_button hr{
+    margin: 0px;
+}

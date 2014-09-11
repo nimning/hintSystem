@@ -8,7 +8,17 @@ App.controller('ProblemUserCtrl', function($scope, $location, $window, $routePar
     var problem_id = $scope.problem_id = $routeParams.problem_id;
     var user_id = $scope.user_id = $routeParams.user_id;
     $scope.student_data = {answers: []};
-
+    $scope.current_part = 0;
+    WebworkService.answersByPart(course, set_id, problem_id, user_id).
+        success(function(data){
+            $scope.answersByPart = {};
+            angular.forEach(data, function(value){
+                if (!$scope.answersByPart[value.part_id]){
+                    $scope.answersByPart[value.part_id] = [];
+                }
+                $scope.answersByPart[value.part_id].push(value);
+            });
+    });
     var sock = SockJSService.get_sock();
     $scope.current_answers = [];
     sock.onmessage = function(e) {
@@ -143,5 +153,8 @@ App.controller('ProblemUserCtrl', function($scope, $location, $window, $routePar
     };
 
 
-
+    $scope.showPart = function(part){
+        $scope.current_part = part;
+    };
+    $scope.displayed_answers = [];
 });
