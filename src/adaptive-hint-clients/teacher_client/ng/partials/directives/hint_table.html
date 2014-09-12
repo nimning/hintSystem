@@ -1,4 +1,4 @@
-<div id="hints_area" collapse="edited_hint">
+<div id="hints_area" collapse="editedHint">
   <h3>Hints</h3>
   <table class="table table-bordered" id="hints_table" st-table="displayed_hints" st-safe-src="hints">
     <thead>
@@ -37,8 +37,8 @@
       <div id="hint_html" class="hint_html" ng-bind-html="rendered_hint"></div>
     </div>
     <div class="col-md-4">
-      <div class="alert alert-warning" ng-show="!box"><strong>Select part to send hint to!</strong></div>
-      <button type="button" class="btn btn-primary" ng-click="send_hint()" ng-disabled="!box">Send Hint</button>
+      <div class="alert alert-warning" ng-show="!selectedBox"><strong>Select part to send hint to!</strong></div>
+      <button type="button" class="btn btn-primary" ng-click="send_hint()" ng-disabled="!selectedBox">Send Hint</button>
       <button type="button" class="btn" ng-click="cancel_hint()">Cancel</button>
     </div>
   </div>

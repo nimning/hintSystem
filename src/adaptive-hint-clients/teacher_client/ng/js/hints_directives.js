@@ -1,28 +1,35 @@
 angular.module('ta-console.directives')
-    .directive('hintTable', function($window, WebworkService, SockJSService) {
+    .directive('hintTable', function($window, $sce, WebworkService, SockJSService) {
         return {
             restrict: 'EA',
             scope: {
                 hints: '=',
-                selectedBox: '='
+                selectedBox: '=',
+                course: '=',
+                setId: '=',
+                problemId: '=',
+                userId: '=',
+                seed: '=',
+                editedHint: '=',
+                pgHeader: '=',
+                pgFooter: '='
             },
             controller: function($scope) {
 
                 $scope.displayed_hints = [];
-                $scope.hints = [];
 
                 $scope.reload_hints = function(){
-                    WebworkService.problemHints(course, set_id, problem_id).success(function(data){
-                        $scope.hints = data;
-                    });
+                    WebworkService.problemHints($scope.course, $scope.setId, $scope.problemId).
+                        success(function(data){
+                            $scope.hints = data;
+                        });
                 };
 
                 $scope.reload_hints();
                 $scope.rendered_hint="";
-                $scope.box="";
                 $scope.preview_hint = function(hint){
                     $scope.hint = hint;
-                    WebworkService.previewHint(hint, $scope.problem_seed, true).
+                    WebworkService.previewHint(hint, $scope.seed, true).
                         then(function(rendered_html){
                             $scope.hint_html_template = rendered_html;
                             $scope.rendered_hint = $sce.trustAsHtml(rendered_html);
@@ -33,7 +40,7 @@ angular.module('ta-console.directives')
 
                 $scope.send_hint = function(){
                     SockJSService.add_hint(
-                        course, set_id, problem_id, user_id, $scope.box, $scope.hint.hint_id, $scope.hint_html_template);
+                        $scope.course, $scope.setId, $scope.problemId, $scope.userId, $scope.selectedBox, $scope.hint.hint_id, $scope.hint_html_template);
                 };
                 $scope.cancel_hint = function(){
                     $scope.rendered_hint = "";
@@ -41,26 +48,34 @@ angular.module('ta-console.directives')
 
 
                 $scope.new_hint = function(){
-                    $scope.edited_hint = {
-                        pg_header: $scope.pg_header,
-                        pg_footer: $scope.pg_footer,
+                    $scope.editedHint = {
+                        pg_header: $scope.pgHeader,
+                        pg_footer: $scope.pgFooter,
                         author: 'teacher',
-                        set_id: set_id,
-                        problem_id: problem_id
+                        set_id: $scope.setId,
+                        problem_id: $scope.problemId
                     };
                 };
 
                 $scope.edit_hint = function(hint){
-                    $scope.edited_hint = hint;
+                    $scope.editedHint = hint;
                 };
 
                 $scope.delete_hint = function(hint){
-                    WebworkService.deleteHint(course, hint.hint_id).success($scope.reload_hints);
+                    WebworkService.deleteHint($scope.course, hint.hint_id).success($scope.reload_hints);
                 };
+                $scope.$watch('editedHint', function(newVal, oldVal){
+                    // When the edited hint is unset, some editing operation was finished
+                    if(!newVal){
+                        $scope.reload_hints();
+                    }
+                });
+
 
             },
             link: function($scope, element, attrs) {
-            }
+            },
+            templateUrl: 'partials/directives/hint_table.html'
         };
     });
 
