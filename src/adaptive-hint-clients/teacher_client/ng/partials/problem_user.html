@@ -1,5 +1,5 @@
 <h3>Student {{user_id}} - Problem {{problem_id}}</h3>
-<div pg-file-preview pg-file="pg_file" seed="problem_seed" student-data="studentData" sock-answers="current_answers" box="box"></div>
+<div pg-file-preview pg-file="pg_text" seed="problem_seed" student-data="studentData" sock-answers="current_answers" box="box"></div>
 
 <div class="row">
   <div class="col-md-12 panel panel-default" ng-repeat="(student, activity) in attempts">{{student}}, {{activity.length}} attempts
@@ -46,7 +46,7 @@
         <td>{{hint.hint_id}}</td>
         <td>{{hint.pg_text}}</td>
         <td>{{hint.author}}</td>
-        <td>
+        <td class="nostretch">
           <button type="button" class="btn btn-primary" ng-click="preview_hint(hint)" title="Preview Hint"><span class="glyphicon glyphicon-eye-open"></span></button>
           <button type="button" class="btn btn-primary" ng-click="edit_hint(hint)" title="Edit Hint"><span class="glyphicon glyphicon-pencil"></span></button>
           <button type="button" class="btn btn-danger" title="Delete Hint" ng-click="delete_hint(hint)"><span class="glyphicon glyphicon-trash"></span></button>

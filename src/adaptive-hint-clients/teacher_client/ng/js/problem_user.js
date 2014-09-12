@@ -38,6 +38,12 @@ App.controller('ProblemUserCtrl', function($scope, $location, $window, $routePar
     SockJSService.request_student($scope.course, $scope.set_id, $scope.problem_id, $scope.user_id);
     SockJSService.get_student_info($scope.course, $scope.set_id, $scope.problem_id, $scope.user_id);
 
+    WebworkService.problemSeed(course, set_id, problem_id, user_id).
+        success(function(data){
+            $scope.problem_seed = data;
+            console.log(data);
+        });
+    
     WebworkService.problemPGFile(course, set_id, problem_id).success(function(data){
         $scope.pg_text = JSON.parse(data);
         var hf = WebworkService.extractHeaderFooter($scope.pg_text);

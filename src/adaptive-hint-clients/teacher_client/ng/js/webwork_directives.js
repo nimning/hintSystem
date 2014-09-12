@@ -28,8 +28,8 @@ angular.module('ta-console.directives')
           },
           link: function($scope, element, attrs){
               $scope.hidePreview="";
-              $scope.$watch('pgFile', function(pgFile){
-                  if($scope.pgFile && $scope.pgFile.length > 0){
+              renderPreview = function(){
+                  if($scope.pgFile && $scope.pgFile.length > 0 && $scope.seed!=undefined){
                       WebworkService.render($scope.pgFile, String($scope.seed))
                           .success(function(data){
                               // Insert ng-model directive and disable the input
@@ -37,10 +37,11 @@ angular.module('ta-console.directives')
                               s = '<div>'+$.trim(s)+'</div>';
                               var e = $compile(s)($scope);
                               element.append(e);
-                              if ($scope.showHintButtons !== "false"){
+                              if ($scope.showHintButtons !== "false" &&
+                                  $(element).find('button').length === 0){
                                   $(element).find('input[name^=AnSwEr]').each(function(i,el){
                                       var boxname = $(el).attr('name');
-	                                  var button = $compile('<button class="btn" ng-class="box_class(\''+boxname+'\')" ng-click="choose_box(\''+boxname+'\')"><span class="glyphicon glyphicon-plus"></span></button>')($scope);
+	                                  var button = $compile('<button class="btn add-hint-btn" ng-class="box_class(\''+boxname+'\')" ng-click="choose_box(\''+boxname+'\')"><span class="glyphicon glyphicon-plus"></span></button>')($scope);
                                       $(el).after(button);
                                   });
 
@@ -51,7 +52,9 @@ angular.module('ta-console.directives')
                               console.log('boo');
                           });
                   }
-              });
+              };
+              $scope.$watch('pgFile', renderPreview);
+              $scope.$watch('seed', renderPreview);
 
               $scope.$watch('studentData.answers', function(answers, oldAnswers, scope){
                   if(!!answers){
