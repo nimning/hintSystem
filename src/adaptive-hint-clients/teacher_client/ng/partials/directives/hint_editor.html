@@ -1,0 +1,18 @@
+<div id="hint_editor" collapse="!hint">
+  <h3>Edit Hint</h3>
+  <div class="row">
+    <div class="col-md-6">
+      <div ng-model="hint.pg_text" ui-codemirror="" ui-codemirror-opts="editorOptions"></div>
+      <div class="hint_html" ng-bind-html="hint_editor_preview"></div>
+    </div>
+    <div class="col-md-6">
+      <div ng-model="pgFile" ui-codemirror="" ui-codemirror-opts="pgFileEditorOptions"></div>
+    <button type="button" class="btn btn-primary" ng-click="save_hint(hint)">
+      Save Hint
+    </button>
+    <button type="button" class="btn" ng-click="cancel_edit_hint()">
+      Cancel
+    </button>
+    </div>
+  </div>
+</div>
