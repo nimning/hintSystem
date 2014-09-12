@@ -96,7 +96,6 @@ if __name__ == '__main__':
     blank_lines = 0
     part_answer_c = 0
     duplicate_answer_c = 0
-    idkwtf = 0
     total_answer_count = 0
     for (set_id, problem_id), pas in pa.groupby(['set_id', 'problem_id']):
         print set_id, problem_id
@@ -112,8 +111,8 @@ if __name__ == '__main__':
                 answers=re.split('\t', row['answer_string'].strip())
                 total_answer_count += len(answers)
                 for part in range(len(answers)):
-                    if len(prev_answers)<=part or len(prev_answers[part])==0 \
-                       or answers[part] != prev_answers[part]:
+                    if (len(prev_answers)<=part or len(prev_answers[part])==0 \
+                       or answers[part] != prev_answers[part]) and len(answers[part]) > 0:
                         if  len(row.scores) <= part: # This is a weird error case
                             print row
                         else:
@@ -129,8 +128,6 @@ if __name__ == '__main__':
                     else:
                         if len(prev_answers) > part and answers[part] == prev_answers[part]:
                             duplicate_answer_c += 1
-                        else:
-                            idkwtf += 1
                 prev_answers=answers
 
     print blank_lines
