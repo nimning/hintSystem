@@ -121,10 +121,10 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $routeParams,
             hints[hint_id].feedback.push(value);
             hints[hint_id].feedback_counts[value.feedback]++;
         });
-        $scope.hints = [];
-        angular.forEach(hints, function(value, key){
-            $scope.hints.push(value);
-        });
+        // $scope.hints = [];
+        // angular.forEach(hints, function(value, key){
+        //     $scope.hints.push(value);
+        // });
     }); // End exportProblemData promise resolver
 
 
