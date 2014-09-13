@@ -1,7 +1,8 @@
 var App = angular.module('ta-console');
 
 App.controller('LoginCtrl', function($scope, $location, $window, $routeParams, AuthService){
-    var course = $routeParams.course;
+    var course = $scope.course = $routeParams.course;
+    
     $scope.submit = function(){
         AuthService.logIn(course, $scope.username, $scope.password);
     };
@@ -40,6 +41,10 @@ App.factory('AuthService', function($http, $window, $rootScope, $location,
         logOut: function() {
             Session.destroy();
             $rootScope.$emit(AUTH_EVENTS.logoutSuccess);
+            $location.path('/');
+        },
+        isAuthenticated: function(){
+            return Session.logged_in();
         }
     };
 });

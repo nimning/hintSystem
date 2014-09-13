@@ -12,36 +12,59 @@ App.config(
              when('/:course', {
                  templateUrl: 'partials/course.html',
                  controller: 'CourseCtrl',
-                 title: '{{course}}'
+                 title: '{{course}}',
+                 loginRequired: true
              }).
              when('/:course/sets/:set_id', {
                  templateUrl: 'partials/set.html',
                  controller: 'SetCtrl',
-                 title: '{{set_id}}'
+                 title: '{{set_id}}',
+                 loginRequired: true
              }).
              when('/:course/sets/:set_id/problems/:problem_id', {
                  templateUrl: 'partials/problem.html',
                  controller: 'ProblemCtrl',
-                 title: '{{set_id}} #{{problem_id}}'
+                 title: '{{set_id}} #{{problem_id}}',
+                 loginRequired: true
              }).
              when('/:course/sets/:set_id/problems/:problem_id/users/:user_id', {
                  templateUrl: 'partials/problem_user.html',
                  controller: 'ProblemUserCtrl',
-                 title: '{{set_id}} #{{problem_id}} - {{user_id}}'
+                 title: '{{set_id}} #{{problem_id}} - {{user_id}}',
+                 loginRequired: true
              }).
              when('/:course/login', {
                  templateUrl: 'partials/login.html',
                  controller: 'LoginCtrl',
-                 title: 'Log In'
+                 title: 'Log In',
+                 loginRequired: false
              }).
              when('/:course/console', {
                  templateUrl: 'partials/console.html',
                  controller: 'TAConsoleCtrl'
              }).
+             when('/', {
+                 templateUrl: 'partials/home.html',
+                 controller: 'HomeCtrl'
+             }).
              otherwise({
                  redirectTo: '/'
              });
-     }]);
+     }])
+    .run(function ($rootScope, $location, AUTH_EVENTS, AuthService) {
+        $rootScope.$on('$routeChangeStart', function (event, next) {
+            if(next.loginRequired){
+                if (!AuthService.isAuthenticated()) {
+                    $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
+                    if(next.params.course){
+                        $location.path('/'+next.params.course+'/login');
+                    } else{
+                        $location.path('/');
+                    }
+                }
+            }
+        });
+    });;
 
 App.constant('APIHost', 'webwork.cse.ucsd.edu');
 
