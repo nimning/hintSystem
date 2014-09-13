@@ -36,6 +36,7 @@ App.controller('ProblemUserCtrl', function($scope, $location, $window, $routePar
     SockJSService.request_student($scope.course, $scope.set_id, $scope.problem_id, $scope.user_id);
     SockJSService.get_student_info($scope.course, $scope.set_id, $scope.problem_id, $scope.user_id);
 
+    // FIXME: There's a weird race condition when the seed and pg file are retrieved at the same time
     WebworkService.problemSeed(course, set_id, problem_id, user_id).
         success(function(data){
             $scope.problem_seed = data;

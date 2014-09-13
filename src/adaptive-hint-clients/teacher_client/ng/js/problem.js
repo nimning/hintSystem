@@ -19,18 +19,8 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $routeParams,
     WebworkService.exportProblemData($scope.course, $scope.set_id, $scope.problem_id).success(function(data){
         $scope.problem_data = data;
         var headerFooter = WebworkService.extractHeaderFooter(data.pg_file);
-
-        for(var i=0; i<data.hints.length; i++){
-            var hint_text = headerFooter.pg_header + '\n' + $scope.problem_data.hints[i].pg_text +
-                '\n' + headerFooter.pg_footer;
-            WebworkService.render(hint_text, "1234").success(function(idx, result){
-                $scope.problem_data.hints[idx].rendered_html = result.rendered_html;
-            }.bind(this, i))
-            .error(function(){
-                console.log('boo');
-            });
-        }
-
+        $scope.pg_header = headerFooter.pg_header;
+        $scope.pg_footer = headerFooter.pg_footer;
         data.past_answers.forEach( function(attempt){
             if(!$scope.attempts[attempt.user_id]){
                 $scope.attempts[attempt.user_id] = [];

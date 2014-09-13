@@ -12,10 +12,11 @@ angular.module('ta-console.directives')
                 seed: '=',
                 editedHint: '=',
                 pgHeader: '=',
-                pgFooter: '='
+                pgFooter: '=',
+                enableSend: '=?'
             },
             controller: function($scope) {
-
+                $scope.enableSend = angular.isDefined($scope.enableSend) ? $scope.enableSend : true;
                 $scope.displayed_hints = [];
 
                 $scope.reload_hints = function(){
