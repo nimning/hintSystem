@@ -72,7 +72,10 @@ App.value('CurrentCourse', {name: 'Course'});
 
 App.controller('ApplicationCtrl', function($routeParams, $route, $rootScope, $interpolate,
                                            SockJSService, CurrentCourse, Session, AUTH_EVENTS){
-    var sock = SockJSService.connect(4350, 'teacher');
+    if(Session.user_id){
+        var sock = SockJSService.connect(4350, Session.user_id);
+    }
+
     $rootScope.$on("$routeChangeSuccess", function(currentRoute, previousRoute){
         if($routeParams.course){
             CurrentCourse.name = $routeParams.course;

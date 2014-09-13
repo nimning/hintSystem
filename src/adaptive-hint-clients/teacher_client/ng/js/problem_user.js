@@ -1,7 +1,7 @@
 var App = angular.module('ta-console');
 
 App.controller('ProblemUserCtrl', function($scope, $location, $window, $routeParams,
-                                           $sce, $interval, $timeout,
+                                           $sce, $interval, $timeout, Session,
                                            WebworkService, SockJSService){
     var course = $scope.course = $routeParams.course;
     var set_id = $scope.set_id = $routeParams.set_id;
@@ -32,7 +32,7 @@ App.controller('ProblemUserCtrl', function($scope, $location, $window, $routePar
             });
 	    }
     };
-    SockJSService.teacher_join('teacher', $scope.course, $scope.set_id, $scope.problem_id, $scope.user_id);
+    SockJSService.teacher_join(Session.user_id, $scope.course, $scope.set_id, $scope.problem_id, $scope.user_id);
     SockJSService.request_student($scope.course, $scope.set_id, $scope.problem_id, $scope.user_id);
     SockJSService.get_student_info($scope.course, $scope.set_id, $scope.problem_id, $scope.user_id);
 

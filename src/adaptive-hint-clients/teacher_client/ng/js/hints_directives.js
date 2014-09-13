@@ -1,5 +1,6 @@
 angular.module('ta-console.directives')
-    .directive('hintTable', function($window, $sce, WebworkService, SockJSService) {
+    .directive('hintTable', function($window, $sce, WebworkService,
+                                     SockJSService, Session) {
         return {
             restrict: 'EA',
             scope: {
@@ -52,7 +53,7 @@ angular.module('ta-console.directives')
                     $scope.editedHint = {
                         pg_header: $scope.pgHeader,
                         pg_footer: $scope.pgFooter,
-                        author: 'teacher',
+                        author: Session.user_id,
                         set_id: $scope.setId,
                         problem_id: $scope.problemId
                     };
@@ -119,7 +120,8 @@ angular.module('ta-console.directives')
                                 $scope.hint=false;
                             });
                     }else{
-                        WebworkService.createHint($scope.course, hint.set_id, hint.problem_id, 'teacher', hint.pg_text).
+                        WebworkService.createHint($scope.course, hint.set_id,
+                                                  hint.problem_id, hint.author, hint.pg_text).
                             success(function(data){
                                 $scope.hint=false;
                             });
