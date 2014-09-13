@@ -45,7 +45,7 @@ App.factory('WebworkService', function($http, $window, $rootScope, $location, $q
 
         render: function(pg_file, seed) {
             if(pg_file[0]!=='/'){ // Don't base64 encode absolute paths
-                pg_file = btoa(pg_file);
+                pg_file = btoa(unescape(encodeURIComponent(pg_file)));
             }
             return $http
                 .post('http://'+APIHost+':4351/render',
