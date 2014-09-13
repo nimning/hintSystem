@@ -88,8 +88,9 @@
             <li><a href="/webwork2">Webwork</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">{{userId}}</a></li>
-            <li><a ng-href="{{loginout.href}}">{{loginout.text}}</a></li>
+            <li ng-if="logged_in"><a href="#/{{current_course.name}}">{{user_id}}</a></li>
+            <li ng-if="logged_in"><a ng-click="logout()" href="javascript:void(0);">Logout</a></li>
+            <li ng-if="!logged_in"><a ng-href="#/{{current_course.name}}/login">Login</a></li>
           </ul>
         </div>
       </div>

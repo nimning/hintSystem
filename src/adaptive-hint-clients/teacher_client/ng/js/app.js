@@ -48,10 +48,12 @@ App.constant('APIHost', 'webwork.cse.ucsd.edu');
 App.value('CurrentCourse', {name: 'Course'});
 
 App.controller('ApplicationCtrl', function($routeParams, $route, $rootScope, $interpolate,
-                                           SockJSService, CurrentCourse){
+                                           SockJSService, CurrentCourse, Session, AUTH_EVENTS){
     var sock = SockJSService.connect(4350, 'teacher');
-
     $rootScope.$on("$routeChangeSuccess", function(currentRoute, previousRoute){
+        if($routeParams.course){
+            CurrentCourse.name = $routeParams.course;
+        }
         //Change page title, based on Route information
         if($route.current.title){
             var titleExp = $interpolate($route.current.title);
@@ -60,4 +62,8 @@ App.controller('ApplicationCtrl', function($routeParams, $route, $rootScope, $in
             $rootScope.title="";
         }
     });
+
+    $rootScope.$on(AUTH_EVENTS.loginSuccess, function(event){
+    });
+
 });
