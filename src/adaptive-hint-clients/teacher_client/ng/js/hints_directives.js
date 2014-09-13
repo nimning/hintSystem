@@ -143,6 +143,15 @@ angular.module('ta-console.directives')
                         }, 500);
                     }
                 });
+                // Workaround for bug with ng-show. There's supposed to be a
+                // ui-refresh option which handles this but it doesn't work.
+                $scope.$watch('hint', function(newVal, oldVal){
+                    if(newVal && !oldVal){
+                        $(".CodeMirror").each(function(i, el){
+                            el.CodeMirror.refresh();
+                        });
+                    }
+                });
             },
             templateUrl: 'partials/directives/hint_editor.html'
         };
