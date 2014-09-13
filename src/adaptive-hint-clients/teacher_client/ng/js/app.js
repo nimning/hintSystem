@@ -39,10 +39,6 @@ App.config(
                  title: 'Log In',
                  loginRequired: false
              }).
-             when('/:course/console', {
-                 templateUrl: 'partials/console.html',
-                 controller: 'TAConsoleCtrl'
-             }).
              when('/', {
                  templateUrl: 'partials/home.html',
                  controller: 'HomeCtrl'
