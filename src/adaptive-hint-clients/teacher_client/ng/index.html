@@ -50,6 +50,7 @@
     <script src="js/problem_user.js"></script>
     <script src="js/graphs.js"></script>
     <script src="js/webwork_service.js"></script>
+    <script src="js/messages.js"></script>
     <script src="js/sockjs_service.js"></script>
     <script src="js/webwork_directives.js"></script>
     <script src="js/hints_directives.js"></script>
@@ -96,6 +97,11 @@
       </div>
     </nav>
     <div class="container">
+      <div id="messages_container">
+        <div class="alert" ng-class="message.type" ng-repeat="message in messages" role="alert">
+          {{message.body}}
+        </div>
+      </div>
       <div ng-view></div>
     </div>
 

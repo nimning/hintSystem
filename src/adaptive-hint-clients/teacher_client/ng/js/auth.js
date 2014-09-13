@@ -19,9 +19,10 @@ App.constant('AUTH_EVENTS', {
 });
 
 App.factory('AuthService', function($http, $window, $rootScope, $location,
-                                    APIHost, CurrentCourse, Session, AUTH_EVENTS) {
+                                    APIHost, CurrentCourse, Session, AUTH_EVENTS, MessageService) {
     return {
         logIn: function(course, username, password) {
+            MessageService.clear();
             $http
                 .post('http://'+APIHost+':4351/login',
                       {course: course, username: username, password: password})
@@ -30,18 +31,21 @@ App.factory('AuthService', function($http, $window, $rootScope, $location,
                     Session.create(course, data.token);
                     $rootScope.$emit(AUTH_EVENTS.loginSuccess);
                     $location.path('/'+course);
+                    MessageService.addInfo('Logged in!');
                 })
                 .error(function (data, status, headers, config) {
                     // Erase the token if the user fails to login
                     Session.destroy();
                     $rootScope.$emit(AUTH_EVENTS.loginFailed);
                     $rootScope.message = 'Error: Invalid email or password';
+                    MessageService.addError('Login failed!');
                 });
         },
         logOut: function() {
             Session.destroy();
             $rootScope.$emit(AUTH_EVENTS.logoutSuccess);
             $location.path('/');
+            MessageService.addInfo('Logged out!');
         },
         isAuthenticated: function(){
             return Session.logged_in();

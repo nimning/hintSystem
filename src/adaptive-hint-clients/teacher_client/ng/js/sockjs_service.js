@@ -51,6 +51,11 @@ App.factory('SockJSService', function($http, $window, $rootScope, $location, $in
 
     };
 
+    factory.disconnect = function(){
+        if(connected){
+            sock.close();
+        }
+    };
     factory.teacher_join = function(teacher_id, course_id, set_id, problem_id, student_id){
         factory.send_command('teacher_join', {
             teacher_id: teacher_id, course_id: course_id, set_id: set_id,
