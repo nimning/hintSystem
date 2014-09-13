@@ -61,7 +61,6 @@
         <th class="st-sortable" st-sort="student_id">Student</th>
         <th class="st-sortable" st-sort="last_attempt_time">Time since last incorrect</th>
         <th class="st-sortable" st-sort="total_tries">Total incorrect tries</th>
-        <th class="st-sortable" st-sort="realtime_tries">Realtime Tries</th>
         <th class="st-sortable" >Time since last hint</th>
 	    <th class="st-sortable" >Online</th>
       </tr>
@@ -71,7 +70,6 @@
         <td><a ng-href="#/{{course}}/sets/{{set_id}}/problems/{{problem_id}}/users/{{student.student_id}}">{{student.student_id}}</a></td>
         <td am-time-ago="student.last_attempt_time"></td>
         <td>{{student.total_tries}}</td>
-        <td>{{student.realtime_tries}}</td>
         <td am-time-ago="student.last_answer.timestamp"></td>
         <td>{{student.is_online}}</td>
         <td></td>
