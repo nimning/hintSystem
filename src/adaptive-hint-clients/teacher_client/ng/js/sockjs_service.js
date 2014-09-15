@@ -8,6 +8,8 @@ App.factory('SockJSService', function($http, $window, $rootScope, $location, $in
     var factory = {};
     var sock;
     var connected = false;
+    var user_id;
+    var my_port;
     factory.connected = function(){
         return connected;
     };
@@ -17,9 +19,13 @@ App.factory('SockJSService', function($http, $window, $rootScope, $location, $in
     factory.send_command = function (cmd, args) {
         if(!connected){
             print("SockJS not connected");
-            $timeout(function(){
-                factory.send_command(cmd, args);
-            }, 100);
+            if(user_id){ // Auto reconnect SockJS
+                factory.connect(my_port, user_id);
+                $timeout(function(){
+                    factory.send_command(cmd, args);
+                }, 100);
+
+            }
         }else{
             sock.send(JSON.stringify({
                 "type" : cmd,
@@ -34,7 +40,8 @@ App.factory('SockJSService', function($http, $window, $rootScope, $location, $in
 	    sock = new SockJS('http://' + APIHost + ':' +
 			                  port +
 			                  '/teacher');
-
+        user_id = teacher_id;
+        my_port = port;
 	    sock.onopen = function() {
 	        print("INFO: connected");
             connected = true;
