@@ -59,23 +59,23 @@ App.service('Session', function ($window) {
         this.token = token;
         this.user_id = user.user_id;
         this.course = course;
-        $window.sessionStorage.token = token;
-        $window.sessionStorage.user_id = user.user_id;
-        $window.sessionStorage.course = course;
+        $window.localStorage.token = token;
+        $window.localStorage.user_id = user.user_id;
+        $window.localStorage.course = course;
     };
     this.destroy = function () {
         this.token = null;
         this.user_id = null;
         this.course = null;
-        delete $window.sessionStorage.token;
-        delete $window.sessionStorage.user_id;
+        delete $window.localStorage.token;
+        delete $window.localStorage.user_id;
     };
 
     this.logged_in = function(){
         return !!this.token;
     };
-    if($window.sessionStorage.course && $window.sessionStorage.token){
-        this.create($window.sessionStorage.course, $window.sessionStorage.token);
+    if($window.localStorage.course && $window.localStorage.token){
+        this.create($window.localStorage.course, $window.localStorage.token);
     }
     return this;
 });
@@ -84,8 +84,8 @@ App.factory('authInterceptor', function ($rootScope, $q, $window, $location) {
     return {
         request: function (config) {
             config.headers = config.headers || {};
-            if($window.sessionStorage.token) {
-                config.headers.Authorization = 'Bearer ' + $window.sessionStorage.token;
+            if($window.localStorage.token) {
+                config.headers.Authorization = 'Bearer ' + $window.localStorage.token;
             }
             return config;
         },
