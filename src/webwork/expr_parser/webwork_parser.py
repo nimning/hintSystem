@@ -2,15 +2,27 @@ import sys,os
 import pickle
 import ply.lex as lex
 import ply.yacc as yacc
+from math import factorial
 
+"""
+Parsing webwork expressions
+written by Matt Elkherj, Yoav Freund
 
-# -----------------------------------------------------------------------------
-# calc.py
-#
-# A simple calculator with variables -- all in one file.
-# -----------------------------------------------------------------------------
+The main two methods are:
+parse_webwork(expression), compute_webwork(expression)
+Where expression is a string containing what should be a valid webwork answer (otherwise an exception is thrown).
+
+parse_webwork - returns a tree, represented as nested tuples.
+Example: parse_webwork('C(32,5) - C(20,5)')
+Answer: ('+', ('C', 32, 5), ('-', ('C', 20, 5)))
+
+compute_webwork - returns the numeratical value of the expression
+Example:  compute_webwork('C(32,5) - C(20,5)')
+Answer:  185872L
+"""
 
 associative_ops = ['*','+']
+parse_output=''
 
 def reduce_associative(tree):
     ''' Given a tree of nested operations, group nested associative operations into a single tuple.  
@@ -93,11 +105,11 @@ t_ignore = " \t"
 def t_newline(t):
     r'\n+'
     t.lexer.lineno += t.value.count("\n")
-    
+
 def t_error(t):
     raise WebworkParseException(
         "Illegal character '%s'" % t.value[0])
-    
+
 # Build the lexer
 lex.lex()
 
@@ -129,34 +141,62 @@ def p_expression_ops(t):
                   | expression MINUS factor %prec PLUS
                   | factor MINUS factor     %prec PLUS
                   '''
-    if t[2] == '+'  : t[0] = ('+',t[1],t[3])
-    elif t[2] == '-': t[0] = ('+',t[1],('-',t[3]))
+    #global parse_output
+    if parse_output=='parse':
+        if t[2] == '+'  : t[0] = ('+',t[1],t[3])
+        elif t[2] == '-': t[0] = ('+',t[1],('-',t[3]))
+    else:
+        if t[2] == '+'  : t[0] = t[1]+t[3]
+        elif t[2] == '-': t[0] = t[1]-t[3]
 
 def p_factor_ops(t):
     '''factor : factor TIMES factor    %prec TIMES
                 | factor DIVIDE factor %prec TIMES
                 | factor EXP factor    %prec EXP
                   '''
-    if t[2] == '*': t[0] = ('*',t[1],t[3])
-    elif t[2] == '/': t[0] = ('*',t[1],('/',t[3]))
-    elif t[2] == '^' or t[2] == '**': t[0] = ('^',t[1],t[3])
+    #global parse_output
+    if parse_output=='parse':
+        if t[2] == '*': t[0] = ('*',t[1],t[3])
+        elif t[2] == '/': t[0] = ('*',t[1],('/',t[3]))
+        elif t[2] == '^' or t[2] == '**': t[0] = ('^',t[1],t[3])
+    else:
+        if t[2] == '*': t[0] = t[1]*t[3]
+        elif t[2] == '/': t[0] = t[1]/t[3]
+        elif t[2] == '^' or t[2] == '**': t[0] = t[1]**t[3]
 
 def p_expression_implicit_times(t):
     '''factor : factor factor %prec IMPL_TIMES'''
-    t[0] = ('*',t[1],t[2])
+    #global parse_output
+    if parse_output=='parse':
+        t[0] = ('*',t[1],t[2])
+    else:
+        t[0] = t[1]*t[2]
 
 def p_expression_uminus(t):
     'factor : MINUS factor %prec UMINUS'
-    t[0] = ('-',t[2])
+    #global parse_output
+    if parse_output=='parse':
+        t[0] = ('-',t[2])
+    else:
+        t[0]=-t[2]
 
 def p_expression_factorial(t):
     'factor : factor FACTORIAL %prec FACTORIAL'
-    t[0] = ('!',t[1])
-
+    #global parse_output
+    if parse_output=='parse':
+        t[0] = ('!',t[1])
+    else:
+        t[0]=factorial(t[1])
+        
 def p_expression_choose(t):
     'factor : CHOOSE LPAREN list RPAREN %prec CHOOSE'
-    lst = t[3]
-    t[0] = tuple(['C']+lst)
+    #global parse_output
+    if parse_output=='parse':
+        lst = t[3]
+        t[0] = tuple(['C']+lst)
+    else:
+        (m,n) = t[3]
+        t[0] = factorial(m)/(factorial(n)*factorial(m-n))
 
 def p_expression_group(t):
     '''factor : LPAREN expression RPAREN
@@ -207,12 +247,24 @@ def p_error(t):
 yacc.yacc()
 
 def parse_webwork(expr):
+    global parse_output
+    parse_output='parse'
     global expr_tree
     parsed = handle_comma_separated_number(expr)
     if parsed is None: #didn't match comma_separated_number, so parse expr
         yacc.parse(expr)
         parsed = expr_tree
     return reduce_associative(parsed)
+
+def compute_webwork(expr):
+    global parse_output
+    parse_output='compute'
+    global expr_tree
+    parsed = handle_comma_separated_number(expr)
+    if parsed is None: #didn't match comma_separated_number, so parse expr
+        yacc.parse(expr)
+        parsed = expr_tree
+    return parsed
 
 if __name__ == '__main__':
     webwork = pickle.load(open(os.path.join(sys.argv[1],'pickled_data'),'rb'))
