@@ -15,7 +15,7 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
 
     A new handler for a message can be defined as follows:
 
-    def __init__(self, *args, **kwargs):        
+    def __init__(self, *args, **kwargs):
         ...
         @self.add_handler('new_message')
         def handle_new_message(self, args):
@@ -26,12 +26,12 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
     ----------
         teacher_session : TeacherSession
            Teacher session
-           
+
     """
     def __init__(self, *args, **kwargs):
         super(TeacherSockJSHandler, self).__init__(*args, **kwargs)
         self.teacher_session = None
-                
+
         @self.add_handler('teacher_join')
         @gen.engine
         def handle_teacher_join(self, args):
@@ -81,9 +81,9 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
 
             """
             set_id = args.get('set_id', None)
-            
+
             yield gen.Task(self._perform_list_students, set_id)
-            
+
         @self.add_handler('add_hint')
         @gen.engine
         def handle_add_hint(self, args):
@@ -98,10 +98,10 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
 
               hint_id : string
                 Hint  ID
-                
+
               hint_html_template : string
                 HTML template
-              
+
             """
             try:
                 location = args['location']
@@ -115,9 +115,8 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
                                location,
                                hint_id,
                                hint_html_template)
-                
+
                 logger.info("%s: add_hint"%ts.teacher_id)
-                
             except:
                 logger.exception("Exception add_hint")
 
@@ -135,21 +134,21 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
 
               hintbox_id : string
                 Hint answer box ID
-                
+
             """
             try:
                 location = args['location']
                 hintbox_id = args['hintbox_id']
-                
+
                 # shorthand
                 ts = self.teacher_session
 
                 yield gen.Task(self._perform_unassign_hint,
                                location,
                                hintbox_id)
-                
+
                 logger.info("%s: remove_hint"%ts.teacher_id)
-                
+
             except:
                 logger.exception("Exception remove_hint")
 
@@ -160,7 +159,7 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
             """Handler for 'request_student'
 
             Request to help a student
-            
+
             args
             ----
               student_id : string
@@ -170,12 +169,12 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
             """
             try:
                 ts = self.teacher_session
-                
+
                 student_id = args['student_id']
                 course_id = args['course_id']
                 set_id = args['set_id']
                 problem_id = args['problem_id']
-                
+
                 yield gen.Task(self._perform_request_student,
                                student_id,
                                course_id,
@@ -183,7 +182,7 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
                                problem_id)
 
                 logger.info("%s: request_student"%ts.teacher_id)
-                
+
             except:
                 logger.exception("Exception handling 'request_student'")
 
@@ -193,7 +192,7 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
             """Handler for 'release_student'
 
             Release a student to the unassigned pool
-            
+
             args
             ----
               student_id : string
@@ -204,7 +203,7 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
             """
             try:
                 ts = self.teacher_session
-                
+
                 student_id = args['student_id']
                 course_id = args['course_id']
                 set_id = args['set_id']
@@ -217,7 +216,7 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
                                problem_id)
 
                 logger.info("%s: release_student"%ts.teacher_id)
-                
+
             except:
                 logger.exception("Exception handling 'release_student'")
 
@@ -228,16 +227,16 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
             try:
                 ts = self.teacher_session
                 yield gen.Task(self._perform_get_student_info)
-                logger.info("%s: get_student_info"%ts.teacher_id)    
+                logger.info("%s: get_student_info"%ts.teacher_id)
             except:
                 logger.exception("Exception handling 'get_student_info'")
- 
+
     ################################################################
     # Tasks                                                        #
     ################################################################
     def _perform_teacher_join(self, teacher_id, student_id,
                               course_id, set_id, problem_id,
-                              callback=None):     
+                              callback=None):
         # create an instance of TeacherSession
         self.teacher_session = TeacherSession(teacher_id,
                                               self,
@@ -245,7 +244,7 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
                                               course_id=course_id,
                                               set_id=set_id,
                                               problem_id=problem_id)
-                
+
         # shorthand
         ts = self.teacher_session
 
@@ -258,7 +257,7 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
 
     def _perform_list_students(self, set_id, callback=None):
         ts = self.teacher_session
-        
+
         # send student lists
         self.send_unassigned_students(ts.list_unassigned_students(set_id))
         self.send_my_students(ts.list_my_students())
@@ -281,11 +280,11 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
             assigned_hintbox_id = HintRestAPI.assign_hint(student_id,
                                                           course_id,
                                                           set_id,
-                                                          problem_id, 
+                                                          problem_id,
                                                           location,
                                                           hint_id,
                                                           hint_html_template)
-            
+
             # Find the student session and update its view
             ss = StudentSession.get_student_session(student_id,
                                                     course_id,
@@ -313,13 +312,13 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
             ss = StudentSession.get_student_session(student_id,
                                                     course_id,
                                                     set_id,
-                                                    problem_id)            
+                                                    problem_id)
             if ss is not None:
                 ss.update_hints()
 
             # Update teacher's view
             ts.update_hints()
-                
+
         # done
         callback()
 
@@ -331,9 +330,9 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
                                    course_id,
                                    set_id,
                                    problem_id)
-        
+
             self.send_student_info(info)
-        
+
         # done
         callback()
 
@@ -344,7 +343,7 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
                            course_id,
                            set_id,
                            problem_id)
-        
+
         # send student lists
         self.send_unassigned_students(ts.list_unassigned_students(set_id))
         self.send_my_students(ts.list_my_students())
@@ -385,7 +384,7 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
     def on_open(self, info):
         """Callback for when a teacher is connected"""
         logger.info("%s connected"%info.ip)
-        
+
     def on_close(self):
         """Callback for when a teacher is disconnected"""
         ts = self.teacher_session
@@ -399,5 +398,5 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
 
             if len(ts.teacher_id) > 0:
                 logger.info("%s left"%ts.teacher_id)
-        
+
         logger.info("%s disconnected"%self.session.conn_info.ip)

@@ -14,7 +14,7 @@ CREATE TABLE {{course_name}}_assigned_hint_filter (
     hint_filter_id int NOT NULL,
     -- When the hint was assigned:
     assigned TIMESTAMP,
-
+    trigger_cond TEXT,
     primary key (hint_id, hint_filter_id),
     CONSTRAINT FOREIGN KEY (hint_id) REFERENCES {{course_name}}_hint(id),
     CONSTRAINT FOREIGN KEY (hint_filter_id) REFERENCES {{course_name}}_hint_filter(id)

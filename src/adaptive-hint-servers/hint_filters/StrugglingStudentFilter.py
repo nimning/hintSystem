@@ -1,6 +1,6 @@
 from datetime import timedelta
 
-def struggling_student_filter(args, df, previous_hint_assignments):
+def struggling_student_filter(args, df, previous_hint_assignments, trigger_cond):
     ''' *** Input:
         args is a dictionary containing the most recent attempt by a student
         to answer a question.  This contains user_id, hint_id, set_id, problem_id,
