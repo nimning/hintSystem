@@ -8,6 +8,7 @@ CREATE TABLE {{course_name}}_hint (
     author varchar(255) NOT NULL,
     set_id varchar(255) NOT NULL,
     problem_id int NOT NULL,
+    part_id int,
     created TIMESTAMP,
     deleted boolean default false,
 
