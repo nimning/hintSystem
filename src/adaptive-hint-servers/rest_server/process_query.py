@@ -8,7 +8,8 @@ from get_header_footer import get_header, get_footer
 from json_request_handler import JSONRequestHandler
 
 from webwork_config import mysql_username, mysql_password
-
+import logging
+logger = logging.getLogger(__name__)
 # Connect to webwork mysql database
 conn = Connection('localhost',
                   'webwork',

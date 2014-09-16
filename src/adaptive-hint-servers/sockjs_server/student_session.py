@@ -17,27 +17,27 @@ class StudentSession(object):
     ---------------
      all_sessions : dict of StudentSession
         All student sessions
-    
+
     Properties
     ----------
      session_id : string
        Webwork session ID
-       
+
      student_id : string
        Webwork student ID
-       
+
      course_id : string
        Webwork course ID
-       
+
      set_id : string
        Webwork set ID
-       
+
      problem_id : string
        Webwork problem ID
-              
+
      pg_file : string
        PG file path on the server
-       
+
      pg_seed : int
        Random seed
 
@@ -55,7 +55,7 @@ class StudentSession(object):
 
      solved  : boolean
        Whether this problem is solved
-       
+
     """
     all_sessions = dict()
 
@@ -97,9 +97,9 @@ class StudentSession(object):
         self._sockjs_handler = sockjs_handler
         # internal cache
         self._answers = None
-        self._hints = None 
+        self._hints = None
         self._summary = None
-       
+
     @property
     def hints(self):
         if self._hints is None:
@@ -108,7 +108,7 @@ class StudentSession(object):
                                                              self.set_id,
                                                              self.problem_id)
         return self._hints
-    
+
     @property
     def answers(self):
         if self._answers is None:
@@ -128,7 +128,7 @@ class StudentSession(object):
         # update recent tries
         if _summary['recent_tries'] > 0:
             Thread(target=self.update_summary).start()
-            
+
         _summary['is_online'] = (self._sockjs_handler is not None)
         return _summary
 
@@ -137,12 +137,12 @@ class StudentSession(object):
         answer_dict = {}
         # recontruct the current answers
         for answer in self.answers:
-            answer_dict[answer['boxname']] = answer        
+            answer_dict[answer['boxname']] = answer
         return answer_dict.values()
 
     def update_hints(self):
         """Update the hints displayed on the client"""
-        try:            
+        try:
             # invalidate internal cache
             self._hints = None
             if self._sockjs_handler is not None:
@@ -163,10 +163,10 @@ class StudentSession(object):
                                          self.set_id,
                                          self.problem_id,
                                          answer_status)
-        hint_ids = HintRestAPI.apply_hint_filters(self.student_id, 
+        hint_ids = HintRestAPI.apply_hint_filters(self.student_id,
                                        self.course_id,
-                                       self.set_id, 
-                                       self.problem_id, 
+                                       self.set_id,
+                                       self.problem_id,
                                        boxname)
         if len(hint_ids) > 0:
             self.update_hints()
@@ -221,4 +221,3 @@ class StudentSession(object):
                           'recent_tries' : sum_recent_tries,
                           'time_lastincorrect' : time_lastincorrect,
                           'time_lasthint' : time_lasthint }
-

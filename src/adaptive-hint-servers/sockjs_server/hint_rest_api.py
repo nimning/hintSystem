@@ -11,7 +11,7 @@ requests_log.setLevel(logging.WARNING)
 
 class HintRestAPI(object):
     """Provides an interface to the Hint ReSTful APIs"""
-    
+
     _baseurl = "http://127.0.0.1:4351"
 
     @staticmethod
@@ -59,7 +59,7 @@ class HintRestAPI(object):
         seed = requests.get(base_url + '/problem_seed',
                             params=params).text
         return int(seed)
-    
+
     @staticmethod
     def pg_path(course_id, set_id, problem_id):
         """
@@ -72,7 +72,7 @@ class HintRestAPI(object):
                    'problem_id': problem_id }
         return requests.get(base_url + '/pg_path',
                             params=params).json()
-            
+
     @staticmethod
     def hint(course_id, set_id, problem_id, assigned_hint_id):
         """
@@ -110,13 +110,13 @@ class HintRestAPI(object):
                 'hint_html' : p.unescape(row['hint_html']),
                 'timestamp' : row['timestamp'] })
         return hints
- 
+
     @staticmethod
     def assign_hint(student_id, course_id, set_id,
                     problem_id, location, hint_id, hint_html_template):
         base_url = HintRestAPI._baseurl
         params = {'user_id':student_id, 'course':course_id,
-                  'set_id':set_id, 'problem_id':problem_id, 'pg_id':location, 
+                  'set_id':set_id, 'problem_id':problem_id, 'pg_id':location,
                   'hint_id':hint_id, 'hint_html_template':hint_html_template}
         r = requests.post(base_url+'/assigned_hint', data=params)
 
@@ -126,7 +126,7 @@ class HintRestAPI(object):
         params = {'course': course_id,
                   'assigned_hint_id': int(hintbox_id[-5:])}
         r = requests.delete(base_url+'/assigned_hint', params=params)
-            
+
     @staticmethod
     def get_realtime_answers(student_id, course_id,
                              set_id, problem_id):
@@ -145,7 +145,7 @@ class HintRestAPI(object):
             row['entered_value'] = row['answer_string']
             row['is_correct'] = (row['correct'] == 1)
             row['timestamp'] = float(row['timestamp'])
-        return rows 
+        return rows
 
     @staticmethod
     def post_realtime_answer(student_id, course_id,
@@ -168,18 +168,18 @@ class HintRestAPI(object):
                   'assigned_hint_id': assigned_hint_id,
                   'feedback': feedback}
         r = requests.post(base_url+'/hint_feedback', data=params)
-        
+
     @staticmethod
     def apply_hint_filters(user_id, course, set_id, problem_id, pg_id):
         ''' Call the "run_hint_filters" API call.  This determines what
-            hints should be assigned to this particular user/box.  
+            hints should be assigned to this particular user/box.
             Then call a function to assign the hint to this user at the given
             box (given by course/set/problem/pg id) '''
         base_url = HintRestAPI._baseurl
-        params = {'user_id':user_id, 
-            'course':course, 
-            'set_id':set_id, 
-            'problem_id':problem_id, 
+        params = {'user_id':user_id,
+            'course':course,
+            'set_id':set_id,
+            'problem_id':problem_id,
             'pg_id':pg_id
         }
         r = requests.get(base_url+'/run_hint_filters', params=params)
@@ -194,9 +194,9 @@ class HintRestAPI(object):
     def render_html_assign_hint(user_id, course, set_id,
                     problem_id, pg_id, hint_id):
         ''' rows in the assigned hint table store the rendered html associated
-            with the hint.  
+            with the hint.
             here we call REST API's to render the hint with the given id,
-            then send the rendered hint along with its location to the 
+            then send the rendered hint along with its location to the
             assign_hint API '''
         base_url = HintRestAPI._baseurl
         # GET /hint
@@ -224,6 +224,6 @@ class HintRestAPI(object):
             '</div>'
         # POST to /assigned_hint
         params = {'user_id':user_id, 'course':course,
-                  'set_id':set_id, 'problem_id':problem_id, 'pg_id':pg_id, 
+                  'set_id':set_id, 'problem_id':problem_id, 'pg_id':pg_id,
                   'hint_id':hint_id, 'hint_html_template':h}
         r = requests.post(base_url+'/assigned_hint', data=params)
