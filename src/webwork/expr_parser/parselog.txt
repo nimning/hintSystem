@@ -1,0 +1,140 @@
+    lex.py: 909:lex: tokens   = ('CHOOSE', 'VARIABLE', 'NUMBER', 'PLUS', 'MINUS', 'TIMES', 'DIVIDE', 'LPAREN', 'RPAREN', 'FACTORIAL', 'LSET', 'RSET', 'COMMA', 'EXP', 'LBRACKET', 'RBRACKET')
+    lex.py: 910:lex: literals = ''
+    lex.py: 911:lex: states   = {'INITIAL': 'inclusive'}
+    lex.py: 938:lex: Adding rule t_NUMBER -> '\d*\.?\d+' (state 'INITIAL')
+    lex.py: 938:lex: Adding rule t_newline -> '\n+' (state 'INITIAL')
+    lex.py: 944:lex: Adding rule t_VARIABLE -> '[A-BD-Za-z]+[0-9]*' (state 'INITIAL')
+    lex.py: 944:lex: Adding rule t_EXP -> '\^|(\*\*)' (state 'INITIAL')
+    lex.py: 944:lex: Adding rule t_LBRACKET -> '\[' (state 'INITIAL')
+    lex.py: 944:lex: Adding rule t_PLUS -> '\+' (state 'INITIAL')
+    lex.py: 944:lex: Adding rule t_RSET -> '\}' (state 'INITIAL')
+    lex.py: 944:lex: Adding rule t_COMMA -> '\,' (state 'INITIAL')
+    lex.py: 944:lex: Adding rule t_LPAREN -> '\(' (state 'INITIAL')
+    lex.py: 944:lex: Adding rule t_LSET -> '\{' (state 'INITIAL')
+    lex.py: 944:lex: Adding rule t_TIMES -> '\*' (state 'INITIAL')
+    lex.py: 944:lex: Adding rule t_RBRACKET -> '\]' (state 'INITIAL')
+    lex.py: 944:lex: Adding rule t_RPAREN -> '\)' (state 'INITIAL')
+    lex.py: 944:lex: Adding rule t_FACTORIAL -> '!' (state 'INITIAL')
+    lex.py: 944:lex: Adding rule t_DIVIDE -> '/' (state 'INITIAL')
+    lex.py: 944:lex: Adding rule t_CHOOSE -> 'C' (state 'INITIAL')
+    lex.py: 944:lex: Adding rule t_MINUS -> '-' (state 'INITIAL')
+    lex.py: 951:lex: ==== MASTER REGEXS FOLLOW ====
+    lex.py: 960:lex: state 'INITIAL' : regex[0] = '(?P<t_NUMBER>\d*\.?\d+)|(?P<t_newline>\n+)|(?P<t_VARIABLE>[A-BD-Za-z]+[0-9]*)|(?P<t_EXP>\^|(\*\*))|(?P<t_LBRACKET>\[)|(?P<t_PLUS>\+)|(?P<t_RSET>\})|(?P<t_COMMA>\,)|(?P<t_LPAREN>\()|(?P<t_LSET>\{)|(?P<t_TIMES>\*)|(?P<t_RBRACKET>\])|(?P<t_RPAREN>\))|(?P<t_FACTORIAL>!)|(?P<t_DIVIDE>/)|(?P<t_CHOOSE>C)|(?P<t_MINUS>-)'
+   yacc.py: 292:PLY: PARSE DEBUG START
+   yacc.py: 337:
+   yacc.py: 338:State  : 0
+   yacc.py: 352:Stack  : . LexToken(CHOOSE,'C',1,0)
+   yacc.py: 366:Action : Shift and goto state 6
+   yacc.py: 337:
+   yacc.py: 338:State  : 6
+   yacc.py: 352:Stack  : CHOOSE . LexToken(LPAREN,'(',1,1)
+   yacc.py: 366:Action : Shift and goto state 20
+   yacc.py: 337:
+   yacc.py: 338:State  : 20
+   yacc.py: 352:Stack  : CHOOSE LPAREN . LexToken(NUMBER,15,1,2)
+   yacc.py: 366:Action : Shift and goto state 2
+   yacc.py: 337:
+   yacc.py: 338:State  : 2
+   yacc.py: 352:Stack  : CHOOSE LPAREN NUMBER . LexToken(COMMA,',',1,4)
+   yacc.py: 389:Action : Reduce rule [factor -> NUMBER] with [15] and goto state 29
+   yacc.py: 423:Result : <int @ 0x10030c4a8> (15)
+   yacc.py: 337:
+   yacc.py: 338:State  : 18
+   yacc.py: 352:Stack  : CHOOSE LPAREN factor . LexToken(COMMA,',',1,4)
+   yacc.py: 366:Action : Shift and goto state 27
+   yacc.py: 337:
+   yacc.py: 338:State  : 27
+   yacc.py: 352:Stack  : CHOOSE LPAREN factor COMMA . LexToken(NUMBER,25,1,5)
+   yacc.py: 389:Action : Reduce rule [list -> factor COMMA] with [15,','] and goto state 26
+   yacc.py: 423:Result : <tuple @ 0x100757b90> ((('list', (2, 4)), (15,)))
+   yacc.py: 337:
+   yacc.py: 338:State  : 42
+   yacc.py: 352:Stack  : CHOOSE LPAREN list . LexToken(NUMBER,25,1,5)
+   yacc.py: 366:Action : Shift and goto state 2
+   yacc.py: 337:
+   yacc.py: 338:State  : 2
+   yacc.py: 352:Stack  : CHOOSE LPAREN list NUMBER . LexToken(RPAREN,')',1,7)
+   yacc.py: 389:Action : Reduce rule [factor -> NUMBER] with [25] and goto state 29
+   yacc.py: 423:Result : <int @ 0x10030c3b8> (25)
+   yacc.py: 337:
+   yacc.py: 338:State  : 12
+   yacc.py: 352:Stack  : CHOOSE LPAREN list factor . LexToken(RPAREN,')',1,7)
+   yacc.py: 389:Action : Reduce rule [list -> list factor] with [<tuple @ 0x100757b90>,25] and goto state 28
+   yacc.py: 423:Result : <tuple @ 0x100735cb0> ((('list', (2, 5)), (('list', (2, 4)), (1 ...)
+   yacc.py: 337:
+   yacc.py: 338:State  : 42
+   yacc.py: 352:Stack  : CHOOSE LPAREN list . LexToken(RPAREN,')',1,7)
+   yacc.py: 366:Action : Shift and goto state 54
+   yacc.py: 337:
+   yacc.py: 338:State  : 54
+   yacc.py: 352:Stack  : CHOOSE LPAREN list RPAREN . LexToken(PLUS,'+',1,8)
+   yacc.py: 389:Action : Reduce rule [factor -> CHOOSE LPAREN list RPAREN] with ['C','(',<tuple @ 0x100735cb0>,')'] and goto state 14
+   yacc.py: 423:Result : <tuple @ 0x10073a780> ((('C', (0, 7)), 15, 25))
+   yacc.py: 337:
+   yacc.py: 338:State  : 8
+   yacc.py: 352:Stack  : factor . LexToken(PLUS,'+',1,8)
+   yacc.py: 366:Action : Shift and goto state 24
+   yacc.py: 337:
+   yacc.py: 338:State  : 24
+   yacc.py: 352:Stack  : factor PLUS . LexToken(CHOOSE,'C',1,9)
+   yacc.py: 366:Action : Shift and goto state 6
+   yacc.py: 337:
+   yacc.py: 338:State  : 6
+   yacc.py: 352:Stack  : factor PLUS CHOOSE . LexToken(LPAREN,'(',1,10)
+   yacc.py: 366:Action : Shift and goto state 20
+   yacc.py: 337:
+   yacc.py: 338:State  : 20
+   yacc.py: 352:Stack  : factor PLUS CHOOSE LPAREN . LexToken(NUMBER,10,1,11)
+   yacc.py: 366:Action : Shift and goto state 2
+   yacc.py: 337:
+   yacc.py: 338:State  : 2
+   yacc.py: 352:Stack  : factor PLUS CHOOSE LPAREN NUMBER . LexToken(COMMA,',',1,13)
+   yacc.py: 389:Action : Reduce rule [factor -> NUMBER] with [10] and goto state 29
+   yacc.py: 423:Result : <int @ 0x10030c520> (10)
+   yacc.py: 337:
+   yacc.py: 338:State  : 18
+   yacc.py: 352:Stack  : factor PLUS CHOOSE LPAREN factor . LexToken(COMMA,',',1,13)
+   yacc.py: 366:Action : Shift and goto state 27
+   yacc.py: 337:
+   yacc.py: 338:State  : 27
+   yacc.py: 352:Stack  : factor PLUS CHOOSE LPAREN factor COMMA . LexToken(NUMBER,20,1,14)
+   yacc.py: 389:Action : Reduce rule [list -> factor COMMA] with [10,','] and goto state 26
+   yacc.py: 423:Result : <tuple @ 0x10073df38> ((('list', (11, 13)), (10,)))
+   yacc.py: 337:
+   yacc.py: 338:State  : 42
+   yacc.py: 352:Stack  : factor PLUS CHOOSE LPAREN list . LexToken(NUMBER,20,1,14)
+   yacc.py: 366:Action : Shift and goto state 2
+   yacc.py: 337:
+   yacc.py: 338:State  : 2
+   yacc.py: 352:Stack  : factor PLUS CHOOSE LPAREN list NUMBER . LexToken(RPAREN,')',1,16)
+   yacc.py: 389:Action : Reduce rule [factor -> NUMBER] with [20] and goto state 29
+   yacc.py: 423:Result : <int @ 0x10030c430> (20)
+   yacc.py: 337:
+   yacc.py: 338:State  : 12
+   yacc.py: 352:Stack  : factor PLUS CHOOSE LPAREN list factor . LexToken(RPAREN,')',1,16)
+   yacc.py: 389:Action : Reduce rule [list -> list factor] with [<tuple @ 0x10073df38>,20] and goto state 28
+   yacc.py: 423:Result : <tuple @ 0x1007357e8> ((('list', (11, 14)), (('list', (11, 13)) ...)
+   yacc.py: 337:
+   yacc.py: 338:State  : 42
+   yacc.py: 352:Stack  : factor PLUS CHOOSE LPAREN list . LexToken(RPAREN,')',1,16)
+   yacc.py: 366:Action : Shift and goto state 54
+   yacc.py: 337:
+   yacc.py: 338:State  : 54
+   yacc.py: 352:Stack  : factor PLUS CHOOSE LPAREN list RPAREN . $end
+   yacc.py: 389:Action : Reduce rule [factor -> CHOOSE LPAREN list RPAREN] with ['C','(',<tuple @ 0x1007357e8>,')'] and goto state 14
+   yacc.py: 423:Result : <tuple @ 0x10073a730> ((('C', (9, 16)), 10, 20))
+   yacc.py: 337:
+   yacc.py: 338:State  : 46
+   yacc.py: 352:Stack  : factor PLUS factor . $end
+   yacc.py: 389:Action : Reduce rule [expression -> factor PLUS factor] with [<tuple @ 0x10073a780>,'+',<tuple @ 0x10073a730>] and goto state 5
+   yacc.py: 423:Result : <tuple @ 0x10073a820> ((('+', (0, 16)), (('C', (0, 7)), 15, 25) ...)
+   yacc.py: 337:
+   yacc.py: 338:State  : 10
+   yacc.py: 352:Stack  : expression . $end
+   yacc.py: 389:Action : Reduce rule [statement -> expression] with [<tuple @ 0x10073a820>] and goto state 1
+   yacc.py: 423:Result : <NoneType @ 0x10017dc40> (None)
+   yacc.py: 337:
+   yacc.py: 338:State  : 7
+   yacc.py: 352:Stack  : statement . $end
+   yacc.py: 484:Done   : Returning <NoneType @ 0x10017dc40> (None)
+   yacc.py: 485:PLY: PARSE DEBUG END
