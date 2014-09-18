@@ -128,6 +128,25 @@ angular.module('ta-console.directives')
                     }
                 };
 
+                $scope.check_answers = function(hint){
+                    var hint_text = hint.pg_header + '\n' + hint.pg_text + '\n' + hint.pg_footer;
+                    var $el = $("#HINTBOXID");
+                    var answer_val = $el.val();
+                    $scope.checking_hint = true;
+                    WebworkService.checkAnswer(hint_text, $scope.seed, {AnSwEr0001: answer_val}).
+                        success(function(data){
+                            $scope.checking_hint = false;
+                            if (data.AnSwEr0001.is_correct){
+                                $el.removeClass('incorrect');
+                                $el.addClass('correct');
+                            }else{
+                                $el.removeClass('correct');
+                                $el.addClass('incorrect');
+                            }
+                        }).error(function(data){
+                        });
+                };
+
             },
             link: function($scope, element, attrs) {
                 // Periodically preview hint so as to avoid jitter
