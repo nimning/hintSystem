@@ -51,6 +51,15 @@ App.factory('WebworkService', function($http, $window, $rootScope, $location, $q
                 .post('http://'+APIHost+':4351/render',
                       {pg_file: pg_file, seed: seed.toString()});
         },
+        checkAnswer: function(pg_file, seed, answers) {
+            if(pg_file[0]!=='/'){ // Don't base64 encode absolute paths
+                pg_file = btoa(unescape(encodeURIComponent(pg_file)));
+            }
+            return $http
+                .post('http://'+APIHost+':4351/checkanswer',
+                      angular.extend({pg_file: pg_file, seed: seed.toString()}, answers)
+                     );
+        },
         previewHint: function(hint, seed, feedback){
             var deferred = $q.defer();
             factory.render(hint.pg_header+hint.pg_text+hint.pg_footer, seed).success(function (data){
