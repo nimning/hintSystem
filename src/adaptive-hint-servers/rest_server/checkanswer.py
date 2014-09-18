@@ -5,11 +5,14 @@ import pg_wrapper
 import os
 import tempfile
 import base64
+from json_request_handler import JSONRequestHandler
+import logging
+logger = logging.getLogger(__name__)
 
 def task_checkanswer(pg_file, answers, seed, callback=None):
     callback(pg_wrapper.checkanswer(pg_file, answers, int(seed)))
  
-class CheckAnswer(tornado.web.RequestHandler):
+class CheckAnswer(JSONRequestHandler, tornado.web.RequestHandler):
     """Interface with Webwork/PG for checking answers with a PG
     """
 
@@ -44,14 +47,15 @@ class CheckAnswer(tornado.web.RequestHandler):
             
         if len(answers) == 0:
             response = { 'error_msg': 'Need at least 1 answer' }
+            self.set_status(400)
             self._write_finish(response)
             return
-
         # Case1: pg_file is a path
         if os.path.isabs(pg_file):
             # check if the file actually exists
             if not os.path.isfile(pg_file):
                 response = { 'error_msg': 'PG file not found' }
+                self.set_status(500)
                 self._write_finish(response)
                 return
 
@@ -63,6 +67,7 @@ class CheckAnswer(tornado.web.RequestHandler):
 
             if results is None:
                 response = { 'error_msg': 'PG service error' }
+                self.set_status(500)
                 self._write_finish(response)
                 return
 
@@ -79,6 +84,7 @@ class CheckAnswer(tornado.web.RequestHandler):
                 temp.close()
             except Exception:
                 response = { 'error_msg': 'Unable to create a temporary file' }
+                self.set_status(500)
                 self._write_finish(response)
                 return
 
@@ -93,6 +99,7 @@ class CheckAnswer(tornado.web.RequestHandler):
 
             if results is None:
                 response = { 'error_msg': 'PG service error' }
+                self.set_status(500)
                 self._write_finish(response)
                 return
 
