@@ -56,6 +56,7 @@ def eval_parsed(e):
             elif f=='-':  ans= v1-v2
             elif f=='/':  ans= v1/v2
             elif f=='**': ans= v1**v2
+            elif f=='^': ans= v1**v2
             elif f=='C':  ans= factorial(v1)/(factorial(v2)*factorial(v1-v2))
             else:
                 raise Exception('unrecognized binary operator',f,'in',e)
