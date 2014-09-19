@@ -281,7 +281,8 @@ def parse_webwork(expr):
 #    exprs = [expr for _,_,expr in webwork.all_attempts]
 #    parse_webwork(exprs[0])
 
-string=sys.argv[1]
-print 'input:::',string
-tree=parse_webwork(string)
-print 'output:::',tree
+if __name__ == '__main__':
+    string=sys.argv[1]
+    print 'input:::',string
+    tree=parse_webwork(string)
+    print 'output:::',tree
