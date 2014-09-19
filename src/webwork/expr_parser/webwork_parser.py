@@ -164,7 +164,7 @@ def p_factor_ops(t):
                 | factor EXP factor    %prec EXP
                   '''
     if t[2] == '*': t[0] = ('*',t[1],t[3])
-    elif t[2] == '/': t[0] = ('*',t[1],('/',t[3]))
+    elif t[2] == '/': t[0] = ('/', t[1], t[3])
     elif t[2] == '^' or t[2] == '**': t[0] = ('^',t[1],t[3])
     t[0]=add_header(t)
 
