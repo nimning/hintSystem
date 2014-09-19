@@ -101,7 +101,7 @@ t_COMMA     = r'\,'
 t_VARIABLE  = r'[A-BD-Za-z]+[0-9]*'
 
 def t_NUMBER(t):
-    r'\d*\.?\d+'
+    r'\d*\.?\d+E?(\+|\-)?\d*'
     try:
         t.value = int(t.value)
     except ValueError:
