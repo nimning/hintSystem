@@ -197,7 +197,7 @@ def p_expression_group(t):
               | LBRACKET factor RBRACKET 
               '''
     t[0] = t[2]
-    t[0]=add_header(t)
+    # t[0]=add_header(t)
 
 def p_expression_set(t):
     '''factor : LSET list RSET
