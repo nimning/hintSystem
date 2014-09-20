@@ -252,15 +252,15 @@ yacc.yacc()
 
 # set up debugging.
 # Set up a logging object
-# import logging
-# print 'setting up logging'
-# logging.basicConfig(
-#     level = logging.DEBUG,
-#     filename = "parselog.txt",
-#     filemode = "w",
-#     format = "%(filename)10s:%(lineno)4d:%(message)s"
-# )
-# log = logging.getLogger()
+import logging
+print 'setting up logging'
+logging.basicConfig(
+    level = logging.DEBUG,
+    filename = "parselog.txt",
+    filemode = "w",
+    format = "%(filename)10s:%(lineno)4d:%(message)s"
+)
+log = logging.getLogger()
 
 #lex.lex(debug=True,debuglog=log,errorlog=log)
 #yacc.yacc(debug=True,debuglog=log,errorlog=log)
