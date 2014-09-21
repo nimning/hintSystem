@@ -97,8 +97,6 @@ def handle_comma_separated_number(expr):
             except (TypeError, ValueError):
                 return None
 
-expr_tree = None
-
 # Parsing rules
 precedence = (
     ('left','LIST'),
@@ -111,13 +109,12 @@ precedence = (
     ('right','CHOOSE')
     )
 
-def p_statement_expr_list(t):
+def p_statement_expr_list(p):
     '''statement : expression
                  | factor
                  | list
                  '''
-    global expr_tree
-    expr_tree = t[1]
+    p[0] = p[1]
 
 def add_header(t): # append the span of the expression to the header
     #print 'add_header got:',t[0]
@@ -234,11 +231,9 @@ parser = yacc.yacc()
 
 
 def parse_webwork(expr):
-    global expr_tree
     parsed = handle_comma_separated_number(expr)
     if parsed is None: #didn't match comma_separated_number, so parse expr
-        parser.parse(expr,tracking=True,debug=log, lexer=lexer.lexer)
-        parsed = expr_tree
+        parsed = parser.parse(expr,tracking=True,debug=log, lexer=lexer.lexer)
     return parsed
 #    return reduce_associative(parsed)
 
