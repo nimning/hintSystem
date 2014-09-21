@@ -3,6 +3,18 @@ import pickle
 import ply.lex as lex
 import ply.yacc as yacc
 from math import factorial
+from webwork_lexer import WebworkLexer
+
+# Set up a logging object
+import logging
+
+logging.basicConfig(
+    level = logging.DEBUG,
+    filename = "parselog.txt",
+    filemode = "w",
+    format = "%(filename)10s:%(lineno)4d:%(message)s"
+)
+log = logging.getLogger()
 
 """
 Parsing webwork expressions
@@ -84,49 +96,6 @@ def handle_comma_separated_number(expr):
                 return float(expr_without_commas)
             except (TypeError, ValueError):
                 return None
-
-tokens = (
-    'CHOOSE', 'VARIABLE', 'NUMBER', 'PLUS','MINUS','TIMES','DIVIDE', 'LPAREN','RPAREN','FACTORIAL', 'LSET', 'RSET','COMMA','EXP', 'LBRACKET', 'RBRACKET'
-    )
-
-# Tokens
-t_CHOOSE    = r'C'
-t_PLUS      = r'\+'
-t_MINUS     = r'-'
-t_FACTORIAL = r'!'
-t_TIMES     = r'\*'
-t_DIVIDE    = r'/'
-t_EXP       = r'\^|(\*\*)'
-t_LPAREN    = r'\('
-t_RPAREN    = r'\)'
-t_LBRACKET  = r'\['
-t_RBRACKET  = r'\]'
-t_LSET      = r'\{'
-t_RSET      = r'\}'
-t_COMMA     = r'\,'
-t_VARIABLE  = r'[A-BD-Za-z]+[0-9]*'
-
-def t_NUMBER(t):
-    r'\d*\.?\d+E?(\+|\-)?\d*'
-    try:
-        t.value = int(t.value)
-    except ValueError:
-        try:
-            t.value = float(t.value)
-        except ValueError:
-            raise WebworkParseException("Trouble parsing float %s", t.value)
-    return t
-
-# Ignored characters
-t_ignore = " \t"
-
-def t_newline(t):
-    r'\n+'
-    t.lexer.lineno += t.value.count("\n")
-
-def t_error(t):
-    raise WebworkParseException(
-        "Illegal character '%s'" % t.value[0])
 
 expr_tree = None
 
@@ -253,20 +222,11 @@ def p_error(t):
 
 
 # Start lex and yacc
-lex.lex()
-yacc.yacc()
+lexer = WebworkLexer()
+tokens = lexer.tokens
+parser = yacc.yacc()
 
 # set up debugging.
-# Set up a logging object
-import logging
-print 'setting up logging'
-logging.basicConfig(
-    level = logging.DEBUG,
-    filename = "parselog.txt",
-    filemode = "w",
-    format = "%(filename)10s:%(lineno)4d:%(message)s"
-)
-log = logging.getLogger()
 
 #lex.lex(debug=True,debuglog=log,errorlog=log)
 #yacc.yacc(debug=True,debuglog=log,errorlog=log)
@@ -277,7 +237,7 @@ def parse_webwork(expr):
     global expr_tree
     parsed = handle_comma_separated_number(expr)
     if parsed is None: #didn't match comma_separated_number, so parse expr
-        yacc.parse(expr,tracking=True,debug=log)
+        parser.parse(expr,tracking=True,debug=log, lexer=lexer.lexer)
         parsed = expr_tree
     return parsed
 #    return reduce_associative(parsed)
