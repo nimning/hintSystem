@@ -60,6 +60,12 @@ def flatten_list(L):
             items=items+[flatten_list(L[i])]
         return items
 
+def tree_to_s_exp(tree):
+    '''Convert an expression parse tree to a lisp-style s-expression'''
+    if type(tree) == tuple:
+        return '('+tree[0][0] + ' ' + ' '.join(tree_to_s_exp(child) for child in tree[1:]) +')'
+    else:
+        return str(tree)
 class WebworkParseException(Exception):
     pass
 
