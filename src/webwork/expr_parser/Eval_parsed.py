@@ -64,7 +64,10 @@ def eval_parsed(e):
         else:
             raise Exception('Unrecognized expression form:',e)
     except Exception as ex:
+        print "Evaluation error for", e
         PrintException()
+        return ((e[0][0], None, e[0][1]),)
+
         
 def Collect_numbers(etree):
     T={}
