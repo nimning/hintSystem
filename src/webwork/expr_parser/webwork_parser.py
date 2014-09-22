@@ -171,6 +171,17 @@ def p_expression_group(t):
     t[0] = t[2]
     # t[0]=add_header(t)
 
+def p_expression_unbalanced_group(t):
+    '''factor : LPAREN expression
+              | LBRACKET expression
+              | LPAREN factor
+              | LBRACKET factor
+              '''
+    print "Error: Unbalanced Group Operator"
+    print t.lexer.lexdata
+    print ' '*(t.lexpos(0))+'^'
+    raise WebworkParseException('Unbalanced grouping operator in expression: ' + t.lexer.lexdata)
+
 def p_expression_set(t):
     '''factor : LSET list RSET
                 | LSET expression RSET
@@ -211,11 +222,11 @@ def p_expression_number_variable(t):
     t[0] = t[1]
 #   t[0]=(t[0],t.lexspan(0))
 
-def p_error(t):
-    if t is None:
+def p_error(p):
+    if p is None:
         raise WebworkParseException('Syntax error')
     else:
-        raise WebworkParseException("Syntax error at '%s'" % t)
+        raise WebworkParseException("Syntax error at '%s'" % p)
 
 
 # Start lex and yacc
