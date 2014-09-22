@@ -1,6 +1,8 @@
 from math import factorial
 import linecache
 import sys
+from webwork_parser import WebworkParseException
+import traceback
 
 def PrintException():
     exc_type, exc_obj, tb = sys.exc_info()
@@ -29,10 +31,18 @@ def eval_parsed(e):
         else: return ev[0][1]
         
     try:
-        if is_number(e)==1:
+        #print 'eval_parsed, e="',e,'"'
+        if type(e)==type(None):
+            return 0
+        elif is_number(e)==1:
             return (float(e),)
         elif len(e)==2:
             ((f,span),op)=e
+
+            if f=='{}':
+                return e  # if element is a list, just return as is.
+                          # might need to improve this id we want sets of expressions
+
             ev=eval_parsed(op)
             v=get_number(ev)
             
@@ -41,7 +51,7 @@ def eval_parsed(e):
             elif f=='!':
                 ans=factorial(v)
             else:
-                raise Exception('unrecognized unary operator',f,'in',e)
+                raise Exception('unrecognized unary operator %s in %s'%(f,e))
             return ((f,ans,span),ev)
         
         elif len(e)==3:
@@ -59,12 +69,14 @@ def eval_parsed(e):
             elif f=='^': ans= v1**v2
             elif f=='C':  ans= factorial(v1)/(factorial(v2)*factorial(v1-v2))
             else:
-                raise Exception('unrecognized binary operator',f,'in',e)
+                raise Exception('unrecognized binary operator %s in %s'%(f,e))
             return ((f,ans,span),ev1,ev2)
         else:
-            raise Exception('Unrecognized expression form:',e)
+            raise Exception('Unrecognized expression form: %s'%e)
     except Exception as ex:
-        PrintException()
+        #print 'Eval_parsed Exception:',ex
+        #traceback.print_exc()
+        raise WebworkParseException(ex)
         
 def Collect_numbers(etree):
     T={}
