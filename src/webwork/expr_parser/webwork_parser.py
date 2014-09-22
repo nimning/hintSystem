@@ -74,7 +74,7 @@ def flatten_list(L):
 
 def tree_to_s_exp(tree):
     '''Convert an expression parse tree to a lisp-style s-expression'''
-    if type(tree) == tuple:
+    if type(tree) == tuple or type(tree) == list:
         return '('+tree[0][0] + ' ' + ' '.join(tree_to_s_exp(child) for child in tree[1:]) +')'
     else:
         return str(tree)
@@ -101,8 +101,8 @@ def handle_comma_separated_number(expr):
 precedence = (
     ('left','LIST'),
     ('left','PLUS'),
-    ('nonassoc','UMINUS'),
-    ('left','TIMES'),
+    ('right','UMINUS'),
+    ('left','TIMES', 'DIVIDE'),
     ('left','IMPL_TIMES'),
     ('left','EXP'),
     ('left','FACTORIAL'),
@@ -132,7 +132,7 @@ def p_expression_ops(t):
 
 def p_factor_ops(t):
     '''factor : factor TIMES factor    %prec TIMES
-                | factor DIVIDE factor %prec TIMES
+                | factor DIVIDE factor %prec DIVIDE
                 | factor EXP factor    %prec EXP
                   '''
     if t[2] == '*': t[0] = ('*',t[1],t[3])
@@ -177,10 +177,17 @@ def p_expression_unbalanced_group(t):
               | LPAREN factor
               | LBRACKET factor
               '''
-    print "Error: Unbalanced Group Operator"
+    print "Parse Error: Unbalanced Group Operator"
     print t.lexer.lexdata
     print ' '*(t.lexpos(0))+'^'
     raise WebworkParseException('Unbalanced grouping operator in expression: ' + t.lexer.lexdata)
+
+def p_expression_unclosed_choose(t):
+    'factor : CHOOSE LPAREN list'
+    print "Parse Error: Unclosed Choose"
+    print t.lexer.lexdata
+    print ' '*(t.lexpos(0))+'^'
+    raise WebworkParseException('Unbalanced parentheses in expression: ' + t.lexer.lexdata)
 
 def p_expression_set(t):
     '''factor : LSET list RSET
