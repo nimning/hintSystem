@@ -29,7 +29,7 @@ if __name__ == '__main__':
     metadata = MetaData()
 
     old_hints = Table("{0}_hint".format(args.source), metadata,
-                      Column('id', Integer, nullable=False),
+                      Column('id', Integer, nullable=False, primary_key=True),
                       Column('pg_text', String(65536), nullable=False),
                       Column('author', String(255), nullable=False),
                       Column('set_id', String(255), nullable=False),
@@ -40,7 +40,7 @@ if __name__ == '__main__':
     )
 
     new_hints = Table("{0}_hint".format(args.target), metadata,
-                      Column('id', Integer, nullable=False),
+                      Column('id', Integer, nullable=False, primary_key=True),
                       Column('pg_text', String(65536), nullable=False),
                       Column('author', String(255), nullable=False),
                       Column('set_id', String(255), nullable=False),
@@ -50,9 +50,46 @@ if __name__ == '__main__':
                       Column('deleted', Boolean)
     )
 
+    old_assigned_hint = Table("{0}_assigned_hint".format(args.source), metadata,
+                              Column('id', Integer, nullable=False, primary_key=True),
+                              Column('set_id', String(255), nullable=False),
+                              Column('problem_id', Integer, nullable=False),
+                              Column('pg_id', String(255), nullable=False),
+                              Column('user_id', String(255), nullable=False),
+                              Column('hint_id', Integer, nullable=False),
+                              Column('assigned', TIMESTAMP),
+                              Column('hint_html', Text, nullable=False)
+    )
+
+    new_assigned_hint = Table("{0}_assigned_hint".format(args.target), metadata,
+                              Column('id', Integer, nullable=False, primary_key=True),
+                              Column('set_id', String(255), nullable=False),
+                              Column('problem_id', Integer, nullable=False),
+                              Column('pg_id', String(255), nullable=False),
+                              Column('user_id', String(255), nullable=False),
+                              Column('hint_id', Integer, nullable=False),
+                              Column('assigned', TIMESTAMP),
+                              Column('hint_html', Text, nullable=False)
+    )
+
+
     s = select([old_hints]).order_by(asc('id'))
     conn = engine.connect()
     hint_rows = conn.execute(s)
+    hint_mapping = {}
     for row in hint_rows:
-        conn.execute(new_hints.insert(), pg_text = row.pg_text, author=row.author, set_id=row.set_id, problem_id=row.problem_id, part_id=row.part_id, created=row.created, deleted=row.deleted)
+        ins = new_hints.insert().values(pg_text = row.pg_text, author=row.author, set_id=row.set_id, problem_id=row.problem_id, part_id=row.part_id, created=row.created, deleted=row.deleted)
+        res = conn.execute(ins)
+        hint_mapping[row.id]=res.inserted_primary_key[0]
 
+    print "Finished importing hints"
+    s2 = select([old_assigned_hint]).order_by(asc('id'))
+    assigned_hints = conn.execute(s2)
+    for row in assigned_hints:
+        ins = new_assigned_hint.insert().values(
+            set_id = row.set_id,
+            problem_id = row.problem_id, pg_id = row.pg_id, user_id = row.user_id,
+            hint_id = hint_mapping[row.hint_id], assigned = row.assigned,
+            hint_html = row.hint_html)
+        conn.execute(ins )
+    print "Finished importing hint assignments"
