@@ -23,7 +23,7 @@ class WebworkLexer(object):
     t_VARIABLE  = r'[A-BD-Za-z]+[0-9]*'
 
     def t_NUMBER(self, t):
-        r'\d*\.?\d+(E(\+|\-)?\d*)?'
+        r'\d*\.?\d+(E(\+|\-)?\d+)?'
         try:
             t.value = int(t.value)
         except ValueError:
@@ -31,7 +31,7 @@ class WebworkLexer(object):
                 t.value = float(t.value)
             except ValueError:
                 print t
-                raise WebworkParseException("Trouble parsing float %s", t.value)
+                raise WebworkParseException("LEXER: Trouble parsing float %s", t.value)
         return t
 
     # Ignored characters
@@ -43,7 +43,8 @@ class WebworkLexer(object):
 
     def t_error(self, t):
         raise WebworkParseException(
-            "Illegal character '%s'" % t.value[0])
+            "LEXER: Illegal character '%s' at location %1d" % \
+            (t.value[0], t.lexpos))
 
     def __init__(self,**kwargs):
         # Build the lexer
