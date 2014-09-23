@@ -58,18 +58,19 @@ def flatten_list(L):
     """ Flatten a hierarchical list into one level """
     if not isinstance(L, tuple):
         #print 'flatten_list, non-tuple',L
-        return L
+        return [L]
     elif len(L)==1:
         #print 'flatten_list, len 1 tuple',L
         return flatten_list(L[0])
     elif L[0][0]!='list':
         #print 'flatten_list, header is not "list"',L
-        return L
+        return [L]
     else:
         #print 'flatten_list, real list ',L
         items=[]
         for i in range(1,len(L)):
-            items=items+[flatten_list(L[i])]
+            items=items+flatten_list(L[i])
+        #print 'returning',items
         return items
 
 def tree_to_s_exp(tree):
@@ -79,7 +80,7 @@ def tree_to_s_exp(tree):
     else:
         return str(tree)
 class WebworkParseException(Exception):
-    pass
+    print Exception
 
 def handle_comma_separated_number(expr):
     ''' Handles numbers of the form 1,234,562.09842 or 1,234,562 returning the 
@@ -100,13 +101,14 @@ def handle_comma_separated_number(expr):
 # Parsing rules
 precedence = (
     ('left','LIST'),
-    ('left','PLUS'),
-    ('right','UMINUS'),
-    ('left','TIMES', 'DIVIDE'),
+    ('nonassoc','COMMA'),
     ('left','IMPL_TIMES'),
+    ('nonassoc','UMINUS'),
+    ('left','PLUS','MINUS'),
+    ('left','TIMES','DIVIDE'),
     ('left','EXP'),
     ('left','FACTORIAL'),
-    ('right','CHOOSE')
+    ('nonassoc','CHOOSE')
     )
 
 def p_statement_expr_list(p):
@@ -194,9 +196,10 @@ def p_expression_set(t):
                 | LSET expression RSET
                 | LSET RSET '''
     if len(t) == 4:
-        t[0] = ('{}',t[2])
+        list=flatten_list(t[2][1:])
+        t[0] = ('{}',tuple(list))
     else:
-        t[0] = ('{}',[])
+        t[0] = ('{}',())
     t[0]=add_header(t)
 
 def p_expression_tuple(t):
@@ -231,12 +234,20 @@ def p_expression_number_variable(t):
 
 def p_error(p):
     if p is None:
-        raise WebworkParseException('Syntax error')
+        raise WebworkParseException('yacc:Syntax error - Empty token')
     else:
-        raise WebworkParseException("Syntax error at '%s'" % p)
+        #start,end = p.lexpos
+        raise WebworkParseException("yacc:Syntax error at '%s',location=%1d" % (p,p.lexpos))
 
+# def p_error(p):
+#     if p==None:
+#         print "Syntax error at end of expression"
+#     else:
+#         print "Syntax error at <<", p,p.lexspan(0),'>>'
+#     # Just discard the token and tell the parser it's okay.
+#     yacc.token()
 
-# Start lex and yacc
+# START lex and yacc
 lexer = WebworkLexer()
 tokens = lexer.tokens
 parser = yacc.yacc()
@@ -251,7 +262,11 @@ parser = yacc.yacc()
 def parse_webwork(expr):
     parsed = handle_comma_separated_number(expr)
     if parsed is None: #didn't match comma_separated_number, so parse expr
-        parsed = parser.parse(expr,tracking=True,debug=log, lexer=lexer.lexer)
+        try:
+            parsed = parser.parse(expr,tracking=True,debug=log, lexer=lexer.lexer)
+        except  WebworkParseException, e:
+            print '||%s||'%expr,e
+            parsed=None
     return parsed
 #    return reduce_associative(parsed)
 
