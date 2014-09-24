@@ -2,6 +2,8 @@ import subprocess
 import os
 import re
 import urllib
+import logging
+logger = logging.getLogger(__name__)
 
 # scripts' location
 _SCRIPTDIR = os.path.join(os.path.dirname(os.path.abspath(__file__)),

@@ -123,7 +123,7 @@ if __name__ == '__main__':
                             ans_by_part['score'].append(row['scores'][part])
                             ans_by_part['problem_id'].append(row['problem_id'])
                             ans_by_part['set_id'].append(row['set_id'])
-                            ans_by_part['part_id'].append(part)
+                            ans_by_part['part_id'].append(part+1)
                             ans_by_part['timestamp'].append(row['timestamp'])
                     else:
                         if len(prev_answers) > part and answers[part] == prev_answers[part]:
