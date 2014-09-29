@@ -1,7 +1,7 @@
 from math import factorial
 import linecache
 import sys
-from webwork_parser import WebworkParseException
+from webwork_parser import parse_webwork, WebworkParseException
 import traceback
 
 def PrintException():
@@ -79,7 +79,7 @@ def eval_parsed(e):
         raise WebworkParseException(ex)
         # return ((e[0][0], None, e[0][1]),)
 
-        
+
 def Collect_numbers(etree):
     T={}
     collection_recursion(T,etree)
@@ -92,5 +92,13 @@ def collection_recursion(T,etree):
         T[etree[0][1]]=etree   # add evaluation for non-leaf
         for i in range(1,len(etree)):
             collection_recursion(T,etree[i])
-            
-    
+
+
+def parse_and_collect_numbers(string):
+    try:
+        parse_tree = parse_webwork(string)
+        eval_tree = eval_parsed(parse_tree)
+        eval_numbers = Collect_numbers(eval_tree)
+        return set(eval_numbers.keys())
+    except:
+        return set()
