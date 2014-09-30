@@ -1,7 +1,7 @@
 var App = angular.module('ta-console');
 
-App.controller('LoginCtrl', function($scope, $location, $window, $routeParams, AuthService){
-    var course = $scope.course = $routeParams.course;
+App.controller('LoginCtrl', function($scope, $location, $window, $stateParams, AuthService){
+    var course = $scope.course = $stateParams.course;
     
     $scope.submit = function(){
         AuthService.logIn(course, $scope.username, $scope.password);

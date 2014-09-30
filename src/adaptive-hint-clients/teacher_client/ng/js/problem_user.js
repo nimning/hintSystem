@@ -1,12 +1,12 @@
 var App = angular.module('ta-console');
 
-App.controller('ProblemUserCtrl', function($scope, $location, $window, $routeParams,
+App.controller('ProblemUserCtrl', function($scope, $location, $window, $stateParams,
                                            $sce, $interval, $timeout, Session,
                                            WebworkService, SockJSService){
-    var course = $scope.course = $routeParams.course;
-    var set_id = $scope.set_id = $routeParams.set_id;
-    var problem_id = $scope.problem_id = $routeParams.problem_id;
-    var user_id = $scope.user_id = $routeParams.user_id;
+    var course = $scope.course = $stateParams.course;
+    var set_id = $scope.set_id = $stateParams.set_id;
+    var problem_id = $scope.problem_id = $stateParams.problem_id;
+    var user_id = $scope.user_id = $stateParams.user_id;
     $scope.student_data = {answers: []};
     $scope.current_part = 0;
     $scope.problem_seed = "";

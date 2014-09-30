@@ -1,9 +1,9 @@
 var App = angular.module('ta-console');
 
-App.controller('CourseCtrl', function($scope, $location, $window, $routeParams, $interval,
+App.controller('CourseCtrl', function($scope, $location, $window, $stateParams, $interval,
                                       WebworkService, SockJSService,
                                       DTOptionsBuilder, DTColumnDefBuilder, CurrentCourse){
-    $scope.course = $routeParams.course;
+    $scope.course = $stateParams.course;
     CurrentCourse.name = $scope.course;
     WebworkService.sets($scope.course, function(data){
         $scope.sets = data;
@@ -20,10 +20,10 @@ App.controller('CourseCtrl', function($scope, $location, $window, $routeParams, 
 
 });
 
-App.controller('SetCtrl', function($scope, $location, $window, $routeParams, $interval, $timeout,
+App.controller('SetCtrl', function($scope, $location, $window, $stateParams, $interval, $timeout,
                                    WebworkService, SockJSService, DTOptionsBuilder, DTColumnDefBuilder){
-    $scope.course = $routeParams.course;
-    $scope.set_id = $routeParams.set_id;
+    $scope.course = $stateParams.course;
+    $scope.set_id = $stateParams.set_id;
     WebworkService.problems($scope.course, $scope.set_id).success(function(data){
         $scope.problems = data;
     });
