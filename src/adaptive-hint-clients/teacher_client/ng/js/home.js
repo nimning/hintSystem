@@ -1,5 +1,5 @@
 var App = angular.module('ta-console');
 
-App.controller('HomeCtrl', function($scope, CurrentCourse, Session, AUTH_EVENTS){
+App.controller('HomeCtrl', function($scope, $state, $timeout, CurrentCourse, Session, AUTH_EVENTS){
     $scope.courses = ['UCSD_CSE103', 'CSE103_Fall14'];
 });

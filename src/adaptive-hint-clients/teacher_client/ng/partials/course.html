@@ -12,7 +12,7 @@
   </thead>
   <tbody>
     <tr ng-repeat="set in sets" dt-rows="">
-      <td><a ng-href="#/{{course}}/sets/{{set.set_id}}">{{set.set_id}}</a></td>
+      <td><a ui-sref="set({course: course, set_id: set.set_id})">{{set.set_id}}</a></td>
       <td><time datetime="{{set.open_date*1000|date:'yyyy-MM-ddTHH:mm:ss.sssZ'}}">{{set.open_date*1000|date : "yyyy-MM-ddTHH:mm"}}</time></td>
       <td><time datetime="{{set.due_date*1000|date:'yyyy-MM-ddTHH:mm:ss.sssZ'}}">{{set.due_date*1000|date : "yyyy-MM-ddTHH:mm"}}</time></td>
       <td>{{set.answer_count}}</td>

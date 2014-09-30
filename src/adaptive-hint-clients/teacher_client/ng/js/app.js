@@ -1,7 +1,7 @@
 var App = angular.module(
     'ta-console',
     ['ngRoute', 'ngSanitize', 'datatables', 'ta-console.directives',
-     'smart-table', 'angularMoment', 'ui.codemirror', 'ui.ladda',
+     'smart-table', 'angularMoment', 'ui.codemirror', 'ui.bootstrap', 'ui.ladda',
      'mgcrea.ngStrap', 'mgcrea.ngStrap.helpers.dimensions',
      'mgcrea.ngStrap.scrollspy', 'ui.router']);
 var directives = angular.module('ta-console.directives', []);
@@ -14,45 +14,45 @@ App.config(
          $httpProvider.defaults.useXDomain = true;
          delete $httpProvider.defaults.headers.common['X-Requested-With'];
          $httpProvider.interceptors.push('authInterceptor');
-         $urlRouterProvider.otherwise('/');
+         $urlRouterProvider.otherwise('/courses');
          $stateProvider.
              state('course', {
-                 url: '/:course',
+                 url: '/courses/:course',
                  templateUrl: 'partials/course.html',
                  controller: 'CourseCtrl',
                  title: '{{course}}',
                  loginRequired: true
              }).
              state('set', {
-                 url: '/:course/sets/:set_id',
+                 url: '/courses/:course/sets/:set_id',
                  templateUrl: 'partials/set.html',
                  controller: 'SetCtrl',
                  title: '{{set_id}}',
                  loginRequired: true
              }).
              state('problem', {
-                 url: '/:course/sets/:set_id/problems/:problem_id',
+                 url: '/courses/:course/sets/:set_id/problems/:problem_id',
                  templateUrl: 'partials/problem.html',
                  controller: 'ProblemCtrl',
                  title: '{{set_id}} #{{problem_id}}',
                  loginRequired: true
              }).
              state('problem_user', {
-                 url: '/:course/sets/:set_id/problems/:problem_id/users/:user_id',
+                 url: '/courses/:course/sets/:set_id/problems/:problem_id/users/:user_id',
                  templateUrl: 'partials/problem_user.html',
                  controller: 'ProblemUserCtrl',
                  title: '{{set_id}} #{{problem_id}} - {{user_id}}',
                  loginRequired: true
              }).
              state('login', {
-                 url: '/:course/login',
+                 url: '/courses/:course/login',
                  templateUrl: 'partials/login.html',
                  controller: 'LoginCtrl',
                  title: 'Log In',
                  loginRequired: false
              }).
              state('home', {
-                 url: '/',
+                 url: '/courses',
                  templateUrl: 'partials/home.html',
                  controller: 'HomeCtrl',
                  title: 'Courses'
@@ -75,7 +75,7 @@ App.config(
         });
     });;
 
-App.constant('APIHost', 'webwork.cse.ucsd.edu');
+App.constant('APIHost', '192.168.33.10');
 
 App.value('CurrentCourse', {name: 'Course'});
 

@@ -90,16 +90,16 @@
               <a href="javascript:void(0);" class="dropdown-toggle">Courses <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
                 <li ng-repeat="course in courses">
-                  <a ng-href="#/{{course}}">{{course}}</a>
+                  <a ui-sref="course({course: course})">{{course}}</a>
                 </li>
               </ul>
             </li>
             <li><a href="/webwork2">Webwork</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li ng-if="logged_in"><a href="#/{{current_course.name}}">{{user_id}}</a></li>
+            <li ng-if="logged_in"><a ui-sref="course({course: current_course.name})">{{user_id}}</a></li>
             <li ng-if="logged_in"><a ng-click="logout()" href="javascript:void(0);">Logout</a></li>
-            <li ng-if="!logged_in"><a ng-href="#/{{current_course.name}}/login">Login</a></li>
+            <li ng-if="!logged_in"><a ui-sref="login({course: current_course.name})">Login</a></li>
           </ul>
         </div>
       </div>

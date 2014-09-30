@@ -37,7 +37,7 @@
         </thead>
         <tbody>
           <tr st-select-row="row" st-select-mode="multiple" ng-repeat="student in displayed_students">
-            <td><a ng-href="#/{{course}}/sets/{{set_id}}/problems/{{student.problem_id}}/users/{{student.student_id}}">{{student.student_id}}</a></td>
+            <td><a ui-sref="problem_user({course: course, set_id: set_id, problem_id: student.problem_id, user_id: student.student_id})">{{student.student_id}}</a></td>
             <td>{{student.problem_id}}</td>
             <td am-time-ago="student.time_lastincorrect" am-preprocess="unix"></td>
             <td>{{student.total_tries}}</td>
@@ -71,7 +71,7 @@
         </thead>
         <tbody>
           <tr ng-repeat="student in displayed_historical_students">
-            <td><a ng-href="#/{{course}}/sets/{{set_id}}/problems/{{problem_id}}/users/{{student.student_id}}">{{student.student_id}}</a></td>
+            <td><a ui-sref="problem_user({course: course, set_id: set_id, problem_id: problem_id, user_id: student.student_id})">{{student.student_id}}</a></td>
             <td am-time-ago="student.last_attempt_time"></td>
             <td>{{student.total_tries}}</td>
             <td am-time-ago="student.last_answer.timestamp"></td>
@@ -107,7 +107,7 @@
   </div>
   
   <div class="col-sm-2 hidden-xs" id="page-nav" bs-scrollspy-list>
-    <h3>Foobar</h3>
+    <h3>Navigation</h3>
     <ul class="nav nav-stacked nav-pills bs-sidenav affix" >
       <li><a href="#problem" ng-click="scrollTo($event)">Problem {{problem_id}}</a></li>
       <li><a href="#active_students" ng-click="scrollTo($event)">Active Students</a></li>
