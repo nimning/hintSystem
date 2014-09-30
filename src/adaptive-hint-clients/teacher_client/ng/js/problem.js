@@ -15,6 +15,17 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $stateParams,
         .withDOM('rtip')
         .withBootstrap();
     $scope.dtOptions['dom'] = 'rtip';
+
+    $scope.scrollTo = function($event) {
+        $event.preventDefault();
+        var id = $($event.target).attr('href').substr(1);
+        var old = $location.hash();
+        $location.hash(id);
+        $anchorScroll();
+        //reset to old to keep any additional routing logic from kicking in
+        $location.hash(old);
+    };
+
     $scope.download_json_url = 'http://'+APIHost+':4351/export_problem_data?course='+course+'&set_id='+set_id+'&problem_id='+problem_id;
     WebworkService.exportProblemData($scope.course, $scope.set_id, $scope.problem_id).success(function(data){
         $scope.problem_data = data;

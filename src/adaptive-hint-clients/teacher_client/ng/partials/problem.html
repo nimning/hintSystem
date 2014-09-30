@@ -1,102 +1,118 @@
-<h3>Problem {{problem_id}}</h3>
-<a class="btn btn-info" ng-href="{{download_json_url}}">Download Problem Data (JSON)</a>
-<div pg-file-preview pg-file="problem_data.pg_file" seed="1234" student-data="studentData" show-hint-buttons="false"></div>
-<h3>Attempts</h3>
-<table class="table table-striped" id="attempts_by_part" datatable="ng" dt-options="dtOptions">
-  <thead>
-    <tr>
-      <th>Part</th>
-      <th>Number of Submissions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr ng-repeat="(part, attempts) in attemptsByPart" dt-rows="">
-      <td>{{part}}</td>
-      <td>{{attempts.submitted}}</td>
-    </tr>
-  </tbody>
-</table>
+<div class="row">
+  <div class="col-sm-10">
+    <section id="problem">
+      <h3>Problem {{problem_id}}</h3>
+      <a class="btn btn-info" ng-href="{{download_json_url}}">Download Problem Data (JSON)</a>
+      <div pg-file-preview pg-file="problem_data.pg_file" seed="1234" student-data="studentData" show-hint-buttons="false"></div>
+      <h3>Attempts</h3>
+      <table class="table table-striped" id="attempts_by_part" datatable="ng" dt-options="dtOptions">
+        <thead>
+          <tr>
+            <th>Part</th>
+            <th>Number of Submissions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="(part, attempts) in attemptsByPart" dt-rows="">
+            <td>{{part}}</td>
+            <td>{{attempts.submitted}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+    
+    <section id="active_students">
+      <h3>Active Students</h3>
+      <table class="table" id="students_table" st-table="displayed_students" st-safe-src="unassigned_students">
+        <thead>
+          <tr>
+            <th class="st-sortable" st-sort="student_id">Student</th>
+            <th class="st-sortable" st-sort="problem_id">Current Problem</th>
+            <th class="st-sortable" >Time since last incorrect</th>
+            <th class="st-sortable" st-sort="total_tries">Total incorrect tries</th>
+            <th class="st-sortable" st-sort="recent_tries">Incorrect tries (last 15 mins)</th>
+            <th class="st-sortable" >Time since last hint</th>
+	        <th class="st-sortable" >Online</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr st-select-row="row" st-select-mode="multiple" ng-repeat="student in displayed_students">
+            <td><a ng-href="#/{{course}}/sets/{{set_id}}/problems/{{student.problem_id}}/users/{{student.student_id}}">{{student.student_id}}</a></td>
+            <td>{{student.problem_id}}</td>
+            <td am-time-ago="student.time_lastincorrect" am-preprocess="unix"></td>
+            <td>{{student.total_tries}}</td>
+            <td>{{student.recent_tries}}</td>
+            <td am-time-ago="student.time_lasthint" am-preprocess="unix"></td>
+            <td>{{student.is_online}}</td>
+            <td></td>
+          </tr>
+        </tbody>
+        <tfoot>
+	      <tr>
+	        <td colspan="7">
+		      <div st-pagination="" st-items-by-page="20" st-displayed-pages="7"></div>
+	        </td>
+	      </tr>
+        </tfoot>
+      </table>
+    </section>
 
-<section id="active_students">
-  <h3>Active Students</h3>
-  <table class="table" id="students_table" st-table="displayed_students" st-safe-src="unassigned_students">
-    <thead>
-      <tr>
-        <th class="st-sortable" st-sort="student_id">Student</th>
-        <th class="st-sortable" st-sort="problem_id">Current Problem</th>
-        <th class="st-sortable" >Time since last incorrect</th>
-        <th class="st-sortable" st-sort="total_tries">Total incorrect tries</th>
-        <th class="st-sortable" st-sort="recent_tries">Incorrect tries (last 15 mins)</th>
-        <th class="st-sortable" >Time since last hint</th>
-	    <th class="st-sortable" >Online</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr st-select-row="row" st-select-mode="multiple" ng-repeat="student in displayed_students">
-        <td><a ng-href="#/{{course}}/sets/{{set_id}}/problems/{{student.problem_id}}/users/{{student.student_id}}">{{student.student_id}}</a></td>
-        <td>{{student.problem_id}}</td>
-        <td am-time-ago="student.time_lastincorrect" am-preprocess="unix"></td>
-        <td>{{student.total_tries}}</td>
-        <td>{{student.recent_tries}}</td>
-        <td am-time-ago="student.time_lasthint" am-preprocess="unix"></td>
-        <td>{{student.is_online}}</td>
-        <td></td>
-      </tr>
-    </tbody>
-    <tfoot>
-	  <tr>
-	    <td colspan="7">
-		  <div st-pagination="" st-items-by-page="20" st-displayed-pages="7"></div>
-	    </td>
-	  </tr>
-    </tfoot>
-  </table>
-</section>
+    <section id="historical_data">
+      <h3>All Students</h3>
+      <table class="table" id="all_students_table" st-table="displayed_historical_students" st-safe-src="historical_students">
+        <thead>
+          <tr>
+            <th class="st-sortable" st-sort="student_id">Student</th>
+            <th class="st-sortable" st-sort="last_attempt_time">Time since last incorrect</th>
+            <th class="st-sortable" st-sort="total_tries">Total incorrect tries</th>
+            <th class="st-sortable" >Time since last hint</th>
+	        <th class="st-sortable" >Online</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="student in displayed_historical_students">
+            <td><a ng-href="#/{{course}}/sets/{{set_id}}/problems/{{problem_id}}/users/{{student.student_id}}">{{student.student_id}}</a></td>
+            <td am-time-ago="student.last_attempt_time"></td>
+            <td>{{student.total_tries}}</td>
+            <td am-time-ago="student.last_answer.timestamp"></td>
+            <td>{{student.is_online}}</td>
+            <td></td>
+          </tr>
+        </tbody>
+        <tfoot>
+	      <tr>
+	        <td colspan="6">
+		      <div st-pagination="" st-items-by-page="10" st-displayed-pages="10"></div>
+	        </td>
+	      </tr>
+        </tfoot>
+      </table>
+    </section>
 
-<section id="historical_data">
-  <h3>All Students</h3>
-  <table class="table" id="all_students_table" st-table="displayed_historical_students" st-safe-src="historical_students">
-    <thead>
-      <tr>
-        <th class="st-sortable" st-sort="student_id">Student</th>
-        <th class="st-sortable" st-sort="last_attempt_time">Time since last incorrect</th>
-        <th class="st-sortable" st-sort="total_tries">Total incorrect tries</th>
-        <th class="st-sortable" >Time since last hint</th>
-	    <th class="st-sortable" >Online</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr ng-repeat="student in displayed_historical_students">
-        <td><a ng-href="#/{{course}}/sets/{{set_id}}/problems/{{problem_id}}/users/{{student.student_id}}">{{student.student_id}}</a></td>
-        <td am-time-ago="student.last_attempt_time"></td>
-        <td>{{student.total_tries}}</td>
-        <td am-time-ago="student.last_answer.timestamp"></td>
-        <td>{{student.is_online}}</td>
-        <td></td>
-      </tr>
-    </tbody>
-    <tfoot>
-	  <tr>
-	    <td colspan="6">
-		  <div st-pagination="" st-items-by-page="10" st-displayed-pages="10"></div>
-	    </td>
-	  </tr>
-    </tfoot>
-  </table>
-</section>
+    <section id="hints">
 
-<section id="hints">
+      <div hint-table="" hints="hints" course="course" set-id="set_id" problem-id="problem_id" seed="1234" edited-hint="edited_hint" pg-header="pg_header" pg-footer="pg_footer" enable-send="false">
+      </div>
 
-  <div hint-table="" hints="hints" course="course" set-id="set_id" problem-id="problem_id" seed="1234" edited-hint="edited_hint" pg-header="pg_header" pg-footer="pg_footer" enable-send="false">
+      <div hint-editor="" hint="edited_hint" pg-file="problem_data.pg_file" seed="1234" course="course">
+      </div>
+
+    </section>
+
+    <!-- <div class="row">
+    <div class="col-md-12 panel panel-default" ng-repeat="(student, activity) in attempts">{{student}}, {{activity.length}} attempts
+    <div student-timeline activity="activity" student="student" student-data="studentData"></div>
+    </div>
+    </div> -->
   </div>
-
-  <div hint-editor="" hint="edited_hint" pg-file="problem_data.pg_file" seed="1234" course="course">
+  
+  <div class="col-sm-2 hidden-xs" id="page-nav" bs-scrollspy-list>
+    <h3>Foobar</h3>
+    <ul class="nav nav-stacked nav-pills bs-sidenav affix" >
+      <li><a href="#problem" ng-click="scrollTo($event)">Problem {{problem_id}}</a></li>
+      <li><a href="#active_students" ng-click="scrollTo($event)">Active Students</a></li>
+      <li><a href="#historical_data" ng-click="scrollTo($event)">All Students</a></li>
+      <li><a href="#hints" ng-click="scrollTo($event)">Hints</a></li>
+    </ul>
   </div>
-
-</section>
-
-<!-- <div class="row">
-<div class="col-md-12 panel panel-default" ng-repeat="(student, activity) in attempts">{{student}}, {{activity.length}} attempts
-<div student-timeline activity="activity" student="student" student-data="studentData"></div>
 </div>
-</div> -->
