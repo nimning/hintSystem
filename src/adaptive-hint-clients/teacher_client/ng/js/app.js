@@ -4,7 +4,9 @@ var App = angular.module(
      'smart-table', 'angularMoment', 'ui.codemirror', 'ui.bootstrap', 'ui.ladda',
      'mgcrea.ngStrap', 'mgcrea.ngStrap.helpers.dimensions',
      'mgcrea.ngStrap.scrollspy', 'ui.router']);
+
 var directives = angular.module('ta-console.directives', []);
+
 App.config(
     ['$httpProvider', '$locationProvider', '$stateProvider',
      '$urlRouterProvider',
@@ -74,10 +76,6 @@ App.config(
             }
         });
     });;
-
-App.constant('APIHost', '192.168.33.10');
-
-App.value('CurrentCourse', {name: 'Course'});
 
 App.controller('ApplicationCtrl', function($scope, $stateParams, $route, $rootScope, $interpolate,
                                            SockJSService, CurrentCourse, Session, AUTH_EVENTS, MessageService){

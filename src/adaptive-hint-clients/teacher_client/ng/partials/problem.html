@@ -107,12 +107,14 @@
   </div>
   
   <div class="col-sm-2 hidden-xs" id="page-nav" bs-scrollspy-list>
-    <h3>Navigation</h3>
-    <ul class="nav nav-stacked nav-pills bs-sidenav affix" >
-      <li><a href="#problem" ng-click="scrollTo($event)">Problem {{problem_id}}</a></li>
-      <li><a href="#active_students" ng-click="scrollTo($event)">Active Students</a></li>
-      <li><a href="#historical_data" ng-click="scrollTo($event)">All Students</a></li>
-      <li><a href="#hints" ng-click="scrollTo($event)">Hints</a></li>
-    </ul>
+    <div id="sidenav" class="affix">
+      <h3>Navigation</h3>
+      <ul class="nav nav-stacked nav-pills bs-sidenav" >
+        <li><a href="#problem" ng-click="scrollTo($event)">Problem {{problem_id}}</a></li>
+        <li><a href="#active_students" ng-click="scrollTo($event)">Active Students</a></li>
+        <li><a href="#historical_data" ng-click="scrollTo($event)">All Students</a></li>
+        <li><a href="#hints" ng-click="scrollTo($event)">Hints</a></li>
+      </ul>
+    </div>
   </div>
 </div>

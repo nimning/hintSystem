@@ -10,7 +10,7 @@ App.factory('WebworkService', function($http, $window, $rootScope, $location, $q
                     fn(data);
                 });
         },
-        problems: function(course, set_id, fn) {
+        problems: function(course, set_id) {
             return $http
                 .get('http://'+APIHost+':4351/problems',
                      {params: {course: course, set_id: set_id}});
@@ -121,7 +121,14 @@ App.factory('WebworkService', function($http, $window, $rootScope, $location, $q
                 pg_footer: pg_footer
             };
 
+        },
+
+        hintFilters: function(course) {
+            return $http
+                .get('http://'+APIHost+':4351/hint_filter',
+                     {params: {course: course}});
         }
+
     };
     return factory;
 });

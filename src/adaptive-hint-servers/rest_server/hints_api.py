@@ -335,8 +335,8 @@ class HintFilter(ProcessQuery):
         return [row['filter_name'] for row in rows]
 
     def get(self):
-        query_template = ''' select filter_name from {{course}}_hint_filter '''
-        self.process_query(query_template, dehydrate=self.filter_names_to_list)
+        query_template = ''' select id, filter_name from {{course}}_hint_filter '''
+        self.process_query(query_template)
 
     def post(self):
         query_template = ''' insert into {{course}}_hint_filter

@@ -82,7 +82,8 @@ angular.module('ta-console.directives')
     });
 
 angular.module('ta-console.directives')
-    .directive('hintEditor', function($window, $timeout, $sce, WebworkService) {
+    .directive('hintEditor', function($window, $timeout, $sce, WebworkService,
+                                     HintFilterProperties) {
         return {
             restrict: 'EA',
             scope: {
@@ -149,6 +150,11 @@ angular.module('ta-console.directives')
 
             },
             link: function($scope, element, attrs) {
+                WebworkService.hintFilters($scope.course).success(function(filters){
+                    $scope.hint_filters = filters.map(function(filter){
+                        return angular.extend(filter, HintFilterProperties[filter.filter_name]);
+                    });
+                });
                 // Periodically preview hint so as to avoid jitter
                 var previewHintTimer;
                 $scope.$watch('hint.pg_text', function(newVal, oldVal){

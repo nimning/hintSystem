@@ -52,6 +52,8 @@
     <script src="bower_components/codemirror/mode/xml/xml.js"></script>
     <script src="bower_components/codemirror/mode/markdown/markdown.js"></script>
     <script src="js/app.js"></script>
+    <script src="js/constants.js"></script>
+    <script src="js/filters.js"></script>
     <script src="js/home.js"></script>
     <script src="js/course.js"></script>
     <script src="js/problem.js"></script>
@@ -104,13 +106,13 @@
         </div>
       </div>
     </nav>
-    <div class="container">
+    <div class="container-fluid">
       <div id="messages_container">
         <div class="alert" ng-class="message.type" ng-repeat="message in messages" role="alert">
           {{message.body}}
         </div>
       </div>
-      <div ui-view></div>
+      <div class="container" ui-view></div>
     </div>
 
 

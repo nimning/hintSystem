@@ -1,21 +1,38 @@
 <div id="hint_editor" collapse="!hint">
   <h3>Edit Hint</h3>
   <div class="row">
+
     <div class="col-md-6">
       <div ng-model="hint.pg_text" ui-codemirror="" ui-codemirror-opts="editorOptions"></div>
       <div class="hint_html" ng-bind-html="hint_editor_preview"></div>
     </div>
     <div class="col-md-6">
       <div ng-model="pgFile" ui-codemirror="" ui-codemirror-opts="pgFileEditorOptions"></div>
-    <button type="button" class="btn btn-primary" ng-click="save_hint(hint)">
-      Save Hint
-    </button>
-    <button type="button" class="btn btn-success ladda-button" ng-click="check_answers(hint)" data-ui-ladda="checking_hint" data-style="expand-right">
-      Check Answers
-    </button>
-    <button type="button" class="btn" ng-click="cancel_edit_hint()">
-      Cancel
-    </button>
+      <button type="button" class="btn btn-primary" ng-click="save_hint(hint)">
+        Save Hint
+      </button>
+      <button type="button" class="btn btn-success ladda-button" ng-click="check_answers(hint)" data-ui-ladda="checking_hint" data-style="expand-right">
+        Check Answers
+      </button>
+      <button type="button" class="btn" ng-click="cancel_edit_hint()">
+        Cancel
+      </button>
+    </div>
+  </div>
+  <h3>Hint Filter</h3>
+
+  <div id="hint_filter_options">
+    <div class="row">
+      <div class="col-md-6">
+        <select ng-model="hint_filter" ng-options="filter as filter.name for filter in hint_filters"></select>
+        <p ng-bind-html="hint_filter.description | nl2br"></p>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group" ng-show="hint_filter.takesArg">
+          <label for="trigger_condition">Trigger Condition</label>
+          <input id="trigger_condition" class="form-control" type="text" ng-model="trigger_condition"></input>
+        </div>
+      </div>
     </div>
   </div>
 </div>
