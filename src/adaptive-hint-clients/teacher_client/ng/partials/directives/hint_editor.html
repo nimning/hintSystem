@@ -19,18 +19,19 @@
       </button>
     </div>
   </div>
-  <h3>Hint Filter</h3>
-
+  <h3>Hint Filter (optional)</h3>
   <div id="hint_filter_options">
     <div class="row">
       <div class="col-md-6">
-        <select ng-model="hint_filter" ng-options="filter as filter.name for filter in hint_filters"></select>
+        <select ng-model="hint_filter" ng-options="filter as filter.name for filter in hint_filters track by filter.id">
+          <option value="">-- None --</option>
+        </select>
         <p ng-bind-html="hint_filter.description | nl2br"></p>
       </div>
       <div class="col-md-6">
-        <div class="form-group" ng-show="hint_filter.takesArg">
+        <div class="form-group" ng-if="hint_filter.takesArg">
           <label for="trigger_condition">Trigger Condition</label>
-          <input id="trigger_condition" class="form-control" type="text" ng-model="trigger_condition"></input>
+          <input id="trigger_condition" class="form-control" type="text" ng-model="hint_filter_options.trigger_condition" required></input>
         </div>
       </div>
     </div>

@@ -344,22 +344,34 @@ class HintFilter(ProcessQuery):
         self.process_query(query_template, write_response=False)
 
 class AssignedHintFilter(ProcessQuery):
+    def set_default_headers(self):
+        # Allows X-site requests
+        super(ProcessQuery, self).set_default_headers()
+        self.add_header("Access-Control-Allow-Methods", "PUT,DELETE")
 
     def get(self):
-        query_template = ''' select {{course}}_hint_filter.filter_name,
-            {{course}}_assigned_hint_filter.hint_id
-            from {{course}}_hint_filter, {{course}}_assigned_hint_filter
-            where {{course}}_assigned_hint_filter.hint_filter_id =
-                {{course}}_hint_filter.id
+        query_template = ''' SELECT hint_filter.filter_name, hint_filter.id as filter_id,
+            assigned_hint_filter.hint_id, assigned_hint_filter.trigger_cond
+            FROM {{course}}_hint_filter as hint_filter
+            JOIN {{course}}_assigned_hint_filter as assigned_hint_filter
+            ON assigned_hint_filter.hint_filter_id = hint_filter.id
         '''
+        if self.get_argument('hint_id', None):
+            query_template += 'WHERE assigned_hint_filter.hint_id = {{hint_id}}'
         self.process_query(query_template)
 
     def post(self):
         # insert ignore inserts only if there is not already a matching element
         query_template = ''' insert ignore into {{course}}_assigned_hint_filter
-            (hint_filter_id, hint_id) values
-            ( (select id from {{course}}_hint_filter
-                       where filter_name="{{filter_name}}"),
-              {{hint_id}})
+            (hint_filter_id, hint_id, trigger_cond) values
+            ( {{hint_filter_id}}, {{hint_id}}, "{{trigger_cond}}")
+        '''
+
+        self.process_query(query_template, write_response=False)
+
+    def put(self):
+        query_template = ''' UPDATE {{course}}_assigned_hint_filter
+            SET hint_filter_id={{hint_filter_id}}, trigger_cond="{% raw trigger_cond %}"
+            WHERE hint_id={{hint_id}}
         '''
         self.process_query(query_template, write_response=False)

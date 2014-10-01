@@ -23,8 +23,8 @@ def regex_match_filter(args, df, previous_hint_assignments, trigger_cond):
             the problem has spent at least some given amount of time trying
             the problem part
     '''
-    if (len(df) > 1):
-        previous_answer = df.iloc[-2].answer_string
+    if (len(df) >= 1):
+        previous_answer = df.iloc[-1].answer_string
         m = re.search(trigger_cond, previous_answer)
         if m:
             return True

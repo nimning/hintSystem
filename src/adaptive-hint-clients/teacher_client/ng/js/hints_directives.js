@@ -83,7 +83,7 @@ angular.module('ta-console.directives')
 
 angular.module('ta-console.directives')
     .directive('hintEditor', function($window, $timeout, $sce, WebworkService,
-                                     HintFilterProperties) {
+                                     HintFilterProperties, HintsService) {
         return {
             restrict: 'EA',
             scope: {
@@ -110,6 +110,7 @@ angular.module('ta-console.directives')
                     readOnly: true
                 };
 
+                $scope.hint_filter_options={};
                 $scope.cancel_edit_hint = function(){
                     $scope.hint=false;
                 };
@@ -123,9 +124,28 @@ angular.module('ta-console.directives')
                     }else{
                         WebworkService.createHint($scope.course, hint.set_id,
                                                   hint.problem_id, hint.author, hint.pg_text).
-                            success(function(data){
+                            success(function(new_hint_id){
                                 $scope.hint=false;
+                                if($scope.hint_filter){ // A Hint Filter was selected
+                                    HintsService.createHintFilter(
+                                        $scope.course, parseInt(new_hint_id), $scope.hint_filter.id,
+                                        $scope.hint_filter_options.trigger_condition);
+                                }
+
                             });
+                    }
+
+                    if($scope.hint_filter){ // A Hint Filter was selected
+                        if($scope.hint_filter_options.update){
+                            HintsService.updateHintFilter(
+                                $scope.course, hint.hint_id, $scope.hint_filter.id,
+                                $scope.hint_filter_options.trigger_condition);
+                        }else{
+                            HintsService.createHintFilter(
+                                $scope.course, hint.hint_id, $scope.hint_filter.id,
+                                $scope.hint_filter_options.trigger_condition);
+
+                        }
                     }
                 };
 
@@ -173,10 +193,32 @@ angular.module('ta-console.directives')
                 // Workaround for bug with ng-show. There's supposed to be a
                 // ui-refresh option which handles this but it doesn't work.
                 $scope.$watch('hint', function(newVal, oldVal){
-                    if(newVal && !oldVal){
+                    if(newVal && !oldVal){ // A new hint has been loaded
                         $(".CodeMirror").each(function(i, el){
                             el.CodeMirror.refresh();
                         });
+                        if(typeof newVal.hint_id !== 'undefined'){ // Editing existing hint
+                            HintsService.getHintFilter($scope.course, newVal.hint_id).
+                                success(function(data){
+                                    if(data.length > 0){
+                                        $scope.hint_filter_options.trigger_condition=data[0].trigger_cond;
+                                        $scope.hint_filter_options.update = true;
+
+                                        angular.forEach($scope.hint_filters, function(hf){
+                                            if(hf.id == data[0].filter_id){
+                                                $scope.hint_filter = hf;
+                                            }
+                                        });
+                                    }else{ // No hint filter previously assigned
+                                        $scope.hint_filter=undefined;
+                                        $scope.hint_filter_options={};
+                                    }
+                                });
+                        }else{ // No hint filter since this is a new hint
+                            $scope.hint_filter=undefined;
+                            $scope.hint_filter_options={};
+                        }
+
                     }
                 });
             },
