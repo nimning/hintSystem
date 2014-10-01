@@ -28,6 +28,7 @@ def expression_value_filter(args, df, previous_hint_assignments, trigger_cond):
         Returns True iff the
     '''
     user_id = args['user_id']
+    # TODO: Check the part where the hint is supposed to be assigned
     # Don't reassign the same hint to the same user
     if any([x['user_id'] == user_id for x in previous_hint_assignments]):
         return False
