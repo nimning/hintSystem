@@ -288,13 +288,15 @@ class RunHintFilters(ProcessQuery):
         df = pd.DataFrame(rows)
         # Go through each entry in the assigned_hint_filter table.
         # Find matches for
-        query_template = ''' select {{course}}_hint_filter.filter_name,
-                {{course}}_assigned_hint_filter.hint_id,
-                {{course}}_assigned_hint_filter.trigger_cond
-            from {{course}}_hint_filter, {{course}}_assigned_hint_filter
-            where
-                {{course}}_assigned_hint_filter.hint_filter_id
-                    = {{course}}_hint_filter.id
+        query_template = ''' SELECT hint_filter.filter_name,
+                assigned_hint_filter.hint_id,
+                assigned_hint_filter.trigger_cond,
+                hint.set_id, hint.problem_id
+            FROM {{course}}_hint_filter AS hint_filter
+            JOIN {{course}}_assigned_hint_filter as assigned_hint_filter
+            ON assigned_hint_filter.hint_filter_id = hint_filter.id
+            JOIN {{course}}_hint as hint ON assigned_hint_filter.hint_id = hint.id
+            WHERE hint.set_id = '{{set_id}}' AND hint.problem_id = {{problem_id}}
         '''
         query_rendered = Template(query_template).generate(**self.args)
         hint_filters_dict = dict( (f.__name__, f) for f in hint_filters)
