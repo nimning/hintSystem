@@ -83,14 +83,14 @@ App.controller('ApplicationCtrl', function($scope, $stateParams, $route, $rootSc
         var sock = SockJSService.connect(4350, Session.user_id);
     }
 
-    $rootScope.$on("$stateChangeSuccess", function(currentRoute, previousRoute){
+    $rootScope.$on("$stateChangeSuccess", function(event, toState, toParams, fromState, fromParams){
         if($stateParams.course){
             CurrentCourse.name = $stateParams.course;
         }
         //Change page title, based on Route information
-        if(false){ //$route.current.title){
-            var titleExp = $interpolate($route.current.title);
-            $rootScope.title = titleExp($route.current.params);
+        if(toState.title){
+            var titleExp = $interpolate(toState.title);
+            $rootScope.title = titleExp($stateParams);
         }else{
             $rootScope.title="";
         }
