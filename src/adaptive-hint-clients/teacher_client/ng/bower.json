@@ -29,7 +29,6 @@
     "angular-moment": "~0.8.0",
     "angular-bootstrap": "~0.11.0",
     "angular-ui-codemirror": "~0.1.6",
-    // "angular-ui-ladda": "*",
     "angular-strap": "~2.1.1",
     "angular-ui-router": "~0.2.11"
   },
