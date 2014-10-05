@@ -1,4 +1,5 @@
 tornado
+numpy
 pandas
 tzlocal
 sockjs-tornado
