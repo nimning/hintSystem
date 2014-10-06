@@ -360,7 +360,7 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
                            problem_id)
 
         # send student lists
-        self.send_unassigned_students(ts.list_unassigned_students())
+        self.send_unassigned_students(ts.list_unassigned_students(set_id))
         self.send_my_students(ts.list_my_students())
 
         # done

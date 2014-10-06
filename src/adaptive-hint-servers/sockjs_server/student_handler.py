@@ -11,12 +11,12 @@ logger = logging.getLogger(__name__)
 
 class StudentSockJSHandler(_BaseSockJSHandler):
     """Student SockJS connection handler
-    
+
     This class handles messages received from the student clients.
 
     A new handler for a message can be defined as follows:
 
-    def __init__(self, *args, **kwargs):   
+    def __init__(self, *args, **kwargs):
         ...
         @self.add_handler('new_message')
         def handle_new_message(self, args):
@@ -27,9 +27,9 @@ class StudentSockJSHandler(_BaseSockJSHandler):
     ----------
       student_session : StudentSession
         The corresponding instance of StudentSession.
-        
+
     """
-    
+
     def __init__(self, *args, **kwargs):
         super(StudentSockJSHandler, self).__init__(*args, **kwargs)
         self.student_session = None
@@ -42,26 +42,26 @@ class StudentSockJSHandler(_BaseSockJSHandler):
             'student_join' is sent from the client as the first message
             after the connection has been established. The message also
             includes the client information.
-              
+
             More detail:
               https://github.com/yoavfreund/Webwork_AdaptiveHints/tree/master/
               src/adaptive-hint-servers/sockjs_server#messages-handled-
               by-the-student-server
-            
+
             args
             ----
               session_id : string
                 Webwork session ID
-                
+
               student_id : string
                 Webwork student ID
-                
+
               course_id : string
                 Webwork course ID
-              
+
               set_id : string
                 Webwork set ID
-                
+
               problem_id : string
                 Webwork problem ID
             """
@@ -81,12 +81,12 @@ class StudentSockJSHandler(_BaseSockJSHandler):
                     course_id,
                     set_id,
                     problem_id)
-                                
+
                 logger.info("Student: %s joined"%student_id)
             except:
                 logger.exception("Exception in student_join handler")
                 self.session.close()
-            
+
 
         @self.add_handler('student_answer')
         @gen.engine
@@ -112,7 +112,7 @@ class StudentSockJSHandler(_BaseSockJSHandler):
 
                 # shorthand
                 ss = self.student_session
-        
+
                 # yeild and perform checkanswer
                 yield gen.Task(self._perform_checkanswer,
                                boxname,
@@ -146,13 +146,13 @@ class StudentSockJSHandler(_BaseSockJSHandler):
                 HintRestAPI.post_hint_feedback(ss.course_id,
                                                assigned_hint_id,
                                                feedback)
-                
+
                 logger.info("%s updated feedback for %s to %s"%(
                     ss.student_id, hintbox_id, feedback))
             except:
                 logger.exception('Exception in hint_feedback handler')
 
-                
+
     ###############################################################
     # Tasks                                                       #
     ###############################################################
@@ -168,20 +168,20 @@ class StudentSockJSHandler(_BaseSockJSHandler):
 
         # shorthand
         ss = self.student_session
-        
+
         # get PG file path
         if ss.pg_file is None:
             ss.pg_file = HintRestAPI.pg_path(ss.course_id,
                                              ss.set_id,
                                              ss.problem_id)
-            
+
         # get problem seed
         if ss.pg_seed is None:
             ss.pg_seed = HintRestAPI.problem_seed(ss.student_id,
                                                   ss.course_id,
                                                   ss.set_id,
                                                   ss.problem_id)
-                                
+
         # update the student session mapping.
         StudentSession.update_student_session(ss)
 
@@ -202,13 +202,13 @@ class StudentSockJSHandler(_BaseSockJSHandler):
     def _perform_checkanswer(self, boxname, value, callback=None):
         ss = self.student_session
         answer_status = {}
-        
+
         # check problem answer
         if boxname.startswith('AnSwEr'):
             answer_status = HintRestAPI.checkanswer(ss.pg_file,
                                                     ss.pg_seed,
                                                     boxname,
-                                                    value)         
+                                                    value)
         # check hint answer
         elif boxname.startswith('AssignedHint'):
             # get hint pg
@@ -217,21 +217,21 @@ class StudentSockJSHandler(_BaseSockJSHandler):
                                     ss.set_id,
                                     ss.problem_id,
                                     assigned_hint_id)
-            
+
             pg_file = base64.b64encode(
                 hint['pg_header'] + '\n' +
                 hint['pg_text'] + '\n' +
                 hint['pg_footer'])
 
-            # check using temporary boxname 'AnSwEr0001' 
+            # check using temporary boxname 'AnSwEr0001'
             answer_status = HintRestAPI.checkanswer(pg_file,
                                                     ss.pg_seed,
                                                     'AnSwEr0001',
                                                     value)
             # set boxname to the hint boxname
             answer_status['boxname'] = boxname
-            
-        # unknown box name    
+
+        # unknown box name
         else:
             raise ValueError('Boxname must begin with AnSwEr or AssignedHint')
 
@@ -239,7 +239,7 @@ class StudentSockJSHandler(_BaseSockJSHandler):
         if len(answer_status) > 0:
             # update the database
             ss.update_answer(boxname, answer_status)
-        
+
             # send the status to client
             self.send_answer_status([answer_status,])
 
@@ -264,7 +264,7 @@ class StudentSockJSHandler(_BaseSockJSHandler):
                 answer = answer.copy()
                 answer.pop('correct_value', None)
                 clean_answer_statuses.append(answer)
-            
+
         self.send_message('answer_status', clean_answer_statuses)
 
 
@@ -274,12 +274,12 @@ class StudentSockJSHandler(_BaseSockJSHandler):
             hints = [hints,]
         self.send_message('hints', hints)
 
-                     
+
     def on_open(self, info):
         """Callback for when a student is connected"""
         logger.info("%s connected"%info.ip)
 
-        
+
     def on_close(self):
         """Callback for when a student is disconnected"""
         ss = self.student_session
@@ -287,13 +287,12 @@ class StudentSockJSHandler(_BaseSockJSHandler):
         if ss is not None:
             # Remove sockjs handler
             ss._sockjs_handler = None
-            
+
             # Notify the teachers
             for ts in TeacherSession.active_sessions:
                 ts.notify_student_left(ss)
 
             if len(ss.student_id) > 0:
                 logger.info("%s left"%ss.student_id)
-                
+
         logger.info("%s disconnected"%self.session.conn_info.ip)
-            
