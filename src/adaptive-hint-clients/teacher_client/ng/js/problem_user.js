@@ -8,7 +8,7 @@ App.controller('ProblemUserCtrl', function($scope, $location, $window, $statePar
     var problem_id = $scope.problem_id = $stateParams.problem_id;
     var user_id = $scope.user_id = $stateParams.user_id;
     $scope.student_data = {answers: []};
-    $scope.current_part = 0;
+    $scope.current_part = 1;
     $scope.problem_seed = "";
     WebworkService.answersByPart(course, set_id, problem_id, user_id).
         success(function(data){
