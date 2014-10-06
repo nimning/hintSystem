@@ -132,6 +132,12 @@ App.factory('WebworkService', function($http, $window, $rootScope, $location, $q
             return $http
                 .post('http://'+APIHost+':4351/parse_string',
                      {expression: expression});
+        },
+        groupedPartAnswers: function(course, set_id, problem_id, part_id) {
+            return $http
+                .get('http://'+APIHost+':4351/grouped_part_answers',
+                     {params: {course: course, set_id: set_id, problem_id: problem_id,
+                     part_id: part_id}});
         }
 
     };

@@ -14,7 +14,7 @@
         </thead>
         <tbody>
           <tr ng-repeat="(part, attempts) in attemptsByPart" dt-rows="">
-            <td>{{part}}</td>
+            <td><a ui-sref="problem_part({course: course, set_id: set_id, problem_id: problem_id, part_id: part})">{{part}}</a></td>
             <td>{{attempts.submitted}}</td>
           </tr>
         </tbody>

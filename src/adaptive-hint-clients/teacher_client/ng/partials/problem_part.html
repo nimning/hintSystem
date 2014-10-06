@@ -1,0 +1,26 @@
+<div class="row">
+  <div class="col-sm-10">
+    <section id="problem">
+      <h3>Problem {{problem_id}} Part {{part_id}}</h3>
+    </section>
+
+    <h3>Group By:</h3>
+    <section id="Answers">
+      <img src="ajax-loader.gif" ng-show="!grouped_answers"></img>
+      <div ng-repeat="(value, group) in grouped_answers['correct']">
+        <h4>{{value}}</h4>
+        <ul>
+          <li ng-repeat="(expression, users) in group">
+            <h5>
+              {{expression}}: {{users.length}} answers
+            </h5>
+            <span ng-repeat="user in users"><a ui-sref="problem_user({course: course, set_id: set_id, problem_id: problem_id, user_id: user})">{{user}}</a> </span>
+          </li>
+        </ul>
+      </div>
+    </section>
+  </div>
+  <div class="col-sm-2">
+    <h3>Navigation</h3>
+  </div>
+</div>
