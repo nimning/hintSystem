@@ -298,12 +298,13 @@ class ExportProblemData(JSONRequestHandler, tornado.web.RequestHandler):
         query = 'SELECT * from {0}_problem WHERE set_id = %s AND problem_id = %s'.format(course)
         result = conn.query(query, set_id, problem_id)[0]
         pg_path = result['source_file']
-        with open(os.path.join(webwork_dir, 'courses', course, 'templates', pg_path), 'r') as f:
+        full_path = os.path.join(webwork_dir, 'courses', course, 'templates', pg_path)
+        with open(full_path, 'r') as f:
             pg_file_contents = f.read()
 
         out = {}
         out['pg_file'] = pg_file_contents
-        out['filename'] = pg_path
+        out['filename'] = full_path
         past_answers = conn.query(
             'SELECT * from {0}_past_answer where set_id = %s AND problem_id = %s'.format(course),
             set_id, problem_id)
