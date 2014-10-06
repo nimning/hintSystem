@@ -134,7 +134,9 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $stateParams,
         if (data.type === "my_students"){
             $scope.my_students = data.arguments;
         }else if (data.type === "unassigned_students"){
-            $scope.unassigned_students = data.arguments;
+            $scope.unassigned_students = data.arguments.filter(function(student){
+                return student.problem_id == problem_id;
+            });
         }
     };
 
