@@ -61,13 +61,13 @@ App.config(
              });
      }])
     .run(function ($rootScope, $location, AUTH_EVENTS, AuthService, MessageService) {
-        $rootScope.$on('$routeChangeStart', function (event, next) {
+        $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
             MessageService.clear();
-            if(next.loginRequired){
+            if(toState.loginRequired){
                 if (!AuthService.isAuthenticated()) {
                     $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
-                    if(next.params.course){
-                        $location.path('/'+next.params.course+'/login');
+                    if(toParams.course){
+                        $location.path('/courses/'+toParams.course+'/login');
                         MessageService.addWarning('You must log in!');
                     } else{
                         $location.path('/');
