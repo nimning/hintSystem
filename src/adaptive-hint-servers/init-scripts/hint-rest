@@ -4,10 +4,10 @@ PORT=7250
 NAME="hint-rest-"$PORT
 PIDFILE=/var/run/$NAME.pid
 
-SERVER_PATH="/home/scheaman/Webwork_AdaptiveHints/src/adaptive-hint-servers/rest_server"
+SERVER_PATH="/opt/Webwork_AdaptiveHints/src/adaptive-hint-servers/rest_server"
 DAEMON="/usr/bin/python"
 DAEMON_ARG=$SERVER_PATH"/rest_server.py -- --port="$PORT
-PYTHONPATH=/opt/Webwork_AdaptiveHints/src/webwork/expr_parser:$PYTHONPATH
+export PYTHONPATH=/opt/Webwork_AdaptiveHints/src/webwork/expr_parser:$PYTHONPATH
 
 case "$1" in
   start)
