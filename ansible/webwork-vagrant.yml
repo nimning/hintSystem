@@ -189,7 +189,7 @@
     - name: Symlink adaptive hints JS
       file:
         src: /vagrant/src/adaptive-hint-clients/webwork_js/adaptive_hints.js
-        path: /opt/webwork/webwork2/htdocs/js/
+        path: /opt/webwork/webwork2/htdocs/js/adaptive_hints.js
         state: link
     - name: Download PhantomJS
       command: "wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.7-linux-x86_64.tar.bz2"
