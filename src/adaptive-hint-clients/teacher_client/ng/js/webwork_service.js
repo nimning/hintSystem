@@ -127,6 +127,11 @@ App.factory('WebworkService', function($http, $window, $rootScope, $location, $q
             return $http
                 .get('http://'+APIHost+':4351/hint_filter',
                      {params: {course: course}});
+        },
+        parseString: function(expression) {
+            return $http
+                .post('http://'+APIHost+':4351/parse_string',
+                     {expression: expression});
         }
 
     };

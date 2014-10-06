@@ -13,7 +13,7 @@ from hints_api import (UserProblemHints, Hint, AssignedHint,
                        HintFilter, AssignedHintFilter)
 
 from auth import (Login)
-
+from parsers import ParseString
 # Server configuration
 BIND_IP = '0.0.0.0'
 DEFAULT_PORT = 4351
@@ -40,6 +40,7 @@ application = tornado.web.Application([
     (r"/problems", Problems),
     (r"/login", Login),
     (r"/answers_by_part", AnswersByPart),
+    (r"/parse_string", ParseString),
     (r"/export_problem_data", ExportProblemData),
     ], gzip=True)
 
