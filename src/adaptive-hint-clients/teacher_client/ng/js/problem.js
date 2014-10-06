@@ -96,18 +96,6 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $stateParams,
             };
             $scope.historical_students.push(student_summary);
         });
-        var realtimeAttemptsByPart = {};
-        angular.forEach(data.realtime_past_answers, function(value, key){
-            realtimeAttemptsByPart[value.pg_id] |= 0;
-            realtimeAttemptsByPart[value.pg_id]++;
-        });
-        $scope.realtimeAttemptsByPart = {};
-        angular.forEach(realtimeAttemptsByPart, function(value, key){
-            var idx = parseInt(key.match(/\d+/));
-            if($scope.attemptsByPart[idx]){
-                $scope.attemptsByPart[idx].realtime = value;
-            }
-        });
         angular.forEach(attemptsByPart, function(value, key){
             $scope.attemptsByPart[key].submitted = value;
         });
