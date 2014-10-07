@@ -30,6 +30,11 @@ App.factory('WebworkService', function($http, $window, $rootScope, $location, $q
                 .get('http://'+APIHost+':4351/pg_file',
                      {params: {course: course, set_id: set_id, problem_id: problem_id}});
         },
+        problemPGPath: function(course, set_id, problem_id) {
+            return $http
+                .get('http://'+APIHost+':4351/pg_path',
+                     {params: {course: course, set_id: set_id, problem_id: problem_id}});
+        },
         problemSeed: function(course, set_id, problem_id, user_id) {
             return $http
                 .get('http://'+APIHost+':4351/problem_seed',
