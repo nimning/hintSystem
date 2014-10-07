@@ -49,6 +49,10 @@ App.controller('ProblemUserCtrl', function($scope, $location, $window, $statePar
         $scope.pg_footer = hf.pg_footer;
     });
 
+    WebworkService.problemPGPath(course, set_id, problem_id).success(function(data){
+        $scope.pg_path = JSON.parse(data);
+    });
+
     $scope.hints = [];
 
     $scope.box="";
