@@ -30,7 +30,8 @@
     "angular-bootstrap": "~0.11.0",
     "angular-ui-codemirror": "~0.1.6",
     "angular-strap": "~2.1.1",
-    "angular-ui-router": "~0.2.11"
+    "angular-ui-router": "~0.2.11",
+    "moment-timezone": "~0.2.2"
   },
   "resolutions": {
     "datatables": "~1.10.2"

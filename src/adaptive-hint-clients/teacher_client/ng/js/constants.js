@@ -34,3 +34,7 @@ App.constant(
         }
 
     });
+
+App.value('angularMomentConfig', {
+    timezone: 'America/Los_Angeles' // optional
+});
