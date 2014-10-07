@@ -1,4 +1,6 @@
 import ply.lex as lex
+import webwork_parser
+# from webwork_parser import WebworkParseException
 
 class WebworkLexer(object):
     tokens = (
@@ -31,7 +33,7 @@ class WebworkLexer(object):
                 t.value = float(t.value)
             except ValueError:
                 print t
-                raise WebworkParseException("LEXER: Trouble parsing float %s", t.value)
+                raise webwork_parser.WebworkParseException("LEXER: Trouble parsing float %s", t.value)
         return t
 
     # Ignored characters
@@ -42,7 +44,7 @@ class WebworkLexer(object):
         t.lexer.lineno += t.value.count("\n")
 
     def t_error(self, t):
-        raise WebworkParseException(
+        raise webwork_parser.WebworkParseException(
             "LEXER: Illegal character '%s' at location %1d" % \
             (t.value[0], t.lexpos))
 

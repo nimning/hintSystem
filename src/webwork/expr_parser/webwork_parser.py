@@ -31,7 +31,7 @@ Answer: ('+', ('C', 32, 5), ('-', ('C', 20, 5)))
 associative_ops = ['*','+']
 
 def reduce_associative(tree):
-    ''' Given a tree of nested operations, group nested associative operations into a single tuple.  
+    ''' Given a tree of nested operations, group nested associative operations into a single tuple.
         For example:
 
         >> reduce_associative(  ('*',('*',1,2),3)  )
@@ -79,12 +79,13 @@ def tree_to_s_exp(tree):
         return '('+tree[0][0] + ' ' + ' '.join(tree_to_s_exp(child) for child in tree[1:]) +')'
     else:
         return str(tree)
+
 class WebworkParseException(Exception):
-    print Exception
+    pass
 
 def handle_comma_separated_number(expr):
-    ''' Handles numbers of the form 1,234,562.09842 or 1,234,562 returning the 
-         numeric value 
+    ''' Handles numbers of the form 1,234,562.09842 or 1,234,562 returning the
+         numeric value
          returns None if the expression is not of this form '''
     expr_without_commas = ''.join( (c for c in expr if c != ',') )
     if len(expr) == len(expr_without_commas):
@@ -156,7 +157,7 @@ def p_expression_factorial(t):
     'factor : factor FACTORIAL %prec FACTORIAL'
     t[0] = ('!',t[1])
     t[0]=add_header(t)
-        
+
 def p_expression_choose(t):
     'factor : CHOOSE LPAREN list RPAREN %prec CHOOSE'
     list=flatten_list(t[3][1:])
@@ -166,9 +167,9 @@ def p_expression_choose(t):
 
 def p_expression_group(t):
     '''factor : LPAREN expression RPAREN
-              | LBRACKET expression RBRACKET 
+              | LBRACKET expression RBRACKET
               | LPAREN factor RPAREN
-              | LBRACKET factor RBRACKET 
+              | LBRACKET factor RBRACKET
               '''
     t[0] = t[2]
     # t[0]=add_header(t)
@@ -211,7 +212,7 @@ def p_expression_tuple(t):
 def p_nonempty_list(t):
     ''' list  : expression COMMA
               | list expression COMMA
-              | list expression 
+              | list expression
               | factor COMMA
               | list factor COMMA
               | list factor %prec LIST '''
@@ -219,7 +220,7 @@ def p_nonempty_list(t):
     #for i in range(len(t)):
     #    print 't[%1d]='%i, t[i],';',
     #print
-                   
+
     if len(t) == 3 and t[2] == ',':                #eg 1,
         t[0] = ('list',(t[1],))
     elif len(t) == 4 or len(t) == 3:               #eg ...1, or ...1
