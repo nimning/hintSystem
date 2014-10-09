@@ -5,9 +5,10 @@ NAME="hint-rest-"$PORT
 PIDFILE=/var/run/$NAME.pid
 
 SERVER_PATH="/opt/Webwork_AdaptiveHints/src/adaptive-hint-servers/rest_server"
-DAEMON="/usr/bin/python"
+DAEMON="/usr/local/bin/newrelic-admin run-program /usr/bin/python"
 DAEMON_ARG=$SERVER_PATH"/rest_server.py -- --port="$PORT
 export PYTHONPATH=/opt/Webwork_AdaptiveHints/src/webwork/expr_parser:$PYTHONPATH
+export NEW_RELIC_CONFIG_FILE="$SERVER_PATH/newrelic.ini"
 
 case "$1" in
   start)
