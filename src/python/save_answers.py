@@ -20,7 +20,12 @@ import base64
 import os.path
 
 db = 'webwork'
-url='http://192.168.33.10/mod_xmlrpc'
+url='http://webwork.cse.ucsd.edu/mod_xmlrpc'
+# Login details for fake course for XMLRPC requests
+user = 'scheaman'
+password = 'scheaman'
+course = 'CompoundProblems'
+
 server = xmlrpclib.ServerProxy(url)
 
 part_re = re.compile('AnSwEr(\d{4})')
@@ -34,7 +39,7 @@ def get_answers(problem_text, filename, seed):
     args = {'envir':
             {'fileName': filename, 'problemSeed': int(seed), 'displayMode':'images'},
             'source': base64.b64encode(problem_text),
-            'userID': 'admin', 'password': 'admin', 'courseID':'CSE103'}
+            'userID': user, 'password': password, 'courseID': course}
     res=server.WebworkXMLRPC.renderProblem(args)
     out = {}
 
