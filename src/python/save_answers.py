@@ -37,7 +37,7 @@ def get_all_answers(problem_file, problem_users):
     with open(problem_file, 'r') as f:
         pg_text = f.read()
     box_count = len(box_re.findall(pg_text))
-    print box_count
+    print "Boxes", box_count
     variables = variables_re.findall(pg_text)
     var_names = []
     var_boxes = []
@@ -139,7 +139,7 @@ if __name__ == '__main__':
                 ans_by_part['set_id'].append(args.set_id)
                 ans_by_part['problem_id'].append(problem.problem_id)
                 ans_by_part['part_id'].append(part_id)
-                ans_by_part['problem_seed'].append(seed)
+                ans_by_part['user_id'].append(user_id)
                 ans_by_part['answer'].append(answer)
             for var_name, var_val in variables.iteritems():
                 variable_arrs['set_id'].append(args.set_id)
