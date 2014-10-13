@@ -6,6 +6,8 @@
       <h3><a ui-sref="set({course: course, set_id: set_id})">{{set_id}}</a> <a ui-sref="problem({course: course, set_id: set_id, problem_id: problem_id})">Problem {{problem_id}}</a> Part {{part_id}}</h3>
     </section>
 
+    <div id="problem" pg-file-preview pg-file="problem_data.filename" seed="1234" student-data="studentData" show-hint-buttons="false"></div>
+
     <section id="answers_group" style="padding-bottom:7px;">
       <h3>Answer Group</h3>
       <!--heading of the table-->
@@ -27,7 +29,7 @@
         </div>
         <!--2nd column: signature of each group-->
         <div class = "col-md-1" style="word-wrap: break-word; padding:0px;">
-            {{value}}
+          {{value}}
         </div>
         <!--3rd column: list all the answers in the group-->
         <div class="col-md-5">
@@ -37,8 +39,8 @@
               ...click to show all answers in this group...
             </a>
           </div>
-          <div id ="collapse{{$index}}" class="panel-collapse collapse">
-            <div class = "row" ng-repeat="(expression, users) in group" >
+          <div id ="collapse{{$index}}" class="panel-collapse collapse" style="padding:0;">
+            <div class = "row" ng-repeat="(expression, users) in group">
               <div class = "col-md-6" style="word-wrap: break-word; padding:0px;">
                 {{expression}}
               </div>
@@ -88,8 +90,10 @@
   <!--navigation-->
   <div class="col-sm-2 hidden-xs" id="page-nav" bs-scrollspy-list>
     <div id="sidenav" class="affix">
+      <h3>Solution Expression</h3>
       <h3>Navigation</h3>
       <ul class="nav nav-stacked nav-pills bs-sidenav" >
+        <li><a href="#problem" ng-click="scrollTo($event)">Problem</a></li>
         <li><a href="#answers_group" ng-click="scrollTo($event)">Answer Group</a></li>
         <li><a href="#hints" ng-click="scrollTo($event)">Hints</a></li>
       </ul>
