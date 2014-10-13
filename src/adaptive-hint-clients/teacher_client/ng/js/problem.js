@@ -127,6 +127,7 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $stateParams,
     }); // End exportProblemData promise resolver
 
 
+
     var sock = SockJSService.get_sock();
     sock.onmessage = function(event) {
         print("RECEIVED: " + event.data);
@@ -140,7 +141,7 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $stateParams,
         }
     };
 
-    // Angular Smart-table is weird about updating the first time
+    /* Angular Smart-table is weird about updating the first time
     $timeout(function(){
         SockJSService.send_command('list_students', {'set_id': $scope.set_id});
     }, 500);
@@ -156,6 +157,7 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $stateParams,
         DTColumnDefBuilder.newColumnDef(0),
         DTColumnDefBuilder.newColumnDef(1),
         DTColumnDefBuilder.newColumnDef(2)
-    ];
+    ];*/
+
 
 });
