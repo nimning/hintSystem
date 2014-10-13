@@ -83,18 +83,18 @@ if __name__ == '__main__':
     metadata = MetaData()
 
     answers_table = Table("{0}_correct_answers".format(args.course), metadata,
-                            Column('set_id', String(1024), nullable=False, index=True),
+                            Column('set_id', String(255), nullable=False, index=True),
                             Column('problem_id', Integer, nullable=False, index=True),
-                            Column('user_id', String(1024), nullable=False, index=True),
+                            Column('user_id', String(255), nullable=False, index=True),
                             Column('part_id', Integer, nullable=False, index=True),
-                            Column('answer', String(1024))
+                            Column('answer', Text)
     )
 
     variables_table = Table("{0}_user_variables".format(args.course), metadata,
-                            Column('set_id', String(1024), nullable=False, index=True),
+                            Column('set_id', String(255), nullable=False, index=True),
                             Column('problem_id', Integer, nullable=False, index=True),
-                            Column('user_id', String(1024), nullable=False, index=True),
-                            Column('name', String(1024), nullable=False, index=True),
+                            Column('user_id', String(255), nullable=False, index=True),
+                            Column('name', String(255), nullable=False, index=True),
                             Column('value', Integer, nullable=False)
     )
 
