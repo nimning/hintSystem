@@ -132,7 +132,7 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $stateParams,
         print("RECEIVED: " + event.data);
         var data = JSON.parse(event.data);
         if (data.type === "my_students"){
-            $scope.my_students = data.arguments;
+            //$scope.my_students = data.arguments;
         }else if (data.type === "unassigned_students"){
             $scope.unassigned_students = data.arguments.filter(function(student){
                 return student.problem_id == problem_id;

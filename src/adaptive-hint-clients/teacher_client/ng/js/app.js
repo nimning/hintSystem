@@ -1,7 +1,7 @@
 var App = angular.module(
     'ta-console',
     ['ngRoute', 'ngSanitize', 'datatables', 'ta-console.directives',
-     'smart-table', 'angularMoment', 'ui.codemirror', 'ui.bootstrap', 'ui.ladda',
+     'smart-table', 'angularMoment', 'ui.codemirror', 'ui.bootstrap',
      'mgcrea.ngStrap', 'mgcrea.ngStrap.helpers.dimensions',
      'mgcrea.ngStrap.scrollspy', 'ui.router']);
 
