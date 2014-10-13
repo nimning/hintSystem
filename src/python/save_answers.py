@@ -95,7 +95,7 @@ if __name__ == '__main__':
                             Column('problem_id', Integer, nullable=False, index=True),
                             Column('user_id', String(255), nullable=False, index=True),
                             Column('name', String(255), nullable=False, index=True),
-                            Column('value', Integer, nullable=False)
+                            Column('value', String(1024), nullable=False)
     )
 
     answers_table.create(engine, checkfirst=True)
