@@ -105,7 +105,7 @@ if __name__ == '__main__':
     FROM {course}_problem as p WHERE p.set_id = ("{set_id}")'''.
                                  format(course=args.course, set_id=args.set_id), engine)
 
-    problem_users = pd.read_sql_query('''SELECT pu.set_id, pu.problem_id, pu.user_id, pu.problem_seed, su.psvn
+    problem_users_df = pd.read_sql_query('''SELECT pu.set_id, pu.problem_id, pu.user_id, pu.problem_seed, su.psvn
     FROM {course}_problem_user as pu
     JOIN {course}_set_user as su ON su.user_id = pu.user_id AND su.set_id=("{set_id}")
     WHERE pu.set_id = ("{set_id}")'''.
@@ -129,7 +129,7 @@ if __name__ == '__main__':
         print "Problem!"
         print problem
         
-        problem_users = problem_users[(problem_users['problem_id']==problem.problem_id) & (problem_users['set_id']==problem.set_id)]
+        problem_users = problem_users_df[(problem_users_df['problem_id']==problem.problem_id) & (problem_users_df['set_id']==problem.set_id)]
         full_path = os.path.join(args.base_dir, args.course, 'templates', problem.source_file)
         all_answers = get_all_answers(full_path, problem_users)
         for user_id, (answers, variables) in all_answers.iteritems():
