@@ -34,7 +34,15 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
         console.error(data);
     });
 
-
+    $scope.scrollTo = function($event) {
+        $event.preventDefault();
+        var id = $($event.target).attr('href').substr(1);
+        var old = $location.hash();
+        $location.hash(id);
+        $anchorScroll();
+        //reset to old to keep any additional routing logic from kicking in
+        $location.hash(old);
+    };
 
 
 
