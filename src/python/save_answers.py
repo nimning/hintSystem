@@ -31,7 +31,7 @@ server = xmlrpclib.ServerProxy(url)
 part_re = re.compile('AnSwEr(\d{4})')
 variables_re = re.compile('(\$\w+)\s*=')
 box_re = re.compile('\[_+\]')
-ignored_variables = set(['$showPartialCorrectAnswers'])
+ignored_variables = set(['$showPartialCorrectAnswers', '$isProfessor'])
 def get_all_answers(problem_file, problem_users):
     print "Users: ", len(problem_users)
     with open(problem_file, 'r') as f:
@@ -152,5 +152,5 @@ if __name__ == '__main__':
     var_DF = pd.DataFrame(variable_arrs)
     print ans_DF
     print var_DF
-    ans_DF.to_sql('{course}_correct_answers'.format(course='args.course'), engine, if_exists='append', index=False)
-    var_DF.to_sql('{course}_user_variables'.format(course='args.course'), engine, if_exists='append', index=False)
+    ans_DF.to_sql('{course}_correct_answers'.format(course=args.course), engine, if_exists='append', index=False)
+    var_DF.to_sql('{course}_user_variables'.format(course=args.course), engine, if_exists='append', index=False)
