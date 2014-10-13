@@ -187,7 +187,7 @@ angular.module('ta-console.directives')
                                 then(function(rendered_html){
                                     $scope.hint_editor_preview = $sce.trustAsHtml(rendered_html);
                                 });
-                        }, 500);
+                        }, 1500);
                     }
                 });
                 // Workaround for bug with ng-show. There's supposed to be a
