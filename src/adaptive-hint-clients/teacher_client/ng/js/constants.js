@@ -1,6 +1,6 @@
 var App = angular.module('ta-console');
 
-App.constant('APIHost', '192.168.33.10');
+App.constant('APIHost', 'webwork.cse.ucsd.edu');
 
 App.value('CurrentCourse', {name: 'Course'});
 

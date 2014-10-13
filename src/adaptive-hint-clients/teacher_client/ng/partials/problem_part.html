@@ -3,7 +3,7 @@
   <div class="col-sm-10">
 
     <section id="problem" style="padding-bottom:7px;">
-      <h3>Problem {{problem_id}} Part {{part_id}}</h3>
+      <h3><a ui-sref="set({course: course, set_id: set_id})">{{set_id}}</a> <a ui-sref="problem({course: course, set_id: set_id, problem_id: problem_id})">Problem {{problem_id}}</a> Part {{part_id}}</h3>
     </section>
 
     <section id="answers_group" style="padding-bottom:7px;">

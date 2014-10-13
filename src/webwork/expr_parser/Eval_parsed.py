@@ -20,12 +20,14 @@ def is_number(s):
     except:
         return False
 
-def eval_parsed(e):
+def eval_parsed(e, variables = None):
     """ Evaluate a parsed expression, returns a tree, of the same form as the parse tree. Where each operator 
         is replaced by a binary tuple: (operator,evaluation result)
     
         Still need to write code to handle varibles, lists and sets.
     """
+    if variables is None:
+        variables = {}
     def get_number(ev):
         if len(ev)==1: return ev[0]
         else: return ev[0][1]
@@ -36,14 +38,20 @@ def eval_parsed(e):
             return 0
         elif is_number(e)==1:
             return (float(e),)
+        elif type(e) == str: # Variable
+            if e in variables:
+                return (variables[e],)
+            else:
+                print "Couldn't find", e, "in",variables
+                return (e,) # Variables will cause things to break right now
         elif len(e)==2:
             ((f,span),op)=e
 
             if f=='{}':
                 return e  # if element is a list, just return as is.
-                          # might need to improve this id we want sets of expressions
+                          # might need to improve this if we want sets of expressions
 
-            ev=eval_parsed(op)
+            ev=eval_parsed(op, variables)
             v=get_number(ev)
             
             if f=='-':
@@ -56,9 +64,9 @@ def eval_parsed(e):
         
         elif len(e)==3:
             ((f,span),op1,op2)=e
-            ev1=eval_parsed(op1)
+            ev1=eval_parsed(op1, variables)
             v1=get_number(ev1)
-            ev2=eval_parsed(op2) 
+            ev2=eval_parsed(op2, variables)
             v2=get_number(ev2)
             
             if f=='+':    ans= v1+v2

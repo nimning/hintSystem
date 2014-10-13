@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col-sm-10">
     <section id="problem">
-      <h3>Problem {{problem_id}}</h3>
+      <h3><a ui-sref="set({course: course, set_id: set_id})">{{set_id}}</a> Problem {{problem_id}}</h3>
       <a class="btn btn-info" ng-href="{{download_json_url}}">Download Problem Data (JSON)</a>
       <div pg-file-preview pg-file="problem_data.filename" seed="1234" student-data="studentData" show-hint-buttons="false"></div>
       <h3>Attempts</h3>

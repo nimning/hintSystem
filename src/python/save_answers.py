@@ -31,7 +31,7 @@ server = xmlrpclib.ServerProxy(url)
 part_re = re.compile('AnSwEr(\d{4})')
 variables_re = re.compile('(\$\w+)\s*=')
 box_re = re.compile('\[_+\]')
-ignored_variables = set(['$showPartialCorrectAnswers'])
+ignored_variables = set(['$showPartialCorrectAnswers', '$isProfessor'])
 def get_all_answers(problem_file, problem_users):
     print "Users: ", len(problem_users)
     with open(problem_file, 'r') as f:
@@ -83,19 +83,19 @@ if __name__ == '__main__':
     metadata = MetaData()
 
     answers_table = Table("{0}_correct_answers".format(args.course), metadata,
-                            Column('set_id', String(1024), nullable=False, index=True),
+                            Column('set_id', String(255), nullable=False, index=True),
                             Column('problem_id', Integer, nullable=False, index=True),
-                            Column('user_id', String(1024), nullable=False, index=True),
+                            Column('user_id', String(255), nullable=False, index=True),
                             Column('part_id', Integer, nullable=False, index=True),
-                            Column('answer', String(1024))
+                            Column('answer', Text)
     )
 
     variables_table = Table("{0}_user_variables".format(args.course), metadata,
-                            Column('set_id', String(1024), nullable=False, index=True),
+                            Column('set_id', String(255), nullable=False, index=True),
                             Column('problem_id', Integer, nullable=False, index=True),
-                            Column('user_id', String(1024), nullable=False, index=True),
-                            Column('name', String(1024), nullable=False, index=True),
-                            Column('value', Integer, nullable=False)
+                            Column('user_id', String(255), nullable=False, index=True),
+                            Column('name', String(255), nullable=False, index=True),
+                            Column('value', String(1024), nullable=False)
     )
 
     answers_table.create(engine, checkfirst=True)
@@ -105,7 +105,7 @@ if __name__ == '__main__':
     FROM {course}_problem as p WHERE p.set_id = ("{set_id}")'''.
                                  format(course=args.course, set_id=args.set_id), engine)
 
-    problem_users = pd.read_sql_query('''SELECT pu.set_id, pu.problem_id, pu.user_id, pu.problem_seed, su.psvn
+    problem_users_df = pd.read_sql_query('''SELECT pu.set_id, pu.problem_id, pu.user_id, pu.problem_seed, su.psvn
     FROM {course}_problem_user as pu
     JOIN {course}_set_user as su ON su.user_id = pu.user_id AND su.set_id=("{set_id}")
     WHERE pu.set_id = ("{set_id}")'''.
@@ -129,7 +129,7 @@ if __name__ == '__main__':
         print "Problem!"
         print problem
         
-        problem_users = problem_users[(problem_users['problem_id']==problem.problem_id) & (problem_users['set_id']==problem.set_id)]
+        problem_users = problem_users_df[(problem_users_df['problem_id']==problem.problem_id) & (problem_users_df['set_id']==problem.set_id)]
         full_path = os.path.join(args.base_dir, args.course, 'templates', problem.source_file)
         all_answers = get_all_answers(full_path, problem_users)
         for user_id, (answers, variables) in all_answers.iteritems():
@@ -152,5 +152,5 @@ if __name__ == '__main__':
     var_DF = pd.DataFrame(variable_arrs)
     print ans_DF
     print var_DF
-    ans_DF.to_sql('{course}_correct_answers'.format(course='args.course'), engine, if_exists='append', index=False)
-    var_DF.to_sql('{course}_user_variables'.format(course='args.course'), engine, if_exists='append', index=False)
+    ans_DF.to_sql('{course}_correct_answers'.format(course=args.course), engine, if_exists='append', index=False)
+    var_DF.to_sql('{course}_user_variables'.format(course=args.course), engine, if_exists='append', index=False)

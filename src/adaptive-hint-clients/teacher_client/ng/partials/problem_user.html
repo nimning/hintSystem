@@ -1,4 +1,4 @@
-<h3>Student {{user_id}} - Problem {{problem_id}}</h3>
+<h3><a ui-sref="set({course: course, set_id: set_id})">{{set_id}}</a> <a ui-sref="problem({course: course, set_id: set_id, problem_id: problem_id})">Problem {{problem_id}}</a> Student {{user_id}}</h3>
 <div pg-file-preview pg-file="pg_path" seed="problem_seed" student-data="studentData" sock-answers="current_answers" box="box"></div>
 
 <div class="row">
