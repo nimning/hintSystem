@@ -6,7 +6,7 @@
       <h3><a ui-sref="set({course: course, set_id: set_id})">{{set_id}}</a> <a ui-sref="problem({course: course, set_id: set_id, problem_id: problem_id})">Problem {{problem_id}}</a> Part {{part_id}}</h3>
     </section>
 
-    <div id="problem" pg-file-preview pg-file="problem_data.filename" seed="1234" student-data="studentData" show-hint-buttons="false"></div>
+    <div id="problem" pg-file-preview pg-file="pg_path" seed="1234" show-hint-buttons="false"></div>
 
     <section id="answers_group" style="padding-bottom:7px;">
       <h3>Answer Group</h3>
@@ -91,6 +91,7 @@
   <div class="col-sm-2 hidden-xs" id="page-nav" bs-scrollspy-list>
     <div id="sidenav" class="affix">
       <h3>Solution Expression</h3>
+      <p class="well">{{answer_expression}}</p>
       <h3>Navigation</h3>
       <ul class="nav nav-stacked nav-pills bs-sidenav" >
         <li><a href="#problem" ng-click="scrollTo($event)">Problem</a></li>
