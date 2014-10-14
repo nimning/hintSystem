@@ -12,11 +12,11 @@
       <h3>Answer Group</h3>
       <!--heading of the table-->
       <div class="row" id="students_table" st-table="displayed_students" st-safe-src="unassigned_students" style="border-bottom:2px solid #ccc;">
-          <div class="col-md-1" style="padding:0px;"><h5># of Students</h5></div>
-          <div class="col-md-1" style="padding:0px;"><h5>Signature</h5></div>
-          <div class="col-md-2" style="padding:0px;"><h5>Anwers in group</h5></div>
-          <div class="col-md-3" style="padding:0px;"><h5>Attempted Students</h5></div>
-          <div class="col-md-5" style="padding:0px;"><h5>Linked Hint</h5></div>
+          <div class="col-md-1"><h5># of Students</h5></div>
+          <div class="col-md-2"><h5>Signature</h5></div>
+          <div class="col-md-2"><h5>Anwers in group</h5></div>
+          <div class="col-md-2"><h5>Attempted Students</h5></div>
+          <div class="col-md-5"><h5>Linked Hint</h5></div>
       </div>
       <!--loading img-->
       <img src="ajax-loader.gif" ng-show="!grouped_answers"></img>
@@ -24,24 +24,24 @@
       <!--table content-->
       <div class="row" style="padding-top: 5px; padding-bottom: 5px; border-bottom:2px solid #ccc;" ng-repeat="(value, group) in grouped_answers['correct']">
         <!--1st column: the total number of students of each group-->
-        <div class = "col-md-1" style="padding:0px;">
+        <div class = "col-md-1">
           {{sum(group)}}
         </div>
         <!--2nd column: signature of each group-->
-        <div class = "col-md-1" style="word-wrap: break-word; padding:0px;">
+        <div class = "col-md-2" style="word-wrap: break-word;">
           {{value}}
         </div>
         <!--3rd column: list all the answers in the group-->
-        <div class="col-md-5">
+        <div class="col-md-4">
           <!-- expandable answer list -->
           <div class="panel-heading" style="padding:0;">
             <a data-toggle="collapse" data-parent="#users_list" data-target="#collapse{{$index}}">
-              ...click to show all answers in this group...
+              -->
             </a>
           </div>
           <div id ="collapse{{$index}}" class="panel-collapse collapse" style="padding:0;">
             <div class = "row" ng-repeat="(expression, users) in group">
-              <div class = "col-md-6" style="word-wrap: break-word; padding:0px;">
+              <div class = "col-md-6" style="word-wrap: break-word;">
                 {{expression}}
               </div>
               <div class = "col-md-6" id="users_list" style="padding:0px;">
@@ -64,11 +64,11 @@
         <!--4th column: linked hint for each group-->
         <div class="col-md-5" id="linked_hints" style="padding:0px;">
           <!--id input box for hints--> <!-- need to implement database update here-->
-          <div class="col-md-2" id="linked_hints_id" style="padding:0px;">
+          <div class="col-md-3" id="linked_hints_id" style="padding-right:0px;">
             ID <input type="text" style="height:20px; width:30px;" ng-model="input_id"/> :
           </div>
           <!--corresponding hint content in pg-->
-          <div class="col-md-8" style="padding:0px;">
+          <div class="col-md-7" style="padding:0px;">
             {{match_hint_id(input_id)}}
           </div>
           <!--send button-->
