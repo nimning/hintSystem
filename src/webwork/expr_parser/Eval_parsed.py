@@ -103,7 +103,6 @@ def collection_recursion(T,etree):
 
 def numbers_and_exps(etree, string):
     numbers = Collect_numbers(etree)
-    print numbers
     ret = {k: node_string(v, string) for k, v in numbers.iteritems()}
     return ret
 
