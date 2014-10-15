@@ -129,6 +129,7 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
         var hint_html_template = "";
         var rendered_hint="";
         // FIXME Put in the proper seed for the student
+        // FIXME This should go inside the loop
         WebworkService.previewHint($scope.hint, 1234, true).
             then(function(rendered_html){
                 hint_html_template = rendered_html;
@@ -139,8 +140,13 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
 
         for(var entry in group){ // For each different expression in the group
             for (var i=0; i<group[entry].length; i++){ //For each student
-                SockJSService.add_hint(course, set_id, problem_id, group[entry][i], // <-- user_id
-                                       "AnSwEr"+("0000"+part_id).slice(-4), id, hint_html_template);
+                var user_id = group[entry][i];
+                SockJSService.request_student(course, set_id, problem_id, user_id);
+                $timeout(function(){
+                    SockJSService.add_hint(course, set_id, problem_id, user_id,
+                                           "AnSwEr"+("0000"+part_id).slice(-4), id, hint_html_template);
+
+                }, 1000);
             }
         }
     };
