@@ -1,7 +1,7 @@
 from math import factorial
 import linecache
 import sys
-from webwork_parser import parse_webwork, WebworkParseException
+from webwork_parser import parse_webwork, WebworkParseException, node_string
 import traceback
 
 def PrintException():
@@ -101,6 +101,11 @@ def collection_recursion(T,etree):
         for i in range(1,len(etree)):
             collection_recursion(T,etree[i])
 
+def numbers_and_exps(etree, string):
+    numbers = Collect_numbers(etree)
+    print numbers
+    ret = {k: node_string(v, string) for k, v in numbers.iteritems()}
+    return ret
 
 def parse_and_collect_numbers(string):
     try:
