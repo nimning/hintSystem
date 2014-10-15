@@ -11,7 +11,7 @@
     <section id="answers_group" style="padding-bottom:7px;">
       <h3>Answer Group</h3>
       <div class="row" id="correct_terms_row">
-        <button type="button" class="btn btn-default" style="margin-right: 1em" ng-repeat="term in correct_terms">{{term}}</button>
+        <button type="button" class="btn btn-default" ng-class="{'btn-default': !term_selected(term), 'btn-primary': term_selected(term)}" style="margin-right: 1em" ng-repeat="term in correct_terms" ng-click="toggle_term(term)">{{term}}</button>
       </div>
       <!--heading of the table-->
       <div class="row" id="students_table" style="border-bottom:2px solid #ccc;">
@@ -25,7 +25,7 @@
       <img src="ajax-loader.gif" ng-show="!grouped_answers"></img>
 
       <!--table content-->
-      <div class="row" style="padding-top: 5px; padding-bottom: 5px; border-bottom:2px solid #ccc;" ng-repeat="(value, group) in grouped_answers['correct']">
+      <div class="row" style="padding-top: 5px; padding-bottom: 5px; border-bottom:2px solid #ccc;" ng-repeat="(value, group) in shown_answers">
         <!--1st column: the total number of students of each group-->
         <div class = "col-md-1">
           {{sum(group)}}

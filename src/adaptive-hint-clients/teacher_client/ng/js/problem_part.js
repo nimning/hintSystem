@@ -29,11 +29,38 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
     });
     WebworkService.groupedPartAnswers(course, set_id, problem_id, part_id).success(function(data){
         console.log(data);
-        $scope.grouped_answers = data;
+        $scope.grouped_answers = data.correct;
+        $scope.shown_answers = data.correct;
         $scope.correct_terms = data.correct_terms;
     }).error(function(data){
         console.error(data);
     });
+
+    $scope.filter_terms = [];
+    $scope.toggle_term = function(term){
+        var idx = $scope.filter_terms.indexOf(term);
+        if( ~idx ){
+            $scope.filter_terms.splice(idx, 1);
+        }else{
+            $scope.filter_terms.push(term);
+        }
+
+        if($scope.filter_terms.length > 0){
+            $scope.shown_answers = {};
+            angular.forEach($scope.grouped_answers, function(value, group){
+                if($scope.filter_terms.every(function(t){return group.indexOf(t)!=-1;})){
+                    $scope.shown_answers[group] = value;
+                }
+            });
+        }else{
+            $scope.shown_answers = $scope.grouped_answers;
+        }
+    };
+
+    $scope.term_selected = function(term){
+        var idx = $scope.filter_terms.indexOf(term);
+        return ~idx;
+    };
 
     $scope.scrollTo = function($event) {
         $event.preventDefault();

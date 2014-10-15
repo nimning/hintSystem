@@ -126,8 +126,6 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $stateParams,
         // });
     }); // End exportProblemData promise resolver
 
-
-
     var sock = SockJSService.get_sock();
     sock.onmessage = function(event) {
         print("RECEIVED: " + event.data);

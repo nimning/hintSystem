@@ -154,7 +154,7 @@ class GroupedPartAnswers(JSONRequestHandler, tornado.web.RequestHandler):
                    part_id=part_id)
 
         answers = conn.query(query)
-
+        all_correct_terms = set()
         correct_terms_map = defaultdict(lambda: defaultdict(list))
         incorrect_terms_map = defaultdict(lambda: defaultdict(list))
         # Parse and evaluate all answers
@@ -167,13 +167,15 @@ class GroupedPartAnswers(JSONRequestHandler, tornado.web.RequestHandler):
                 etree, nums = parsed(a['answer_string'])
                 if etree and nums:
                     correct_terms = self.correct_terms(nums, ans)
+                    all_correct_terms |= set(correct_terms)
+                    # logger.debug(set(correct_terms))
                     # correct,incorrect = separate_nums(correct_nums, nums)
                     correct_terms_map[str(sorted(correct_terms))][a['answer_string']].append(a['user_id'])
                     # incorrect_terms_map[str(sorted(incorrect))][a['answer_string']].append(a['user_id'])
 
         out = {}
         out['correct'] = correct_terms_map
-        out['correct_terms'] = correct_terms_map.keys()
+        out['correct_terms'] = sorted(all_correct_terms)
         out['incorrect'] = incorrect_terms_map
         out['answer_tree'] = str(self.answer_tree)
         self.write(json.dumps(out, default=serialize_datetime))
