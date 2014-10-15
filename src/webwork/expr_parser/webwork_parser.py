@@ -30,6 +30,20 @@ Answer: ('+', ('C', 32, 5), ('-', ('C', 20, 5)))
 
 associative_ops = ['*','+']
 
+def node_span(node):
+    if type(node)==tuple and type(node[0])==tuple:
+        if len(node[0]) == 2: # Parse tree
+            return node[0][1]
+        elif len(node[0]) == 3: # Evaluation tree
+            return node[0][2]
+
+def node_string(node, string):
+    if len(node) > 1:
+        span = node_span(node)
+        return string[span[0]:(span[1]+1)]
+    else:
+        return str(node[0])
+
 def reduce_associative(tree):
     ''' Given a tree of nested operations, group nested associative operations into a single tuple.
         For example:
@@ -257,8 +271,6 @@ parser = yacc.yacc()
 
 #lex.lex(debug=True,debuglog=log,errorlog=log)
 #yacc.yacc(debug=True,debuglog=log,errorlog=log)
-
-
 
 def parse_webwork(expr):
     parsed = handle_comma_separated_number(expr)
