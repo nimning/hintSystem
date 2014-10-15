@@ -117,6 +117,7 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
         for (var i=0; i<all_hints.length; i++){
             if (all_hints[i].hint_id == id){
                 $scope.hint_id = i;
+                $scope.hint = all_hints[i];
                 return all_hints[i].pg_text;
             }
         }
@@ -127,7 +128,8 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
     $scope.preview_send_hint = function(id, group){
         var hint_html_template = "";
         var rendered_hint="";
-        WebworkService.previewHint(hint, $scope.seed, true).
+        // FIXME Put in the proper seed for the student
+        WebworkService.previewHint($scope.hint, 1234, true).
             then(function(rendered_html){
                 hint_html_template = rendered_html;
                 rendered_hint = $sce.trustAsHtml(rendered_html);
@@ -135,10 +137,10 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
                 console.log(error);
             });
 
-        for(entry in group){
-            for (var i=0; i<group[entry].length; i++){
-                SockJSService.add_hint(
-            $scope.course, $scope.setId, $scope.problemId, group[entry][i], "AnSwEr"+("0000"+part_id).slice(-4), id, hint_html_template);
+        for(var entry in group){ // For each different expression in the group
+            for (var i=0; i<group[entry].length; i++){ //For each student
+                SockJSService.add_hint(course, set_id, problem_id, group[entry][i], // <-- user_id
+                                       "AnSwEr"+("0000"+part_id).slice(-4), id, hint_html_template);
             }
         }
     };
