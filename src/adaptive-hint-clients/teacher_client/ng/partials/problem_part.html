@@ -10,11 +10,14 @@
 
     <section id="answers_group" style="padding-bottom:7px;">
       <h3>Answer Group</h3>
+      <div class="row" id="correct_terms_row">
+        <button type="button" class="btn btn-default" style="margin-right: 1em" ng-repeat="term in correct_terms">{{term}}</button>
+      </div>
       <!--heading of the table-->
-      <div class="row" id="students_table" st-table="displayed_students" st-safe-src="unassigned_students" style="border-bottom:2px solid #ccc;">
+      <div class="row" id="students_table" style="border-bottom:2px solid #ccc;">
           <div class="col-md-1"><h5># of Students</h5></div>
           <div class="col-md-2"><h5>Signature</h5></div>
-          <div class="col-md-2"><h5>Anwers in group</h5></div>
+          <div class="col-md-2"><h5>Answers in group</h5></div>
           <div class="col-md-2"><h5>Attempted Students</h5></div>
           <div class="col-md-5"><h5>Linked Hint</h5></div>
       </div>

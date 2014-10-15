@@ -30,6 +30,7 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
     WebworkService.groupedPartAnswers(course, set_id, problem_id, part_id).success(function(data){
         console.log(data);
         $scope.grouped_answers = data;
+        $scope.correct_terms = data.correct_terms;
     }).error(function(data){
         console.error(data);
     });
