@@ -9,7 +9,8 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
     var set_id = $scope.set_id = $stateParams.set_id;
     var problem_id = $scope.problem_id = $stateParams.problem_id;
     var part_id = $scope.part_id = $stateParams.part_id;
-    $scope.input_id = 0;
+    $scope.hint_id = -1;
+    $scope.input_id = null;
 
     $scope.hints = [];
     angular.forEach(hints, function(value, key){
@@ -112,14 +113,45 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
     };
 
     $scope.match_hint_id = function(id){
-        var i = 0;
-        var data = $scope.hints;
-        for (i=0; i<data.length; i++){
-            if (data[i].hint_id == id){
-                return data[i].pg_text;
+        var all_hints = $scope.hints;
+        for (var i=0; i<all_hints.length; i++){
+            if (all_hints[i].hint_id == id){
+                $scope.hint_id = i;
+                return all_hints[i].pg_text;
             }
         }
+        $scope.hint_id = -1;
         return "no matching hint";
+    };
+
+    $scope.preview_send_hint = function(id, group){
+        var hint_html_template = "";
+        var rendered_hint="";
+        WebworkService.previewHint(hint, $scope.seed, true).
+            then(function(rendered_html){
+                hint_html_template = rendered_html;
+                rendered_hint = $sce.trustAsHtml(rendered_html);
+            }, function(error){
+                console.log(error);
+            });
+
+        for(entry in group){
+            for (var i=0; i<group[entry].length; i++){
+                SockJSService.add_hint(
+            $scope.course, $scope.setId, $scope.problemId, group[entry][i], "AnSwEr"+("0000"+part_id).slice(-4), id, hint_html_template);
+            }
+        }
+    };
+
+    $scope.validID = function(){
+        if ($scope.hint_id == -1)
+            return false;
+        else
+            return true;
+    };
+
+    $scope.test = function(){
+        return "AnSwEr"+("0000"+part_id).slice(-4);
     };
 
 });

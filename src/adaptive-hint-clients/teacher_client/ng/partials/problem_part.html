@@ -42,12 +42,12 @@
               -->
             </a>
           </div>
-          <div id ="collapse{{$index}}" class="panel-collapse collapse" style="padding:0;">
+          <div id ="collapse{{$index}}" class="panel-collapse collapse">
             <div class = "row" ng-repeat="(expression, users) in group">
               <div class = "col-md-6" style="word-wrap: break-word;">
                 {{expression}}
               </div>
-              <div class = "col-md-6" id="users_list" style="padding:0px;">
+              <div class = "col-md-6" id="users_list">
                 <!-- expandable student list -->
                 <div class="panel-heading" style="padding:0;">
                     <a data-toggle="collapse" data-parent="#users_list" data-target="#collapse{{$parent.$index}}_{{$index}}">
@@ -65,18 +65,33 @@
         </div>
 
         <!--4th column: linked hint for each group-->
-        <div class="col-md-5" id="linked_hints" style="padding:0px;">
+        <div class="col-md-5" id="linked_hints">
           <!--id input box for hints--> <!-- need to implement database update here-->
-          <div class="col-md-3" id="linked_hints_id" style="padding-right:0px;">
-            ID <input type="text" style="height:20px; width:30px;" ng-model="input_id"/> :
+          <div class = "row">
+            <div class="col-md-3" id="linked_hints_id" style="padding-right:0px;">
+              ID <input type="text" style="height:20px; width:30px;" ng-model="input_id"/> :
+            </div>
+            <!--corresponding hint content in pg-->
+            <div class="col-md-7" style="padding:0px;">
+              {{match_hint_id(input_id)}}
+            </div>
+            <!--send button-->
+            <div class="col-md-2" style="padding:0px;">
+              <button type="button" class="btn btn-primary" ng-click="preview_send_hint(input_id,group)" ng-disabled="!validID()">Send</button>
+            </div>
           </div>
-          <!--corresponding hint content in pg-->
-          <div class="col-md-7" style="padding:0px;">
-            {{match_hint_id(input_id)}}
-          </div>
-          <!--send button-->
-          <div class="col-md-2" style="padding:0px;">
-            <button type="button" class="btn btn-primary" ng-click="" title="Send Hint">Send</button>
+          <!-- row to show history hints -->
+          <div class = "row">
+            <div class="panel-heading">
+              <a data-toggle="collapse" data-parent="#users_list" data-target="#history_hints_collapse{{$index}}">
+                history hints -->
+              </a>
+            </div>
+            <div id="history_hints_collapse{{$index}}" class="panel-collapse collapse">
+              <div class="panel-body" style="border:1px solid #ccc;">
+                ID 000: history hints will be implement ASAP
+              </div>
+            </div>
           </div>
         </div>
       </div>
