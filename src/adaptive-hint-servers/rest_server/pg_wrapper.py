@@ -13,7 +13,7 @@ _SCRIPTDIR = os.path.join(os.path.dirname(os.path.abspath(__file__)),
 _RENDERPG = os.path.join(_SCRIPTDIR,'renderPG.pl')
 _CHECKANSWER = os.path.join(_SCRIPTDIR,'checkanswer.pl')
 
-xmlrpc_url = 'http://192.168.33.10/mod_xmlrpc'
+xmlrpc_url = 'http://webwork.cse.ucsd.edu/mod_xmlrpc'
 server = xmlrpclib.ServerProxy(xmlrpc_url)
 user = 'scheaman'
 password = 'scheaman'
