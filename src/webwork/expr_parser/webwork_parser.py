@@ -9,12 +9,13 @@ from webwork_lexer import WebworkLexer
 import logging
 
 logging.basicConfig(
-    level = logging.DEBUG,
+    level = logging.WARNING,
     filename = "parselog.txt",
     filemode = "w",
     format = "%(filename)10s:%(lineno)4d:%(message)s"
 )
-log = logging.getLogger()
+log = logging.getLogger(__name__)
+log.setLevel(logging.WARNING)
 
 """
 Parsing webwork expressions
