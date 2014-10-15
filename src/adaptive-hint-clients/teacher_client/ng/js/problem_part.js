@@ -51,7 +51,7 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
     WebworkService.problemPGFile(course, set_id, problem_id).success(function(data){
         $scope.pg_file = JSON.parse(data);
         var re = /\[__+\]{(?:Compute\(")(.+)(?:"\))}/g;
-        var i = 1;
+        var i = 0;
         var match;
         while(i < part_id){
             match = re.exec($scope.pg_file);
