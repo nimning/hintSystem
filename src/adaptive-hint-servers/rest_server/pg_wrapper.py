@@ -3,6 +3,8 @@ import os
 import re
 import urllib
 import logging
+import xmlrpclib
+import base64
 logger = logging.getLogger(__name__)
 
 # scripts' location
@@ -10,6 +12,37 @@ _SCRIPTDIR = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                           'scripts')
 _RENDERPG = os.path.join(_SCRIPTDIR,'renderPG.pl')
 _CHECKANSWER = os.path.join(_SCRIPTDIR,'checkanswer.pl')
+
+xmlrpc_url = 'http://192.168.33.10/mod_xmlrpc'
+server = xmlrpclib.ServerProxy(xmlrpc_url)
+user = 'scheaman'
+password = 'scheaman'
+course = 'CompoundProblems'
+
+def render_pg_xmlrpc(pg_file, seed=1234, psvn=1234):
+    ''' Renders an HTML snippet from a given PG file.
+    Uses python's xmlrpclib instead of separate perl script
+
+    Args:
+       pg_file : string
+         Path to the PG file
+       seed : int
+         Random seed
+    Return:
+       A string containing the HTML snippet, or None if there is an error.
+
+    '''
+    pg_file = os.path.abspath(pg_file)
+    with open(pg_file, 'r') as fin:
+        problem_text = fin.read()
+    args = {'envir':
+            {'fileName': pg_file, 'problemSeed': int(seed), 'displayMode':'images', 'psvn': psvn},
+            'source': base64.b64encode(problem_text),
+            'userID': user, 'password': password, 'courseID': course}
+    res=server.WebworkXMLRPC.renderProblem(args)
+    logger.debug(res['compute_time'])
+    html = base64.b64decode(res['text'])
+    return html
 
 def render_pg(pg_file, seed=1234):
     """Render a HTML snippet from a given PG file.
