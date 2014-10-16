@@ -7,10 +7,11 @@ from render import Render
 from checkanswer import CheckAnswer
 from webwork import (ProblemSeed, ProblemPGPath, ProblemPGFile,
                      RealtimeUserProblemAnswers, RealtimeProblemAnswer,
-                     SetIds, Sets, Problems, ExportProblemData, AnswersByPart)
+                     SetIds, Sets, Problems, ExportProblemData, AnswersByPart,
+                     ProblemStatus, ProblemPartStatus)
 from hints_api import (UserProblemHints, Hint, AssignedHint,
                        ProblemHints, HintFeedback, RunHintFilters,
-                       HintFilter, AssignedHintFilter)
+                       HintFilter, AssignedHintFilter, AssignedHintHistory)
 
 from auth import (Login)
 from parsers import ParseString, GroupedPartAnswers
@@ -28,6 +29,7 @@ application = tornado.web.Application([
     (r"/user_problem_hints", UserProblemHints),
     (r"/hint", Hint),
     (r"/assigned_hint", AssignedHint),
+    (r"/assigned_hint_history", AssignedHintHistory),
     (r"/realtime_user_problem_answers", RealtimeUserProblemAnswers),
     (r"/problem_hints", ProblemHints),
     (r"/realtime_problem_answer", RealtimeProblemAnswer),
@@ -42,6 +44,8 @@ application = tornado.web.Application([
     (r"/answers_by_part", AnswersByPart),
     (r"/parse_string", ParseString),
     (r"/grouped_part_answers", GroupedPartAnswers),
+    (r"/problem_status", ProblemStatus),
+    (r"/problem_part_status", ProblemPartStatus),
     (r"/export_problem_data", ExportProblemData),
     ], gzip=True, debug=True)
 

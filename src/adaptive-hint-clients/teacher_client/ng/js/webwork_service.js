@@ -143,6 +143,17 @@ App.factory('WebworkService', function($http, $window, $rootScope, $location, $q
                 .get('http://'+APIHost+':4351/grouped_part_answers',
                      {params: {course: course, set_id: set_id, problem_id: problem_id,
                      part_id: part_id}});
+        },
+        problemStatus: function(course, set_id, problem_id) {
+            return $http
+                .get('http://'+APIHost+':4351/problem_status',
+                     {params: {course: course, set_id: set_id, problem_id: problem_id}});
+        },
+        problemPartStatus: function(course, set_id, problem_id, part_id) {
+            return $http
+                .get('http://'+APIHost+':4351/problem_part_status',
+                     {params: {course: course, set_id: set_id, problem_id: problem_id,
+                     part_id: part_id}});
         }
 
     };

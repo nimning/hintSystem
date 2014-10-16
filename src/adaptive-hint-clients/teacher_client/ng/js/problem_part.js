@@ -179,4 +179,8 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
         }
     }
 
+    WebworkService.problemPartStatus(course, set_id, problem_id, part_id).success(function(data){
+        $scope.completion_data = data;
+    });
+
 });
