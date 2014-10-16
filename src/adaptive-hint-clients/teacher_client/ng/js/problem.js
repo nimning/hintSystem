@@ -139,6 +139,9 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $stateParams,
         }
     };
 
+    WebworkService.problemStatus(course, set_id, problem_id).success(function(data){
+        $scope.completion_data = data;
+    });
     /* Angular Smart-table is weird about updating the first time
     $timeout(function(){
         SockJSService.send_command('list_students', {'set_id': $scope.set_id});
