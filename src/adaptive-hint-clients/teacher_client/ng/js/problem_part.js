@@ -37,6 +37,14 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
         console.error(data);
     });
 
+    /*sort by key
+    $scope.sortByKey = function(array, key) {
+        return Array.sort(function(a, b) {
+            var x = a[key]; var y = b[key];
+            return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+        });
+    };*/
+
     $scope.filter_terms = [];
     $scope.toggle_term = function(term){
         var idx = $scope.filter_terms.indexOf(term);
@@ -51,7 +59,7 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
             angular.forEach($scope.grouped_answers, function(value, group){
                 if($scope.filter_terms.every(function(t){return group.indexOf(t)!=-1;})){
                     $scope.shown_answers[group] = value;
-                }
+                }//sum the number of students for each groups and make an ordered array with three attributes(sum, group_signature, value)
             });
         }else{
             $scope.shown_answers = $scope.grouped_answers;
@@ -104,13 +112,20 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
         }
     };
 
-    $scope.sum = function(group){
-        var s = 0;
-        for (g in group){
-            s = s + group[g].length;
+    /*$scope.groups_students_sum = [];
+    $scope.sum = function(all_groups){
+        for(value in all_groups){
+            var s = 0;
+            for (g in all_group[value]){
+                s = s + group[g].length;
+            }
+            $scope.groups_students_sum.push(s);
         }
-        return s;
     };
+
+    $scope.rearrange_groups = function(all_groups){
+        return false;
+    };*/
 
     $scope.match_hint_id = function(id){
         var all_hints = $scope.hints;
@@ -159,7 +174,9 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
     };
 
     $scope.test = function(){
-        return "AnSwEr"+("0000"+part_id).slice(-4);
-    };
+        for (g in $scope.shown_answers){
+            return $scope.shown_answers[g];
+        }
+    }
 
 });
