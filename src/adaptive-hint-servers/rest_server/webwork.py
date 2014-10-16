@@ -8,12 +8,16 @@ from json_request_handler import JSONRequestHandler
 import tornado.web
 import simplejson as json
 from datetime import datetime
+from dateutil.tz import tzlocal
+
+tz = tzlocal()
+
 import logging
 logger = logging.getLogger(__name__)
 
 def serialize_datetime(obj):
     if isinstance(obj, datetime):
-        serial = obj.isoformat()
+        serial = obj.replace(tzinfo=tz).isoformat()
         return serial
 
 # GET /problem_seed?
