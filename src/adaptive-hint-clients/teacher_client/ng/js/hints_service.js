@@ -18,6 +18,11 @@ App.factory('HintsService', function($http, $window, $rootScope, $location, $q, 
                 .put('http://'+APIHost+':4351/assigned_hint_filter',
                      {course: course, hint_id: hint_id,
                                hint_filter_id: filter_id, trigger_cond: trigger_cond});
+        },
+        assignedHintHistory: function(course, hint_id){
+            return $http
+                .get('http://'+APIHost+':4351/assigned_hint_history',
+                     {params: {course: course, hint_id: hint_id}});
         }
 
     };
