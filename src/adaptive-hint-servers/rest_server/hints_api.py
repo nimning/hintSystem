@@ -1,5 +1,5 @@
 import tornado
-import json
+import simplejson as json
 import tornado.ioloop
 import tornado.web
 import logging
@@ -10,6 +10,15 @@ from process_query import ProcessQuery, conn
 from hint_filters.AllFilters import hint_filters
 from operator import itemgetter
 import pandas as pd
+from datetime import datetime
+from dateutil.tz import tzlocal
+
+tz = tzlocal()
+
+def serialize_datetime(obj):
+    if isinstance(obj, datetime):
+        serial = obj.replace(tzinfo=tz).isoformat()
+        return serial
 
 logger = logging.getLogger(__name__)
 
@@ -205,6 +214,24 @@ class AssignedHint(ProcessQuery):
            where id={{assigned_hint_id}}'''
         self.process_query(query_template, write_response=False)
 
+class AssignedHintHistory(ProcessQuery):
+    """ /assigned_hint_history """
+
+
+    def get(self):
+        '''
+            Sample arguments:
+            course="CompoundProblems",
+            hint_id=10
+            '''
+        query = '''
+            select id, pg_id, user_id, assigned, hint_id, hint_html
+            from {course}_assigned_hint as assigned_hint
+            where
+                assigned_hint.hint_id={hint_id};'''.format(
+                    course=self.get_argument('course'), hint_id=self.get_argument('hint_id'))
+        rows = conn.query(query)
+        self.write(json.dumps(rows, default=serialize_datetime))
 
 class HintFeedback(ProcessQuery):
     """ /hint_feedback """
