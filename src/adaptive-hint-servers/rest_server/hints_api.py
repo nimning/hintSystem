@@ -17,7 +17,7 @@ tz = tzlocal()
 
 def serialize_datetime(obj):
     if isinstance(obj, datetime):
-        serial = obj.replace(tzinfo=tz).isoformat()
+        serial = obj.isoformat()
         return serial
 
 logger = logging.getLogger(__name__)

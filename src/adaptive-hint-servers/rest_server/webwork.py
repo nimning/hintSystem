@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 def serialize_datetime(obj):
     if isinstance(obj, datetime):
-        serial = obj.replace(tzinfo=tz).isoformat()
+        serial = obj.isoformat()
         return serial
 
 # GET /problem_seed?
