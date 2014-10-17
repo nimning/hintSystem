@@ -23,16 +23,15 @@
       </div>
       <!--loading img-->
       <img src="ajax-loader.gif" ng-show="!grouped_answers"></img>
-
       <!--table content-->
-      <div class="row" style="padding-top: 5px; padding-bottom: 5px; border-bottom:2px solid #ccc;" ng-repeat="(value, group) in shown_answers">
+      <div class="row" style="padding-top: 5px; padding-bottom: 5px; border-bottom:2px solid #ccc;" ng-repeat="item in shown_answers_array | orderBy:'-sum':ture">
         <!--1st column: the total number of students of each group-->
         <div class = "col-md-1">
-          1<!--{{groups_students_sum[$index]}}-->
+          {{item.sum}}
         </div>
         <!--2nd column: signature of each group-->
         <div class = "col-md-2" style="word-wrap: break-word;">
-          {{value}}
+          {{item.signature}}
         </div>
         <!--3rd column: list all the answers in the group-->
         <div class="col-md-4">
@@ -43,7 +42,7 @@
             </a>
           </div>
           <div id ="collapse{{$index}}" class="panel-collapse collapse">
-            <div class = "row" ng-repeat="(expression, users) in group">
+            <div class = "row" ng-repeat="(expression, users) in item.student_list">
               <div class = "col-md-6" style="word-wrap: break-word;">
                 {{expression}}
               </div>
@@ -107,7 +106,7 @@
 
   <!--navigation-->
   <div class="col-sm-2 hidden-xs" id="page-nav" bs-scrollspy-list>
-    <div id="sidenav" class="affix">
+    <div id="sidenav" class="affix" style="margin-right: 30px;">
       <h3>Solution Expression</h3>
       <p class="well">{{answer_expression}}</p>
       <h3>Status</h3>
