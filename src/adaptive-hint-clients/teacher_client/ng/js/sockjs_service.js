@@ -18,12 +18,12 @@ App.factory('SockJSService', function($http, $window, $rootScope, $location, $in
     };
     factory.send_command = function (cmd, args) {
         if(!connected){
-            print("SockJS not connected");
+            console.error("SockJS not connected");
             if(user_id){ // Auto reconnect SockJS
                 factory.connect(my_port, user_id);
                 $timeout(function(){
                     factory.send_command(cmd, args);
-                }, 100);
+                }, 1000);
 
             }
         }else{
