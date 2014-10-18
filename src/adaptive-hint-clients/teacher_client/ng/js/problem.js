@@ -131,7 +131,7 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $stateParams,
         print("RECEIVED: " + event.data);
         var data = JSON.parse(event.data);
         if (data.type === "my_students"){
-            //$scope.my_students = data.arguments;
+            $scope.my_students = data.arguments;
         }else if (data.type === "unassigned_students"){
             $scope.unassigned_students = data.arguments.filter(function(student){
                 return student.problem_id == problem_id;
@@ -139,10 +139,12 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $stateParams,
         }
     };
 
+
     WebworkService.problemStatus(course, set_id, problem_id).success(function(data){
         $scope.completion_data = data;
     });
-    /* Angular Smart-table is weird about updating the first time
+
+    /* Angular Smart-table is weird about updating the first time*/
     $timeout(function(){
         SockJSService.send_command('list_students', {'set_id': $scope.set_id});
     }, 500);
@@ -158,7 +160,7 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $stateParams,
         DTColumnDefBuilder.newColumnDef(0),
         DTColumnDefBuilder.newColumnDef(1),
         DTColumnDefBuilder.newColumnDef(2)
-    ];*/
+    ];/**/
 
 
 });

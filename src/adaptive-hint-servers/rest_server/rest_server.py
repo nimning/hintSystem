@@ -47,7 +47,7 @@ application = tornado.web.Application([
     (r"/problem_status", ProblemStatus),
     (r"/problem_part_status", ProblemPartStatus),
     (r"/export_problem_data", ExportProblemData),
-    ], gzip=True)
+    ], gzip=True, debug=True)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

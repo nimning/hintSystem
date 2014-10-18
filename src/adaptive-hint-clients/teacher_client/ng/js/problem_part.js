@@ -31,11 +31,24 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
     WebworkService.groupedPartAnswers(course, set_id, problem_id, part_id).success(function(data){
         console.log(data);
         $scope.grouped_answers = data.correct;
-        $scope.shown_answers = data.correct;
+        $scope.shown_answers_array = [];
+        angular.forEach($scope.grouped_answers, function(value,group){sort_answers(value,group);});
         $scope.correct_terms = data.correct_terms;
     }).error(function(data){
         console.error(data);
     });
+
+    function sort_answers(value, group){
+        var answer_object = {};
+        answer_object["signature"] = group;
+        answer_object["student_list"] = value;
+        var sum = 0;
+        for (v in value){
+            sum = sum + value[v].length;
+        }
+        answer_object["sum"] = sum
+        $scope.shown_answers_array.push(answer_object);
+    }
 
     $scope.filter_terms = [];
     $scope.toggle_term = function(term){
@@ -47,16 +60,34 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
         }
 
         if($scope.filter_terms.length > 0){
-            $scope.shown_answers = {};
+            $scope.shown_answers_array = [];
             angular.forEach($scope.grouped_answers, function(value, group){
                 if($scope.filter_terms.every(function(t){return group.indexOf(t)!=-1;})){
-                    $scope.shown_answers[group] = value;
+                    sort_answers(value, group);
                 }
             });
         }else{
-            $scope.shown_answers = $scope.grouped_answers;
+            $scope.shown_answers_array = [];
+            angular.forEach($scope.grouped_answers, function(value, group){
+                sort_answers(value, group);
+            });
         }
     };
+
+    /*$scope.groups_students_sum = [];
+    $scope.sum = function(all_groups){
+        for(value in all_groups){
+            var s = 0;
+            for (g in all_group[value]){
+                s = s + group[g].length;
+            }
+            $scope.groups_students_sum.push(s);
+        }
+    };
+
+    $scope.rearrange_groups = function(all_groups){
+        return false;
+    };*/
 
     $scope.term_selected = function(term){
         var idx = $scope.filter_terms.indexOf(term);
@@ -93,14 +124,6 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
                 return student.problem_id == problem_id;
             });
         }
-    };
-
-    $scope.sum = function(group){
-        var s = 0;
-        for (g in group){
-            s = s + group[g].length;
-        }
-        return s;
     };
 
     $scope.match_hint_id = function(id){
@@ -150,7 +173,9 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
     };
 
     $scope.test = function(){
-        return "AnSwEr"+("0000"+part_id).slice(-4);
+        for (g in $scope.shown_answers_array){
+            return g.sum;
+        }
     };
 
     WebworkService.problemPartStatus(course, set_id, problem_id, part_id).success(function(data){
