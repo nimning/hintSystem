@@ -1,6 +1,6 @@
 angular.module('ta-console.directives')
     .directive('hintTable', function($window, $sce, WebworkService,
-                                     SockJSService, Session) {
+                                     SockJSService, Session, HintsService) {
         return {
             restrict: 'EA',
             scope: {
@@ -31,7 +31,7 @@ angular.module('ta-console.directives')
                 $scope.rendered_hint="";
                 $scope.preview_hint = function(hint){
                     $scope.hint = hint;
-                    WebworkService.previewHint(hint, $scope.seed, true).
+                    HintsService.previewHint(hint, $scope.seed, true).
                         then(function(rendered_html){
                             $scope.hint_html_template = rendered_html;
                             $scope.rendered_hint = $sce.trustAsHtml(rendered_html);
@@ -64,7 +64,7 @@ angular.module('ta-console.directives')
                 };
 
                 $scope.delete_hint = function(hint){
-                    WebworkService.deleteHint($scope.course, hint.hint_id).success($scope.reload_hints);
+                    HintsService.deleteHint($scope.course, hint.hint_id).success($scope.reload_hints);
                 };
                 $scope.$watch('editedHint', function(newVal, oldVal){
                     // When the edited hint is unset, some editing operation was finished
@@ -72,6 +72,12 @@ angular.module('ta-console.directives')
                         $scope.reload_hints();
                     }
                 });
+                $scope.show_assigned_hints = function(hint){
+                    HintsService.assignedHintHistory($scope.course, hint.hint_id).
+                        success(function(data){
+                            console.log(data);
+                        }).error(function(data){console.log(data);});
+                };
 
 
             },
@@ -117,13 +123,13 @@ angular.module('ta-console.directives')
 
                 $scope.save_hint = function(hint){
                     if(hint.hint_id){ // Hint is already in DB
-                        WebworkService.updateHint($scope.course, hint.hint_id, hint.pg_text).
+                        HintsService.updateHint($scope.course, hint.hint_id, hint.pg_text).
                             success(function(data){
                                 $scope.hint=false;
                             });
                     }else{
-                        WebworkService.createHint($scope.course, hint.set_id,
-                                                  hint.problem_id, hint.author, hint.pg_text).
+                        HintsService.createHint($scope.course, hint.set_id,
+                                                hint.problem_id, hint.author, hint.pg_text).
                             success(function(new_hint_id){
                                 $scope.hint=false;
                                 if($scope.hint_filter){ // A Hint Filter was selected
@@ -167,10 +173,9 @@ angular.module('ta-console.directives')
                         }).error(function(data){
                         });
                 };
-
             },
             link: function($scope, element, attrs) {
-                WebworkService.hintFilters($scope.course).success(function(filters){
+                HintsService.hintFilters($scope.course).success(function(filters){
                     $scope.hint_filters = filters.map(function(filter){
                         return angular.extend(filter, HintFilterProperties[filter.filter_name]);
                     });
@@ -183,7 +188,7 @@ angular.module('ta-console.directives')
                             $timeout.cancel(previewHintTimer);
                         }
                         previewHintTimer = $timeout(function(){
-                            WebworkService.previewHint($scope.hint, $scope.seed, false).
+                            HintsService.previewHint($scope.hint, $scope.seed, false).
                                 then(function(rendered_html){
                                     $scope.hint_editor_preview = $sce.trustAsHtml(rendered_html);
                                 });

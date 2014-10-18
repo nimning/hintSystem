@@ -79,16 +79,7 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
 
     WebworkService.problemPGFile(course, set_id, problem_id).success(function(data){
         $scope.pg_file = JSON.parse(data);
-        var re = /\[__+\]{(?:Compute\(")(.+)(?:"\))}/g;
-        var i = 0;
-        var match;
-        while(i < part_id){
-            match = re.exec($scope.pg_file);
-            i++;
-        }
-        if(match && match[1]){
-            $scope.answer_expression = match[1];
-        }
+        $scope.answer_expression = WebworkService.partSolution($scope.pg_file, part_id);
     });
 
     var sock = SockJSService.get_sock();
@@ -130,7 +121,7 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
         var rendered_hint="";
         // FIXME Put in the proper seed for the student
         // FIXME This should go inside the loop
-        WebworkService.previewHint($scope.hint, 1234, true).
+        HintsService.previewHint($scope.hint, 1234, true).
             then(function(rendered_html){
                 hint_html_template = rendered_html;
                 rendered_hint = $sce.trustAsHtml(rendered_html);
