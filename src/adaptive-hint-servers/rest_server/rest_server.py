@@ -8,7 +8,7 @@ from checkanswer import CheckAnswer
 from webwork import (ProblemSeed, ProblemPGPath, ProblemPGFile,
                      RealtimeUserProblemAnswers, RealtimeProblemAnswer,
                      SetIds, Sets, Problems, ExportProblemData, AnswersByPart,
-                     ProblemStatus, ProblemPartStatus)
+                     ProblemStatus, ProblemPartStatus, SetPsvn)
 from hints_api import (UserProblemHints, Hint, AssignedHint,
                        ProblemHints, HintFeedback, RunHintFilters,
                        HintFilter, AssignedHintFilter, AssignedHintHistory)
@@ -24,6 +24,7 @@ application = tornado.web.Application([
     (r"/render", Render),
     (r"/checkanswer", CheckAnswer),
     (r"/problem_seed", ProblemSeed),
+    (r"/set_psvn", SetPsvn),
     (r"/pg_path", ProblemPGPath),
     (r"/pg_file", ProblemPGFile),
     (r"/user_problem_hints", UserProblemHints),

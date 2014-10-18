@@ -10,6 +10,7 @@ App.controller('ProblemUserCtrl', function($scope, $location, $window, $statePar
     $scope.student_data = {answers: []};
     $scope.current_part = 1;
     $scope.problem_seed = "";
+    $scope.psvn = "";
     WebworkService.answersByPart(course, set_id, problem_id, user_id).
         success(function(data){
             $scope.answersByPart = {};
@@ -41,7 +42,9 @@ App.controller('ProblemUserCtrl', function($scope, $location, $window, $statePar
         success(function(data){
             $scope.problem_seed = data;
         });
-
+    WebworkService.setPsvn(course, set_id, user_id).success(function(data){
+        $scope.psvn = data;
+    });
     WebworkService.problemPGFile(course, set_id, problem_id).success(function(data){
         $scope.pg_text = JSON.parse(data);
         var hf = WebworkService.extractHeaderFooter($scope.pg_text);

@@ -45,6 +45,29 @@ class ProblemSeed(ProcessQuery):
         self.process_query(query_template,
             dehydrate=lambda rows: rows[0]["problem_seed"])
 
+# GET /set_psvn?
+class SetPsvn(ProcessQuery):
+    def get(self):
+        '''
+            To render some problems, we need to get the psvn from that set.
+
+            Sample arguments:
+            course="CompoundProblems",
+            set_id="compoundProblemExperiments",
+            user_id="melkherj"
+
+            Response:
+                2225
+            '''
+        query_template = '''
+            select psvn from {{course}}_set_user
+            where
+                user_id="{{user_id}}" and
+                set_id="{{set_id}}";
+        '''
+        self.process_query(query_template,
+            dehydrate=lambda rows: rows[0]["psvn"])
+
 
 # GET /pg_path?
 class ProblemPGPath(ProcessQuery):

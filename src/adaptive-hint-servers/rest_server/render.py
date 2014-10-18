@@ -32,7 +32,7 @@ class Render(JSONRequestHandler, tornado.web.RequestHandler):
         """
         pg_file = self.get_argument("pg_file")
         seed = self.get_argument("seed")
-
+        psvn = self.get_argument("psvn", 1234)
         # check validity of input
         if (len(pg_file) == 0 or len(seed) == 0 or not seed.isdigit()):
             raise tornado.web.HTTPError(400)
@@ -51,7 +51,7 @@ class Render(JSONRequestHandler, tornado.web.RequestHandler):
             # call the PG wrapper
             rendered_html = yield tornado.gen.Task(task_render,
                                                    pg_file,
-                                                   int(seed))
+                                                   int(seed), int(psvn))
             
             if rendered_html is None:
                 response['error_msg'] = 'PG service error'
@@ -76,7 +76,7 @@ class Render(JSONRequestHandler, tornado.web.RequestHandler):
                 
             rendered_html = yield tornado.gen.Task(task_render,
                                                    temp.name,
-                                                   int(seed))
+                                                   int(seed), int(psvn))
             # remove the temp file
             os.remove(temp.name)
 

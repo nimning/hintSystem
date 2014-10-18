@@ -8,7 +8,8 @@ angular.module('ta-console.directives')
               studentData: '=',
               sockAnswers: '=',
               box: '=?',
-              showHintButtons: '@'
+              showHintButtons: '@',
+              psvn: '=?'
           },
           controller: function($scope){
               $scope.choose_box = function(boxname, b){
@@ -28,9 +29,9 @@ angular.module('ta-console.directives')
           },
           link: function($scope, element, attrs){
               $scope.hidePreview="";
-              renderPreview = function(){
+              var renderPreview = function(){
                   if($scope.pgFile && $scope.pgFile.length > 0 && $scope.seed!=undefined){
-                      WebworkService.render($scope.pgFile, String($scope.seed))
+                      WebworkService.render($scope.pgFile, $scope.seed, $scope.psvn)
                           .success(function(data){
                               // Insert ng-model directive and disable the input
                               var s = data.rendered_html.replace(/name=('|")(AnSwEr\d+)('|")/g, "$& ng-model='$2' disabled=''");
@@ -55,7 +56,7 @@ angular.module('ta-console.directives')
               };
               $scope.$watch('pgFile', renderPreview);
               $scope.$watch('seed', renderPreview);
-
+              $scope.$watch('psvn', renderPreview);
               $scope.$watch('studentData.answers', function(answers, oldAnswers, scope){
                   if(!!answers){
                       var inputs = element.find('input[type=text]');
