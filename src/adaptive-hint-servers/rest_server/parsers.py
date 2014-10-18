@@ -169,7 +169,8 @@ class GroupedPartAnswers(JSONRequestHandler, tornado.web.RequestHandler):
                     all_correct_terms |= set(correct_terms)
                     # logger.debug(set(correct_terms))
                     # correct,incorrect = separate_nums(correct_nums, nums)
-                    correct_terms_map[str(sorted(correct_terms))][a['answer_string']].append(a['user_id'])
+                    if a['user_id'] not in correct_terms_map[str(sorted(correct_terms))][a['answer_string']]:
+                        correct_terms_map[str(sorted(correct_terms))][a['answer_string']].append(a['user_id'])
                     # incorrect_terms_map[str(sorted(incorrect))][a['answer_string']].append(a['user_id'])
 
         out = {}
