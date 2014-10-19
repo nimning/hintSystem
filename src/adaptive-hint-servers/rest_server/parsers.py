@@ -137,7 +137,7 @@ class GroupedPartAnswers(JSONRequestHandler, tornado.web.RequestHandler):
         WHERE set_id="{set_id}" AND problem_id = {problem_id};
         '''.format(course=course, set_id=set_id, problem_id=problem_id))
         self.variables_df = pd.DataFrame(user_variables)
-        answer_re = re.compile('\[__+\]{(?:Compute\(")?(.+)(?:"\))?}')
+        answer_re = re.compile('\[__+\]{(?:Compute\(")?(.+?)(?:"\))?}')
         answer_boxes = answer_re.findall(pg_file)
         self.part_answer = answer_boxes[part_id-1]
         self.answer_tree = parse_webwork(self.part_answer)

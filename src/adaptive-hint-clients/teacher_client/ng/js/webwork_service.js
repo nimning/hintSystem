@@ -112,7 +112,7 @@ App.factory('WebworkService', function($http, $window, $rootScope, $location, $q
                      part_id: part_id}});
         },
         partSolution: function(pg_file, part_id){
-            var re = /\[__+\]{(?:Compute\(")?(.+)(?:"\))?}/g;
+            var re = /\[__+\]{(?:Compute\(")?(.+?)(?:"\))?}/g;
             var i = 0;
             var match;
             while(i < part_id){
