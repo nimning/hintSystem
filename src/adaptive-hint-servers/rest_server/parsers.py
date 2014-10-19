@@ -42,16 +42,6 @@ def separate_nums(correct_etree, answer_etree):
     return (correct_nums & answer_nums,
             answer_nums - correct_nums)
 
-
-def get_correct_answers(course, set_id, problem_id, seed):
-    base_url = 'http://webwork.cse.ucsd.edu:4351/{0}'
-    pg_path = requests.get(base_url.format('pg_path'),
-                 params={'course':course, 'set_id':set_id, 'problem_id':problem_id}).json()
-    check_answer = requests.post(base_url.format('checkanswer'),
-                                 {'pg_file':pg_path, 'seed':seed, 'AnSwEr1':'0'}).json()
-    logger.debug(check_answer)
-    return {k: v['correct_value'] for k, v in check_answer.iteritems()}
-
 # POST /parse_string?
 class ParseString(JSONRequestHandler, tornado.web.RequestHandler):
     def post(self):
@@ -128,7 +118,7 @@ class GroupedPartAnswers(JSONRequestHandler, tornado.web.RequestHandler):
                 problem_id={problem_id} and
                 set_id="{set_id}";
         '''.format(course=course, set_id=set_id, problem_id=problem_id))[0]['source_file']
-
+        
         pg_path = os.path.join(webwork_dir, 'courses', course, 'templates', source_file)
         with open(pg_path, 'r') as fin:
             pg_file = fin.read()
@@ -141,9 +131,6 @@ class GroupedPartAnswers(JSONRequestHandler, tornado.web.RequestHandler):
         answer_boxes = answer_re.findall(pg_file)
         self.part_answer = answer_boxes[part_id-1]
         self.answer_tree = parse_webwork(self.part_answer)
-
-        # correct_answers = get_correct_answers(course, set_id, problem_id, 1) # last arg is random seed
-        # _, correct_nums = parsed(correct_answers[part_id_to_box(part_id)])
 
         # Get attempts by part
         query = '''SELECT * from {course}_answers_by_part
@@ -168,10 +155,8 @@ class GroupedPartAnswers(JSONRequestHandler, tornado.web.RequestHandler):
                     correct_terms = self.correct_terms(nums, ans)
                     all_correct_terms |= set(correct_terms)
                     # logger.debug(set(correct_terms))
-                    # correct,incorrect = separate_nums(correct_nums, nums)
                     if a['user_id'] not in correct_terms_map[str(sorted(correct_terms))][a['answer_string']]:
                         correct_terms_map[str(sorted(correct_terms))][a['answer_string']].append(a['user_id'])
-                    # incorrect_terms_map[str(sorted(incorrect))][a['answer_string']].append(a['user_id'])
 
         out = {}
         out['correct'] = correct_terms_map

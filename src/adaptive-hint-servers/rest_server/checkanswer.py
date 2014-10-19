@@ -9,8 +9,8 @@ from json_request_handler import JSONRequestHandler
 import logging
 logger = logging.getLogger(__name__)
 
-def task_checkanswer(pg_file, answers, seed, callback=None):
-    callback(pg_wrapper.checkanswer(pg_file, answers, int(seed)))
+def task_checkanswer(pg_file, answers, seed, psvn, callback=None):
+    callback(pg_wrapper.check_answer_xmlrpc(pg_file, answers, seed, psvn))
  
 class CheckAnswer(JSONRequestHandler, tornado.web.RequestHandler):
     """Interface with Webwork/PG for checking answers with a PG
@@ -34,6 +34,7 @@ class CheckAnswer(JSONRequestHandler, tornado.web.RequestHandler):
         """
         pg_file = self.get_argument("pg_file")
         seed = self.get_argument("seed")
+        psvn = self.get_argument("psvn", 1234)
 
         # check validity of the input
         if len(pg_file) == 0 or len(seed) == 0 or not seed.isdigit():
@@ -60,10 +61,8 @@ class CheckAnswer(JSONRequestHandler, tornado.web.RequestHandler):
                 return
 
             # call the PG wrapper
-            results = yield tornado.gen.Task(task_checkanswer,
-                                             pg_file,
-                                             answers,
-                                             int(seed))
+            results = yield tornado.gen.Task(task_checkanswer, pg_file, answers, \
+                                             seed, psvn)
 
             if results is None:
                 response = { 'error_msg': 'PG service error' }
@@ -89,10 +88,8 @@ class CheckAnswer(JSONRequestHandler, tornado.web.RequestHandler):
                 return
 
             # call the PG wrapper
-            results = yield tornado.gen.Task(task_checkanswer,
-                                             temp.name,
-                                             answers,
-                                             int(seed))
+            results = yield tornado.gen.Task(task_checkanswer, temp.name, answers, \
+                                             seed, psvn)
 
             # remove the temp file
             os.remove(temp.name)

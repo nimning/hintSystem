@@ -44,6 +44,61 @@ def render_pg_xmlrpc(pg_file, seed=1234, psvn=1234):
     html = base64.b64decode(res['text'])
     return html
 
+def check_answer_xmlrpc(pg_file, answers, seed=1234, psvn=1234):
+    ''' Checks answers for a given PG file
+    Uses python's xmlrpclib instead of separate perl script
+
+    Args:
+       pg_file : string
+         Path to the PG file
+       answers : dict
+         Dictionary with the answers e.g.
+            { 'AnSwEr0001' : '123',
+              'AnSwEr0002' : 'x' }
+       seed : int
+         Random seed
+       psvn : int
+         Problem set version (potentially used as random seed)
+    Return:
+       A dictionary containing results e.g.
+            { 'AnSwEr0001' : { 'entered_value' : '123',
+                               'correct_value' : '50',
+                               'is_correct' : False,
+                               'error_msg' : '' },
+              'AnSwEr0002' : { 'entered_value' : 'x',
+                               'correct_value' : '10',
+                               'is_correct' : False,
+                               'error_msg' : 'Your answer isn't a number
+                               (it looks like a formula that returns a number)' } }
+
+       or None if there is an error.
+
+    '''
+    pg_file = os.path.abspath(pg_file)
+    with open(pg_file, 'r') as fin:
+        problem_text = fin.read()
+    args = {'envir':
+            {'fileName': pg_file, 'problemSeed': int(seed), 'displayMode':'images',
+             'inputs_ref': answers, 'psvn': int(psvn)},
+            'source': base64.b64encode(problem_text),
+            'userID': user, 'password': password, 'courseID': course}
+    res = server.WebworkXMLRPC.renderProblem(args)
+    logger.debug(res['compute_time'])
+
+    results = {}
+    for label, answer in res['answers'].iteritems():
+        entered_value = answer['original_student_ans']
+        if entered_value == '&nbsp;':
+            entered_value = ''
+        is_correct = answer['score'] == 1
+        correct_value = answer['correct_ans']
+        error = answer['error_message']
+        results[label] = { 'entered_value' : entered_value,
+                           'correct_value' : correct_value,
+                           'is_correct' : is_correct,
+                           'error_msg' : error }
+    return results
+
 def render_pg(pg_file, seed=1234):
     """Render a HTML snippet from a given PG file.
 
@@ -52,7 +107,7 @@ def render_pg(pg_file, seed=1234):
          Path to the PG file
        seed : int
          Random seed
-         
+
     Return:
        A string containing the HTML snippet, or None if there is an error.
 
@@ -68,20 +123,20 @@ def render_pg(pg_file, seed=1234):
                                    stderr=subprocess.PIPE)
         # block until done
         process.wait()
-        
+
         # read stdout, stderr
         out, err = process.communicate()
 
-        # check for any error 
+        # check for any error
         if len(out) == 0 or len(err) > 0:
             return None
 
         # parse PG output
         problem = re.search(r'<form.*?>(.*?)<input type="hidden" name="answersSubmitted" value="1">',
                             out, re.DOTALL).group(1)
-        
+
         return problem
-            
+
     except Exception:
         return None
 
@@ -98,7 +153,7 @@ def checkanswer(pg_file, answers, seed=1234):
               'AnSwEr0002' : 'x' }
        seed : int
          Random seed
-         
+
     Return:
        A dictionary containing results e.g.
             { 'AnSwEr0001' : { 'entered_value' : '123',
@@ -110,9 +165,9 @@ def checkanswer(pg_file, answers, seed=1234):
                                'is_correct' : False,
                                'error_msg' : 'Your answer isn't a number
                                (it looks like a formula that returns a number)' } }
-                               
-       or None if there is an error.                        
-   
+
+       or None if there is an error.
+
     Notes:
        This function blocks until the PG generation process is complete.
        It is not recommended to call this function from the main thread.
@@ -128,7 +183,7 @@ def checkanswer(pg_file, answers, seed=1234):
                                    stderr=subprocess.PIPE)
         # block until done
         process.wait()
-        
+
         # read stdout, stderr
         out, err = process.communicate()
 
@@ -158,15 +213,15 @@ def checkanswer(pg_file, answers, seed=1234):
                                                 'correct_value' : correct_value,
                                                 'is_correct' : is_correct,
                                                 'error_msg' : error }
-        
+
         return results
-            
+
     except Exception:
         import traceback
         traceback.print_exc()
         return None
-    
-    
+
+
 def test():
     print '#'*50
     print render_pg(os.path.join(_SCRIPTDIR,'BayesBurglary.pg'))
