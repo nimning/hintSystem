@@ -63,6 +63,7 @@
         - python-dev
         - curl
         - ipython
+        - libfreetype6-dev
     - name: Install perl dependencies from CPAN
       cpanm:
         name: "{{ item }}"

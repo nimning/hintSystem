@@ -9,7 +9,6 @@ alembic
 selenium
 PyJWT
 PyCrypto
-matplotlib
 ipython[notebook] >= 2.0
 ply
 zss
