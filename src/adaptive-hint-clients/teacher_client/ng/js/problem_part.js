@@ -111,6 +111,10 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
     WebworkService.problemPGFile(course, set_id, problem_id).success(function(data){
         $scope.pg_file = JSON.parse(data);
         $scope.answer_expression = WebworkService.partSolution($scope.pg_file, part_id);
+        var hf = WebworkService.extractHeaderFooter($scope.pg_file);
+        $scope.pg_header = hf.pg_header;
+        $scope.pg_footer = hf.pg_footer;
+
     });
 
     var sock = SockJSService.get_sock();
