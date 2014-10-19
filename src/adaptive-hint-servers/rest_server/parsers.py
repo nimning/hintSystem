@@ -127,6 +127,9 @@ class GroupedPartAnswers(JSONRequestHandler, tornado.web.RequestHandler):
         WHERE set_id="{set_id}" AND problem_id = {problem_id};
         '''.format(course=course, set_id=set_id, problem_id=problem_id))
         self.variables_df = pd.DataFrame(user_variables)
+        if len(self.variables_df) == 0:
+            logger.error("No user variables saved for assignment %s, please run the save_answers script", set_id)
+            raise tornado.web.HTTPError(500)
         answer_re = re.compile('\[__+\]{(?:Compute\(")?(.+?)(?:"\))?}')
         answer_boxes = answer_re.findall(pg_file)
         self.part_answer = answer_boxes[part_id-1]
