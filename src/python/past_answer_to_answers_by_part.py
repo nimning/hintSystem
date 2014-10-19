@@ -60,10 +60,6 @@ if __name__ == '__main__':
     res1 = conn.execute(s).fetchone()
     print res1
 
-    s2 = select([past_answers])
-    res2 = conn.execute(s2).fetchall()
-    # for row in res2:
-    #     print row
     if res1:
         start_id = res1.answer_id+1
         print "Starting from", start_id

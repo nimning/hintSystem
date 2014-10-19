@@ -12,12 +12,8 @@ from sqlalchemy.dialects.mysql import \
         NUMERIC, NVARCHAR, REAL, SET, SMALLINT, TEXT, TIME, TIMESTAMP, \
         TINYBLOB, TINYINT, TINYTEXT, VARBINARY, VARCHAR, YEAR
 
-import pandas as pd
-import numpy as np
-import re
 from IPython import embed
 
-from sqlalchemy.orm import sessionmaker
 db = 'webwork'
 
 if __name__ == '__main__':
