@@ -18,11 +18,12 @@ def parse_args():
     parser.add_argument('--theta', '-t', type=float, default=0.1, help='The probability with which the student gets the correct answer')
     parser.add_argument('--filename', '-f', default='hw.yaml', help='A YAML file describing the homework')
     parser.add_argument('--domain', '-d', default='192.168.33.10', help='Domain running webwork (can be an IP address)')
+    parser.add_argument('--wait', '-w', default=1, type=float, help='Wait time between answers')
     args = parser.parse_args()
     return args
 
 
-def simulate_student(hw_file, domain, course, p_correct, username, password):
+def simulate_student(hw_file, domain, course, p_correct, username, password, wait):
     with open(hw_file) as f:
         hw_def = yaml.load(f)
 
@@ -61,7 +62,7 @@ def simulate_student(hw_file, domain, course, p_correct, username, password):
                 if random() < p_correct:
                     part_el.clear()
                     part_el.send_keys(answer)
-                    sleep(0.5)
+                    sleep(wait)
                     submit.click()
 
                     print tries
@@ -69,7 +70,7 @@ def simulate_student(hw_file, domain, course, p_correct, username, password):
                 else:
                     part_el.clear()
                     part_el.send_keys("gibberish")
-                    sleep(0.5)
+                    sleep(wait)
                     submit.click()
                     tries = tries + 1
                     print driver.title
@@ -77,4 +78,4 @@ def simulate_student(hw_file, domain, course, p_correct, username, password):
 if __name__ == '__main__':
     args = parse_args()
     simulate_student(args.filename, args.domain, args.course, args.theta,
-                     args.username, args.password)
+                     args.username, args.password, args.wait)
