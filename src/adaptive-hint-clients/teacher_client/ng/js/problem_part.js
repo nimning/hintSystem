@@ -3,7 +3,8 @@ var App = angular.module('ta-console');
 App.controller('ProblemPartCtrl', function($scope, $location, $window, $stateParams,
                                            $sce, $timeout, $interval, $anchorScroll, $modal, $log,
                                            WebworkService, SockJSService, APIHost,
-                                           DTOptionsBuilder, DTColumnDefBuilder){
+                                           DTOptionsBuilder, DTColumnDefBuilder,
+                                           MessageService){
 
     var course = $scope.course = $stateParams.course;
     var set_id = $scope.set_id = $stateParams.set_id;
@@ -35,7 +36,9 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
         angular.forEach($scope.grouped_answers, function(value,group){sort_answers(value,group);});
         $scope.correct_terms = data.correct_terms;
     }).error(function(data){
+        $scope.grouped_answers = [];
         console.error(data);
+        MessageService.addError('An error occurred while trying to group student answers.');
     });
 
     function sort_answers(value, group){
@@ -46,7 +49,7 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
         for (v in value){
             sum = sum + value[v].length;
         }
-        answer_object["sum"] = sum
+        answer_object["sum"] = sum;
         $scope.shown_answers_array.push(answer_object);
     }
 
