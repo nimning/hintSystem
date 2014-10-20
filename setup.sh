@@ -37,4 +37,4 @@ export WWAH_NOTEBOOKS=${pwd}/src/notebooks
 echo 'ipython notebooks $WWAH_NOTEBOOKS=' 
 echo $WWAH_NOTEBOOKS
 
-export PYTHONPATH=$WWAH_SRC/adaptive-hint-servers/:$WWAH_SRC:$PYTHONPATH
+export PYTHONPATH=$WWAH_SRC/webwork/expr_parser/:$WWAH_SRC/adaptive-hint-servers/:$WWAH_SRC:$PYTHONPATH
