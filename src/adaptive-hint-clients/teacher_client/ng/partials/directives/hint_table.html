@@ -4,6 +4,7 @@
     <thead>
       <tr>
         <th class="st-sortable" st-sort="hint_id">ID</th>
+        <th> Students list </th>
         <th class="st-sortable" st-sort="pg_text">PG Text</th>
         <th class="st-sortable" st-sort="author">Author</th>
         <th>Actions</th>
@@ -12,6 +13,19 @@
     <tbody>
       <tr ng-repeat="hint in displayed_hints">
         <td>{{hint.hint_id}}</td>
+        <td>
+          <div class="panel-heading" style="padding:0;">
+              <a data-toggle="collapse" data-parent="#users_list" data-target="#collapse{{$parent.$index}}_{{$index}}"
+              ng-click="show_assigned_hints(hint)">
+              students-->
+              </a>
+          </div>
+          <div id="collapse{{$parent.$index}}_{{$index}}" class="panel-collapse collapse">
+            <div class="panel-body" style="padding:0; border:1px solid #ccc;">
+              <a ng-repeat="user in hint.students" ui-sref="problem_user({course: course, set_id: setId, problem_id: problemId, user_id: user})"> {{user}} </a>
+            </div>
+          </div>
+        </td>
         <td>{{hint.pg_text}}</td>
         <td>{{hint.author}}</td>
         <td class="nostretch">
