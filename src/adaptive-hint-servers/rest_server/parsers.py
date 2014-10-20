@@ -101,7 +101,7 @@ class GroupedPartAnswers(JSONRequestHandler, tornado.web.RequestHandler):
             set_id='Week1',
             problem_id=1,
             part_id=1
-
+            include_finished=0
             Response:
                 ...
             '''
@@ -111,6 +111,7 @@ class GroupedPartAnswers(JSONRequestHandler, tornado.web.RequestHandler):
         set_id = self.get_argument('set_id')
         problem_id = self.get_argument('problem_id')
         part_id = int(self.get_argument('part_id'))
+        include_finished = (int(self.get_argument('include_finished', 0)) == 1)
 
         source_file = conn.query('''
             select source_file from {course}_problem
@@ -136,12 +137,23 @@ class GroupedPartAnswers(JSONRequestHandler, tornado.web.RequestHandler):
         self.answer_tree = parse_webwork(self.part_answer)
 
         # Get attempts by part
-        query = '''SELECT * from {course}_answers_by_part
-        WHERE set_id="{set_id}" AND problem_id = {problem_id}
-        AND part_id={part_id};
-        '''.format(course=course, set_id=set_id, problem_id=problem_id,
-                   part_id=part_id)
-
+        if include_finished:
+            query = '''SELECT * from {course}_answers_by_part
+            WHERE set_id="{set_id}" AND problem_id = {problem_id}
+            AND part_id={part_id};
+            '''.format(course=course, set_id=set_id, problem_id=problem_id,
+                       part_id=part_id)
+        else:
+            # This self join query idea comes from http://stackoverflow.com/a/4519302/90551
+            # You can do this more clearly with subqueries but it's super slow
+            query = '''SELECT abp.* FROM {course}_answers_by_part as abp
+            LEFT JOIN {course}_answers_by_part AS abp2
+            ON abp.problem_id = abp2.problem_id AND abp.set_id = abp2.set_id
+            AND abp.part_id = abp2.part_id AND abp.user_id = abp2.user_id AND abp2.score = '1'
+            WHERE abp.set_id='{set_id}' AND abp.problem_id={problem_id}
+            AND abp.part_id={part_id} AND abp2.user_id IS NULL;
+            '''.format(course=course, set_id=set_id, problem_id=problem_id,
+                       part_id=part_id)
         answers = conn.query(query)
         all_correct_terms = set()
         correct_terms_map = defaultdict(lambda: defaultdict(list))
