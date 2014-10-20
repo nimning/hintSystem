@@ -77,6 +77,7 @@ def flatten_list(L):
     elif len(L)==1:
         #print 'flatten_list, len 1 tuple',L
         return flatten_list(L[0])
+    # This line seems to error sometimes, seems like L or L[0] can be an int somehow
     elif L[0][0]!='list':
         #print 'flatten_list, header is not "list"',L
         return [L]
@@ -278,9 +279,12 @@ def parse_webwork(expr):
     if parsed is None: #didn't match comma_separated_number, so parse expr
         try:
             parsed = parser.parse(expr,tracking=True,debug=log, lexer=lexer.lexer)
-        except  WebworkParseException, e:
-            print '||%s||'%expr,e
+        except  WebworkParseException as e:
+            logger.error('||%s|| %s', expr, e)
             parsed=None
+        except Exception as e:
+            logger.error('||%s|| %s', expr, e)
+            parsed = None
     return parsed
 #    return reduce_associative(parsed)
 
