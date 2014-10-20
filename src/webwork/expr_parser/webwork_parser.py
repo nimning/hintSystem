@@ -280,10 +280,10 @@ def parse_webwork(expr):
         try:
             parsed = parser.parse(expr,tracking=True,debug=log, lexer=lexer.lexer)
         except  WebworkParseException as e:
-            logger.error('||%s|| %s', expr, e)
+            log.error('||%s|| %s', expr, e)
             parsed=None
         except Exception as e:
-            logger.error('||%s|| %s', expr, e)
+            log.error('||%s|| %s', expr, e)
             parsed = None
     return parsed
 #    return reduce_associative(parsed)
