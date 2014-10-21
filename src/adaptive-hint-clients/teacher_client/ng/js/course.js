@@ -27,7 +27,7 @@ App.controller('SetCtrl', function($scope, $location, $window, $stateParams, $in
     WebworkService.problems($scope.course, $scope.set_id).success(function(data){
         $scope.problems = data;
         for(var i=0; i < $scope.problems.length; i++){
-	    var problem = $scope.problems[i];
+	        var problem = $scope.problems[i];
             WebworkService.problemStatus(course, set_id, problem.problem_id).
                 success(function(problem, status){
                     problem.students_completed = status.students_completed;

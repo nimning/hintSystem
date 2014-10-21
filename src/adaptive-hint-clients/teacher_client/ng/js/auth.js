@@ -19,12 +19,13 @@ App.constant('AUTH_EVENTS', {
 });
 
 App.factory('AuthService', function($http, $window, $rootScope, $location,
-                                    APIHost, CurrentCourse, Session, AUTH_EVENTS, MessageService) {
+                                    APIHost, APIPort, CurrentCourse, Session, AUTH_EVENTS, MessageService) {
+    var BASE_URL = 'http://'+APIHost+':'+APIPort;
     return {
         logIn: function(course, username, password) {
             MessageService.clear();
             $http
-                .post('http://'+APIHost+':4351/login',
+                .post(BASE_URL+'/login',
                       {course: course, username: username, password: password})
                 .success(function (data, status, headers, config) {
                     CurrentCourse.name = course;

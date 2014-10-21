@@ -1,10 +1,11 @@
 var App = angular.module('ta-console');
 
-App.factory('WebworkService', function($http, $window, $rootScope, $location, $q, APIHost) {
+App.factory('WebworkService', function($http, $window, $rootScope, $location, $q, APIHost, APIPort) {
+    var BASE_URL = 'http://'+APIHost+':'+APIPort;
     var factory = {
         sets: function(course, fn) {
             $http
-                .get('http://'+APIHost+':4351/sets',
+                .get(BASE_URL+'/sets',
                      {params: {course: course}})
                 .success(function (data, status, headers, config) {
                     fn(data);
@@ -12,44 +13,44 @@ App.factory('WebworkService', function($http, $window, $rootScope, $location, $q
         },
         problems: function(course, set_id) {
             return $http
-                .get('http://'+APIHost+':4351/problems',
+                .get(BASE_URL+'/problems',
                      {params: {course: course, set_id: set_id}});
         },
         problemHints: function(course, set_id, problem_id) {
             return $http
-                .get('http://'+APIHost+':4351/problem_hints',
+                .get(BASE_URL+'/problem_hints',
                      {params: {course: course, set_id: set_id, problem_id: problem_id}});
         },
         exportProblemData: function(course, set_id, problem_id) {
             return $http
-                .get('http://'+APIHost+':4351/export_problem_data',
+                .get(BASE_URL+'/export_problem_data',
                      {params: {course: course, set_id: set_id, problem_id: problem_id}});
         },
         problemPGFile: function(course, set_id, problem_id) {
             return $http
-                .get('http://'+APIHost+':4351/pg_file',
+                .get(BASE_URL+'/pg_file',
                      {params: {course: course, set_id: set_id, problem_id: problem_id}});
         },
         problemPGPath: function(course, set_id, problem_id) {
             return $http
-                .get('http://'+APIHost+':4351/pg_path',
+                .get(BASE_URL+'/pg_path',
                      {params: {course: course, set_id: set_id, problem_id: problem_id}});
         },
         problemSeed: function(course, set_id, problem_id, user_id) {
             return $http
-                .get('http://'+APIHost+':4351/problem_seed',
+                .get(BASE_URL+'/problem_seed',
                      {params: {course: course, set_id: set_id,
                                problem_id: problem_id, user_id: user_id}});
         },
         setPsvn: function(course, set_id, user_id) {
             return $http
-                .get('http://'+APIHost+':4351/set_psvn',
+                .get(BASE_URL+'/set_psvn',
                      {params: {course: course, set_id: set_id, user_id: user_id}});
         },
 
         answersByPart: function(course, set_id, problem_id, user_id) {
             return $http
-                .get('http://'+APIHost+':4351/answers_by_part',
+                .get(BASE_URL+'/answers_by_part',
                      {params: {course: course, set_id: set_id, problem_id: problem_id,
                                user_id: user_id}});
         },
@@ -59,7 +60,7 @@ App.factory('WebworkService', function($http, $window, $rootScope, $location, $q
                 pg_file = btoa(unescape(encodeURIComponent(pg_file)));
             }
             return $http
-                .post('http://'+APIHost+':4351/render',
+                .post(BASE_URL+'/render',
                       {pg_file: pg_file, seed: seed.toString(), psvn: psvn});
         },
         checkAnswer: function(pg_file, seed, answers) {
@@ -67,7 +68,7 @@ App.factory('WebworkService', function($http, $window, $rootScope, $location, $q
                 pg_file = btoa(unescape(encodeURIComponent(pg_file)));
             }
             return $http
-                .post('http://'+APIHost+':4351/checkanswer',
+                .post(BASE_URL+'/checkanswer',
                       angular.extend({pg_file: pg_file, seed: seed.toString()}, answers)
                      );
         },
@@ -91,23 +92,23 @@ App.factory('WebworkService', function($http, $window, $rootScope, $location, $q
         },
         parseString: function(expression) {
             return $http
-                .post('http://'+APIHost+':4351/parse_string',
+                .post(BASE_URL+'/parse_string',
                      {expression: expression});
         },
         groupedPartAnswers: function(course, set_id, problem_id, part_id) {
             return $http
-                .get('http://'+APIHost+':4351/grouped_part_answers',
+                .get(BASE_URL+'/grouped_part_answers',
                      {params: {course: course, set_id: set_id, problem_id: problem_id,
                      part_id: part_id}});
         },
         problemStatus: function(course, set_id, problem_id) {
             return $http
-                .get('http://'+APIHost+':4351/problem_status',
+                .get(BASE_URL+'/problem_status',
                      {params: {course: course, set_id: set_id, problem_id: problem_id}});
         },
         problemPartStatus: function(course, set_id, problem_id, part_id) {
             return $http
-                .get('http://'+APIHost+':4351/problem_part_status',
+                .get(BASE_URL+'/problem_part_status',
                      {params: {course: course, set_id: set_id, problem_id: problem_id,
                      part_id: part_id}});
         },
