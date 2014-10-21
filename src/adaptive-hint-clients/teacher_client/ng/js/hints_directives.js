@@ -75,7 +75,11 @@ angular.module('ta-console.directives')
                 $scope.show_assigned_hints = function(hint){
                     HintsService.assignedHintHistory($scope.course, hint.hint_id).
                         success(function(data){
-                            console.log(data);
+                            hint.history = data;
+                            hint.students = []
+                            for(h in data){
+                                hint.students.push(data[h].user_id);
+                            }
                         }).error(function(data){console.log(data);});
                 };
 
