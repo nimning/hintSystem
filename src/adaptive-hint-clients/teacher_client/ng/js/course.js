@@ -27,11 +27,10 @@ App.controller('SetCtrl', function($scope, $location, $window, $stateParams, $in
     WebworkService.problems($scope.course, $scope.set_id).success(function(data){
         $scope.problems = data;
         for(var i=0; i < $scope.problems.length; i++){
-            var problem = $scope.problems[i];
-            WebworkService.problemStatus(course, set_id, problem.problem_id).
+            WebworkService.problemStatus(course, set_id, $scope.problems[i].problem_id).
                 success(function(status){
-                    problem.students_completed = status.students_completed;
-                    problem.students_attempted = status.students_attempted;
+                    $scope.problems[i].students_completed = status.students_completed;
+                    $scope.problems[i].students_attempted = status.students_attempted;
                 });
         }
     });
