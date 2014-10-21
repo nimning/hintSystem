@@ -20,11 +20,11 @@ import base64
 import os.path
 
 db = 'webwork'
-url='http://webwork.cse.ucsd.edu/mod_xmlrpc'
+url='http://192.168.33.10/mod_xmlrpc'
 # Login details for fake course for XMLRPC requests
-user = 'scheaman'
-password = 'scheaman'
-course = 'CompoundProblems'
+user = 'admin'
+password = 'admin'
+course = 'CSE103'
 
 server = xmlrpclib.ServerProxy(url)
 
@@ -41,17 +41,20 @@ def get_all_answers(problem_file, problem_users):
     variables = variables_re.findall(pg_text)
     var_names = []
     var_boxes = []
+    print variables
     for var in variables:
         if var not in ignored_variables:
             var_names.append(var)
             var_boxes.append('[____]{{{0}}}'.format(var))
-    file_parts = pg_text.split('END_PGML')
+    print var_names
+    file_parts = pg_text.rsplit('END_PGML', 1)
 
     file_parts.insert(1, 'END_PGML')
     file_parts[1:1] = var_boxes # Add answer boxes for variable values
     new_text = '\n'.join(file_parts)
-    print problem_users
-    all_answers = {user.user_id: get_answers(new_text, problem_file, user.problem_seed, user.psvn, box_count, var_names) for (idx, user) in problem_users.iterrows()}
+    print new_text
+    # print problem_users
+    all_answers = {}#{user.user_id: get_answers(new_text, problem_file, user.problem_seed, user.psvn, box_count, var_names) for (idx, user) in problem_users.iterrows()}
     return all_answers
 
 def get_answers(problem_text, filename, seed, psvn, part_count, var_names):
