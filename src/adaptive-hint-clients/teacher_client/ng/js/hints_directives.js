@@ -72,17 +72,15 @@ angular.module('ta-console.directives')
                         $scope.reload_hints();
                     }
                 });
-                $scope.show_assigned_hints = function(hint){
-                    HintsService.assignedHintHistory($scope.course, hint.hint_id).
+                $scope.show_assigned_hints_by_hint = function(hint){
+                    HintsService.assignedHintHistoryByHintID($scope.course, hint.hint_id).
                         success(function(data){
-                            hint.history = data;
                             hint.students = []
                             for(h in data){
                                 hint.students.push(data[h].user_id);
                             }
                         }).error(function(data){console.log(data);});
                 };
-
 
             },
             link: function($scope, element, attrs) {

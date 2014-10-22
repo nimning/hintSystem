@@ -1,7 +1,7 @@
 var App = angular.module('ta-console');
 
 App.controller('ProblemCtrl', function($scope, $location, $window, $stateParams, $sce, $timeout, $interval, $anchorScroll,
-                                       WebworkService, SockJSService, APIHost,
+                                       WebworkService, HintsService, SockJSService, APIHost,
                                        DTOptionsBuilder, DTColumnDefBuilder){
     var course = $scope.course = $stateParams.course;
     var set_id = $scope.set_id = $stateParams.set_id;
@@ -15,6 +15,8 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $stateParams,
         .withDOM('rtip')
         .withBootstrap();
     $scope.dtOptions['dom'] = 'rtip';
+    $scope.struggling_student_list = {};
+    $scope.completed_student_list = {};
 
     $scope.scrollTo = function($event) {
         $event.preventDefault();
@@ -25,6 +27,45 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $stateParams,
         //reset to old to keep any additional routing logic from kicking in
         $location.hash(old);
     };
+
+    WebworkService.answersByPart(course, set_id, problem_id).success(function(data){
+        var struggling_student_list = {};
+        var completed_student_list = {};
+        var answers_data = $scope.answers_data = data;
+        //push students who are struggling to the list
+        for (s in answers_data) {
+            var local_part_id = answers_data[s].part_id;
+            var local_user_id = answers_data[s].user_id;
+
+            if (!struggling_student_list[local_part_id]) //init
+                struggling_student_list[local_part_id] = [];
+            if (!completed_student_list[local_part_id]) //init
+                completed_student_list[local_part_id] = [];
+
+            if (answers_data[s].score == 0 && (struggling_student_list[local_part_id]).indexOf(local_user_id) == -1)
+                struggling_student_list[local_part_id].push(local_user_id);
+        }
+        //push students who are done to complete list and remove from struggle list
+        for (s in answers_data) {
+            var local_part_id = answers_data[s].part_id;
+            var local_user_id = answers_data[s].user_id;
+            if (answers_data[s].score == 1) {
+                var index = (struggling_student_list[local_part_id]).indexOf(local_user_id);
+                if (index != -1){
+                    (struggling_student_list[local_part_id]).splice(index, 1);
+                }
+                index = completed_student_list[local_part_id].indexOf(local_user_id);
+                if (index === -1)
+                    completed_student_list[local_part_id].push(local_user_id);
+            }
+        }
+
+        $scope.struggling_student_list = struggling_student_list;
+        $scope.completed_student_list = completed_student_list;
+    });
+
+    //HintsService.assignedHintHistoryByPartID(course, problem_id, part_id)
+
 
     $scope.download_json_url = 'http://'+APIHost+':4351/export_problem_data?course='+course+'&set_id='+set_id+'&problem_id='+problem_id;
     WebworkService.exportProblemData($scope.course, $scope.set_id, $scope.problem_id).success(function(data){
@@ -99,6 +140,10 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $stateParams,
         angular.forEach(attemptsByPart, function(value, key){
             $scope.attemptsByPart[key].submitted = value;
         });
+        for(i=1; i<=part_count; i++){
+            $scope.attemptsByPart[i].struggling = $scope.struggling_student_list[i].length;
+            $scope.attemptsByPart[i].completed = $scope.completed_student_list[i].length;
+        }
 
         // Gather hint statistics
         var hints = {};

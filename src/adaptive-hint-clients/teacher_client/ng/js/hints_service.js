@@ -68,11 +68,21 @@ App.factory('HintsService', function($http, $window, $rootScope, $location, $q, 
                      {course: course, hint_id: hint_id,
                                hint_filter_id: filter_id, trigger_cond: trigger_cond});
         },
-        assignedHintHistory: function(course, hint_id){
+        assignedHintHistoryByHintID: function(course, hint_id){
             return $http
-                .get('http://'+APIHost+':4351/assigned_hint_history',
+                .get('http://'+APIHost+':4351/assigned_hint_history_by_hint_id',
                      {params: {course: course, hint_id: hint_id}});
-        }
+        },
+        /*assignedHintHistoryByStudentID: function(course, problem_id, user_id){
+            return $http
+                .get('http://'+APIHost+':4351/assigned_hint_history_by_student_id',
+                     {params: {course: course, problem_id: problem_id, user_id: user_id}});
+        },
+        assignedHintHistoryByPartID: function(course, problem_id, part_id){
+            return $http
+                .get('http://'+APIHost+':4351/assigned_hint_history_by_part_id',
+                     {params: {course: course, problem_id: problem_id, user_id: user_id}});
+        }*/
 
     };
     return factory;
