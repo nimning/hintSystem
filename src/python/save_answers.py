@@ -45,12 +45,13 @@ def get_all_answers(problem_file, problem_users):
         if var not in ignored_variables:
             var_names.append(var)
             var_boxes.append('[____]{{{0}}}'.format(var))
-    file_parts = pg_text.split('END_PGML')
+    print var_names
+    file_parts = pg_text.rsplit('END_PGML', 1)
 
     file_parts.insert(1, 'END_PGML')
     file_parts[1:1] = var_boxes # Add answer boxes for variable values
     new_text = '\n'.join(file_parts)
-    print problem_users
+    # print problem_users
     all_answers = {user.user_id: get_answers(new_text, problem_file, user.problem_seed, user.psvn, box_count, var_names) for (idx, user) in problem_users.iterrows()}
     return all_answers
 
@@ -69,6 +70,7 @@ def get_answers(problem_text, filename, seed, psvn, part_count, var_names):
             part_answers[part_id] = value['correct_ans']
         else:
             variables[var_names[part_id-part_count-1]] = value['correct_ans']
+    print '.',
     return part_answers, variables
 
 

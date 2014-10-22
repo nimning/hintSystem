@@ -22,10 +22,18 @@ App.controller('CourseCtrl', function($scope, $location, $window, $stateParams, 
 
 App.controller('SetCtrl', function($scope, $location, $window, $stateParams, $interval, $timeout,
                                    WebworkService, SockJSService, DTOptionsBuilder, DTColumnDefBuilder){
-    $scope.course = $stateParams.course;
-    $scope.set_id = $stateParams.set_id;
+    var course = $scope.course = $stateParams.course;
+    var set_id = $scope.set_id = $stateParams.set_id;
     WebworkService.problems($scope.course, $scope.set_id).success(function(data){
         $scope.problems = data;
+        for(var i=0; i < $scope.problems.length; i++){
+	        var problem = $scope.problems[i];
+            WebworkService.problemStatus(course, set_id, problem.problem_id).
+                success(function(problem, status){
+                    problem.students_completed = status.students_completed;
+                    problem.students_attempted = status.students_attempted;
+                }.bind(problem, problem) );
+        }
     });
 
     $scope.unassigned_students = [];
@@ -54,12 +62,15 @@ App.controller('SetCtrl', function($scope, $location, $window, $stateParams, $in
 
 
     $scope.dtOptions = DTOptionsBuilder.newOptions()
-        .withBootstrap();
+        .withBootstrap().withDisplayLength(25);
 
     $scope.dtColumnDefs = [
         DTColumnDefBuilder.newColumnDef(0),
         DTColumnDefBuilder.newColumnDef(1),
-        DTColumnDefBuilder.newColumnDef(2)
+        DTColumnDefBuilder.newColumnDef(2),
+        DTColumnDefBuilder.newColumnDef(3),
+        DTColumnDefBuilder.newColumnDef(4),
+        DTColumnDefBuilder.newColumnDef(5)
     ];
 
     $scope.$on('$destroy', function(event){

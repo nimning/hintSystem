@@ -1,0 +1,4 @@
+var App = angular.module('ta-console');
+
+App.value('APIHost', '192.168.33.10');
+App.value('APIPort', 4351);
