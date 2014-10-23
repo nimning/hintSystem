@@ -66,8 +66,11 @@ class ParseString(JSONRequestHandler, tornado.web.RequestHandler):
 # GET /grouped_part_answers?
 class GroupedPartAnswers(JSONRequestHandler, tornado.web.RequestHandler):
     def vars_for_student(self, user_id):
-        user_vars = dict(self.variables_df[self.variables_df['user_id']==user_id][['name', 'value']].values.tolist())
-        return user_vars
+        try:
+            user_vars = dict(self.variables_df[self.variables_df['user_id']==user_id][['name', 'value']].values.tolist())
+            return user_vars
+        except:
+            return {}
 
     def answer_for_student(self, user_id):
         user_vars = self.vars_for_student(user_id)
