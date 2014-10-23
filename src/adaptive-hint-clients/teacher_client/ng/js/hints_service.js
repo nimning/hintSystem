@@ -75,15 +75,15 @@ App.factory('HintsService', function($http, $window, $rootScope, $location, $q,
                 .get('http://'+APIHost+':4351/assigned_hint_history_by_hint_id',
                      {params: {course: course, hint_id: hint_id}});
         },
-        assignedHintHistoryByStudentID: function(course, problem_id, user_id){
+        assignedHintHistoryByStudentID: function(course, problem_id, set_id, user_id, pg_id){
             return $http
                 .get('http://'+APIHost+':4351/assigned_hint_history_by_student_id',
-                     {params: {course: course, problem_id: problem_id, user_id: user_id}});
+                     {params: {course: course, problem_id: problem_id, set_id:set_id, user_id: user_id, pg_id: pg_id}});
         },
-        assignedHintHistoryByPartID: function(course, problem_id, part_id){
+        assignedHintHistoryOfProblem: function(course, set_id, problem_id){
             return $http
-                .get('http://'+APIHost+':4351/assigned_hint_history_by_part_id',
-                     {params: {course: course, problem_id: problem_id, user_id: user_id}});
+                .get('http://'+APIHost+':4351/assigned_hint_history_of_problem',
+                     {params: {course: course, set_id: set_id, problem_id: problem_id}});
         }
 
     };

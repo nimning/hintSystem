@@ -227,9 +227,9 @@ class AssignedHintHistoryByHintID(ProcessQuery):
             '''
         query = '''
             select hint_id, user_id
-            from {course}_assigned_hint as assigned_hint
+            from {course}_assigned_hint
             where
-                assigned_hint.hint_id={hint_id};'''.format(
+                hint_id={hint_id};'''.format(
                     course=self.get_argument('course'), hint_id=self.get_argument('hint_id'))
         rows = conn.query(query)
         self.write(json.dumps(rows, default=serialize_datetime))
@@ -243,37 +243,39 @@ class AssignedHintHistoryByStudentID(ProcessQuery):
         '''
             Sample arguments:
             course="CompoundProblems",
+            problem_id = 1,
             student_id=zzhai
             '''
         query = '''
-            select assigned_hint.problem_id, part_id, user_id, hint_id
-            from {course}_assigned_hint as assigned_hint,
-            {course}_hint as created_hint
+            select problem_id, set_id, pg_id, user_id, hint_id
+            from {course}_assigned_hint
             where
-                user_id={user_id} and assigned_hint.problem_id = {problem_id} and hint_id=created_hint.id;'''.format(
-                    course=self.get_argument('course'), problem_id=self.get_argument('problem_id'), user_id=self.get_argument('user_id'))
+                user_id={user_id} and problem_id = {problem_id} and set_id={set_id} and pg_id={pg_id};'''.format(
+                    course=self.get_argument('course'), problem_id=self.get_argument('problem_id'),
+                    set_id=self.get_argument('set_id'), user_id=self.get_argument('user_id'),
+                    pg_id=self.get_argument('pg_id'))
         rows = conn.query(query)
         self.write(json.dumps(rows, default=serialize_datetime))
 
-class AssignedHintHistoryByPartID(ProcessQuery):
-    """ /assigned_hint_history_by_part_id """
+class AssignedHintHistoryofProblem(ProcessQuery):
+    """ /assigned_hint_history_of_problem """
 
     def get(self):
         '''
             Sample arguments:
             course="CompoundProblems",
+            problem_id = 1,
             part_id=1
-            '''
+        '''
         query = '''
-            select assigned_hint.problem_id, part_id, user_id, hint_id
-            from {course}_assigned_hint as assigned_hint,
-            {course}_hint as created_hint
+            select pg_id, user_id, hint_id
+            from {course}_assigned_hint
             where
-                part_id={part_id} and assigned_hint.problem_id = {problem_id} and hint_id=created_hint.id;'''.format(
-                    course=self.get_argument('course'), problem_id=self.get_argument('problem_id'), part_id=self.get_argument('part_id'))
+                set_id={set_id} and problem_id={problem_id};'''.format(
+                    course=self.get_argument('course'), set_id=self.get_argument('set_id'),
+                    problem_id=self.get_argument('problem_id'))
         rows = conn.query(query)
         self.write(json.dumps(rows, default=serialize_datetime))
-
 
 
 class HintFeedback(ProcessQuery):

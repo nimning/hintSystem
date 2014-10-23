@@ -160,7 +160,8 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
     };
 
     $scope.show_assigned_hints_by_student = function(student_id){
-        HintsService.assignedHintHistoryByStudentID($scope.course, student_id).
+        var part_value = "AnSwEr"+("0000"+part_id).slice(-4);
+        HintsService.assignedHintHistoryByStudentID(course, problem_id, set_id, student_id, part_value).
             success(function(data){
                 hint.history = data;
                 hint.students = []

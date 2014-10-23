@@ -28,6 +28,10 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $stateParams,
         $location.hash(old);
     };
 
+    HintsService.assignedHintHistoryOfProblem(course, set_id, problem_id).success(function(data) {
+        console.log(data);
+    });
+
     WebworkService.answersByPart(course, set_id, problem_id).success(function(data){
         var struggling_student_list = {};
         var completed_student_list = {};
@@ -64,7 +68,6 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $stateParams,
         $scope.completed_student_list = completed_student_list;
     });
 
-    //HintsService.assignedHintHistoryByPartID(course, problem_id, part_id)
 
 
     $scope.download_json_url = 'http://'+APIHost+':4351/export_problem_data?course='+course+'&set_id='+set_id+'&problem_id='+problem_id;
@@ -165,11 +168,8 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $stateParams,
             hints[hint_id].feedback.push(value);
             hints[hint_id].feedback_counts[value.feedback]++;
         });
-        // $scope.hints = [];
-        // angular.forEach(hints, function(value, key){
-        //     $scope.hints.push(value);
-        // });
     }); // End exportProblemData promise resolver
+
 
     var sock = SockJSService.get_sock();
     sock.onmessage = function(event) {
