@@ -5,8 +5,8 @@ angular.module('ta-console.directives')
           scope: {
               pgFile: '=',
               seed: '=',
-              studentData: '=',
-              sockAnswers: '=',
+              studentData: '=?',
+              sockAnswers: '=?',
               box: '=?',
               showHintButtons: '@',
               psvn: '=?'
@@ -47,7 +47,7 @@ angular.module('ta-console.directives')
                                   });
 
                               }
-                              if($scope.studentData.hints){
+                              if($scope.studentData & $scope.studentData.hints){
                                   for(var k = 0; k<$scope.studentData.hints.length; k++){
                                       var h = $scope.studentData.hints[k];
                                       console.log($scope.studentData.hints[k]);
