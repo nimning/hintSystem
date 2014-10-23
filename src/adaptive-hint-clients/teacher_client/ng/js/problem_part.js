@@ -200,6 +200,23 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
             }
         }
 
+        var part_value = "AnSwEr"+("0000"+part_id).slice(-4);
+        $scope.trying_student_list = [];
+        for (s in $scope.struggling_student_list) {
+            HintsService.assignedHintHistoryByStudentID(course, problem_id, set_id, $scope.struggling_student_list[s], part_value).
+                success(function(data){
+                    console.log(data);
+                    for (d in data) {
+                        //remove from struggling student list
+                        var index = $scope.struggling_student_list.indexOf(data[d].user_id);
+                        if (index != -1)
+                            $scope.struggling_student_list.splice(index, 1);
+                        //add to trying student list
+                        $scope.trying_student_list.push(data[d].user_id);
+                    }
+                });
+        }
+
 
     });
 

@@ -250,7 +250,7 @@ class AssignedHintHistoryByStudentID(ProcessQuery):
             select problem_id, set_id, pg_id, user_id, hint_id
             from {course}_assigned_hint
             where
-                user_id={user_id} and problem_id = {problem_id} and set_id={set_id} and pg_id={pg_id};'''.format(
+                user_id='{user_id}' and problem_id = '{problem_id}' and set_id='{set_id}' and pg_id='{pg_id}';'''.format(
                     course=self.get_argument('course'), problem_id=self.get_argument('problem_id'),
                     set_id=self.get_argument('set_id'), user_id=self.get_argument('user_id'),
                     pg_id=self.get_argument('pg_id'))
@@ -271,7 +271,7 @@ class AssignedHintHistoryofProblem(ProcessQuery):
             select pg_id, user_id, hint_id
             from {course}_assigned_hint
             where
-                set_id={set_id} and problem_id={problem_id};'''.format(
+                set_id='{set_id}' and problem_id={problem_id};'''.format(
                     course=self.get_argument('course'), set_id=self.get_argument('set_id'),
                     problem_id=self.get_argument('problem_id'))
         rows = conn.query(query)

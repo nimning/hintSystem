@@ -12,7 +12,7 @@
       <h3>Hints Statistics</h3>
       <!--header of the table-->
       <div class="row" id="hint_statistics_table" style="border-bottom:2px solid #ccc;">
-        <div class="col-md-4"><h5>Students Attemping</h5></div>
+        <div class="col-md-4"><h5>Students Struggling</h5></div>
         <div class="col-md-4"><h5>Students Got Hints</h5></div>
         <div class="col-md-4"><h5>Students Completed After Hints</h5></div>
       </div>
@@ -21,11 +21,15 @@
       <!--table content-->
       <div class="row" id="hint_statistics_table_data">
         <div class="col-md-4">
-          <div class="row" ng-repeat="s in struggling_student_list">
+          <div class="row" ng-repeat="s in struggling_student_list" style="padding-left:15px;">
             <a ui-sref="problem_user({course: course, set_id: set_id, problem_id: problem_id, user_id: s})">{{s}}</a>
           </div>
         </div>
-        <div class="col-md-4">Implementing</div>
+        <div class="col-md-4">
+          <div class="row" ng-repeat="t in trying_student_list" style="padding-left:15px;">
+            <a ui-sref="problem_user({course: course, set_id: set_id, problem_id: problem_id, user_id: s})">{{t}}</a>
+          </div>
+        </div>
         <div class="col-md-4">Implementing</div>
       </div>
     </section>

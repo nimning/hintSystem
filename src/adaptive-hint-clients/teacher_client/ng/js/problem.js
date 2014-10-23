@@ -28,10 +28,6 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $stateParams,
         $location.hash(old);
     };
 
-    HintsService.assignedHintHistoryOfProblem(course, set_id, problem_id).success(function(data) {
-        console.log(data);
-    });
-
     WebworkService.answersByPart(course, set_id, problem_id).success(function(data){
         var struggling_student_list = {};
         var completed_student_list = {};
@@ -167,6 +163,18 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $stateParams,
             var hint_id = assigned_hints[value.assigned_hint_id].hint_id;
             hints[hint_id].feedback.push(value);
             hints[hint_id].feedback_counts[value.feedback]++;
+        });
+
+        for (i in $scope.attemptsByPart) //init
+                $scope.attemptsByPart[i].hint_history = 0;
+
+        HintsService.assignedHintHistoryOfProblem(course, set_id, problem_id).success(function(data) {
+            for (i in $scope.attemptsByPart) {
+                for (d in data) {
+                    if (data[d].pg_id === "AnSwEr"+("0000"+i).slice(-4))
+                        $scope.attemptsByPart[i].hint_history++;
+                }
+            }
         });
     }); // End exportProblemData promise resolver
 
