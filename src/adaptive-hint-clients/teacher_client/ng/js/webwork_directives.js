@@ -47,31 +47,68 @@ angular.module('ta-console.directives')
                                   });
 
                               }
+                              if($scope.studentData.hints){
+                                  for(var k = 0; k<$scope.studentData.hints.length; k++){
+                                      var h = $scope.studentData.hints[k];
+                                      console.log($scope.studentData.hints[k]);
+                                      var newEl = $($scope.insert_hint(h.hint_html,
+			                                                           h.location,
+			                                                           h.hintbox_id));
+                                      console.log(newEl);
+                                      var input_el = $(element).find("#"+h.location);
+                                      console.log(input_el);
+                                      $(input_el).before(newEl);
+                                  }
+                              }
                               $scope.hidePreview="hidden";
                           })
                           .error(function(){
-                              console.log('boo');
+                              console.log('Render returned an error');
                           });
                   }
               };
               $scope.$watch('pgFile', renderPreview);
               $scope.$watch('seed', renderPreview);
               $scope.$watch('psvn', renderPreview);
-              $scope.$watch('studentData.answers', function(answers, oldAnswers, scope){
-                  if(!!answers){
-                      var inputs = element.find('input[type=text]');
-                      for(var i=0; i< answers.length; i++){
-                          var $el=$(inputs[i]);
-                          $el.val(answers[i]);
-                          if(scope.studentData.scores[i]==="1"){
-                              $el.removeClass('incorrect');
-                              $el.addClass('correct');
-                          }else{
-                              $el.removeClass('correct');
-                              $el.addClass('incorrect');
-                          }
-                      }
+              // $scope.$watch('studentData.answers', function(answers, oldAnswers, scope){
+              //     if(!!answers){
+              //         var inputs = element.find('input[type=text]');
+              //         for(var i=0; i< answers.length; i++){
+              //             var $el=$(inputs[i]);
+              //             $el.val(answers[i]);
+              //             if(answers[i].correct === 1){
+              //                 $el.removeClass('incorrect');
+              //                 $el.addClass('correct');
+              //             }else{
+              //                 $el.removeClass('correct');
+              //                 $el.addClass('incorrect');
+              //             }
+              //         }
 
+              //     }
+              // });
+
+              // Insert a hint to a given location.
+              $scope.insert_hint = function(hint_html, location, hintbox_id) {
+                  hint_html = '<div style="float:right;">' +
+	                  '<button onclick=remove_hint("'+ hintbox_id +
+	                  '","' + location + '")>X</button></div>' + hint_html;
+                  var d = document.createElement('div');
+                  d.setAttribute('id', 'wrapper_' + hintbox_id);
+                  d.innerHTML = hint_html;
+                  d.setAttribute('style',
+		                         'background-color: #E0FAC0; ' +
+		                         'clear:left; ' +
+		                         'margin:10px; ' +
+		                         'border:1px solid; ' +
+		                         'padding:5px; ');
+                  return(d);
+              };
+
+              $scope.$watch('studentData.hints', function(hints, oldHints, scope){
+                  if(hints){
+                      console.log(hints);
+                      renderPreview();
                   }
               });
 

@@ -30,6 +30,7 @@ App.controller('ProblemUserCtrl', function($scope, $location, $window, $statePar
 	        var student_info = data['arguments'];
             $scope.$apply(function(){
                 $scope.current_answers = student_info.current_answers;
+                $scope.studentData = student_info;
             });
 	    }
     };
