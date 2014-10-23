@@ -2,9 +2,8 @@ var App = angular.module('ta-console');
 
 App.controller('ProblemPartCtrl', function($scope, $location, $window, $stateParams,
                                            $sce, $timeout, $interval, $anchorScroll, $modal, $log,
-                                           WebworkService, SockJSService, APIHost,
-                                           DTOptionsBuilder, DTColumnDefBuilder,
-                                           MessageService){
+                                           WebworkService, HintsService, SockJSService, APIHost,
+                                           DTOptionsBuilder, DTColumnDefBuilder, MessageService){
 
     var course = $scope.course = $stateParams.course;
     var set_id = $scope.set_id = $stateParams.set_id;
@@ -77,21 +76,6 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
         }
     };
 
-    /*$scope.groups_students_sum = [];
-    $scope.sum = function(all_groups){
-        for(value in all_groups){
-            var s = 0;
-            for (g in all_group[value]){
-                s = s + group[g].length;
-            }
-            $scope.groups_students_sum.push(s);
-        }
-    };
-
-    $scope.rearrange_groups = function(all_groups){
-        return false;
-    };*/
-
     $scope.term_selected = function(term){
         var idx = $scope.filter_terms.indexOf(term);
         return ~idx;
@@ -114,10 +98,6 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
     WebworkService.problemPGFile(course, set_id, problem_id).success(function(data){
         $scope.pg_file = JSON.parse(data);
         $scope.answer_expression = WebworkService.partSolution($scope.pg_file, part_id);
-        var hf = WebworkService.extractHeaderFooter($scope.pg_file);
-        $scope.pg_header = hf.pg_header;
-        $scope.pg_footer = hf.pg_footer;
-
     });
 
     var sock = SockJSService.get_sock();
@@ -179,14 +159,65 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
             return true;
     };
 
-    $scope.test = function(){
-        for (g in $scope.shown_answers_array){
-            return g.sum;
-        }
+    $scope.show_assigned_hints_by_student = function(student_id){
+        var part_value = "AnSwEr"+("0000"+part_id).slice(-4);
+        HintsService.assignedHintHistoryByStudentID(course, problem_id, set_id, student_id, part_value).
+            success(function(data){
+                hint.history = data;
+                hint.students = []
+                for(h in data){
+                    hint.students.push(data[h].hint_id);
+                }
+            }).error(function(data){console.log(data);});
     };
 
     WebworkService.problemPartStatus(course, set_id, problem_id, part_id).success(function(data){
         $scope.completion_data = data;
+    });
+
+    //student attempting statistics
+    $scope.struggling_student_list = [];
+    $scope.hint_static = [];
+    WebworkService.answersByPart(course, set_id, problem_id).success(function(data){
+        var answers_data = $scope.answers_data = data;
+        var struggling_student_list = [];
+        //push students who are struggling to the list
+        for (s in answers_data) {
+            if (answers_data[s].part_id == part_id) {
+                var local_user_id = answers_data[s].user_id;
+                if (answers_data[s].score == 0 && $scope.struggling_student_list.indexOf(local_user_id) == -1)
+                    $scope.struggling_student_list.push(local_user_id);
+            }
+        }
+        //pop students who are done from struggle list
+        for (s in answers_data) {
+            if (answers_data[s].part_id == part_id) {
+                if (answers_data[s].score == 1) {
+                    var index = $scope.struggling_student_list.indexOf(answers_data[s].user_id);
+                    if (index != -1)
+                        $scope.struggling_student_list.splice(index, 1);
+                }
+            }
+        }
+
+        var part_value = "AnSwEr"+("0000"+part_id).slice(-4);
+        $scope.trying_student_list = [];
+        for (s in $scope.struggling_student_list) {
+            HintsService.assignedHintHistoryByStudentID(course, problem_id, set_id, $scope.struggling_student_list[s], part_value).
+                success(function(data){
+                    console.log(data);
+                    for (d in data) {
+                        //remove from struggling student list
+                        var index = $scope.struggling_student_list.indexOf(data[d].user_id);
+                        if (index != -1)
+                            $scope.struggling_student_list.splice(index, 1);
+                        //add to trying student list
+                        $scope.trying_student_list.push(data[d].user_id);
+                    }
+                });
+        }
+
+
     });
 
 });

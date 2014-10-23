@@ -9,13 +9,19 @@
         <thead>
           <tr>
             <th>Part</th>
-            <th>Number of Submissions</th>
+            <th># Submissions</th>
+            <th># Struggling</th>
+            <th># Hints Sent</th>
+            <th># Completed</th>
           </tr>
         </thead>
         <tbody>
           <tr ng-repeat="(part, attempts) in attemptsByPart" dt-rows="">
             <td><a ui-sref="problem_part({course: course, set_id: set_id, problem_id: problem_id, part_id: part})">{{part}}</a></td>
             <td>{{attempts.submitted}}</td>
+            <td>{{attempts.struggling}}</td>
+            <td>{{attempts.hint_history}}</td>
+            <td>{{attempts.completed}}</td>
           </tr>
         </tbody>
       </table>

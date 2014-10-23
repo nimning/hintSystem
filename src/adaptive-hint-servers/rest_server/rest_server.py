@@ -11,7 +11,8 @@ from webwork import (ProblemSeed, ProblemPGPath, ProblemPGFile,
                      ProblemStatus, ProblemPartStatus, SetPsvn)
 from hints_api import (UserProblemHints, Hint, AssignedHint,
                        ProblemHints, HintFeedback, RunHintFilters,
-                       HintFilter, AssignedHintFilter, AssignedHintHistory)
+                       HintFilter, AssignedHintFilter,
+                       AssignedHintHistoryByHintID, AssignedHintHistoryByStudentID, AssignedHintHistoryofProblem)
 
 from auth import (Login)
 from parsers import ParseString, GroupedPartAnswers
@@ -30,7 +31,9 @@ application = tornado.web.Application([
     (r"/user_problem_hints", UserProblemHints),
     (r"/hint", Hint),
     (r"/assigned_hint", AssignedHint),
-    (r"/assigned_hint_history", AssignedHintHistory),
+    (r"/assigned_hint_history_by_hint_id", AssignedHintHistoryByHintID),
+    (r"/assigned_hint_history_by_student_id", AssignedHintHistoryByStudentID),
+    (r"/assigned_hint_history_of_problem", AssignedHintHistoryofProblem),
     (r"/realtime_user_problem_answers", RealtimeUserProblemAnswers),
     (r"/problem_hints", ProblemHints),
     (r"/realtime_problem_answer", RealtimeProblemAnswer),

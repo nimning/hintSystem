@@ -31,7 +31,8 @@ App.controller('SetCtrl', function($scope, $location, $window, $stateParams, $in
             WebworkService.problemStatus(course, set_id, problem.problem_id).
                 success(function(problem, status){
                     problem.students_completed = status.students_completed;
-                    problem.students_attempted = status.students_attempted;
+                    problem.students_attempting = status.students_attempted-status.students_completed;
+                    problem.free_students = status.students - status.students_attempted;
                 }.bind(problem, problem) );
         }
     });

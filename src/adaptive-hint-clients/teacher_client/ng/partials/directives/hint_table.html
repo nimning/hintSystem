@@ -16,12 +16,12 @@
         <td>
           <div class="panel-heading" style="padding:0;">
               <a data-toggle="collapse" data-parent="#users_list" data-target="#collapse{{$parent.$index}}_{{$index}}"
-              ng-click="show_assigned_hints(hint)">
+              ng-click="show_assigned_hints_by_hint(hint)">
               students-->
               </a>
           </div>
           <div id="collapse{{$parent.$index}}_{{$index}}" class="panel-collapse collapse">
-            <div class="panel-body" style="padding:0; border:1px solid #ccc;">
+            <div class="panel-body" style="padding:0px; border:1px solid #ccc;">
               <a ng-repeat="user in hint.students" ui-sref="problem_user({course: course, set_id: setId, problem_id: problemId, user_id: user})"> {{user}} </a>
             </div>
           </div>
