@@ -229,12 +229,12 @@ angular.module('ta-console.directives')
                                         });
                                     }else{ // No hint filter previously assigned
                                         $scope.hint_filter=undefined;
-                                        $scope.hint_filter_options={};
+                                        $scope.hint_filter_options={trigger_condition: ""};
                                     }
                                 });
                         }else{ // No hint filter since this is a new hint
                             $scope.hint_filter=undefined;
-                            $scope.hint_filter_options={};
+                            $scope.hint_filter_options={trigger_condition: ""};
                         }
 
                     }

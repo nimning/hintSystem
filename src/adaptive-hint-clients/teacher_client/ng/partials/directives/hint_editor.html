@@ -33,7 +33,7 @@
         <p ng-bind-html="hint_filter.description | nl2br"></p>
       </div>
       <div class="col-md-6">
-        <div class="form-group" ng-if="hint_filter.takesArg">
+        <div class="form-group" ng-show="hint_filter.takesArg">
           <label for="trigger_condition">Trigger Condition</label>
           <input id="trigger_condition" class="form-control" type="text" ng-model="hint_filter_options.trigger_condition" required></input>
         </div>
