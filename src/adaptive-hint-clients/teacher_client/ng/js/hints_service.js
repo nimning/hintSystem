@@ -35,13 +35,14 @@ App.factory('HintsService', function($http, $window, $rootScope, $location, $q,
         createHint: function(course, set_id, problem_id, part_id, author, pg_text){
             return $http
                 .post(BASE_URL+'/hint',
-                      {course: course, set_id: set_id, problem_id: problem_id, part_id: part_id,
+                      {course: course, set_id: set_id, problem_id: problem_id, part_id: parseInt(part_id),
                        author: author, pg_text: pg_text.replace(/\\/g,"\\\\")});
         },
-        updateHint: function(course, hint_id, pg_text){
+        updateHint: function(course, hint_id, pg_text, part_id){
             return $http
                 .put(BASE_URL+'/hint',
-                     {course: course, hint_id: hint_id, pg_text: pg_text.replace(/\\/g,"\\\\")});
+                     {course: course, hint_id: hint_id, pg_text: pg_text.replace(/\\/g,"\\\\"),
+                      part_id: part_id});
         },
         deleteHint: function(course, hint_id){
             return $http

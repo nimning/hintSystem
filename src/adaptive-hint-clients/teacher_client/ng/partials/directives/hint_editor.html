@@ -8,6 +8,10 @@
     </div>
     <div class="col-md-6">
       <div ng-model="pgFile" ui-codemirror="" ui-codemirror-opts="pgFileEditorOptions"></div>
+      <div ng-if="!partId">
+        <label for="part-id-selector">Part</label>
+        <select name="part-id-selector" ng-model="hint.part_id" ng-options="''+x for x in part_ids"></select>
+      </div>
       <button type="button" class="btn btn-primary" ng-click="save_hint(hint)">
         Save Hint
       </button>

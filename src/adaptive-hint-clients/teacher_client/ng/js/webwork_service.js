@@ -125,6 +125,15 @@ App.factory('WebworkService', function($http, $window, $rootScope, $location, $q
             }else{
                 return '';
             }
+        },
+        partCount: function(pg_file) {
+            var box_re = /\[__+\]/g;
+            var box_matches = pg_file.match(box_re);
+            var box_count = box_matches ? box_matches.length : 0;
+            var ans_re = /ANS\(.+\)/g;
+            var ans_matches = pg_file.match(ans_re);
+            var ans_count = ans_matches ? ans_matches.length : 0;
+            return box_count + ans_count;
         }
     };
     return factory;

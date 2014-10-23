@@ -9,6 +9,7 @@ angular.module('ta-console.directives')
                 course: '=',
                 setId: '=',
                 problemId: '=',
+                partId: '=?',
                 userId: '=',
                 seed: '=',
                 editedHint: '=',
@@ -55,7 +56,8 @@ angular.module('ta-console.directives')
                         pg_footer: $scope.pgFooter,
                         author: Session.user_id,
                         set_id: $scope.setId,
-                        problem_id: $scope.problemId
+                        problem_id: $scope.problemId,
+                        part_id: $scope.partId
                     };
                 };
 
@@ -100,7 +102,8 @@ angular.module('ta-console.directives')
                 hint: '=',
                 pgFile: '=',
                 seed: '=',
-                course: '='
+                course: '=',
+                partId: '=?'
             },
             controller: function($scope) {
                 $scope.editorOptions = {
@@ -127,13 +130,13 @@ angular.module('ta-console.directives')
 
                 $scope.save_hint = function(hint){
                     if(hint.hint_id){ // Hint is already in DB
-                        HintsService.updateHint($scope.course, hint.hint_id, hint.pg_text).
+                        HintsService.updateHint($scope.course, hint.hint_id, hint.pg_text, hint.part_id).
                             success(function(data){
                                 $scope.hint=false;
                             });
                     }else{
                         HintsService.createHint($scope.course, hint.set_id,
-                                                hint.problem_id, hint.author, hint.pg_text).
+                                                hint.problem_id, hint.part_id, hint.author, hint.pg_text).
                             success(function(new_hint_id){
                                 $scope.hint=false;
                                 if($scope.hint_filter){ // A Hint Filter was selected
@@ -177,6 +180,12 @@ angular.module('ta-console.directives')
                         }).error(function(data){
                         });
                 };
+                $scope.$watch('pgFile', function(pg_file){
+                    if(pg_file){
+                        $scope.part_count = WebworkService.partCount(pg_file);
+                        $scope.part_ids = _.range(1, $scope.part_count+1);
+                    }
+                });
             },
             link: function($scope, element, attrs) {
                 HintsService.hintFilters($scope.course).success(function(filters){

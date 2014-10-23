@@ -126,11 +126,11 @@ class Hint(ProcessQuery):
             author="melkherj"
             set_id="compoundProblemExperiments"
             problem_id=1
-
+            part_id=1
             With return 6   (the id of the row created)'''
         query_template = '''insert into {{course}}_hint
-            (pg_text, author, set_id, problem_id) values
-            ("{{pg_text}}", "{{author}}", "{{set_id}}", "{{problem_id}}")
+            (pg_text, author, set_id, problem_id, part_id) values
+            ("{{pg_text}}", "{{author}}", "{{set_id}}", "{{problem_id}}", {{part_id}})
         '''
         self.process_query(query_template, write_response=False)
 
@@ -141,9 +141,14 @@ class Hint(ProcessQuery):
             pg_text="This might help you.  3+3=? [____]{6}"
             hint_id=6
 
-            With return 6   (the id of the row created)'''
+            With return 6   (the id of the row updated)'''
         query_template = '''UPDATE {{course}}_hint
             SET pg_text="{{pg_text}}" WHERE id={{hint_id}}
+        '''
+        # TODO This is ugly, do something better
+        if self.request.arguments.get('part_id'):
+            query_template = '''UPDATE {{course}}_hint
+            SET pg_text="{{pg_text}}",part_id={{part_id}} WHERE id={{hint_id}}
         '''
         self.process_query(query_template, write_response=False)
 
@@ -281,7 +286,8 @@ class ProblemHints(ProcessQuery):
                    {{course}}_hint.pg_text,
                    {{course}}_hint.author,
                    {{course}}_hint.set_id,
-                   {{course}}_hint.problem_id
+                   {{course}}_hint.problem_id,
+                   {{course}}_hint.part_id
             from {{course}}_hint left outer join {{course}}_assigned_hint
             on {{course}}_assigned_hint.hint_id={{course}}_hint.id
             where
