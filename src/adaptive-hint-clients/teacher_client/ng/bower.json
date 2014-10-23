@@ -31,7 +31,8 @@
     "angular-ui-codemirror": "~0.1.6",
     "angular-strap": "~2.1.1",
     "angular-ui-router": "~0.2.11",
-    "moment-timezone": "~0.2.2"
+    "moment-timezone": "~0.2.2",
+    "lodash": "~2.4.1"
   },
   "resolutions": {
     "datatables": "~1.10.2"
