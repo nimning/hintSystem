@@ -15,7 +15,7 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $stateParams,
         .withDOM('rtip')
         .withBootstrap();
     $scope.dtOptions['dom'] = 'rtip';
-    $scope.struggling_student_list = {};
+    $scope.attempting_student_list = {};
     $scope.completed_student_list = {};
 
     $scope.scrollTo = function($event) {
@@ -29,30 +29,32 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $stateParams,
     };
 
     WebworkService.answersByPart(course, set_id, problem_id).success(function(data){
-        var struggling_student_list = {};
+        var attempting_student_list = {};
         var completed_student_list = {};
         var answers_data = $scope.answers_data = data;
-        //push students who are struggling to the list
+        //push students who are attempting to the list
         for (s in answers_data) {
             var local_part_id = answers_data[s].part_id;
             var local_user_id = answers_data[s].user_id;
 
-            if (!struggling_student_list[local_part_id]) //init
-                struggling_student_list[local_part_id] = [];
+            if (!attempting_student_list[local_part_id]) //init
+                attempting_student_list[local_part_id] = [];
             if (!completed_student_list[local_part_id]) //init
                 completed_student_list[local_part_id] = [];
 
-            if (answers_data[s].score == 0 && (struggling_student_list[local_part_id]).indexOf(local_user_id) == -1)
-                struggling_student_list[local_part_id].push(local_user_id);
+            if (answers_data[s].score == 0) {
+                if (attempting_student_list[local_part_id].indexOf(local_user_id) == -1)
+                    attempting_student_list[local_part_id].push(local_user_id);
+            }
         }
         //push students who are done to complete list and remove from struggle list
         for (s in answers_data) {
             var local_part_id = answers_data[s].part_id;
             var local_user_id = answers_data[s].user_id;
             if (answers_data[s].score == 1) {
-                var index = (struggling_student_list[local_part_id]).indexOf(local_user_id);
+                var index = (attempting_student_list[local_part_id]).indexOf(local_user_id);
                 if (index != -1){
-                    (struggling_student_list[local_part_id]).splice(index, 1);
+                    (attempting_student_list[local_part_id]).splice(index, 1);
                 }
                 index = completed_student_list[local_part_id].indexOf(local_user_id);
                 if (index === -1)
@@ -60,7 +62,7 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $stateParams,
             }
         }
 
-        $scope.struggling_student_list = struggling_student_list;
+        $scope.attempting_student_list = attempting_student_list;
         $scope.completed_student_list = completed_student_list;
     });
 
@@ -140,7 +142,7 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $stateParams,
             $scope.attemptsByPart[key].submitted = value;
         });
         for(i=1; i<=part_count; i++){
-            $scope.attemptsByPart[i].struggling = $scope.struggling_student_list[i].length;
+            $scope.attemptsByPart[i].attempting = $scope.attempting_student_list[i].length;
             $scope.attemptsByPart[i].completed = $scope.completed_student_list[i].length;
         }
 

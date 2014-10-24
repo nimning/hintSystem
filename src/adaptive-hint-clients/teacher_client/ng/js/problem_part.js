@@ -177,38 +177,62 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
 
     //student attempting statistics
     $scope.struggling_student_list = [];
+    $scope.attempting_student_list = [];
     $scope.hint_static = [];
     WebworkService.answersByPart(course, set_id, problem_id).success(function(data){
         var answers_data = $scope.answers_data = data;
-        var struggling_student_list = [];
-        //push students who are struggling to the list
+        var struggling_student_count = {};
+        //push students who are attempting to the list
         for (s in answers_data) {
             if (answers_data[s].part_id == part_id) {
                 var local_user_id = answers_data[s].user_id;
-                if (answers_data[s].score == 0 && $scope.struggling_student_list.indexOf(local_user_id) == -1)
-                    $scope.struggling_student_list.push(local_user_id);
-            }
-        }
-        //pop students who are done from struggle list
-        for (s in answers_data) {
-            if (answers_data[s].part_id == part_id) {
-                if (answers_data[s].score == 1) {
-                    var index = $scope.struggling_student_list.indexOf(answers_data[s].user_id);
-                    if (index != -1)
-                        $scope.struggling_student_list.splice(index, 1);
+                if (answers_data[s].score == 0){
+                    if ($scope.attempting_student_list.indexOf(local_user_id) == -1) {
+                        $scope.attempting_student_list.push(local_user_id);
+                        struggling_student_count[local_user_id] = 1;
+                    }
+                    else
+                        struggling_student_count[local_user_id]++;
                 }
             }
         }
 
+        //push students who have more than 5 total attempts to struggling student list
+        for (s in struggling_student_count){
+            if (struggling_student_count[s] > 5)
+                $scope.struggling_student_list.push(s);
+        }
+
+        //pop students who are done from attempting/struggling list
+        for (s in answers_data) {
+            if (answers_data[s].part_id == part_id) {
+                if (answers_data[s].score == 1) {
+                    var index = $scope.attempting_student_list.indexOf(answers_data[s].user_id);
+                    if (index != -1) {
+                        $scope.attempting_student_list.splice(index, 1);
+                    }
+                    index = $scope.struggling_student_list.indexOf(answers_data[s].user_id);
+                    if (index != -1) {
+                       $scope.struggling_student_list.splice(index, 1);
+                    }
+                }
+            }
+        }
+
+        //move students from attempting/struggling list to got hint list
         var part_value = "AnSwEr"+("0000"+part_id).slice(-4);
         $scope.trying_student_list = [];
-        for (s in $scope.struggling_student_list) {
-            HintsService.assignedHintHistoryByStudentID(course, problem_id, set_id, $scope.struggling_student_list[s], part_value).
+        for (s in $scope.attempting_student_list) {
+            HintsService.assignedHintHistoryByStudentID(course, problem_id, set_id, $scope.attempting_student_list[s], part_value).
                 success(function(data){
                     console.log(data);
                     for (d in data) {
-                        //remove from struggling student list
-                        var index = $scope.struggling_student_list.indexOf(data[d].user_id);
+                        //remove from attempting student list
+                        var index = $scope.attempting_student_list.indexOf(data[d].user_id);
+                        if (index != -1)
+                            $scope.attempting_student_list.splice(index, 1);
+                        // remove from struggling student list
+                        index = $scope.struggling_student_list.indexOf(data[d].user_id);
                         if (index != -1)
                             $scope.struggling_student_list.splice(index, 1);
                         //add to trying student list
