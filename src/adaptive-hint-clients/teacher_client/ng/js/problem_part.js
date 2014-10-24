@@ -200,8 +200,9 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
                             && trying_student_list.indexOf(local_user_id) == -1
                             && struggling_student_list.indexOf(local_user_id) == -1) {
                             attempting_student_list.push(local_user_id);
-                            struggling_student_count[local_user_id] = 1;
                         }
+                        if (!struggling_student_count[local_user_id])
+                            struggling_student_count[local_user_id] = 1;
                         else
                             struggling_student_count[local_user_id]++;
                     }
