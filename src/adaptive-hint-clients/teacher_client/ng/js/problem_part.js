@@ -270,7 +270,7 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
                     success(function(data){
                     if (data.length != 0 && success_student_list.indexOf(c) == -1)
                         success_student_list.push(t);
-                }
+                });
             }
 
             $scope.attempting_student_list = attempting_student_list;
