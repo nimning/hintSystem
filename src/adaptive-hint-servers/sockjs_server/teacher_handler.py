@@ -271,9 +271,10 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
 
         # shorthand
         ts = self.teacher_session
-
+        logger.info('In assign hint')
         # get the student_id and other info
         if ts.student_hashkey is not None:
+            logger.info('OK, we have a hashkey')
             (student_id, course_id, set_id, problem_id) = ts.student_hashkey
 
             # Call the rest api
@@ -292,10 +293,12 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
                                                     problem_id)
             if ss is not None:
                 ss.update_hints()
-
+            else:
+                logger.warn('Couldnt update hints')
             # Update teacher's view
             ts.update_hints()
-
+        else:
+            logger.warn('Dont seem to have a student')
         # done
         callback()
 
