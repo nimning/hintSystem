@@ -44,6 +44,7 @@ angular.module('ta-console.directives')
                 $scope.send_hint = function(){
                     SockJSService.add_hint(
                         $scope.course, $scope.setId, $scope.problemId, $scope.userId, $scope.selectedBox, $scope.hint.hint_id, $scope.hint_html_template);
+                    $scope.rendered_hint="";
                 };
                 $scope.cancel_hint = function(){
                     $scope.rendered_hint = "";

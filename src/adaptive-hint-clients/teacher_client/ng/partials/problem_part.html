@@ -16,7 +16,7 @@
           <h5>Students Got No Hint</h5>
           <div class="row">
             <div class="col-md-6"><h5 style="margin-top:0px;">Students Attempting</h5></div>
-            <div class="col-md-6"><h5 style="margin-top:0px;">Students Struggling (>5 tries)</h5></div>
+            <div class="col-md-6"><h5 style="margin-top:0px;">Students Struggling (>3 tries)</h5></div>
           </div>
         </div>
         <div class="col-md-3 span2"><h5>Students Got Hints</h5></div>
@@ -28,8 +28,8 @@
       <div class="row text-center" id="hint_statistics_table_data">
         <!-- students attempting -->
         <div class="col-md-3">
-          <div class="row" ng-repeat="s in attempting_student_list" style="padding-left:15px;">
-            <a ui-sref="problem_user({course: course, set_id: set_id, problem_id: problem_id, user_id: s})">{{s}}</a>
+          <div class="row" ng-repeat="a in attempting_student_list" style="padding-left:15px;">
+            <a ui-sref="problem_user({course: course, set_id: set_id, problem_id: problem_id, user_id: a})">{{a}}</a>
           </div>
         </div>
         <!-- students struggling -->
@@ -41,11 +41,15 @@
         <!-- student got hints -->
         <div class="col-md-3">
           <div class="row" ng-repeat="t in trying_student_list" style="padding-left:15px;">
-            <a ui-sref="problem_user({course: course, set_id: set_id, problem_id: problem_id, user_id: s})">{{t}}</a>
+            <a ui-sref="problem_user({course: course, set_id: set_id, problem_id: problem_id, user_id: t})">{{t}}</a>
           </div>
         </div>
         <!-- students completed after got hints -->
-        <div class="col-md-3">Implementing</div>
+        <div class="col-md-3">
+          <div class="row" ng-repeat="su in success_student_list" style="padding-left:15px;">
+            <a ui-sref="problem_user({course: course, set_id: set_id, problem_id: problem_id, user_id: su})">{{su}}</a>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -96,10 +100,7 @@
                 </div>
                 <div id="collapse{{$parent.$index}}_{{$index}}" class="panel-collapse collapse">
                   <div class="panel-body" style="padding:0; border:1px solid #ccc;">
-                    <div>
-                      <a ng-repeat="user in users" ui-sref="problem_user({course: course, set_id: set_id, problem_id: problem_id, user_id: user})">{{user}}</a>:
-                      <p style="margin:0px; margin-left:30px;">got # hints</p>
-                    </div>
+                      <a ng-repeat="user in users" ui-sref="problem_user({course: course, set_id: set_id, problem_id: problem_id, user_id: user})">{{user}} </a>
                   </div>
                 </div>
               </div>
