@@ -211,7 +211,9 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
 
             //push students who have more than 5 total attempts to struggling student list
             for (s in struggling_student_count){
-                if (struggling_student_count[s] > 5 && struggling_student_list.indexOf(s) == -1){
+                if (struggling_student_count[s] > 5
+                    && struggling_student_list.indexOf(s) == -1
+                    && trying_student_list.indexOf(s) == -1){
                     struggling_student_list.push(s);
                     var index = attempting_student_list.indexOf(s);
                     if (index != -1)
