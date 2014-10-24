@@ -9,6 +9,7 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
     var set_id = $scope.set_id = $stateParams.set_id;
     var problem_id = $scope.problem_id = $stateParams.problem_id;
     var part_id = $scope.part_id = $stateParams.part_id;
+    var part_value = "AnSwEr"+("0000"+part_id).slice(-4);
     $scope.hint_id = -1;
     $scope.input_id = null;
 
@@ -29,7 +30,6 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
             $scope.answers = answersByPart[part_id];
     });
     WebworkService.groupedPartAnswers(course, set_id, problem_id, part_id).success(function(data){
-        console.log(data);
         $scope.grouped_answers = data.correct;
         $scope.shown_answers_array = [];
         angular.forEach($scope.grouped_answers, function(value,group){sort_answers(value,group);});
@@ -176,72 +176,107 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
     });
 
     //student attempting statistics
-    $scope.struggling_student_list = [];
-    $scope.attempting_student_list = [];
     $scope.hint_static = [];
-    WebworkService.answersByPart(course, set_id, problem_id).success(function(data){
-        var answers_data = $scope.answers_data = data;
-        var struggling_student_count = {};
-        //push students who are attempting to the list
-        for (s in answers_data) {
-            if (answers_data[s].part_id == part_id) {
-                var local_user_id = answers_data[s].user_id;
-                if (answers_data[s].score == 0){
-                    if ($scope.attempting_student_list.indexOf(local_user_id) == -1) {
-                        $scope.attempting_student_list.push(local_user_id);
-                        struggling_student_count[local_user_id] = 1;
-                    }
-                    else
-                        struggling_student_count[local_user_id]++;
-                }
-            }
-        }
+    $scope.attempting_student_list = [];
+    $scope.struggling_student_list = [];
+    $scope.trying_student_list = [];
+    $scope.success_student_list = [];
+    var attempting_student_list = [];
+    var struggling_student_list = [];
+    var trying_student_list = [];
+    var success_student_list = [];
 
-        //push students who have more than 5 total attempts to struggling student list
-        for (s in struggling_student_count){
-            if (struggling_student_count[s] > 5)
-                $scope.struggling_student_list.push(s);
-        }
-
-        //pop students who are done from attempting/struggling list
-        for (s in answers_data) {
-            if (answers_data[s].part_id == part_id) {
-                if (answers_data[s].score == 1) {
-                    var index = $scope.attempting_student_list.indexOf(answers_data[s].user_id);
-                    if (index != -1) {
-                        $scope.attempting_student_list.splice(index, 1);
-                    }
-                    index = $scope.struggling_student_list.indexOf(answers_data[s].user_id);
-                    if (index != -1) {
-                       $scope.struggling_student_list.splice(index, 1);
+    $interval(function(){
+        WebworkService.answersByPart(course, set_id, problem_id).success(function(data){
+            var answers_data = $scope.answers_data = data;
+            var completed_student_list = [];
+            var struggling_student_count = {};
+            //push students who are attempting to the list
+            for (s in answers_data) {
+                if (answers_data[s].part_id == part_id) {
+                    var local_user_id = answers_data[s].user_id;
+                    if (answers_data[s].score == 0){
+                        if (attempting_student_list.indexOf(local_user_id) == -1
+                            && trying_student_list.indexOf(local_user_id) == -1
+                            && struggling_student_list.indexOf(local_user_id) == -1) {
+                            attempting_student_list.push(local_user_id);
+                            struggling_student_count[local_user_id] = 1;
+                        }
+                        else
+                            struggling_student_count[local_user_id]++;
                     }
                 }
             }
-        }
 
-        //move students from attempting/struggling list to got hint list
-        var part_value = "AnSwEr"+("0000"+part_id).slice(-4);
-        $scope.trying_student_list = [];
-        for (s in $scope.attempting_student_list) {
-            HintsService.assignedHintHistoryByStudentID(course, problem_id, set_id, $scope.attempting_student_list[s], part_value).
-                success(function(data){
-                    console.log(data);
-                    for (d in data) {
-                        //remove from attempting student list
-                        var index = $scope.attempting_student_list.indexOf(data[d].user_id);
-                        if (index != -1)
-                            $scope.attempting_student_list.splice(index, 1);
-                        // remove from struggling student list
-                        index = $scope.struggling_student_list.indexOf(data[d].user_id);
-                        if (index != -1)
-                            $scope.struggling_student_list.splice(index, 1);
-                        //add to trying student list
-                        $scope.trying_student_list.push(data[d].user_id);
+            //push students who have more than 5 total attempts to struggling student list
+            for (s in struggling_student_count){
+                if (struggling_student_count[s] > 5 && struggling_student_list.indexOf(s) == -1){
+                    struggling_student_list.push(s);
+                    var index = attempting_student_list.indexOf(s);
+                    if (index != -1)
+                        attempting_student_list.splice(index,1);
+                }
+            }
+
+            //pop students who are done from attempting/struggling list
+            for (s in answers_data) {
+                if (answers_data[s].part_id == part_id && answers_data[s].score == 1) {
+                    completed_student_list.push(answers_data[s].user_id);
+                    var index = attempting_student_list.indexOf(answers_data[s].user_id);
+                    if (index != -1) {
+                        attempting_student_list.splice(index, 1);
                     }
-                });
-        }
+                    index = struggling_student_list.indexOf(answers_data[s].user_id);
+                    if (index != -1) {
+                       struggling_student_list.splice(index, 1);
+                    }
+                }
+            }
 
+            //move students from attempting list to got hint list
+            for (s in attempting_student_list) {
+                HintsService.assignedHintHistoryByStudentID(course, problem_id, set_id, attempting_student_list[s], part_value).
+                    success(function(data){
+                        for (d in data) {
+                            //add to trying student list
+                            if (trying_student_list.indexOf(data[d].user_id) == -1)
+                                trying_student_list.push(data[d].user_id);
+                            //remove from attempting student list
+                            var index = attempting_student_list.indexOf(data[d].user_id);
+                            attempting_student_list.splice(index, 1);
+                        }
+                    });
+            }
 
-    });
+            //move students from struggling list to got hint list
+            for (s in struggling_student_list) {
+                HintsService.assignedHintHistoryByStudentID(course, problem_id, set_id, struggling_student_list[s], part_value).
+                    success(function(data){
+                        for (d in data) {
+                            //add to trying student list
+                            if (trying_student_list.indexOf(data[d].user_id) == -1)
+                                trying_student_list.push(data[d].user_id);
+                            // remove from struggling student list
+                            var index = struggling_student_list.indexOf(data[d].user_id);
+                            struggling_student_list.splice(index, 1);
+                        }
+                    });
+            }
+
+            //push to success student list
+            for (c in completed_student_list) {
+                var assigned_hints = HintsService.assignedHintHistoryOfProblem(course, set_id, problem_id);
+                for (a in assigned_hints) {
+                    if (assigned_hints[a].pg_id == part_value && assigned_hints[a].user_id == c)
+                        success_student_list.push(t);
+                }
+            }
+
+            $scope.attempting_student_list = attempting_student_list;
+            $scope.struggling_student_list = struggling_student_list;
+            $scope.trying_student_list = trying_student_list;
+            $scope.success_student_list = success_student_list;
+        });
+    }, 1000);
 
 });
