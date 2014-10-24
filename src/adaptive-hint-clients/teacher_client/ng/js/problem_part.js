@@ -266,9 +266,9 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
 
             //push to success student list
             for (c in completed_student_list) {
-                var assigned_hints = HintsService.assignedHintHistoryOfProblem(course, set_id, problem_id);
-                for (a in assigned_hints) {
-                    if (assigned_hints[a].pg_id == part_value && assigned_hints[a].user_id == c)
+                HintsService.assignedHintHistoryByStudentID(course, problem_id, set_id, c, part_value).
+                    success(function(data){
+                    if (data.length != 0 && success_student_list.indexOf(c) == -1)
                         success_student_list.push(t);
                 }
             }
