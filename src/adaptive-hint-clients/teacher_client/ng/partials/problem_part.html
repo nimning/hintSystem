@@ -29,7 +29,7 @@
         <!-- students attempting -->
         <div class="col-md-3">
           <div class="row" ng-repeat="a in attempting_student_list" style="padding-left:15px;">
-            <a ui-sref="problem_user({course: course, set_id: set_id, problem_id: problem_id, user_id: s})">{{a}}</a>
+            <a ui-sref="problem_user({course: course, set_id: set_id, problem_id: problem_id, user_id: a})">{{a}}</a>
           </div>
         </div>
         <!-- students struggling -->
@@ -41,13 +41,13 @@
         <!-- student got hints -->
         <div class="col-md-3">
           <div class="row" ng-repeat="t in trying_student_list" style="padding-left:15px;">
-            <a ui-sref="problem_user({course: course, set_id: set_id, problem_id: problem_id, user_id: s})">{{t}}</a>
+            <a ui-sref="problem_user({course: course, set_id: set_id, problem_id: problem_id, user_id: t})">{{t}}</a>
           </div>
         </div>
         <!-- students completed after got hints -->
         <div class="col-md-3">
           <div class="row" ng-repeat="su in success_student_list" style="padding-left:15px;">
-            <a ui-sref="problem_user({course: course, set_id: set_id, problem_id: problem_id, user_id: s})">{{su}}</a>
+            <a ui-sref="problem_user({course: course, set_id: set_id, problem_id: problem_id, user_id: su})">{{su}}</a>
           </div>
         </div>
       </div>
