@@ -270,8 +270,11 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
             for (c in completed_student_list) {
                 HintsService.assignedHintHistoryByStudentID(course, problem_id, set_id, completed_student_list[c], part_value).
                     success(function(data){
-                    if (data.length != 0 && success_student_list.indexOf(completed_student_list[c]) == -1)
+                    if (data.length != 0 && success_student_list.indexOf(completed_student_list[c]) == -1){
                         success_student_list.push(completed_student_list[c]);
+                    if (trying_student_list.indexOf(data[d].user_id) == -1)
+                        trying_student_list.push(data[d].user_id);
+                    }
                 });
             }
 
