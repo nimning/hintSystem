@@ -41,16 +41,13 @@ App.controller('SetCtrl', function($scope, $location, $window, $stateParams, $in
     $scope.displayed_students = [];
 
     $scope.my_students = [];
-    var sock = SockJSService.get_sock();
-    sock.onmessage = function(event) {
-        print("RECEIVED: " + event.data);
-        var data = JSON.parse(event.data);
+    SockJSService.onMessage(function(event, data) {
         if (data.type === "my_students"){
             $scope.my_students = data.arguments;
         }else if (data.type === "unassigned_students"){
             $scope.unassigned_students = data.arguments;
         }
-    };
+    });
 
     // Angular Smart-table is weird about updating the first time
     $timeout(function(){
