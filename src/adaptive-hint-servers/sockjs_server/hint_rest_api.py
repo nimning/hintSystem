@@ -19,7 +19,7 @@ class HintRestAPI(object):
         HintRestAPI._baseurl = baseurl
 
     @staticmethod
-    def checkanswer(pg_file, pg_seed, boxname, value):
+    def checkanswer(pg_file, pg_seed, psvn, boxname, value):
         """
           Returns:
             { 'boxname' : 'AnSwEr0001',
@@ -30,8 +30,7 @@ class HintRestAPI(object):
             }
         """
         base_url = HintRestAPI._baseurl
-        params = { 'pg_file' : pg_file,
-                   'seed' : pg_seed,
+        params = { 'pg_file' : pg_file, 'seed' : pg_seed, 'psvn': psvn,
                    boxname : value }
         result_json = requests.post(base_url + '/checkanswer',
                                     data=params).json()
@@ -59,6 +58,20 @@ class HintRestAPI(object):
         seed = requests.get(base_url + '/problem_seed',
                             params=params).text
         return int(seed)
+
+    @staticmethod
+    def set_psvn(student_id, course_id, set_id):
+        """
+          Returns:
+            An integer of the problem set version number.
+        """
+        base_url = HintRestAPI._baseurl
+        params = { 'course': course_id,
+                   'set_id': set_id,
+                   'user_id': student_id }
+        psvn = requests.get(base_url + '/set_psvn',
+                            params=params).text
+        return int(psvn)
 
     @staticmethod
     def pg_path(course_id, set_id, problem_id):

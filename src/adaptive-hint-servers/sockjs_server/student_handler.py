@@ -182,6 +182,12 @@ class StudentSockJSHandler(_BaseSockJSHandler):
                                                   ss.set_id,
                                                   ss.problem_id)
 
+        # get problem seed
+        if ss.psvn is None:
+            ss.psvn = HintRestAPI.set_psvn(ss.student_id,
+                                           ss.course_id,
+                                           ss.set_id)
+
         # update the student session mapping.
         StudentSession.update_student_session(ss)
 
@@ -207,6 +213,7 @@ class StudentSockJSHandler(_BaseSockJSHandler):
         if boxname.startswith('AnSwEr'):
             answer_status = HintRestAPI.checkanswer(ss.pg_file,
                                                     ss.pg_seed,
+                                                    ss.psvn,
                                                     boxname,
                                                     value)
         # check hint answer
@@ -226,6 +233,7 @@ class StudentSockJSHandler(_BaseSockJSHandler):
             # check using temporary boxname 'AnSwEr0001'
             answer_status = HintRestAPI.checkanswer(pg_file,
                                                     ss.pg_seed,
+                                                    ss.psvn,
                                                     'AnSwEr0001',
                                                     value)
             # set boxname to the hint boxname

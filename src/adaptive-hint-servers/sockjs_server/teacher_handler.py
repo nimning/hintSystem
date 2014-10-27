@@ -401,5 +401,6 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
 
             if len(ts.teacher_id) > 0:
                 logger.info("%s left"%ts.teacher_id)
+                ts.release_my_students() # Otherwise wacky stuff happens.
 
         logger.info("%s disconnected"%self.session.conn_info.ip)

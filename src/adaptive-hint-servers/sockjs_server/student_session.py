@@ -93,6 +93,7 @@ class StudentSession(object):
         self.problem_id = problem_id
         self.pg_file = None
         self.pg_seed = None
+        self.psvn = None
         self.solved = False
         self._sockjs_handler = sockjs_handler
         # internal cache

@@ -68,6 +68,9 @@ class TeacherSession(object):
                        datetime.timedelta(minutes=DEFAULT_TIMEOUT))
             TeacherSession.student_assignment[hashkey] = (self.teacher_id,
                                                           timeout)
+            logger.info('Student %s assigned to %s', student_id, self.teacher_id)
+        else:
+            logger.warn('Student %s already taken', student_id)
 
 
     def release_student(self, student_id, course_id, set_id, problem_id):
@@ -77,6 +80,13 @@ class TeacherSession(object):
             TeacherSession.student_assignment[hashkey][0] == self.teacher_id):
             del TeacherSession.student_assignment[hashkey]
 
+
+    def release_my_students(self):
+        """Release all my students"""
+        student_list = self.list_my_students()
+        for student in student_list:
+            self.release_student(student['student_id'], student['course_id'],
+                                 student['set_id'], student['problem_id'])
 
     def list_my_students(self):
         """List all my students"""
