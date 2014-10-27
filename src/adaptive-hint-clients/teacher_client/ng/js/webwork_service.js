@@ -134,6 +134,9 @@ App.factory('WebworkService', function($http, $window, $rootScope, $location, $q
             var ans_matches = pg_file.match(ans_re);
             var ans_count = ans_matches ? ans_matches.length : 0;
             return box_count + ans_count;
+        },
+        partIdToBoxName: function(part_id){
+            return "AnSwEr"+("0000"+part_id).slice(-4);
         }
     };
     return factory;

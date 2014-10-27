@@ -7,10 +7,14 @@ App.controller('ProblemUserCtrl', function($scope, $location, $window, $statePar
     var set_id = $scope.set_id = $stateParams.set_id;
     var problem_id = $scope.problem_id = $stateParams.problem_id;
     var user_id = $scope.user_id = $stateParams.user_id;
-    $scope.student_data = {answers: []};
+    $scope.studentData = {answers: []};
     $scope.current_part = 1;
     $scope.problem_seed = "";
     $scope.psvn = "";
+    $scope.hints = [];
+    $scope.box="";
+    $scope.displayed_answers = [];
+
     WebworkService.answersByPart(course, set_id, problem_id, user_id).
         success(function(data){
             $scope.answersByPart = {};
@@ -20,14 +24,23 @@ App.controller('ProblemUserCtrl', function($scope, $location, $window, $statePar
                 }
                 $scope.answersByPart[value.part_id].push(value);
             });
+            var answers = [];
+            for(var part_id in $scope.answersByPart){
+                var attempts = $scope.answersByPart[part_id].length;
+                if(attempts > 0){
+                    var answer = $scope.answersByPart[part_id][attempts - 1];
+                    answer.is_correct = (parseInt(answer.score) === 1);
+                    answer.boxname = WebworkService.partIdToBoxName(part_id);
+                    answers.push( answer );
+                }
+            }
+            $scope.studentData.answers = answers;
     });
 
-    $scope.current_answers = [];
     SockJSService.onMessage(function(event, data){
         if (data.type == 'student_info') {
 	        var student_info = data['arguments'];
             $scope.$apply(function(){
-                $scope.current_answers = student_info.current_answers;
                 $scope.studentData = student_info;
             });
 	    }
@@ -57,10 +70,6 @@ App.controller('ProblemUserCtrl', function($scope, $location, $window, $statePar
         $scope.pg_path = JSON.parse(data);
     });
 
-    $scope.hints = [];
-
-    $scope.box="";
-
     // Auto send 'release_student' when closing window
     $scope.$on('$destroy', function(event){
         SockJSService.release_student(course, set_id, problem_id, user_id);
@@ -73,5 +82,5 @@ App.controller('ProblemUserCtrl', function($scope, $location, $window, $statePar
     $scope.showPart = function(part){
         $scope.current_part = part;
     };
-    $scope.displayed_answers = [];
+
 });

@@ -72,23 +72,15 @@ angular.module('ta-console.directives')
               $scope.$watch('pgFile', renderPreview);
               $scope.$watch('seed', renderPreview);
               $scope.$watch('psvn', renderPreview);
-              // $scope.$watch('studentData.answers', function(answers, oldAnswers, scope){
-              //     if(!!answers){
-              //         var inputs = element.find('input[type=text]');
-              //         for(var i=0; i< answers.length; i++){
-              //             var $el=$(inputs[i]);
-              //             $el.val(answers[i]);
-              //             if(answers[i].correct === 1){
-              //                 $el.removeClass('incorrect');
-              //                 $el.addClass('correct');
-              //             }else{
-              //                 $el.removeClass('correct');
-              //                 $el.addClass('incorrect');
-              //             }
-              //         }
-
-              //     }
-              // });
+              // Note: If you append to this array, need to use $watchCollection insead of $watch
+              $scope.$watch('studentData.answers', function(answers, oldAnswers, scope){
+                  if(!!answers){
+                      for(var i=0; i< answers.length; i++){
+                          var ans = answers[i];
+                          scope[ans.boxname] = ans;
+                      }
+                  }
+              });
 
               // Insert a hint to a given location.
               $scope.insert_hint = function(hint_html, location, hintbox_id) {
@@ -109,19 +101,10 @@ angular.module('ta-console.directives')
 
               $scope.$watch('studentData.hints', function(hints, oldHints, scope){
                   if(hints){
+                      // TODO: Move hint rendering into angularized code
                       renderPreview();
                   }
               });
-
-              $scope.$watch('sockAnswers', function(answers, oldAnswers, scope){
-                  if(!!answers){
-                      for(var i=0; i< answers.length; i++){
-                          var ans = answers[i];
-                          scope[ans.boxname] = ans;
-                      }
-                  }
-              });
-
           },
           templateUrl: 'partials/directives/pgFilePreview.html'
       };
