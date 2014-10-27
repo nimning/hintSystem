@@ -3,7 +3,8 @@ var App = angular.module('ta-console');
 App.controller('ProblemPartCtrl', function($scope, $location, $window, $stateParams,
                                            $sce, $timeout, $interval, $anchorScroll, $modal, $log,
                                            WebworkService, HintsService, SockJSService, APIHost,
-                                           DTOptionsBuilder, DTColumnDefBuilder, MessageService){
+                                           DTOptionsBuilder, DTColumnDefBuilder, MessageService,
+                                           Session){
 
     var course = $scope.course = $stateParams.course;
     var set_id = $scope.set_id = $stateParams.set_id;
@@ -139,6 +140,7 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
 
         for (i in students)
         {
+            SockJSService.teacher_join(Session.user_id, course, set_id, problem_id, students[i]);
             SockJSService.request_student(course, set_id, problem_id, students[i]);
             $timeout(function(){
                 // FIXME Put in the proper seed for the student
