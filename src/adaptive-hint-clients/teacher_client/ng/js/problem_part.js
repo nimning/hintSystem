@@ -127,7 +127,6 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
         var hint_html_template = "";
         var rendered_hint="";
         var students = [];
-        this.input_id = null;
 
         for(var entry in group.student_list){ // For each different signature in the group
             for (var i=0; i<group.student_list[entry].length; i++){ //For each student
@@ -149,13 +148,14 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
                         rendered_hint = $sce.trustAsHtml(rendered_html);
                         SockJSService.add_hint(course, set_id, problem_id, students[i],
                                                "AnSwEr"+("0000"+part_id).slice(-4), id, hint_html_template);
-
                     }, function(error){
                         console.log(error);
                     });
 
             }, 1000);
         }
+
+        this.input_id = null;
     };
 
     $scope.validID = function(){

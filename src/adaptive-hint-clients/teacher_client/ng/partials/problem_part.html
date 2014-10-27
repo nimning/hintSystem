@@ -55,7 +55,6 @@
 
     <section id="answers_group" style="padding-bottom:7px;">
       <h3>Answer Group</h3>
-      {{shown_answers_array}}
       <div class="row" id="correct_terms_row">
         <button type="button" class="btn btn-default" ng-class="{'btn-default': !term_selected(term), 'btn-primary': term_selected(term)}" style="margin-right: 1em" ng-repeat="term in correct_terms" ng-click="toggle_term(term)">{{term}}</button>
       </div>
