@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from rest_server.tornado_database import Connection
 from rest_server.webwork_config import mysql_username, mysql_password
 import argparse
