@@ -51,7 +51,7 @@ class Render(JSONRequestHandler, tornado.web.RequestHandler):
             # call the PG wrapper
             rendered_html = yield tornado.gen.Task(task_render,
                                                    pg_file,
-                                                   int(seed), int(psvn))
+                                                   int(seed), psvn)
             
             if rendered_html is None:
                 response['error_msg'] = 'PG service error'
