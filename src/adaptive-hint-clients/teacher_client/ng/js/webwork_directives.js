@@ -30,11 +30,12 @@ angular.module('ta-console.directives')
           link: function($scope, element, attrs){
               $scope.hidePreview="";
               var renderPreview = function(){
+                  console.info("someone asked us to re-render");
                   if($scope.pgFile && $scope.pgFile.length > 0 && $scope.seed!=undefined){
                       WebworkService.render($scope.pgFile, $scope.seed, $scope.psvn)
                           .success(function(data){
                               // Insert ng-model directive and disable the input
-                              var s = data.rendered_html.replace(/name=('|")(AnSwEr\d+)('|")/g, "$& ng-model='$2' disabled=''");
+                              var s = data.rendered_html.replace(/name=('|")(AnSwEr\d+)('|")/g, "$& ng-model='$2.answer_string' disabled='' ng-class='{correct: $2.is_correct, incorrect: $2.is_correct===false}'");
                               s = '<div class="pg-file-rendered">'+$.trim(s)+'</div>';
                               var e = $compile(s)($scope);
                               element.children().remove();
@@ -47,7 +48,7 @@ angular.module('ta-console.directives')
                                       var part_indicator = $compile('<span class="badge">'+(i+1)+'</span>')($scope);
                                       $(el).after(part_indicator);
                                       $(el).after(button);
-                                      
+
                                   });
 
                               }
@@ -108,7 +109,6 @@ angular.module('ta-console.directives')
 
               $scope.$watch('studentData.hints', function(hints, oldHints, scope){
                   if(hints){
-                      console.log(hints);
                       renderPreview();
                   }
               });
@@ -117,17 +117,7 @@ angular.module('ta-console.directives')
                   if(!!answers){
                       for(var i=0; i< answers.length; i++){
                           var ans = answers[i];
-                          scope[ans.boxname] = ans.answer_string;
-                          var $el=$('input[name='+ans.boxname+']');
-                          // $el.val(ans.answer_string);
-                          // Should probably do this in a more 'Angular' way, but meh
-                          if(ans.correct===1){
-                              $el.removeClass('incorrect');
-                              $el.addClass('correct');
-                          }else{
-                              $el.removeClass('correct');
-                              $el.addClass('incorrect');
-                          }
+                          scope[ans.boxname] = ans;
                       }
                   }
               });
