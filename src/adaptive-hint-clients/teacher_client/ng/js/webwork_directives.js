@@ -35,28 +35,29 @@ angular.module('ta-console.directives')
                           .success(function(data){
                               // Insert ng-model directive and disable the input
                               var s = data.rendered_html.replace(/name=('|")(AnSwEr\d+)('|")/g, "$& ng-model='$2' disabled=''");
-                              s = '<div>'+$.trim(s)+'</div>';
+                              s = '<div class="pg-file-rendered">'+$.trim(s)+'</div>';
                               var e = $compile(s)($scope);
+                              element.children().remove();
                               element.append(e);
                               if ($scope.showHintButtons !== "false" &&
                                   $(element).find('button').length === 0){
                                   $(element).find('input[name^=AnSwEr]').each(function(i,el){
                                       var boxname = $(el).attr('name');
 	                                  var button = $compile('<button class="btn add-hint-btn" ng-class="box_class(\''+boxname+'\')" ng-click="choose_box(\''+boxname+'\')"><span class="glyphicon glyphicon-plus"></span></button>')($scope);
+                                      var part_indicator = $compile('<span class="badge">'+(i+1)+'</span>')($scope);
+                                      $(el).after(part_indicator);
                                       $(el).after(button);
+                                      
                                   });
 
                               }
-                              if($scope.studentData & $scope.studentData.hints){
+                              if($scope.studentData && $scope.studentData.hints){
                                   for(var k = 0; k<$scope.studentData.hints.length; k++){
                                       var h = $scope.studentData.hints[k];
-                                      console.log($scope.studentData.hints[k]);
                                       var newEl = $($scope.insert_hint(h.hint_html,
 			                                                           h.location,
 			                                                           h.hintbox_id));
-                                      console.log(newEl);
                                       var input_el = $(element).find("#"+h.location);
-                                      console.log(input_el);
                                       $(input_el).before(newEl);
                                   }
                               }
