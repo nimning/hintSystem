@@ -289,6 +289,6 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
             $scope.trying_student_list = trying_student_list;
             $scope.success_student_list = success_student_list;
         });
-    }, 1000);
+    }, 10000);
 
 });
