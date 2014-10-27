@@ -21,23 +21,23 @@ App.controller('ProblemUserCtrl', function($scope, $location, $window, $statePar
                 $scope.answersByPart[value.part_id].push(value);
             });
     });
-    var sock = SockJSService.get_sock();
+
     $scope.current_answers = [];
-    sock.onmessage = function(e) {
-	    print("RECIEVED: " + e.data);
-	    var data = JSON.parse(e.data);
-	    if (data.type == 'student_info') {
+    SockJSService.onMessage(function(event, data){
+        if (data.type == 'student_info') {
 	        var student_info = data['arguments'];
             $scope.$apply(function(){
                 $scope.current_answers = student_info.current_answers;
                 $scope.studentData = student_info;
             });
 	    }
-    };
-    SockJSService.teacher_join(Session.user_id, $scope.course, $scope.set_id, $scope.problem_id, $scope.user_id);
-    SockJSService.request_student($scope.course, $scope.set_id, $scope.problem_id, $scope.user_id);
-    SockJSService.get_student_info($scope.course, $scope.set_id, $scope.problem_id, $scope.user_id);
+    });
 
+    SockJSService.onConnect().then(function(){
+        SockJSService.teacher_join(Session.user_id, $scope.course, $scope.set_id, $scope.problem_id, $scope.user_id);
+        SockJSService.request_student($scope.course, $scope.set_id, $scope.problem_id, $scope.user_id);
+        SockJSService.get_student_info($scope.course, $scope.set_id, $scope.problem_id, $scope.user_id);
+    });
     // FIXME: There's a weird race condition when the seed and pg file are retrieved at the same time
     WebworkService.problemSeed(course, set_id, problem_id, user_id).
         success(function(data){

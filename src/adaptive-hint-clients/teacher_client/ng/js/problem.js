@@ -181,10 +181,7 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $stateParams,
     }); // End exportProblemData promise resolver
 
 
-    var sock = SockJSService.get_sock();
-    sock.onmessage = function(event) {
-        print("RECEIVED: " + event.data);
-        var data = JSON.parse(event.data);
+    SockJSService.onMessage(function(event, data) {
         if (data.type === "my_students"){
             $scope.my_students = data.arguments;
         }else if (data.type === "unassigned_students"){
@@ -192,7 +189,7 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $stateParams,
                 return student.problem_id == problem_id;
             });
         }
-    };
+    });
 
 
     WebworkService.problemStatus(course, set_id, problem_id).success(function(data){

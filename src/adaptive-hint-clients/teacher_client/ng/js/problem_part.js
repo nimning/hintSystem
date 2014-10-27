@@ -100,10 +100,7 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
         $scope.answer_expression = WebworkService.partSolution($scope.pg_file, part_id);
     });
 
-    var sock = SockJSService.get_sock();
-    sock.onmessage = function(event) {
-        print("RECEIVED: " + event.data);
-        var data = JSON.parse(event.data);
+    SockJSService.onMessage(function(event, data) {
         if (data.type === "my_students"){
             //$scope.my_students = data.arguments;
         }else if (data.type === "unassigned_students"){
@@ -111,7 +108,7 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
                 return student.problem_id == problem_id;
             });
         }
-    };
+    });
 
     $scope.match_hint_id = function(id){
         var all_hints = $scope.hints;
@@ -173,7 +170,7 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
         HintsService.assignedHintHistoryByStudentID(course, problem_id, set_id, student_id, part_value).
             success(function(data){
                 hint.history = data;
-                hint.students = []
+                hint.students = [];
                 for(h in data){
                     hint.students.push(data[h].hint_id);
                 }

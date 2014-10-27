@@ -4,7 +4,15 @@ var App = angular.module('ta-console');
 function print(msg) {
    // console.log(msg);
 }
-App.factory('SockJSService', function($http, $window, $rootScope, $location, $interval, $timeout, APIHost) {
+
+App.constant('SOCKJS_EVENTS', {
+    connected: 'sockjs-connected',
+    disconnected: 'sockjs-disconnected',
+    msgReceived: 'sockjs-message-received'
+});
+
+App.factory('SockJSService', function($http, $window, $rootScope, $location, $interval, $q,
+                                      $timeout, APIHost, SOCKJS_EVENTS) {
     var factory = {};
     var sock;
     var connected = false;
@@ -13,19 +21,16 @@ App.factory('SockJSService', function($http, $window, $rootScope, $location, $in
     factory.connected = function(){
         return connected;
     };
-    factory.get_sock = function() {
-        return sock;
-    };
     factory.send_command = function (cmd, args) {
         if(!connected){
             console.error("SockJS not connected");
-            if(user_id){ // Auto reconnect SockJS
-                factory.connect(my_port, user_id);
-                $timeout(function(){
-                    factory.send_command(cmd, args);
-                }, 1000);
+            // if(user_id){ // Auto reconnect SockJS
+            //     factory.connect(my_port, user_id);
+            //     $timeout(function(){
+            //         factory.send_command(cmd, args);
+            //     }, 1000);
 
-            }
+            // }
         }else{
             sock.send(JSON.stringify({
                 "type" : cmd,
@@ -43,16 +48,23 @@ App.factory('SockJSService', function($http, $window, $rootScope, $location, $in
         user_id = teacher_id;
         my_port = port;
 	    sock.onopen = function() {
-	        print("INFO: connected");
+	        console.info("SockJS connected");
             connected = true;
 	        factory.send_command('teacher_join',
 			                     { 'teacher_id' : teacher_id });
+            $rootScope.$emit(SOCKJS_EVENTS.connected);
 	    };
 
 	    sock.onclose = function() {
-	        print("INFO: disconnected");
+	        console.info("SockJS disconnected");
             connected = false;
 	    };
+
+        sock.onmessage = function(e){
+            print("RECIEVED: " + e.data);
+	        var data = JSON.parse(e.data);
+            $rootScope.$emit(SOCKJS_EVENTS.msgReceived, data);
+        };
 
         return sock;
 
@@ -96,6 +108,28 @@ App.factory('SockJSService', function($http, $window, $rootScope, $location, $in
             student_id: student_id, course_id: course_id, set_id: set_id,
             problem_id: problem_id, location: location, hint_id: hint_id,
             hint_html_template: hint_html_template
+        });
+    };
+
+    factory.onConnect = function(){
+        var deferred = $q.defer();
+        if(connected){
+            deferred.resolve();
+        }else{
+            $rootScope.$on(SOCKJS_EVENTS.connected, function(){
+                deferred.resolve();
+            });
+        }
+        return deferred.promise;
+    };
+
+    factory.onMessage = function(fn){
+        console.log("Attaching event handler");
+        var handler = $rootScope.$on(SOCKJS_EVENTS.msgReceived, fn);
+        $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+            // Deregister event handler when changing pages
+            console.info('Destroying event handler');
+            handler();
         });
     };
     return factory;
