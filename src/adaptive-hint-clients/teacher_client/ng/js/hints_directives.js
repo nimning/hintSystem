@@ -79,8 +79,10 @@ angular.module('ta-console.directives')
                     HintsService.assignedHintHistoryByHintID($scope.course, hint.hint_id).
                         success(function(data){
                             hint.students = [];
-                            for(h in data){
-                                hint.students.push(data[h].user_id);
+                            for(var h in data){
+                                if(!_.contains(hint.students, data[h].user_id)){
+                                    hint.students.push(data[h].user_id);
+                                }
                             }
                         }).error(function(data){console.log(data);});
                 };
