@@ -3,6 +3,7 @@ import linecache
 import sys
 from webwork_parser import parse_webwork, WebworkParseException, node_string
 import traceback
+import operator as op
 
 def PrintException():
     exc_type, exc_obj, tb = sys.exc_info()
@@ -19,6 +20,14 @@ def is_number(s):
         return True
     except:
         return False
+
+
+def ncr(n, r):
+    r = min(r, n-r)
+    if r == 0: return 1
+    numer = reduce(op.mul, xrange(n, n-r, -1))
+    denom = reduce(op.mul, xrange(1, r+1))
+    return numer/denom
 
 def eval_parsed(e, variables = None):
     """ Evaluate a parsed expression, returns a tree, of the same form as the parse tree. Where each operator 
@@ -75,7 +84,8 @@ def eval_parsed(e, variables = None):
             elif f=='/':  ans= v1/v2
             elif f=='**': ans= v1**v2
             elif f=='^': ans= v1**v2
-            elif f=='C':  ans= factorial(v1)/(factorial(v2)*factorial(v1-v2))
+            elif f=='C':
+                ans= ncr(int(v1), int(v2))
             else:
                 raise Exception('unrecognized binary operator %s in %s'%(f,e))
             return ((f,ans,span),ev1,ev2)
