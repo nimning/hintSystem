@@ -2,7 +2,7 @@ var App = angular.module('ta-console');
 
 App.controller('ProblemUserCtrl', function($scope, $location, $window, $stateParams,
                                            $sce, $interval, $timeout, Session,
-                                           WebworkService, SockJSService){
+                                           WebworkService, SockJSService, HintsService, APIHost){
     var course = $scope.course = $stateParams.course;
     var set_id = $scope.set_id = $stateParams.set_id;
     var problem_id = $scope.problem_id = $stateParams.problem_id;
@@ -14,7 +14,8 @@ App.controller('ProblemUserCtrl', function($scope, $location, $window, $statePar
     $scope.hints = [];
     $scope.box="";
     $scope.displayed_answers = [];
-
+    $scope.user_webwork_url = 'http://'+APIHost+'/webwork2/'+course+'/'+set_id+
+        '/'+problem_id+'/?effectiveUser='+user_id;
     WebworkService.answersByPart(course, set_id, problem_id, user_id).
         success(function(data){
             $scope.answersByPart = {};
