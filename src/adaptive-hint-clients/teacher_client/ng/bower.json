@@ -32,7 +32,8 @@
     "angular-strap": "~2.1.1",
     "angular-ui-router": "~0.2.11",
     "moment-timezone": "~0.2.2",
-    "lodash": "~2.4.1"
+    "lodash": "~2.4.1",
+    "jsjws": "~3.0.2"
   },
   "resolutions": {
     "datatables": "~1.10.2"

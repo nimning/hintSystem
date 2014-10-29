@@ -1,6 +1,7 @@
 import json
 import tornado.web
 import logging
+import jwt
 logger = logging.getLogger(__name__)
 
 class JSONRequestHandler(object):

@@ -102,6 +102,8 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
               hint_html_template : string
                 HTML template
 
+              optionally, specify the student, course, set, problem
+
             """
             try:
                 location = args['location']
@@ -111,10 +113,15 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
                 # shorthand
                 ts = self.teacher_session
 
-                yield gen.Task(self._perform_assign_hint,
-                               location,
-                               hint_id,
-                               hint_html_template)
+                if all([(x in args) for x in ['student_id', 'course_id', 'set_id', 'problem_id']]):
+                    yield gen.Task(self._perform_assign_hint, location, hint_id,
+                                   hint_html_template, (args['student_id'], args['course_id'],
+                                                        args['set_id'], args['problem_id']))
+                else:
+                    yield gen.Task(self._perform_assign_hint,
+                                   location,
+                                   hint_id,
+                                   hint_html_template)
 
                 logger.info("%s: add_hint"%ts.teacher_id)
             except:
@@ -267,16 +274,19 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
 
 
     def _perform_assign_hint(self, location, hint_id,
-                             hint_html_template, callback=None):
+                             hint_html_template, callback=None,
+                             student_data = None):
 
         # shorthand
         ts = self.teacher_session
         logger.info('In assign hint')
         # get the student_id and other info
-        if ts.student_hashkey is not None:
+        if student_data is not None:
+            (student_id, course_id, set_id, problem_id) = student_data
+        elif ts.student_hashkey is not None:
             logger.info('OK, we have a hashkey')
             (student_id, course_id, set_id, problem_id) = ts.student_hashkey
-
+        if student_id:
             # Call the rest api
             assigned_hintbox_id = HintRestAPI.assign_hint(student_id,
                                                           course_id,
