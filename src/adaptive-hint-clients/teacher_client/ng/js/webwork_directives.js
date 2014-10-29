@@ -84,21 +84,15 @@ angular.module('ta-console.directives')
 
               // Insert a hint to a given location.
               $scope.insert_hint = function(hint_html, location, hintbox_id) {
-                  hint_html = '<div style="float:right;">' +
-	                  '<button onclick=remove_hint("'+ hintbox_id +
-	                  '","' + location + '")>X</button></div>' + hint_html;
-                  var d = document.createElement('div');
-                  d.setAttribute('id', 'wrapper_' + hintbox_id);
-                  d.innerHTML = hint_html;
-                  d.setAttribute('style',
-		                         'background-color: #E0FAC0; ' +
-		                         'clear:left; ' +
-		                         'margin:10px; ' +
-		                         'border:1px solid; ' +
-		                         'padding:5px; ');
-                  return(d);
+                  hint_html = hint_html.replace(/name=('|")(AssignedHint\d+)('|")/g, "$& ng-model='$2.answer_string' disabled='' ng-class='{correct: $2.is_correct, incorrect: $2.is_correct===false}'");
+                  hint_html = '<div class="hint_html" id="wrapper_'+hintbox_id+'"><div style="float:right;">' +
+	                  '<button ng-click=remove_hint("'+ hintbox_id +
+	                  '","' + location + '")>X</button></div>' + hint_html + '</div>';
+                  var inner = $compile(hint_html)($scope);
+                  return inner;
               };
-
+              $scope.remove_hint = function(hintbox_id, location){
+              };
               $scope.$watch('studentData.hints', function(hints, oldHints, scope){
                   if(hints){
                       // TODO: Move hint rendering into angularized code
