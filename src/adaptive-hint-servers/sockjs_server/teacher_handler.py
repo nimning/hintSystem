@@ -115,8 +115,8 @@ class TeacherSockJSHandler(_BaseSockJSHandler):
 
                 if all([(x in args) for x in ['student_id', 'course_id', 'set_id', 'problem_id']]):
                     yield gen.Task(self._perform_assign_hint, location, hint_id,
-                                   hint_html_template, (args['student_id'], args['course_id'],
-                                                        args['set_id'], args['problem_id']))
+                                   hint_html_template, student_data=(args['student_id'], args['course_id'],
+                                                                     args['set_id'], args['problem_id']))
                 else:
                     yield gen.Task(self._perform_assign_hint,
                                    location,
