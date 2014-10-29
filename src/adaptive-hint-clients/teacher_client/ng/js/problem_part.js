@@ -30,6 +30,7 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
             });
             $scope.answers = answersByPart[part_id];
     });
+
     WebworkService.groupedPartAnswers(course, set_id, problem_id, part_id).success(function(data){
         $scope.grouped_answers = data.correct;
         $scope.shown_answers_array = [];
@@ -45,11 +46,18 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
         var answer_object = {};
         answer_object["signature"] = group;
         answer_object["student_list"] = value;
-        var sum = 0;
+        var student_set = [];
+        //console.log(answer_object["student_list"]);
         for (v in value){
-            sum = sum + value[v].length;
+            var index = 0;
+            for (s in value[v]) {
+                console.log(value[v][s]);
+                index = student_set.indexOf(value[v][s]);
+                if (index == -1)
+                    student_set.push(value[v][s]);
+            }   
         }
-        answer_object["sum"] = sum;
+        answer_object["sum"] = student_set.length;
         $scope.shown_answers_array.push(answer_object);
     }
 
@@ -125,12 +133,9 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
     };
 
     $scope.preview_send_hint = function(id, group){
-        var hint_html_template = "";
-        var rendered_hint="";
         var students = [];
-
         for(var entry in group.student_list){ // For each different signature in the group
-            for (var i=0; i<group.student_list[entry].length; i++){ //For each student
+            for (var i=0; i<group.student_list[entry].length; i++){ //push student to the array
                 var user_id = group.student_list[entry][i];
                 var index = students.indexOf(user_id);
                 if (index == -1)
@@ -140,23 +145,21 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
 
         for (i in students)
         {
+            var hint_html_template = "";
             SockJSService.teacher_join(Session.user_id, course, set_id, problem_id, students[i]);
             SockJSService.request_student(course, set_id, problem_id, students[i]);
-            $timeout(function(){
+            //$timeout(function(){
                 // FIXME Put in the proper seed for the student
-                HintsService.previewHint($scope.hint, 1234, true).
-                    then(function(rendered_html){
-                        hint_html_template = rendered_html;
-                        rendered_hint = $sce.trustAsHtml(rendered_html);
-                        SockJSService.add_hint(course, set_id, problem_id, students[i],
+            HintsService.previewHint($scope.hint, 1234, true).
+            then(function(rendered_html){
+                hint_html_template = rendered_html;
+                SockJSService.add_hint(course, set_id, problem_id, students[i],
                                                "AnSwEr"+("0000"+part_id).slice(-4), id, hint_html_template);
-                    }, function(error){
-                        console.log(error);
-                    });
-
-            }, 1000);
+            }, function(error){
+                console.log(error);
+            });
+            //}, 1000);
         }
-
         this.input_id = null;
     };
 
@@ -194,7 +197,7 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
     var trying_student_list = [];
     var success_student_list = [];
 
-    $interval(function(){
+    function generate_hint_table() {
         WebworkService.answersByPart(course, set_id, problem_id).success(function(data){
             var answers_data = $scope.answers_data = data;
             var completed_student_list = [];
@@ -291,6 +294,9 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
             $scope.trying_student_list = trying_student_list;
             $scope.success_student_list = success_student_list;
         });
-    }, 10000);
+    }
+
+    generate_hint_table();
+    $interval(function(){generate_hint_table();}, 10000);
 
 });
