@@ -150,18 +150,17 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
         for (i in students)
         {
             var hint_html_template = "";
-            SockJSService.teacher_join(Session.user_id, course, set_id, problem_id, students[i]);
-            SockJSService.request_student(course, set_id, problem_id, students[i]);
             //$timeout(function(){
-                // FIXME Put in the proper seed for the student
+            // FIXME Put in the proper seed for the student
             HintsService.previewHint($scope.hint, 1234, true).
-            then(function(rendered_html){
-                hint_html_template = rendered_html;
-                SockJSService.add_hint(course, set_id, problem_id, students[i],
-                                               "AnSwEr"+("0000"+part_id).slice(-4), id, hint_html_template);
-            }, function(error){
-                console.log(error);
-            });
+                then(function(student, rendered_html){
+                    hint_html_template = rendered_html;
+                    SockJSService.add_hint(course, set_id, problem_id, student,
+                                           "AnSwEr"+("0000"+part_id).slice(-4), id, hint_html_template);
+                    // the callback might execute after the end of the loop so we need to bind the value of student inside the loop
+                }.bind(this, students[i]), function(error){
+                    console.log(error);
+                });
             //}, 1000);
         }
         this.input_id = null;
