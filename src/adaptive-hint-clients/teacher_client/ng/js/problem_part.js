@@ -149,7 +149,7 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
         for (i in students)
         {
             var hint_html_template = "";
-            $timeout(function(){
+            $timeout(function(student){ // Render with a random delay.
                 // FIXME Put in the proper seed for the student
                 HintsService.previewHint($scope.hint, 1234, true).
                     then(function(student, rendered_html){
@@ -157,10 +157,10 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
                         SockJSService.add_hint(course, set_id, problem_id, student,
                                                "AnSwEr"+("0000"+part_id).slice(-4), id, hint_html_template);
                         // the callback might execute after the end of the loop so we need to bind the value of student inside the loop
-                    }.bind(this, students[i]), function(error){
+                    }, function(error){
                         console.log(error);
                     });
-            }, 2000*Math.random());
+            }.bind(this, students[i]), 2000*Math.random());
         }
         this.input_id = null;
     };
