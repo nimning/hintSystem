@@ -150,18 +150,18 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
         for (i in students)
         {
             var hint_html_template = "";
-            //$timeout(function(){
-            // FIXME Put in the proper seed for the student
-            HintsService.previewHint($scope.hint, 1234, true).
-                then(function(student, rendered_html){
-                    hint_html_template = rendered_html;
-                    SockJSService.add_hint(course, set_id, problem_id, student,
-                                           "AnSwEr"+("0000"+part_id).slice(-4), id, hint_html_template);
-                    // the callback might execute after the end of the loop so we need to bind the value of student inside the loop
-                }.bind(this, students[i]), function(error){
-                    console.log(error);
-                });
-            //}, 1000);
+            $timeout(function(){
+                // FIXME Put in the proper seed for the student
+                HintsService.previewHint($scope.hint, 1234, true).
+                    then(function(student, rendered_html){
+                        hint_html_template = rendered_html;
+                        SockJSService.add_hint(course, set_id, problem_id, student,
+                                               "AnSwEr"+("0000"+part_id).slice(-4), id, hint_html_template);
+                        // the callback might execute after the end of the loop so we need to bind the value of student inside the loop
+                    }.bind(this, students[i]), function(error){
+                        console.log(error);
+                    });
+            }, 2000*Math.random());
         }
         this.input_id = null;
     };
