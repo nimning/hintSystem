@@ -51,7 +51,6 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
         for (v in value){
             var index = 0;
             for (s in value[v]) {
-                console.log(value[v][s]);
                 index = student_set.indexOf(value[v][s]);
                 if (index == -1)
                     student_set.push(value[v][s]);
