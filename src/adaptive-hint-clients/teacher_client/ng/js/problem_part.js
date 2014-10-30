@@ -146,13 +146,13 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
             }
         }
 
-        for (i in students)
+        for (i=0; i <students.length; i++)
         {
             var hint_html_template = "";
             $timeout(function(student){ // Render with a random delay.
                 // FIXME Put in the proper seed for the student
                 HintsService.previewHint($scope.hint, 1234, true).
-                    then(function(student, rendered_html){
+                    then(function(rendered_html){
                         hint_html_template = rendered_html;
                         SockJSService.add_hint(course, set_id, problem_id, student,
                                                "AnSwEr"+("0000"+part_id).slice(-4), id, hint_html_template);
