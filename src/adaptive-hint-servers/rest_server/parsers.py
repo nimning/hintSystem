@@ -16,7 +16,8 @@ import pandas as pd
 import requests
 import re
 from auth import require_auth
-import multiprocessing
+from multiprocessing import Process, Pipe, Queue, current_process
+from StringIO import StringIO
 
 import logging
 logger = logging.getLogger(__name__)
@@ -197,11 +198,24 @@ class GroupedPartAnswers(JSONRequestHandler, tornado.web.RequestHandler):
         self.write(json.dumps(out, default=serialize_datetime))
 
 def filtered_answers(answers, correct_string, correct_tree,
-                     user_vars, filter_function_string, pipe):
+                     user_vars, filter_function_string, pipe, queue):
+    import sys
+    import StringIO
+    class QueueStringIO(StringIO.StringIO):
+        def __init__(self, queue, *args, **kwargs):
+            StringIO.StringIO.__init__(self, *args, **kwargs)
+            self.queue = queue
+        def flush(self):
+            self.queue.put(self.getvalue())
+            self.truncate(0)
+
     selected_answers = []
+    out = QueueStringIO(queue)
+    sys.stderr = sys.stdout = out
+
     t1 = set(locals().keys()) | set(['t1'])
     try:
-        exec(filter_function_string)
+        exec filter_function_string in globals(), locals()
         t2 = set(locals().keys())
         logger.debug("New locals: %s", t2-t1)
         for thing in (t2-t1):
@@ -215,6 +229,7 @@ def filtered_answers(answers, correct_string, correct_tree,
     except Exception, e:
         logger.error("%s", e)
     pipe.send(selected_answers)
+    out.flush()
     return
 
 def get_source(course, set_id, problem_id):
@@ -297,14 +312,13 @@ class FilterAnswers(JSONRequestHandler, tornado.web.RequestHandler):
             user_id = a['user_id']
             ans = self.answer_for_student(user_id)
 
-            logger.debug("Parsing %s", a['answer_string'])
             ptree, etree = parse_eval(a['answer_string'])
             if ptree and etree:
                 student_answers.append({'string': a['answer_string'], 'parsed': ptree, 'evaled': etree, 'user_id': user_id, 'correct_eval': ans})
 
-        parent, child = multiprocessing.Pipe()
-
-        p = multiprocessing.Process(target=filtered_answers, args=(student_answers, self.part_answer, self.answer_tree, self.variables_df, filter_function, child))
+        parent, child = Pipe()
+        queue = Queue()
+        p = Process(target=filtered_answers, args=(student_answers, self.part_answer, self.answer_tree, self.variables_df, filter_function, child, queue))
         p.start()
         p.join(timeout=1)
 
@@ -314,8 +328,12 @@ class FilterAnswers(JSONRequestHandler, tornado.web.RequestHandler):
             p.terminate()
         matches = parent.recv()
 
+        if not queue.empty():
+            output = queue.get()
+        else:
+            output=""
         out = {
-            'output': [],
+            'output': output,
             'matches': matches
         }
         self.write(json.dumps(out))

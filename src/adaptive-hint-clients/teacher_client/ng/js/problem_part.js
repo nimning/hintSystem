@@ -309,7 +309,7 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
 	    matchBrackets: true
     };
 
-    $scope.filter_function = "def answer_filter(answer_string, parse_tree, eval_tree, correct_string, correct_tree, correct_eval, user_vars):\n  return True";
+    $scope.filter_function = "def answer_filter(answer_string, parse_tree, eval_tree, correct_string, correct_tree, correct_eval, user_vars):\n  print answer_string\n  return True";
 
     $scope.run_filter = function(){
         console.info($scope.filter_function);
@@ -318,6 +318,7 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
             success(function(response){
                 console.log(response);
                 $scope.filtered_list = response.matches;
+                $scope.filter_output = response.output;
             }).error(function(error){
                 console.error(error);
             });
