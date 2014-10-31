@@ -137,6 +137,12 @@ App.factory('WebworkService', function($http, $window, $rootScope, $location, $q
         },
         partIdToBoxName: function(part_id){
             return "AnSwEr"+("0000"+part_id).slice(-4);
+        },
+        filterAnswers: function(course, set_id, problem_id, part_id, filter_function){
+            return $http
+                .post(BASE_URL+'/filter_answers',
+                      {course: course, set_id: set_id, problem_id: problem_id,
+                       part_id: part_id, filter_function: filter_function});
         }
     };
     return factory;

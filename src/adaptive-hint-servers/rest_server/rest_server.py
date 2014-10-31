@@ -15,7 +15,7 @@ from hints_api import (UserProblemHints, Hint, AssignedHint,
                        AssignedHintHistoryByHintID, AssignedHintHistoryByProblemPart, AssignedHintHistoryofProblem)
 
 from auth import (Login)
-from parsers import ParseString, GroupedPartAnswers
+from parsers import ParseString, GroupedPartAnswers, FilterAnswers
 # Server configuration
 BIND_IP = '0.0.0.0'
 DEFAULT_PORT = 4351
@@ -51,7 +51,8 @@ application = tornado.web.Application([
     (r"/problem_status", ProblemStatus),
     (r"/problem_part_status", ProblemPartStatus),
     (r"/export_problem_data", ExportProblemData),
-    ], gzip=True, debug=True)
+    (r"/filter_answers", FilterAnswers)
+    ], gzip=True)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

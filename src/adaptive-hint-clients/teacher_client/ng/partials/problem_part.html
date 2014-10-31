@@ -4,10 +4,8 @@
 
     <section id="problem" style="padding-bottom:7px;">
       <h3><a ui-sref="set({course: course, set_id: set_id})">{{set_id}}</a> <a ui-sref="problem({course: course, set_id: set_id, problem_id: problem_id})">Problem {{problem_id}}</a> Part {{part_id}}</h3>
+      <div id="problem" pg-file-preview pg-file="pg_path" seed="1234" show-hint-buttons="false"></div>
     </section>
-
-    <div id="problem" pg-file-preview pg-file="pg_path" seed="1234" show-hint-buttons="false"></div>
-
     <section id="hint_stac" style="padding-bottom:7px;">
       <h3>Hints Statistics</h3>
       <!--header of the table-->
@@ -53,8 +51,37 @@
       </div>
     </section>
 
-    <section id="answers_group" style="padding-bottom:7px;">
-      <h3>Answer Group</h3>
+    <h3>Filter By Function
+      <button type="button" class="btn btn-primary" ng-click="toggle_filter_function()">
+        <span class="glyphicon" ng-class="{'glyphicon-expand': showFilterFunction, 'glyphicon-collapse-down': !showFilterFunction}"></span>
+        Toggle
+      </button>
+    </h3>
+    <section id="filter_function" collapse="!showFilterFunction">
+      <div ng-model="filter_function" ui-codemirror="" ui-codemirror-opts="editorOptions"></div>
+      <button type="button" class="btn" ng-click="run_filter()">Run Filter</button>
+      <div id="filter_output">
+        <h4>Filter Output</h4>
+        <pre class="pre-scrollable">{{filter_output}}</pre>
+      </div>
+      <div id="filtered_list">
+        <h4>Matching Answers</h4>
+        <div class="row" ng-repeat="match in filtered_list">
+          <div class="col-md-2">{{match.user_id}}</div>
+          <div class="col-md-4">{{match.answer_string}}</div>
+        </div>
+      </div>
+    </section>
+
+
+    <h3>Group By Answer Terms
+      <button type="button" class="btn btn-primary" ng-click="toggle_groups()">
+        <span class="glyphicon" ng-class="{'glyphicon-expand': !showGroups, 'glyphicon-collapse-down': showGroups}"></span>
+        Toggle
+      </button>
+    </h3>
+
+    <section id="answers_group" style="padding-bottom:7px;" collapse="!showGroups">
       <div class="row" id="correct_terms_row">
         <button type="button" class="btn btn-default" ng-class="{'btn-default': !term_selected(term), 'btn-primary': term_selected(term)}" style="margin-right: 1em" ng-repeat="term in correct_terms" ng-click="toggle_term(term)">{{term}}</button>
       </div>
@@ -160,7 +187,8 @@
       <h3>Navigation</h3>
       <ul class="nav nav-stacked nav-pills bs-sidenav" >
         <li><a href="#problem" ng-click="scrollTo($event)">Problem</a></li>
-        <li><a href="#answers_group" ng-click="scrollTo($event)">Answer Group</a></li>
+        <li><a href="#filter_function" ng-click="scrollTo($event)">Filter By Function</a></li>
+        <li><a href="#answers_group" ng-click="scrollTo($event)">Group By Answer Terms</a></li>
         <li><a href="#hints" ng-click="scrollTo($event)">Hints</a></li>
       </ul>
     </div>
