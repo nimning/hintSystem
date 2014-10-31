@@ -199,8 +199,17 @@ class GroupedPartAnswers(JSONRequestHandler, tornado.web.RequestHandler):
 
 def filtered_answers(answers, correct_string, correct_tree,
                      user_vars, filter_function_string, pipe, queue):
+    import os
     import sys
     import StringIO
+    import tempfile
+    USER_ID=1009
+
+    tempdir = tempfile.mkdtemp()
+    os.chown(tempdir, USER_ID, -1)
+    os.chroot(tempdir)
+    os.setuid(USER_ID)
+
     class QueueStringIO(StringIO.StringIO):
         def __init__(self, queue, *args, **kwargs):
             StringIO.StringIO.__init__(self, *args, **kwargs)
