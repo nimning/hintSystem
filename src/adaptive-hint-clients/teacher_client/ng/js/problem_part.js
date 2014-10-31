@@ -172,7 +172,7 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
             return true;
     };
 
-    $scope.show_assigned_hints_by_student = function(student_id){
+    /*$scope.show_assigned_hints_by_student = function(student_id){
         var part_value = "AnSwEr"+("0000"+part_id).slice(-4);
         HintsService.assignedHintHistoryByStudentID(course, problem_id, set_id, student_id, part_value).
             success(function(data){
@@ -182,6 +182,18 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
                     hint.students.push(data[h].hint_id);
                 }
             }).error(function(data){console.log(data);});
+    };*/
+
+    $scope.get_student_hint_history = function(){
+        var student_hint_history = {};
+        HintsService.assignedHintHistoryByProblemPart(course, problem_id, set_id, part_value).success(function(data){
+            for (d in data) {
+                if (!student_hint_history[data[d].user_id])
+                    student_hint_history[data[d].user_id] = [];
+                student_hint_history[data[d].user_id].push(data[d]);
+            }
+        });
+        return student_hint_history;
     };
 
     WebworkService.problemPartStatus(course, set_id, problem_id, part_id).success(function(data){
@@ -204,6 +216,8 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
             var answers_data = $scope.answers_data = data;
             var completed_student_list = [];
             var struggling_student_count = {};
+            var student_hint_history = {};
+
             //push students who are attempting to the list
             for (s in answers_data) {
                 if (answers_data[s].part_id == part_id) {
@@ -249,52 +263,54 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
                 }
             }
 
-            //move students from attempting list to got hint list
-            for (s in attempting_student_list) {
-                HintsService.assignedHintHistoryByStudentID(course, problem_id, set_id, attempting_student_list[s], part_value).
-                    success(function(data){
-                        for (d in data) {
-                            //add to trying student list
-                            if (trying_student_list.indexOf(data[d].user_id) == -1)
-                                trying_student_list.push(data[d].user_id);
-                            //remove from attempting student list
-                            var index = attempting_student_list.indexOf(data[d].user_id);
-                            attempting_student_list.splice(index, 1);
-                        }
-                    });
-            }
+            HintsService.assignedHintHistoryByProblemPart(course, problem_id, set_id, part_value).success(function(data){
+                for (d in data) {
+                    if (!student_hint_history[data[d].user_id])
+                        student_hint_history[data[d].user_id] = [];
+                    student_hint_history[data[d].user_id].push(data[d]);
+                }
 
-            //move students from struggling list to got hint list
-            for (s in struggling_student_list) {
-                HintsService.assignedHintHistoryByStudentID(course, problem_id, set_id, struggling_student_list[s], part_value).
-                    success(function(data){
-                        for (d in data) {
-                            //add to trying student list
-                            if (trying_student_list.indexOf(data[d].user_id) == -1)
-                                trying_student_list.push(data[d].user_id);
-                            // remove from struggling student list
-                            var index = struggling_student_list.indexOf(data[d].user_id);
-                            struggling_student_list.splice(index, 1);
-                        }
-                    });
-            }
+                //move students from attempting list to got hint list
+                angular.forEach(attempting_student_list, function(student) {
+                    var data = student_hint_history[student];
+                    for (d in data) {
+                        //add to trying student list
+                        if (trying_student_list.indexOf(data[d].user_id) == -1)
+                            trying_student_list.push(data[d].user_id);
+                        //remove from attempting student list
+                        var index = attempting_student_list.indexOf(data[d].user_id);
+                        attempting_student_list.splice(index, 1);
+                    }
+                });
 
-            //push to success student list
-            for (c in completed_student_list) {
-                HintsService.assignedHintHistoryByStudentID(course, problem_id, set_id, completed_student_list[c], part_value).
-                    success(function(data){
-                    if (data.length != 0 && success_student_list.indexOf(completed_student_list[c]) == -1)
-                        success_student_list.push(completed_student_list[c]);
-                    var index = trying_student_list.indexOf(completed_student_list[c]);
+                //move students from struggling list to got hint list
+                angular.forEach(struggling_student_list, function(student) {
+                    var data = student_hint_history[student];
+                    for (d in data) {
+                        //add to trying student list
+                        if (trying_student_list.indexOf(data[d].user_id) == -1)
+                            trying_student_list.push(data[d].user_id);
+                        // remove from struggling student list
+                        var index = struggling_student_list.indexOf(data[d].user_id);
+                        struggling_student_list.splice(index, 1);
+                    }
+                });
+
+                //push to success student list
+                angular.forEach(completed_student_list, function(student) {
+                    if (student_hint_history[student] && success_student_list.indexOf(student) == -1)
+                        success_student_list.push(student);
+                    var index = trying_student_list.indexOf(student);
                     if (index != -1)
                         trying_student_list.splice(index,1);
                 });
-            }
 
-            $scope.attempting_student_list = attempting_student_list;
-            $scope.struggling_student_list = struggling_student_list;
-            $scope.trying_student_list = trying_student_list;
-            $scope.success_student_list = success_student_list;
+                console.log(student_hint_history);
+                $scope.attempting_student_list = attempting_student_list;
+                $scope.struggling_student_list = struggling_student_list;
+                $scope.trying_student_list = trying_student_list;
+                $scope.success_student_list = success_student_list;
+            });
         });
     }
 
