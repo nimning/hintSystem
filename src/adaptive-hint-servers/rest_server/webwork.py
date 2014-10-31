@@ -9,7 +9,7 @@ import tornado.web
 import simplejson as json
 from datetime import datetime
 from dateutil.tz import tzlocal
-
+from auth import require_auth
 tz = tzlocal()
 
 import logging
@@ -252,6 +252,7 @@ class SetIds(ProcessQuery):
 
 # GET /sets?
 class Sets(ProcessQuery):
+    @require_auth()
     def get(self):
         '''
             List sets.
@@ -307,10 +308,8 @@ class Problems(JSONRequestHandler, tornado.web.RequestHandler):
         ORDER BY problem_id ASC;
         '''.format(course)
         hints = conn.query(hints_query, set_id)
-        logger.debug(hints)
         for i in range(len(result)):
             result[i]['hint_count'] = hints[i]['hint_count']
-        logger.debug(result)
         self.write(json.dumps(result))
 
 # GET /export_problem_data?
@@ -417,7 +416,6 @@ class ProblemStatus(ProcessQuery):
         '''.format(course=course, set_id=set_id, problem_id=problem_id)
         result = conn.query(status_query)
         out = result[0]
-        logger.debug(out)
         self.write(json.dumps(out))
 
 # GET /problem_part_status?
