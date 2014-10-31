@@ -227,7 +227,8 @@ def filtered_answers(answers, correct_string, correct_tree,
             if ret:
                 selected_answers.append({'user_id': user_id, 'answer_string': a['string']})
     except Exception, e:
-        logger.error("%s", e)
+        logger.error("Error in filter function: %s", e)
+        print e
     pipe.send(selected_answers)
     out.flush()
     return
