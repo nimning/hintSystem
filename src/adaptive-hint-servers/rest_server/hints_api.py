@@ -241,24 +241,24 @@ class AssignedHintHistoryByHintID(ProcessQuery):
 
 
 
-class AssignedHintHistoryByStudentID(ProcessQuery):
-    """ /assigned_hint_history_by_student_id """
+class AssignedHintHistoryByProblemPart(ProcessQuery):
+    """ /assigned_hint_history_by_problem_part """
 
     def get(self):
         '''
             Sample arguments:
             course="CompoundProblems",
             problem_id = 1,
-            student_id=zzhai
+            set_id = Week1,
+            pg_id=AnSwEr0001
             '''
         query = '''
             select problem_id, set_id, pg_id, user_id, hint_id
             from {course}_assigned_hint
             where
-                user_id='{user_id}' and problem_id = '{problem_id}' and set_id='{set_id}' and pg_id='{pg_id}';'''.format(
+                problem_id = '{problem_id}' and set_id='{set_id}' and pg_id='{pg_id}';'''.format(
                     course=self.get_argument('course'), problem_id=self.get_argument('problem_id'),
-                    set_id=self.get_argument('set_id'), user_id=self.get_argument('user_id'),
-                    pg_id=self.get_argument('pg_id'))
+                    set_id=self.get_argument('set_id'), pg_id=self.get_argument('pg_id'))
         rows = conn.query(query)
         self.write(json.dumps(rows, default=serialize_datetime))
 

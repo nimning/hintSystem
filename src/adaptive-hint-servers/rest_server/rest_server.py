@@ -12,7 +12,7 @@ from webwork import (ProblemSeed, ProblemPGPath, ProblemPGFile,
 from hints_api import (UserProblemHints, Hint, AssignedHint,
                        ProblemHints, HintFeedback, RunHintFilters,
                        HintFilter, AssignedHintFilter,
-                       AssignedHintHistoryByHintID, AssignedHintHistoryByStudentID, AssignedHintHistoryofProblem)
+                       AssignedHintHistoryByHintID, AssignedHintHistoryByProblemPart, AssignedHintHistoryofProblem)
 
 from auth import (Login)
 from parsers import ParseString, GroupedPartAnswers, FilterAnswers
@@ -32,7 +32,7 @@ application = tornado.web.Application([
     (r"/hint", Hint),
     (r"/assigned_hint", AssignedHint),
     (r"/assigned_hint_history_by_hint_id", AssignedHintHistoryByHintID),
-    (r"/assigned_hint_history_by_student_id", AssignedHintHistoryByStudentID),
+    (r"/assigned_hint_history_by_problem_part", AssignedHintHistoryByProblemPart),
     (r"/assigned_hint_history_of_problem", AssignedHintHistoryofProblem),
     (r"/realtime_user_problem_answers", RealtimeUserProblemAnswers),
     (r"/problem_hints", ProblemHints),
@@ -52,7 +52,7 @@ application = tornado.web.Application([
     (r"/problem_part_status", ProblemPartStatus),
     (r"/export_problem_data", ExportProblemData),
     (r"/filter_answers", FilterAnswers)
-    ], gzip=True)
+    ], gzip=True, debug=True)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
