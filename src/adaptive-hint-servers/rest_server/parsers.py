@@ -320,7 +320,7 @@ class FilterAnswers(JSONRequestHandler, tornado.web.RequestHandler):
         queue = Queue()
         p = Process(target=filtered_answers, args=(student_answers, self.part_answer, self.answer_tree, self.variables_df, filter_function, child, queue))
         p.start()
-        p.join(timeout=1)
+        p.join(timeout=5)
 
         logger.debug('Done waiting')
         if p.is_alive():
