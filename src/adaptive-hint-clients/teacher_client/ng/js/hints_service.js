@@ -8,7 +8,7 @@ App.factory('HintsService', function($http, $window, $rootScope, $location, $q,
             // TODO Need to use PSVN here as well
             var deferred = $q.defer();
             WebworkService.render(hint.pg_header+'\n'+hint.pg_text+'\n'+hint.pg_footer, seed).success(function (data){
-	            var err = data.error_msg;
+              var err = data.error_msg;
 	            // Clean up
 	            var clean_html = data.rendered_html.replace(/[\s\S]*?<div/m, '<div').trim();
 	            // Rename answer box
@@ -76,10 +76,10 @@ App.factory('HintsService', function($http, $window, $rootScope, $location, $q,
                 .get('http://'+APIHost+':4351/assigned_hint_history_by_hint_id',
                      {params: {course: course, hint_id: hint_id}});
         },
-        assignedHintHistoryByStudentID: function(course, problem_id, set_id, user_id, pg_id){
+        assignedHintHistoryByProblemPart: function(course, problem_id, set_id, pg_id){
             return $http
-                .get('http://'+APIHost+':4351/assigned_hint_history_by_student_id',
-                     {params: {course: course, problem_id: problem_id, set_id:set_id, user_id: user_id, pg_id: pg_id}});
+                .get('http://'+APIHost+':4351/assigned_hint_history_by_problem_part',
+                     {params: {course: course, problem_id: problem_id, set_id:set_id, pg_id: pg_id}});
         },
         assignedHintHistoryOfProblem: function(course, set_id, problem_id){
             return $http
