@@ -2,6 +2,7 @@ import json
 import tornado.web
 import logging
 import jwt
+from webwork_config import jwt_key
 logger = logging.getLogger(__name__)
 
 class JSONRequestHandler(object):
@@ -26,3 +27,12 @@ class JSONRequestHandler(object):
                 logger.warn("Failed to parse JSON")
                 message = 'Unable to parse JSON.'
                 # self.send_error(400, message=message) # Bad Request
+        if 'Authorization' in self.request.headers:
+            auth_header = self.request.headers['Authorization']
+            # Authorization header takes the form 'Bearer JWT_TOKEN'
+            try:
+                token = auth_header.split()[1]
+                data = jwt.decode(token, jwt_key)
+                self.auth_data = data
+            except jwt.DecodeError:
+                logger.error("Invalid authorization header in request")
