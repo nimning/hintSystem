@@ -97,7 +97,8 @@ if __name__ == '__main__':
                             Column('problem_id', Integer, nullable=False, index=True),
                             Column('user_id', String(255), nullable=False, index=True),
                             Column('name', String(255), nullable=False, index=True),
-                            Column('value', String(1024), nullable=False)
+                            Column('value', Float, nullable=False),
+                            Column('string', String(1024), nullable=False)
     )
 
     answers_table.create(engine, checkfirst=True)
@@ -114,23 +115,24 @@ if __name__ == '__main__':
                                       format(course=args.course, set_id=args.set_id), engine)
     # print problem_users
     ans_by_part={
-                 'set_id': [],
-                 'problem_id':[],
-                 'part_id':[],
-                 'user_id':[],
-                 'answer':[]
-             }
+        'set_id': [],
+        'problem_id':[],
+        'part_id':[],
+        'user_id':[],
+        'answer':[]
+    }
     variable_arrs = {
-                 'set_id': [],
-                 'problem_id':[],
-                 'user_id':[],
-                 'name':[],
-                 'value':[]
+        'set_id': [],
+        'problem_id':[],
+        'user_id':[],
+        'name':[],
+        'value':[],
+        'string': []
     }
     for idx, problem in problems.iterrows():
         print "Problem!"
         print problem
-        
+
         problem_users = problem_users_df[(problem_users_df['problem_id']==problem.problem_id) & (problem_users_df['set_id']==problem.set_id)]
         full_path = os.path.join(args.base_dir, args.course, 'templates', problem.source_file)
         all_answers = get_all_answers(full_path, problem_users)
@@ -149,6 +151,7 @@ if __name__ == '__main__':
                 variable_arrs['user_id'].append(user_id)
                 variable_arrs['name'].append(var_name)
                 variable_arrs['value'].append(var_val)
+                variable_arrs['string'].append(var_val)
 
     ans_DF = pd.DataFrame(ans_by_part)
     var_DF = pd.DataFrame(variable_arrs)
