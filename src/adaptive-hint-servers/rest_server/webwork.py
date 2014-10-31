@@ -252,7 +252,6 @@ class SetIds(ProcessQuery):
 
 # GET /sets?
 class Sets(ProcessQuery):
-    @require_auth()
     def get(self):
         '''
             List sets.
