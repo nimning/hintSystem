@@ -13,7 +13,8 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
     var part_value = "AnSwEr"+("0000"+part_id).slice(-4);
     $scope.hint_id = -1;
     $scope.input_id = null;
-
+    $scope.showFilterFunction = true;
+    $scope.showGroups = true;
     $scope.hints = [];
     angular.forEach(hints, function(value, key){
         $scope.hints.push(value);
@@ -339,4 +340,13 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
                 console.error(error);
             });
     };
+
+    $scope.toggle_filter_function = function(event){
+        $scope.showFilterFunction = ! $scope.showFilterFunction;
+    };
+
+    $scope.toggle_groups = function(event){
+        $scope.showGroups = ! $scope.showGroups;
+    };
+
 });
