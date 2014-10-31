@@ -301,4 +301,14 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
     generate_hint_table();
     $interval(function(){generate_hint_table();}, 10000);
 
+    $scope.editorOptions = {
+        lineWrapping : true,
+        lineNumbers: true,
+        mode: 'python',
+	    styleActiveLine: true,
+	    matchBrackets: true
+    };
+
+    $scope.filter_function = "def answer_filter(answer_string, parse_tree, eval_tree, correct_string, correct_tree, correct_eval, user_vars):\n  ";
+
 });
