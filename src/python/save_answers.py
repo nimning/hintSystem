@@ -31,26 +31,28 @@ server = xmlrpclib.ServerProxy(url)
 part_re = re.compile('AnSwEr(\d{4})')
 variables_re = re.compile('(\$\w+)\s*=')
 box_re = re.compile('\[_+\]')
+ans_re = re.compile('ANS\(.+\);')
 ignored_variables = set(['$showPartialCorrectAnswers', '$isProfessor'])
 def get_all_answers(problem_file, problem_users):
     print "Users: ", len(problem_users)
     with open(problem_file, 'r') as f:
         pg_text = f.read()
-    box_count = len(box_re.findall(pg_text))
+    box_count = len(box_re.findall(pg_text)) + len(ans_re.findall(pg_text))
     print "Boxes", box_count
     variables = variables_re.findall(pg_text)
     var_names = []
     var_boxes = []
     for var in variables:
-        if var not in ignored_variables:
+        if var not in ignored_variables and var not in var_names:
             var_names.append(var)
             var_boxes.append('[____]{{{0}}}'.format(var))
     print var_names
-    file_parts = pg_text.rsplit('END_PGML', 1)
+    file_parts = pg_text.rsplit('END_PGML\n', 1)
 
-    file_parts.insert(1, 'END_PGML')
+    file_parts.insert(1, 'END_PGML\n')
     file_parts[1:1] = var_boxes # Add answer boxes for variable values
     new_text = '\n'.join(file_parts)
+    print new_text
     # print problem_users
     all_answers = {user.user_id: get_answers(new_text, problem_file, user.problem_seed, user.psvn, box_count, var_names) for (idx, user) in problem_users.iterrows()}
     return all_answers
@@ -60,7 +62,12 @@ def get_answers(problem_text, filename, seed, psvn, part_count, var_names):
             {'fileName': filename, 'problemSeed': int(seed), 'displayMode':'images', 'psvn': psvn},
             'source': base64.b64encode(problem_text),
             'userID': user, 'password': password, 'courseID': course}
-    res=server.WebworkXMLRPC.renderProblem(args)
+    res = None
+    while not res:
+        try:
+            res=server.WebworkXMLRPC.renderProblem(args)
+        except:
+            continue
     part_answers = {}
     variables = {}
     for key, value in res['answers'].iteritems():
@@ -69,7 +76,10 @@ def get_answers(problem_text, filename, seed, psvn, part_count, var_names):
         if part_id <= part_count:
             part_answers[part_id] = value['correct_ans']
         else:
-            variables[var_names[part_id-part_count-1]] = value['correct_ans']
+            try:
+                variables[var_names[part_id-part_count-1]] = value['correct_ans']
+            except:
+                print "Could not find variable"
     print '.',
     return part_answers, variables
 
