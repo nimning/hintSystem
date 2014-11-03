@@ -58,8 +58,18 @@
       </button>
     </h3>
     <section id="filter_function" collapse="!showFilterFunction">
-      <div ng-model="filter_function" ui-codemirror="" ui-codemirror-opts="editorOptions"></div>
-      <button type="button" class="btn" ng-click="run_filter()">Run Filter</button>
+      <form class="form-inline">
+        <div class="form-group">
+          <label for="filter_function_name">Name</label>
+          <input type="text" id="filter_function_name" ng-model="filter_function_name" size="50"></input>
+          <button type="button" class="btn btn-primary" ng-click="load_filter()"><span class="glyphicon glyphicon-folder-open"></span> Load Filter</button>
+        </div>
+        <div ng-model="filter_function" ui-codemirror="" ui-codemirror-opts="editorOptions"></div>
+        <div class="row">
+          <button type="button" class="btn btn-success" ng-click="run_filter()"><span class="glyphicon glyphicon-play"></span> Run Filter</button>
+          <button type="button" class="btn btn-primary" ng-click="save_filter()"><span class="glyphicon glyphicon-floppy-disk"></span> Save</button>
+        </div>
+      </form>
       <div id="filter_output">
         <h4>Filter Output</h4>
         <pre class="pre-scrollable">{{filter_output}}</pre>

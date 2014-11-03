@@ -349,4 +349,9 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
         $scope.showGroups = ! $scope.showGroups;
     };
 
+    $scope.save_filter = function(event){
+        HintsService.createFilterFunction(
+            $scope.filter_function_name, course, Session.user_id, $scope.filter_function,
+            set_id, problem_id);
+    };
 });
