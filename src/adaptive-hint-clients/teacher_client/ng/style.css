@@ -104,3 +104,7 @@ td.nostretch {
 .part_button hr{
     margin: 0px;
 }
+
+.filter-select-match{
+    min-width: 30em;
+}

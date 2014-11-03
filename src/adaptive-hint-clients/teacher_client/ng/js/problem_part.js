@@ -326,12 +326,15 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
 	    matchBrackets: true
     };
 
-    $scope.filter_function = "def answer_filter(answer_string, parse_tree, eval_tree, correct_string, correct_tree, correct_eval, user_vars):\n  print answer_string\n  return True";
+    $scope.filter_function = {
+        code: "def answer_filter(answer_string, parse_tree, eval_tree, correct_string, correct_tree, correct_eval, user_vars):\n  print answer_string\n  return True",
+        author: Session.user_id,
+        course: course
+    };
 
     $scope.run_filter = function(){
-        console.info($scope.filter_function);
         WebworkService.filterAnswers(course, set_id, problem_id, part_id,
-                                     $scope.filter_function).
+                                     $scope.filter_function.code).
             success(function(response){
                 console.log(response);
                 $scope.filtered_list = response.matches;
@@ -349,9 +352,36 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
         $scope.showGroups = ! $scope.showGroups;
     };
 
+    var loadfilters = function(){
+        HintsService.getFilterFunctions().success(function(funcs){
+            $scope.filter_functions = funcs;
+        });
+    };
+    loadfilters();
+
     $scope.save_filter = function(event){
-        HintsService.createFilterFunction(
-            $scope.filter_function_name, course, Session.user_id, $scope.filter_function,
-            set_id, problem_id);
+        var ff = $scope.filter_function;
+        console.log(ff);
+        if(!ff.id){
+            HintsService.createFilterFunction(
+                ff.name, ff.course, ff.author, ff.code,
+                ff.set_id, ff.problem_id).success(function(){
+                    loadfilters();
+                });
+
+        }else{
+            console.log(ff.id);
+            HintsService.updateFilterFunction(
+                ff.id, ff.code).success(function(){
+                    loadfilters();
+                });
+        }
+    };
+
+    $scope.load_filter = function(){
+        HintsService.getFilterFunctions({name: $scope.filter_function.name}).
+            success(function(data){
+                $scope.filter_function = data[0];
+            });
     };
 });
