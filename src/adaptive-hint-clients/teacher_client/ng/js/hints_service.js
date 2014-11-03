@@ -91,7 +91,19 @@ App.factory('HintsService', function($http, $window, $rootScope, $location, $q,
                 .post(BASE_URL+'/filter_functions',
                       {name: name, course: course, author: author, code: code, set_id: set_id,
                        problem_id: problem_id});
+        },
+        updateFilterFunction: function(id, code){
+            return $http
+                .put(BASE_URL+'/filter_functions',
+                     {id: String(id), code: code});
+        },
+
+        getFilterFunctions: function(args){
+            return $http
+                .get(BASE_URL+'/filter_functions',
+                     {params: args});
         }
+
     };
     return factory;
 });
