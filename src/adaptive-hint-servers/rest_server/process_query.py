@@ -17,6 +17,18 @@ conn = Connection('localhost',
                   password=mysql_password)
 
 class ProcessQuery(JSONRequestHandler, tornado.web.RequestHandler):
+    def where_clause(self, **kwargs):
+        ''' Utilitiy function for generating WHERE clauses of SQL queries '''
+        if len(kwargs) == 0:
+            return '';
+        clauses = ['{column} = "{value}"'.format(column=k, value=v) for k, v in kwargs.iteritems()]
+        return 'WHERE ' + ' AND '.join(clauses)
+
+    def filtered_arguments(self, *args_allowed):
+        ''' Utility method for filtering arguments passed to a request. '''
+        args = self.request.arguments
+        return { k: args[k][-1] for k in args_allowed if k in args}
+
     def set_default_headers(self):
         # Allows X-site requests
         self.set_header("Access-Control-Allow-Origin", "*")

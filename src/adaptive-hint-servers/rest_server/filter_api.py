@@ -42,15 +42,18 @@ class FilterFunctions(ProcessQuery):
                 ...
             ]
         '''
-        query_template = '''
-            select * from filter_functions
-            where filter_functions.id = {{id}};'''
-        self.process_query(query_template)
+
+        allowed_args = self.filtered_arguments('id', 'set_id', 'problem_id', 'name', 'author')
+        where = self.where_clause(**allowed_args)
+        query = '''select * from filter_functions {WHERE};'''.format(WHERE=where)
+        logger.debug(query)
+        rows = conn.query(query)
+        self.write(json.dumps(rows, default=serialize_datetime))
 
     def post(self):
         ''' For creating filter functions. '''
         course = self.get_argument('course')
-        set_id = self.get_argument('course', 'GenericFilterFunctions')
+        set_id = self.get_argument('set_id', 'GenericFilterFunctions')
         problem_id = self.get_argument('problem_id', 1)
         author = self.get_argument('author')
         name = self.get_argument('name')
