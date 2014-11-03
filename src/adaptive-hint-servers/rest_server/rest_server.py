@@ -13,6 +13,7 @@ from hints_api import (UserProblemHints, Hint, AssignedHint,
                        ProblemHints, HintFeedback, RunHintFilters,
                        HintFilter, AssignedHintFilter,
                        AssignedHintHistoryByHintID, AssignedHintHistoryByProblemPart, AssignedHintHistoryofProblem)
+from filter_api import FilterFunctions
 
 from auth import (Login)
 from parsers import ParseString, GroupedPartAnswers, FilterAnswers
@@ -51,7 +52,8 @@ application = tornado.web.Application([
     (r"/problem_status", ProblemStatus),
     (r"/problem_part_status", ProblemPartStatus),
     (r"/export_problem_data", ExportProblemData),
-    (r"/filter_answers", FilterAnswers)
+    (r"/filter_answers", FilterAnswers),
+    (r"/filter_functions", FilterFunctions)
     ], gzip=True)
 
 if __name__ == "__main__":
