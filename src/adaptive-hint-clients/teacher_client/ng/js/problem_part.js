@@ -105,8 +105,24 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
     });
 
     WebworkService.problemPGFile(course, set_id, problem_id).success(function(data){
-        $scope.pg_file = JSON.parse(data);
+        var pg_file = JSON.parse(data);
+        var expr = /\[(\$.)\]/g;
+        var match = expr.exec(pg_file);
+        var new_pg_file = pg_file;
+        var added_index = 0;
+        while (match) {
+            var i = match.index+match[0].length+added_index;
+            var s = ['\\[',match[1],'\\]'].join('');
+            new_pg_file = [new_pg_file.slice(0,i),s,new_pg_file.slice(i)].join('');
+            added_index = added_index+match[0].length+2;
+            match = expr.exec(pg_file);
+        }
+
+        $scope.pg_file = new_pg_file;
         $scope.answer_expression = WebworkService.partSolution($scope.pg_file, part_id);
+        WebworkService.checkAnswer($scope.pg_file, 1234, {AnSwEr1:1}).success(function(answer){
+            $scope.answer_value = answer[part_value].correct_value;
+        });
         var hf = WebworkService.extractHeaderFooter($scope.pg_file);
         $scope.pg_header = hf.pg_header;
         $scope.pg_footer = hf.pg_footer;
@@ -124,6 +140,8 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
     });
 
     $scope.match_hint_id = function(id){
+        if (id == null)
+            return;
         var all_hints = $scope.hints;
         for (var i=0; i<all_hints.length; i++){
             if (all_hints[i].hint_id == id){
