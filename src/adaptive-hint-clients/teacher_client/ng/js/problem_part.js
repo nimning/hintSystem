@@ -13,7 +13,8 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
     var part_value = "AnSwEr"+("0000"+part_id).slice(-4);
     $scope.hint_id = -1;
     $scope.input_id = null;
-
+    $scope.showFilterFunction = true;
+    $scope.showGroups = true;
     $scope.hints = [];
     angular.forEach(hints, function(value, key){
         $scope.hints.push(value);
@@ -317,4 +318,40 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
     generate_hint_table();
     $interval(function(){generate_hint_table();}, 10000);
 
+    $scope.editorOptions = {
+        lineWrapping : true,
+        lineNumbers: true,
+        mode: 'python',
+	    styleActiveLine: true,
+	    matchBrackets: true
+    };
+
+    $scope.filter_function = "def answer_filter(answer_string, parse_tree, eval_tree, correct_string, correct_tree, correct_eval, user_vars):\n  print answer_string\n  return True";
+
+    $scope.run_filter = function(){
+        console.info($scope.filter_function);
+        WebworkService.filterAnswers(course, set_id, problem_id, part_id,
+                                     $scope.filter_function).
+            success(function(response){
+                console.log(response);
+                $scope.filtered_list = response.matches;
+                $scope.filter_output = response.output;
+            }).error(function(error){
+                console.error(error);
+            });
+    };
+
+    $scope.toggle_filter_function = function(event){
+        $scope.showFilterFunction = ! $scope.showFilterFunction;
+    };
+
+    $scope.toggle_groups = function(event){
+        $scope.showGroups = ! $scope.showGroups;
+    };
+
+    $scope.save_filter = function(event){
+        HintsService.createFilterFunction(
+            $scope.filter_function_name, course, Session.user_id, $scope.filter_function,
+            set_id, problem_id);
+    };
 });
