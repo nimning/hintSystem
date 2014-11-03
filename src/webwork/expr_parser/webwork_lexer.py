@@ -22,7 +22,7 @@ class WebworkLexer(object):
     t_LSET      = r'\{'
     t_RSET      = r'\}'
     t_COMMA     = r'\,'
-    t_VARIABLE  = r'\$?[A-BD-Za-z]+[0-9]*'
+    t_VARIABLE  = r'\$?[A-BD-Za-z_]+[0-9]*'
 
     def t_NUMBER(self, t):
         r'\d*\.?\d+(E(\+|\-)?\d+)?'
