@@ -80,7 +80,7 @@ if __name__ == "__main__":
         (r"/export_problem_data", ExportProblemData),
         (r"/filter_answers", FilterAnswers),
         (r"/filter_functions", FilterFunctions)
-    ], gzip=True, debug=args.debug)
+    ], gzip=True, debug=True)
 
     application.listen(args.port, address=BIND_IP)
     logging.info(" [*] Listening on %s:%d"%(BIND_IP,args.port))
