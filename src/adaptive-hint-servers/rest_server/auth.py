@@ -60,12 +60,10 @@ class Login(JSONRequestHandler, tornado.web.RequestHandler):
 def require_auth(min_permission=5):
     def require_auth_decorator(func):
         def func_wrapper(self, *args, **kwargs):
-            logger.debug('Inside decorator')
             if not self.auth_data:
                 raise tornado.web.HTTPError(401) # Unauthenticated
             elif self.auth_data['permission'] < min_permission:
                 raise tornado.web.HTTPError(403) # Insufficient privileges
-            logger.debug(self.auth_data)
             return func(self, *args, **kwargs)
         return func_wrapper
     return require_auth_decorator

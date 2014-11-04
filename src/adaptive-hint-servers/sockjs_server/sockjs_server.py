@@ -13,6 +13,7 @@ import argparse
 from hint_rest_api import HintRestAPI
 from student_handler import StudentSockJSHandler
 from teacher_handler import TeacherSockJSHandler
+from daemon_handler import DaemonSockJSHandler
 
 # Server Configurations 
 BIND_IP = '0.0.0.0'
@@ -32,6 +33,9 @@ if __name__ == "__main__":
                         type=int,
                         default=DEFAULT_REST_PORT,
                         help="port of the ReST server")
+    parser.add_argument("--debug",
+                        action='store_true',
+                        help="whether to enable debug mode")
 
     args = parser.parse_args()
 
@@ -57,10 +61,12 @@ if __name__ == "__main__":
                                                 '/student')
     TeacherRouter = sockjs.tornado.SockJSRouter(TeacherSockJSHandler,
                                                 '/teacher')
+    DaemonRouter = sockjs.tornado.SockJSRouter(DaemonSockJSHandler,
+                                               '/daemon')
 
     # Create Tornado application
     app = tornado.web.Application(StudentRouter.urls +
-                                  TeacherRouter.urls)
+                                  TeacherRouter.urls + DaemonRouter.urls, debug=args.debug)
 
     # Make Tornado app listen on the specific port
     app.listen(args.port, address=BIND_IP)
