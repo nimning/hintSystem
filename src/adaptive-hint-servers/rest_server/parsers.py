@@ -128,7 +128,7 @@ class GroupedPartAnswers(JSONRequestHandler, tornado.web.RequestHandler):
         set_id = self.get_argument('set_id')
         problem_id = self.get_argument('problem_id')
         part_id = int(self.get_argument('part_id'))
-        include_finished = (int(self.get_argument('include_finished', 0)) == 1)
+        include_finished = (int(self.get_argument('include_finished', 1)) == 1)
 
         source_file = conn.query('''
             select source_file from {course}_problem
