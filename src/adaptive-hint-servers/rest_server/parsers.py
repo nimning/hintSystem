@@ -278,7 +278,7 @@ class FilterAnswers(JSONRequestHandler, tornado.web.RequestHandler):
         set_id = self.get_argument('set_id')
         problem_id = self.get_argument('problem_id')
         part_id = int(self.get_argument('part_id'))
-        include_finished = (int(self.get_argument('include_finished', 0)) == 1)
+        include_finished = (int(self.get_argument('include_finished', 1)) == 1)
         filter_function = self.get_argument('filter_function')
 
         pg_file = get_source(course, set_id, problem_id)
