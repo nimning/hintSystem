@@ -19,6 +19,10 @@ import re
 from IPython import embed
 import logging
 import time
+from websocket import create_connection
+import json
+
+ws = create_connection("ws://localhost:4350/daemon/websocket")
 
 from sqlalchemy.orm import sessionmaker
 db = 'webwork'
@@ -99,6 +103,15 @@ class PastAnswerConverter(object):
                                 ans_by_part['set_id'].append(row['set_id'])
                                 ans_by_part['part_id'].append(part+1)
                                 ans_by_part['timestamp'].append(row['timestamp'])
+                                if not ws.connected:
+                                    ws = create_connection("ws://localhost:4350/daemon/websocket")
+                                ws.send(json.dumps({'type':'student_answer', 'arguments': {
+                                    'user_id': row['user_id'],
+                                    'set_id': row['set_id'],
+                                    'problem_id': row['problem_id'],
+                                    'part_id': part+1,
+                                    'answer_string': answers[part]
+                                }}))
                     prev_answers=answers
         # It is actually a bit overkill to use a DataFrame when this loop runs
         # so often, but it's a quick and easy way to write SQL to a table
