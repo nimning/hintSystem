@@ -106,8 +106,10 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
 
     WebworkService.problemPGFile(course, set_id, problem_id).success(function(data){
         var pg_file = JSON.parse(data);
-        var expr = /\[(\$.)\]/g;
+        /*console.log(pg_file);
+        var expr = /BEGIN_PGML\[(\$.)\](.+)(END_PGML)/g;
         var match = expr.exec(pg_file);
+        console.log(match);
         var new_pg_file = pg_file;
         var added_index = 0;
         while (match) {
@@ -117,8 +119,8 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
             added_index = added_index+match[0].length+2;
             match = expr.exec(pg_file);
         }
-
-        $scope.pg_file = new_pg_file;
+        */
+        $scope.pg_file = pg_file;
         $scope.answer_expression = WebworkService.partSolution($scope.pg_file, part_id);
         WebworkService.checkAnswer($scope.pg_file, 1234, {AnSwEr1:1}).success(function(answer){
             $scope.answer_value = answer[part_value].correct_value;
