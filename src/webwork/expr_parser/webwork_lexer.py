@@ -4,10 +4,11 @@ import webwork_parser
 
 class WebworkLexer(object):
     tokens = (
-    'CHOOSE', 'VARIABLE', 'NUMBER', 'PLUS','MINUS','TIMES','DIVIDE', 'LPAREN','RPAREN','FACTORIAL', 'LSET', 'RSET','COMMA','EXP', 'LBRACKET', 'RBRACKET'
+    'Q', 'CHOOSE', 'VARIABLE', 'NUMBER', 'PLUS','MINUS','TIMES','DIVIDE', 'LPAREN','RPAREN','FACTORIAL', 'LSET', 'RSET','COMMA','EXP', 'LBRACKET', 'RBRACKET'
     )
 
     # Tokens
+    t_Q         = r'Q'
     t_CHOOSE    = r'C'
     t_PLUS      = r'\+'
     t_MINUS     = r'-'
@@ -22,7 +23,7 @@ class WebworkLexer(object):
     t_LSET      = r'\{'
     t_RSET      = r'\}'
     t_COMMA     = r'\,'
-    t_VARIABLE  = r'\$?[A-BD-Za-z_]+[0-9]*'
+    t_VARIABLE  = r'\$?[A-BD-PR-Za-z_]+[0-9]*'
 
     def t_NUMBER(self, t):
         r'\d*\.?\d+(E(\+|\-)?\d+)?'

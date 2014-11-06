@@ -4,6 +4,7 @@ import sys
 from webwork_parser import parse_webwork, WebworkParseException, node_string
 import traceback
 import operator as op
+from scipy.stats import norm
 
 def PrintException():
     exc_type, exc_obj, tb = sys.exc_info()
@@ -67,6 +68,8 @@ def eval_parsed(e, variables = None):
                 ans=-v
             elif f=='!':
                 ans=factorial(v)
+            elif f=='Q':
+                ans= 1-norm.cdf(v)
             else:
                 raise Exception('unrecognized unary operator %s in %s'%(f,e))
             return ((f,ans,span),ev)
@@ -104,6 +107,7 @@ def Collect_numbers(etree):
     return T
 
 def collection_recursion(T,etree):
+    print "hi"
     if len(etree)==1:
         T[etree[0]]=etree   # add leaf
     if len(etree)>1:

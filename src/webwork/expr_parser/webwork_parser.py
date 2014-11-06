@@ -125,7 +125,8 @@ precedence = (
     ('left','TIMES','DIVIDE'),
     ('left','EXP'),
     ('left','FACTORIAL'),
-    ('nonassoc','CHOOSE')
+    ('nonassoc','CHOOSE'),
+    ('nonassoc','Q')
     )
 
 def p_statement_expr_list(p):
@@ -179,6 +180,11 @@ def p_expression_choose(t):
     list=flatten_list(t[3][1:])
     #print 'p_expression_choose', list
     t[0] = ('C',list[0],list[1])
+    t[0]=add_header(t)
+
+def p_expression_q(t):
+    'factor : Q LPAREN factor RPAREN %prec Q'
+    t[0] = ('Q', t[3])
     t[0]=add_header(t)
 
 def p_expression_group(t):
