@@ -107,7 +107,6 @@ def Collect_numbers(etree):
     return T
 
 def collection_recursion(T,etree):
-    print "hi"
     if len(etree)==1:
         T[etree[0]]=etree   # add leaf
     if len(etree)>1:
