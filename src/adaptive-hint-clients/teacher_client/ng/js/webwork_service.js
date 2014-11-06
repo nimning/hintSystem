@@ -113,15 +113,18 @@ App.factory('WebworkService', function($http, $window, $rootScope, $location, $q
                      part_id: part_id}});
         },
         partSolution: function(pg_file, part_id){
-            var re = /\[__+\]{(?:Compute\(")?(.+?)(?:"\))?}/g;
+            // Look for [__] followed by {} with either a Compute("")
+            // call inside or just a normal mathematical expression.
+            var re = /\[__+\]{(?:(?:Compute\(")?(.+?)(?:"\))(?:.*)?|(.+?))}/g;
             var i = 0;
             var match;
             while(i < part_id){
                 match = re.exec(pg_file);
                 i++;
             }
-            if(match && match[1]){
-                return match[1];
+            // group 1 is with Compute(""), group 2 is without
+            if(match && (match[1] || match[2])){
+                return match[1] || match[2];
             }else{
                 return '';
             }
