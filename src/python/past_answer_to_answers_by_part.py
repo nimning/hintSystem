@@ -22,7 +22,7 @@ import time
 from websocket import create_connection
 import json
 
-ws = create_connection("ws://localhost:4350/daemon/websocket")
+
 
 from sqlalchemy.orm import sessionmaker
 db = 'webwork'
@@ -37,7 +37,7 @@ class PastAnswerConverter(object):
         self.last_pa_by_user_q = "SELECT answer_string from {0}_past_answer WHERE answer_id < {1} \
     AND user_id = '{2}' AND problem_id = '{3}' AND set_id='{4}' \
     ORDER BY answer_id DESC LIMIT 1"
-
+        self.ws = create_connection("ws://localhost:4350/daemon/websocket")
     def init_database(self):
         self.answers_by_part = Table("{0}_answers_by_part".format(self.course), self.metadata,
                                      Column('id', Integer, primary_key=True),
@@ -76,6 +76,7 @@ class PastAnswerConverter(object):
         pa = pd.read_sql_query('SELECT user_id, answer_id, answer_string, scores, problem_id, set_id, timestamp from {0}_past_answer WHERE answer_id >= {1};'.format(self.course, self.start_id), engine, parse_dates={'timestamp': {'unit': 's'}})
         if len(pa) == 0:
             return
+        print len(pa)
         ans_by_part={'user_id':[], 'answer_id':[], 'answer_string':[], 'score':[],
                      'problem_id':[], 'set_id': [], 'part_id':[],'timestamp':[]}
 
@@ -103,9 +104,9 @@ class PastAnswerConverter(object):
                                 ans_by_part['set_id'].append(row['set_id'])
                                 ans_by_part['part_id'].append(part+1)
                                 ans_by_part['timestamp'].append(row['timestamp'])
-                                if not ws.connected:
-                                    ws = create_connection("ws://localhost:4350/daemon/websocket")
-                                ws.send(json.dumps({'type':'student_answer', 'arguments': {
+                                if not self.ws.connected:
+                                    self.ws = create_connection("ws://localhost:4350/daemon/websocket")
+                                self.ws.send(json.dumps({'type':'student_answer', 'arguments': {
                                     'user_id': row['user_id'],
                                     'set_id': row['set_id'],
                                     'problem_id': row['problem_id'],
@@ -130,4 +131,5 @@ if __name__ == '__main__':
     converter = PastAnswerConverter(args.course, engine)
     while True:
         converter.loop()
-        time.sleep(1)
+        time.sleep(15)
+
