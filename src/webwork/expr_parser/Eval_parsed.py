@@ -103,6 +103,8 @@ def eval_parsed(e, variables = None):
 
 def Collect_numbers(etree):
     T={}
+    if type(etree)==int:
+        return T
     collection_recursion(T,etree)
     return T
 
