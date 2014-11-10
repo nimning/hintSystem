@@ -54,13 +54,14 @@ class DaemonSockJSHandler(_BaseSockJSHandler):
             # Send the same data back, just as acknowledgement for now
             # self.send_message('echo', {'data': args})
             logger.info('Got an answer')
-            try:
-                assigned_hints = yield gen.Task(self._perform_run_filters, args['user_id'], args['course'],
-                               args['set_id'], args['problem_id'], args['part_id'], args['user_id'])
-                if assigned_hints:
-                    logger.info("Assigned hints to user %s: %s", args['user_id'], assigned_hints)
-            except Exception as e:
-                logger.warn('Exception %s', e)
+            if args['score'] != '1':
+                try:
+                    assigned_hints = yield gen.Task(self._perform_run_filters, args['user_id'], args['course'],
+                                                    args['set_id'], args['problem_id'], args['part_id'], args['user_id'])
+                    if assigned_hints:
+                        logger.info("Assigned hints to user %s: %s", args['user_id'], assigned_hints)
+                except Exception as e:
+                    logger.warn('Exception %s', e)
 
     ################################################################
     # Asynchronous Tasks                                           #

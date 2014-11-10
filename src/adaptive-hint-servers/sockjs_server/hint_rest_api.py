@@ -209,6 +209,7 @@ class HintRestAPI(object):
             hints should be assigned to this particular user/part.
             Then call a function to assign the hint to this user at the given
             box (given by course/set/problem/pg id) '''
+        logger.debug('Running filters')
         base_url = HintRestAPI._baseurl
         params = {'user_id':user_id,
                   'course':course,
@@ -218,7 +219,11 @@ class HintRestAPI(object):
                   'answer_string': answer_string
         }
         r = requests.post(base_url+'/apply_filter_functions', params=params)
+        logger.debug("Got this back from REST %s", r)
         hints = r.json()
+        logger.debug('We should assign these hints: %s', hints)
+        pg_id = 'AnSwEr{part:04d}'.format(part=part_id)
+        logger.debug(pg_id)
         # Assign hints that pass some filter
         for hint_id, pgml in hints.iteritems():
             HintRestAPI.render_html_assign_hint(user_id, course, set_id,
