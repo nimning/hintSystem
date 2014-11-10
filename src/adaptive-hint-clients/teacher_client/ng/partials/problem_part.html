@@ -167,22 +167,19 @@
             </div>
             <!--send button-->
             <div class="col-md-2" style="padding:0px;">
-              <button type="button" class="btn btn-primary" ng-click="preview_send_hint(input_id,item)" ng-disabled="!validID()">Send</button>
+              <button type="button" class="btn btn-primary" ng-click="link_hint(input_id,item)" ng-disabled="!validID()">Link</button>
             </div>
           </div>
-          <!-- row to show history hints>
+          <!-- row to show linked hint -->
           <div class = "row">
-            <div class="panel-heading">
-              <a data-toggle="collapse" data-parent="#users_list" data-target="#history_hints_collapse{{$index}}">
-                history hints>
-              </a>
+            <div class="col-md-10" id="linked_hint" style="padding-right:0px;">
+              {{linked_hint}}
             </div>
-            <div id="history_hints_collapse{{$index}}" class="panel-collapse collapse">
-              <div class="panel-body" style="border:1px solid #ccc;">
-                ID 000: history hints will be implement ASAP
-              </div>
+            <!--remove button-->
+            <div class="col-md-2" style="padding:0px; padding-top:3px;">
+              <button type="button" class="btn btn-primary" ng-click="remove_linked_hint()" ng-hide="!validLink()">X</button>
             </div>
-          </div-->
+          </div>
         </div>
       </div>
       <!--div st-pagination="" st-items-by-page="10" st-displayed-pages="10"></div-->
