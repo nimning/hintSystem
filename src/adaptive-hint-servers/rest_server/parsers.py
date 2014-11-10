@@ -231,8 +231,9 @@ def filtered_answers(answers, correct_string, correct_tree,
             logger.debug(locals()[thing])
         for a in answers:
             user_id = a['user_id']
+            student_vars = dict(user_vars[user_vars['user_id']==user_id].values.tolist())
             # This function must be defined by the exec'd code
-            ret = answer_filter(a['string'], a['parsed'], a['evaled'], correct_string, correct_tree, a['correct_eval'], user_vars[user_vars['user_id']==user_id])
+            ret = answer_filter(a['string'], a['parsed'], a['evaled'], correct_string, correct_tree, a['correct_eval'], student_vars)
             if ret:
                 selected_answers.append({'user_id': user_id, 'answer_string': a['string']})
     except Exception, e:
@@ -289,10 +290,12 @@ class FilterAnswers(JSONRequestHandler, tornado.web.RequestHandler):
         self.variables_df = pd.DataFrame(user_variables)
         if len(self.variables_df) == 0:
             logger.warn("No user variables saved for assignment %s, please run the save_answers script", set_id)
-
-        answer_re = re.compile('\[__+\]{(?:Compute\(")?(.+?)(?:"\))?}')
+        # Matches answers with Compute() and without in separate groups
+        # TODO Make this a utility function
+        answer_re = re.compile('\[__+\]{(?:(?:Compute\(")(.+?)(?:"\))(?:.*)|(.+?))}')
         answer_boxes = answer_re.findall(pg_file)
-        self.part_answer = answer_boxes[part_id-1]
+        self.part_answer = answer_boxes[part_id-1][0] or answer_boxes[part_id-1][1]
+
         self.answer_tree = parse_webwork(self.part_answer)
 
         # Get attempts by part
