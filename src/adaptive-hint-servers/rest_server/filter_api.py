@@ -159,6 +159,7 @@ class ApplyFilterFunctions(ProcessQuery):
         answer_string = self.get_argument('answer_string')
         pg_file = self.get_source()
 
+        # TODO Get all answers for this part, only run if at least 3 answers and at least 10 minutes since first answer
         # Get student's variables, parse their answer, their correct answer
         user_variables = conn.query('''SELECT * from {course}_user_variables
         WHERE set_id="{set_id}" AND problem_id = {problem_id} AND user_id = "{user_id}";

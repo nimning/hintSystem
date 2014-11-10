@@ -60,6 +60,7 @@ class DaemonSockJSHandler(_BaseSockJSHandler):
                                                     args['set_id'], args['problem_id'], args['part_id'], args['user_id'])
                     if assigned_hints:
                         logger.info("Assigned hints to user %s: %s", args['user_id'], assigned_hints)
+                        # TODO Update student session
                 except Exception as e:
                     logger.warn('Exception %s', e)
 
