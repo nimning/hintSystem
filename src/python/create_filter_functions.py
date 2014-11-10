@@ -34,10 +34,25 @@ def create_table(engine):
                              Column('dummy_hint_id', Integer, nullable=False),
                              Column('code', Text, nullable=False),
                              Column('created', DateTime, nullable=False),
-                             Column('updated', DateTime, nullable=False)
+                             Column('updated', DateTime, nullable=False),
+                             mysql_engine='InnoDB'
     )
 
     filter_functions.create(engine, checkfirst=True)
+
+    assigned_filters = Table("assigned_filters", metadata,
+                             Column('id', Integer, primary_key=True, autoincrement=True),
+                             Column('filter_function_id', Integer, ForeignKey(filter_functions.c.id), nullable=False, index=True),
+                             Column('course', String(100), nullable=False, index=True),
+                             Column('set_id', String(100), nullable=False, index=True),
+                             Column('problem_id', Integer, nullable=False, index=True),
+                             Column('part_id', Integer, nullable=False, index=True),
+                             Column('hint_id', Integer, nullable=False),
+                             Column('created', DateTime, nullable=False),
+                             Column('updated', DateTime, nullable=False),
+                             mysql_engine='InnoDB'
+    )
+    assigned_filters.create(engine, checkfirst=True)
 
 if __name__ == '__main__':
     engine = create_engine('mysql+mysqldb://{0}:{1}@localhost/{2}'.format(mysql_username, mysql_password, db), pool_recycle=3600)
