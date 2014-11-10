@@ -11,6 +11,7 @@ from operator import itemgetter
 import pandas as pd
 from datetime import datetime
 from dateutil.tz import tzlocal
+import os
 
 tz = tzlocal()
 
@@ -20,6 +21,7 @@ def serialize_datetime(obj):
         return serial
 
 logger = logging.getLogger(__name__)
+BASE = '/opt/AdaptiveHintsFilters'
 
 class FilterFunctions(ProcessQuery):
     """ /filter_functions """
@@ -29,6 +31,13 @@ class FilterFunctions(ProcessQuery):
         super(ProcessQuery, self).set_default_headers()
         self.add_header("Access-Control-Allow-Methods", "PUT,DELETE")
 
+    def filter_path(self, id):
+        ''' Helper method for generating file path to put filter functions. '''
+        args = self.filtered_arguments('course', 'set_id', 'problem_id', 'name').values() + [id]
+        logger.debug(args)
+        path = os.path.join(BASE, *args)
+        logger.debug(path)
+        
     def get(self):
         ''' For loading filter functions
 
@@ -43,7 +52,7 @@ class FilterFunctions(ProcessQuery):
             ]
         '''
 
-        allowed_args = self.filtered_arguments('id', 'set_id', 'problem_id', 'name', 'author')
+        allowed_args = self.filtered_arguments('id', 'set_id', 'problem_id', 'name', 'author', 'course')
         where = self.where_clause(**allowed_args)
         query = '''select * from filter_functions {WHERE};'''.format(WHERE=where)
         logger.debug(query)
@@ -76,7 +85,36 @@ class FilterFunctions(ProcessQuery):
         self.write(json.dumps(ret))
 
     def put(self):
+        id = self.get_argument('id')
+        logger.debug(id)
+        code = self.get_argument('code')
+        now = datetime.now().isoformat()
+        query = ''' UPDATE filter_functions SET
+        code = "{code}", updated = "{time}"
+        WHERE id={id};'''.format(code=code, time=now, id=id)
+        get_query = ''' SELECT * FROM filter_functions where '''
+        logger.debug(query)
+        ret = conn.execute(query)
+        self.write(json.dumps(ret))
+        logger.debug(self.filter_path(id))
+        
+    def delete(self):
         pass
 
-    def delete(self):
+class ApplyFilterFunctions(ProcessQuery):
+    def set_default_headers(self):
+        # Allows X-site requests
+        super(ProcessQuery, self).set_default_headers()
+        self.add_header("Access-Control-Allow-Methods", "PUT,DELETE")
+
+    def post(self):
+        '''
+        Tests a student's answer against the filters defined for the problem part.
+
+        For any filters which match, returns the hint_id of the matched hint and
+        any PGML which should be inserted into the hint.
+
+        '''
+        ret = {}
+        self.write(json.dumps(ret))
         pass
