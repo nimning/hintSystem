@@ -13,6 +13,7 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
     var part_value = "AnSwEr"+("0000"+part_id).slice(-4);
     $scope.hint_id = -1;
     $scope.input_id = null;
+    $scope.linked_hint = null;
     $scope.showFilterFunction = true;
     $scope.showGroups = true;
     $scope.hints = [];
@@ -156,6 +157,17 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
         return "no matching hint";
     };
 
+    $scope.link_hint = function(id, group){
+        //link hint to group here
+        this.linked_hint=this.hint.pg_text;
+        this.input_id = null;
+    };
+
+    $scope.remove_linked_hint = function(){
+        //remove linked hint
+        this.linked_hint=null;
+    }
+
     $scope.preview_send_hint = function(id, group){
         var students = [];
         for(var entry in group.student_list){ // For each different signature in the group
@@ -191,6 +203,13 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
             return false;
         else
             return true;
+    };
+
+    $scope.validLink = function(){
+        if (this.linked_hint != null)
+            return true;
+        else
+            return false;
     };
 
     /*$scope.show_assigned_hints_by_student = function(student_id){
