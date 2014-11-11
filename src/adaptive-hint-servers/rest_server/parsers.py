@@ -231,7 +231,7 @@ def filtered_answers(answers, correct_string, correct_tree,
             logger.debug(locals()[thing])
         for a in answers:
             user_id = a['user_id']
-            student_vars = dict(user_vars[user_vars['user_id']==user_id].values.tolist())
+            student_vars = dict(user_vars[user_vars['user_id']==user_id][['name', 'value']].values.tolist())
             # This function must be defined by the exec'd code
             ret = answer_filter(a['string'], a['parsed'], a['evaled'], correct_string, correct_tree, a['correct_eval'], student_vars)
             if ret:
@@ -333,7 +333,7 @@ class FilterAnswers(JSONRequestHandler, tornado.web.RequestHandler):
         queue = Queue()
         p = Process(target=filtered_answers, args=(student_answers, self.part_answer, self.answer_tree, self.variables_df, filter_function, child, queue))
         p.start()
-        p.join(timeout=5)
+        p.join(timeout=30)
 
         logger.debug('Done waiting')
         if p.is_alive():
