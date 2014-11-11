@@ -277,7 +277,7 @@ class FilterAnswers(JSONRequestHandler, tornado.web.RequestHandler):
         self.answer_exps = {}
         course = self.get_argument('course')
         set_id = self.get_argument('set_id')
-        problem_id = self.get_argument('problem_id')
+        problem_id = int(self.get_argument('problem_id'))
         part_id = int(self.get_argument('part_id'))
         include_finished = (int(self.get_argument('include_finished', 1)) == 1)
         filter_function = self.get_argument('filter_function')
