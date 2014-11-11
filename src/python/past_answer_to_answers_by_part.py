@@ -105,14 +105,17 @@ class PastAnswerConverter(object):
                                 ans_by_part['part_id'].append(part+1)
                                 ans_by_part['timestamp'].append(row['timestamp'])
                                 if not self.ws.connected:
+                                    # TODO Need better error handling/reconnection logic
                                     self.ws = create_connection("ws://localhost:4350/daemon/websocket")
                                 self.ws.send(json.dumps({'type':'student_answer', 'arguments': {
                                     'user_id': row['user_id'],
+                                    'course': self.course,
                                     'set_id': row['set_id'],
                                     'problem_id': row['problem_id'],
                                     'part_id': part+1,
                                     'answer_string': answers[part]
                                 }}))
+                                print 'Sent', row
                     prev_answers=answers
         # It is actually a bit overkill to use a DataFrame when this loop runs
         # so often, but it's a quick and easy way to write SQL to a table

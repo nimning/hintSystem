@@ -129,3 +129,14 @@ def parse_and_collect_numbers(string):
         return set(eval_numbers.keys())
     except:
         return set()
+
+def parse_and_eval(string, variables=None):
+    expr = parse_webwork(string)
+    if expr:
+        try:
+            etree = eval_parsed(expr, variables)
+            return expr, etree
+        except:
+            return (None, None)
+    else:
+        return (None, None)

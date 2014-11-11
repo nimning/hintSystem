@@ -13,7 +13,7 @@ from hints_api import (UserProblemHints, Hint, AssignedHint,
                        ProblemHints, HintFeedback, RunHintFilters,
                        HintFilter, AssignedHintFilter,
                        AssignedHintHistoryByHintID, AssignedHintHistoryByProblemPart, AssignedHintHistoryofProblem)
-from filter_api import FilterFunctions
+from filter_api import FilterFunctions, ApplyFilterFunctions
 
 from auth import (Login)
 from parsers import ParseString, GroupedPartAnswers, FilterAnswers
@@ -66,6 +66,7 @@ if __name__ == "__main__":
         (r"/realtime_problem_answer", RealtimeProblemAnswer),
         (r"/hint_feedback", HintFeedback),
         (r"/run_hint_filters", RunHintFilters),
+        (r"/apply_filter_functions", ApplyFilterFunctions),
         (r"/hint_filter", HintFilter),
         (r"/assigned_hint_filter", AssignedHintFilter),
         (r"/set_ids", SetIds),

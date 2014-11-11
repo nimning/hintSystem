@@ -6,8 +6,9 @@ from tornado_database import Connection
 from tornado.web import RequestHandler
 from get_header_footer import get_header, get_footer
 from json_request_handler import JSONRequestHandler
+import os
 
-from webwork_config import mysql_username, mysql_password
+from webwork_config import mysql_username, mysql_password, webwork_dir
 import logging
 logger = logging.getLogger(__name__)
 # Connect to webwork mysql database
@@ -90,3 +91,15 @@ class ProcessQuery(JSONRequestHandler, tornado.web.RequestHandler):
             row['pg_file_path'] = pg_file_path
         return response
 
+    def get_source(self):
+        course = self.get_argument('course')
+        set_id = self.get_argument('set_id')
+        problem_id = self.get_argument('problem_id')
+
+        source_file = conn.query('''select source_file from {course}_problem
+            where problem_id={problem_id} and set_id="{set_id}";
+        '''.format(course=course, set_id=set_id, problem_id=problem_id))[0]['source_file']
+        pg_path = os.path.join(webwork_dir, 'courses', course, 'templates', source_file)
+        with open(pg_path, 'r') as fin:
+            pg_file = fin.read()
+            return pg_file
