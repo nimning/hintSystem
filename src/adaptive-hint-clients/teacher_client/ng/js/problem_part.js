@@ -16,6 +16,7 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
     $scope.linked_hint = null;
     $scope.showFilterFunction = true;
     $scope.showGroups = true;
+    $scope.showFilterGroups = true;
     $scope.hints = [];
     angular.forEach(hints, function(value, key){
         $scope.hints.push(value);
@@ -387,6 +388,10 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
         $scope.showFilterFunction = ! $scope.showFilterFunction;
     };
 
+    $scope.toggle_filter_groups = function(event){
+        $scope.showFilterGroups = ! $scope.showFilterGroups;
+    };
+
     $scope.toggle_groups = function(event){
         $scope.showGroups = ! $scope.showGroups;
     };
@@ -422,5 +427,12 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
             success(function(data){
                 $scope.filter_function = data[0];
             });
+    };
+
+    $scope.validFilterName = function(){
+        if ($scope.filter_function.name != null && $scope.filter_function.name.length != 0)
+            return true;
+        else
+            return false;
     };
 });
