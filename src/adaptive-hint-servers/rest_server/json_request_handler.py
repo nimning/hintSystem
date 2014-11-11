@@ -20,7 +20,7 @@ class JSONRequestHandler(object):
                 for k, v in json_data.items():
                     # Tornado expects values in the argument dict to be lists.
                     # in tornado.web.RequestHandler._get_argument the last argument is returned.
-                    json_data[k] = [v]
+                    json_data[k] = [str(v)]
                 # self.request.arguments.pop(self.request.body)
                 self.request.arguments.update(json_data)
             except ValueError, e:
