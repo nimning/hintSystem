@@ -51,17 +51,18 @@
 # TODOS
 
 - [ ] Store filter functions in a folder on disk
-- [ ] Loading/Saving filter functions
+- [x] Loading/Saving filter functions
 Preferably use an intelligent directory hierarchy based on the course/set/problem_id
-- [ ] Create database table to record which filter functions are assigned to which part and which hint
-- [ ] Create UI for picking which filter function to assign to a problem part and a hint (may be optional if the function generates PGML for a hint, in which case we'd use the dummy hint ID)
-- [ ] REST server needs an API call to run all assigned filter functions for a given part answer
-- [ ] SockJS server needs to handle the notification of a new student answer from the past answer daemon and run the assigned filters (`daemon_handler.py`)
+- [x] Create database table to record which filter functions are assigned to which part and which hint
+- [x] Create UI for picking which filter function to assign to a problem part and a hint
+- [ ] Allow setting hint to dummy hint (generating filter functions).
+- [x] REST server needs an API call to run all assigned filter functions for a given part answer
+- [x] SockJS server needs to handle the notification of a new student answer from the past answer daemon and run the assigned filters (`daemon_handler.py`)
 - [ ] Only run filters if a student has spent some minimum amount of time and/or attempts
-- [ ] Once any filters have returned True/a PGML string, assign those hints to the user
-- [ ] Notify the student's client to insert the new hint into the student's page
-- [ ] Send hints to students who match a filter function after running the function via the TA interface
-
+- [x] Once any filters have returned True/a PGML string, assign those hints to the user
+- [x] Notify the student's client to insert the new hint into the student's page
+- [x] Send hints to students who match a filter function after running the function via the TA interface
+- [x] Typeahead for choosing hints for a filter/group
 
 # Random bugfixes
 - [ ] Hints don't use the psvn when rendering, so some variables might be seeded incorrectly (affects multi-part questions where there are multiple problems using the psvn as the same random seed across problems)
