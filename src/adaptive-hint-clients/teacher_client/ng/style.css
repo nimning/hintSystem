@@ -107,4 +107,15 @@ td.nostretch {
 
 .filter-select-match{
     min-width: 30em;
+    max-width: 200px;
+}
+
+.filter_matched_answers{
+    max-height: 20em;
+    overflow-y: scroll;
+    overflow-x: auto;
+}
+
+.pre-scrollable {
+    max-height: 20em;
 }

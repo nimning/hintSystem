@@ -15,9 +15,13 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
     $scope.input_id = null;
     $scope.linked_hint = null;
     $scope.showFilterFunction = true;
+    $scope.showOutput = true;
+    $scope.showMatches = true;
     $scope.showGroups = true;
     $scope.showFilterGroups = true;
     $scope.hints = [];
+    $scope.filtered_students = [];
+    $scope.filtered_groups = [];
     angular.forEach(hints, function(value, key){
         $scope.hints.push(value);
     });
@@ -160,14 +164,19 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
 
     $scope.link_hint = function(id, group){
         //link hint to group here
-        this.linked_hint=this.hint.pg_text;
+        this.linked_hint = this.hint.pg_text;
+        var hint = _.find($scope.hints, {hint_id: id});
+        console.log(group);
+        var students = _.unique(_.pluck(group.students, 'user_id'));
+        HintsService.sendHintToUsers(students, hint, course, part_id);
+        console.log(hint);
         this.input_id = null;
     };
 
     $scope.remove_linked_hint = function(){
         //remove linked hint
         this.linked_hint=null;
-    }
+    };
 
     $scope.preview_send_hint = function(id, group){
         var students = [];
@@ -180,7 +189,7 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
             }
         }
 
-        for (i=0; i <students.length; i++)
+        for (var i=0; i <students.length; i++)
         {
             var hint_html_template = "";
             $timeout(function(student){ // Render with a random delay.
@@ -379,6 +388,8 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
                 console.log(response);
                 $scope.filtered_list = response.matches;
                 $scope.filter_output = response.output;
+                $scope.filtered_students = _.unique(_.pluck(response.matches, 'user_id'));
+                console.log($scope.filtered_students);
             }).error(function(error){
                 console.error(error);
             });
@@ -429,8 +440,16 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
             });
     };
 
+    $scope.send_hint_to_matches = function(){
+        var data = {
+            filter_function: $scope.filter_function,
+            students: $scope.filtered_list
+        };
+        $scope.filtered_groups.push(data);
+    };
+    
     $scope.validFilterName = function(){
-        if ($scope.filter_function.name != null && $scope.filter_function.name.length != 0)
+        if ($scope.filter_function.name !== null && $scope.filter_function.name.length !== 0)
             return true;
         else
             return false;
