@@ -18,9 +18,12 @@ from auth import require_auth
 from Eval_parsed import eval_parsed, Collect_numbers, numbers_and_exps, parse_and_eval
 from multiprocessing import Process, Pipe, Queue, current_process
 from StringIO import StringIO
-from parsers import parsed
-
+from parsers import parse_eval
+from pg_utils import get_source, get_part_answer
+from webwork_utils import get_user_vars, vars_for_student, answer_for_student
+from exec_filters import filtered_answers
 tz = tzlocal()
+
 
 def serialize_datetime(obj):
     if isinstance(obj, datetime):
@@ -29,6 +32,7 @@ def serialize_datetime(obj):
 
 logger = logging.getLogger(__name__)
 BASE = '/opt/AdaptiveHintsFilters'
+
 
 class FilterFunctions(ProcessQuery):
     """ /filter_functions """
@@ -44,7 +48,7 @@ class FilterFunctions(ProcessQuery):
         logger.debug(args)
         path = os.path.join(BASE, *args)
         logger.debug(path)
-        
+
     def get(self):
         ''' For loading filter functions
 
@@ -120,13 +124,8 @@ def apply_filter(answer_data, user_vars, filter_function_string, pipe):
     os.chroot(tempdir)
     os.setuid(USER_ID)
 
-    t1 = set(locals().keys()) | set(['t1'])
     try:
         exec filter_function_string in globals(), locals()
-        t2 = set(locals().keys())
-        logger.debug("New locals: %s", t2-t1)
-        for thing in (t2-t1):
-            logger.debug(locals()[thing])
         a = answer_data
         # This function must be defined by the exec'd code
         ret = answer_filter(a['string'], a['parsed'], a['evaled'], a['correct_string'],
@@ -146,7 +145,7 @@ class ApplyFilterFunctions(ProcessQuery):
 
     def post(self):
         '''
-        Tests a student's answer against the filters defined for the problem part.
+        Tests one student's answer against the filters defined for the problem part.
 
         For any filters which match, returns the hint_id of the matched hint and
         optionally, any PGML which should be inserted into the hint.
@@ -194,7 +193,7 @@ class ApplyFilterFunctions(ProcessQuery):
             if p.is_alive():
                 logger.warn("Function took too long, we killed it.")
                 p.terminate()
-            result= parent.recv()
+            result = parent.recv()
             logger.debug("Got this back: %s", result)
             if type(result) == str:
                 ret[func.hint_id] = result
@@ -203,3 +202,26 @@ class ApplyFilterFunctions(ProcessQuery):
 
         self.write(json.dumps(ret))
 
+
+class AssignFilterFunction(ProcessQuery):
+    def post(self):
+        '''
+        Assigns a filter function to a given part and hint.
+        '''
+        course = self.get_argument('course')
+        set_id = self.get_argument('set_id')
+        problem_id = self.get_argument('problem_id')
+        part_id = int(self.get_argument('part_id'))
+        filter_function_id = int(self.get_argument('filter_function_id'))
+        hint_id = int(self.get_argument('hint_id'))
+
+        query = '''INSERT INTO assigned_filters
+        (filter_function_id, course, set_id, problem_id, part_id, hint_id)
+        VALUES ({ff_id}, {course}, {set_id}, {problem_id}, {part_id},
+        {hint_id})'''.\
+            format(course=course, set_id=set_id, problem_id=problem_id,
+                   part_id=part_id, hint_id=hint_id, ff_id=filter_function_id)
+
+        res = conn.query(query)
+
+        self.write(json.dumps(res))

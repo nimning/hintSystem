@@ -17,7 +17,8 @@ import requests
 import re
 from auth import require_auth
 from multiprocessing import Process, Pipe, Queue, current_process
-from StringIO import StringIO
+from exec_filters import filtered_answers
+from pg_utils import get_source, get_part_answer
 
 import logging
 logger = logging.getLogger(__name__)
@@ -197,60 +198,7 @@ class GroupedPartAnswers(JSONRequestHandler, tornado.web.RequestHandler):
         out['answer_tree'] = str(self.answer_tree)
         self.write(json.dumps(out, default=serialize_datetime))
 
-def filtered_answers(answers, correct_string, correct_tree,
-                     user_vars, filter_function_string, pipe, queue):
-    import os
-    import sys
-    import StringIO
-    import tempfile
-    USER_ID=1009
 
-    tempdir = tempfile.mkdtemp()
-    os.chown(tempdir, USER_ID, -1)
-    os.chroot(tempdir)
-    os.setuid(USER_ID)
-
-    class QueueStringIO(StringIO.StringIO):
-        def __init__(self, queue, *args, **kwargs):
-            StringIO.StringIO.__init__(self, *args, **kwargs)
-            self.queue = queue
-        def flush(self):
-            self.queue.put(self.getvalue())
-            self.truncate(0)
-
-    selected_answers = []
-    out = QueueStringIO(queue)
-    sys.stderr = sys.stdout = out
-
-    try:
-        exec filter_function_string in globals(), locals()
-        for a in answers:
-            user_id = a['user_id']
-            if len(user_vars) > 0:
-                student_vars = dict(user_vars[user_vars['user_id']==user_id][['name', 'value']].values.tolist())
-            else:
-                student_vars = {}
-            logger.debug('vars: %s', student_vars)
-            # This function must be defined by the exec'd code
-            ret = answer_filter(a['string'], a['parsed'], a['evaled'], correct_string, correct_tree, a['correct_eval'], student_vars)
-            if ret:
-                selected_answers.append({'user_id': user_id, 'answer_string': a['string']})
-    except Exception, e:
-        logger.error("Error in filter function: %s", e)
-        print e
-    pipe.send(selected_answers)
-    out.flush()
-    return
-
-def get_source(course, set_id, problem_id):
-    source_file = conn.query('''select source_file from {course}_problem
-            where problem_id={problem_id} and set_id="{set_id}";
-        '''.format(course=course, set_id=set_id, problem_id=problem_id))[0]['source_file']
-    pg_path = os.path.join(webwork_dir, 'courses', course, 'templates', source_file)
-    with open(pg_path, 'r') as fin:
-        pg_file = fin.read()
-        return pg_file
-    
 # GET /filter_answers?
 class FilterAnswers(JSONRequestHandler, tornado.web.RequestHandler):
     def vars_for_student(self, user_id):
@@ -289,12 +237,7 @@ class FilterAnswers(JSONRequestHandler, tornado.web.RequestHandler):
         self.variables_df = pd.DataFrame(user_variables)
         if len(self.variables_df) == 0:
             logger.warn("No user variables saved for assignment %s, please run the save_answers script", set_id)
-        # Matches answers with Compute() and without in separate groups
-        # TODO Make this a utility function
-        answer_re = re.compile('\[__+\]{(?:(?:Compute\(")(.+?)(?:"\))(?:.*)|(.+?))}')
-        answer_boxes = answer_re.findall(pg_file)
-        self.part_answer = answer_boxes[part_id-1][0] or answer_boxes[part_id-1][1]
-
+        self.part_answer = get_part_answer(pg_file, part_id)
         self.answer_tree = parse_webwork(self.part_answer)
 
         # Get attempts by part
