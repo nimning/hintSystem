@@ -222,16 +222,15 @@ def filtered_answers(answers, correct_string, correct_tree,
     out = QueueStringIO(queue)
     sys.stderr = sys.stdout = out
 
-    t1 = set(locals().keys()) | set(['t1'])
     try:
         exec filter_function_string in globals(), locals()
-        t2 = set(locals().keys())
-        logger.debug("New locals: %s", t2-t1)
-        for thing in (t2-t1):
-            logger.debug(locals()[thing])
         for a in answers:
             user_id = a['user_id']
-            student_vars = dict(user_vars[user_vars['user_id']==user_id][['name', 'value']].values.tolist())
+            if len(user_vars) > 0:
+                student_vars = dict(user_vars[user_vars['user_id']==user_id][['name', 'value']].values.tolist())
+            else:
+                student_vars = {}
+            logger.debug('vars: %s', student_vars)
             # This function must be defined by the exec'd code
             ret = answer_filter(a['string'], a['parsed'], a['evaled'], correct_string, correct_tree, a['correct_eval'], student_vars)
             if ret:
