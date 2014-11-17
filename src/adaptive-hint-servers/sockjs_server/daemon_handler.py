@@ -53,14 +53,20 @@ class DaemonSockJSHandler(_BaseSockJSHandler):
             """
             # Send the same data back, just as acknowledgement for now
             # self.send_message('echo', {'data': args})
-            logger.info('Got an answer')
             if args['score'] != '1':
                 try:
+                    user_id = args['user_id']
+                    course = args['course']
+                    set_id = args['set_id']
+                    problem_id = args['problem_id']
+                    part_id = args['part_id']
+                    logger.info('Doing async yield thing')
                     assigned_hints = yield gen.Task(self._perform_run_filters, args['user_id'], args['course'],
-                                                    args['set_id'], args['problem_id'], args['part_id'], args['user_id'])
+                                                    args['set_id'], args['problem_id'], args['part_id'], args['answer_string'])
                     if assigned_hints:
                         logger.info("Assigned hints to user %s: %s", args['user_id'], assigned_hints)
-                        # TODO Update student session
+                        ss = StudentSession.get_student_session(user_id, course, set_id, problem_id)
+                        ss.update_hints()
                 except Exception as e:
                     logger.warn('Exception %s', e)
 
@@ -76,5 +82,5 @@ class DaemonSockJSHandler(_BaseSockJSHandler):
 
         HintRestAPI.apply_hint_filters, HintRestAPI.render_html_assign_hint
         '''
-        return HintRestAPI.apply_filter_functions(user_id, course, set_id, problem_id, part_id, answer_string)
+        return callback(HintRestAPI.apply_filter_functions(user_id, course, set_id, problem_id, part_id, answer_string))
 
