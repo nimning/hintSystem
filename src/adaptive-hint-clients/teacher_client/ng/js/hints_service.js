@@ -1,7 +1,7 @@
 var App = angular.module('ta-console');
 
-App.factory('HintsService', function($http, $window, $rootScope, $location, $q,
-                                     APIHost, APIPort, WebworkService) {
+App.factory('HintsService', function($http, $window, $rootScope, $location, $q, $timeout,
+                                     APIHost, APIPort, WebworkService, SockJSService) {
     var BASE_URL = 'http://'+APIHost+':'+APIPort;
     var factory = {
         previewHint: function(hint, seed, feedback){
@@ -102,8 +102,32 @@ App.factory('HintsService', function($http, $window, $rootScope, $location, $q,
             return $http
                 .get(BASE_URL+'/filter_functions',
                      {params: args});
-        }
+        },
+        sendHintToUsers: function(students, hint, course, part_id){
+            // Send a hint to multiple users
+            var set_id = hint.set_id;
+            var problem_id = hint.problem_id;
+            for (var i=0; i <students.length; i++){
+                var hint_html_template = "";
+                $timeout(function(student){ // Render with a random delay.
+                    // TODO Flatten promise chain
+                    WebworkService.problemSeed(course, set_id, problem_id, student).success(function(seed){
+                        factory.previewHint(hint, seed, true).
+                            then(function(rendered_html){
+                                console.log(rendered_html);
+                                hint_html_template = rendered_html;
+                                SockJSService.add_hint(course, set_id, problem_id, student,
+                                                       "AnSwEr"+("0000"+part_id).slice(-4), hint.hint_id, hint_html_template);
+                            }, function(error){
+                                console.error(error);
+                            });
 
+                    });
+                    // the callback might execute after the end of the loop so we need to bind the value of student inside the loop
+                }.bind(this, students[i]), 2000*Math.random());
+            }
+
+        }
     };
     return factory;
 });
