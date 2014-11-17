@@ -93,13 +93,13 @@
         <h4>Filter Output</h4>
         <pre class="pre-scrollable">{{filter_output}}</pre>
       </div>
-      <div id="filtered_list">
+      <!--div id="filtered_list">
         <h4>Matching Answers</h4>
         <div class="row" ng-repeat="match in filtered_list">
           <div class="col-md-2">{{match.user_id}}</div>
           <div class="col-md-4">{{match.answer_string}}</div>
         </div>
-      </div>
+      </div-->
     </section>
 
 
@@ -122,14 +122,14 @@
       <!--loading img-->
       <img src="ajax-loader.gif" ng-show="!grouped_answers"></img>
       <!--table content-->
-      <div class="row" style="padding-top: 5px; padding-bottom: 5px; border-bottom:2px solid #ccc;"><!-- ng-repeat="item in shown_answers_array | orderBy:'-sum':ture"-->
+      <div class="row" style="padding-top: 5px; padding-bottom: 5px; border-bottom:2px solid #ccc;"><!-- ng-repeat="item in filter_group | orderBy:'-sum':ture"-->
         <!--1st column: the total number of students of each group-->
         <div class = "col-md-1">
-          .
+          {{filter_group.sum}}
         </div>
         <!--2nd column: signature of each group-->
         <div class = "col-md-2" style="word-wrap: break-word;">
-          .
+          {{filter_group.signature}}
         </div>
         <!--3rd column: list all the answers in the group-->
         <div class="col-md-4">
@@ -140,7 +140,7 @@
             </a>
           </div>
           <div id ="collapse{{$index}}" class="panel-collapse collapse">
-            <div class = "row" ng-repeat="(expression, users) in item.student_list">
+            <div class = "row" ng-repeat="(expression, users) in filter_group.student_list">
               <div class = "col-md-6" style="word-wrap: break-word;">
                 {{expression}}
               </div>

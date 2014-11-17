@@ -372,13 +372,32 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
         course: course
     };
 
+    function group_filter_output(){
+        $scope.filter_group = {};
+        $scope.filter_group.signature = $scope.filter_function.name;
+        var std_list = [];
+        var ans_str_list = {};
+        angular.forEach($scope.filtered_list,function(pair){
+            var std_id = pair.user_id;
+            var answer_str = pair.answer_string;
+            if (std_list.indexOf(std_id) == -1)
+                std_list.push(std_id);
+            if (ans_str_list[answer_str] == null)
+                ans_str_list[answer_str] = [];
+            ans_str_list[answer_str].push(std_id);
+        });
+        $scope.filter_group.sum = std_list.length;
+        $scope.filter_group.student_list = ans_str_list;
+    }
+
     $scope.run_filter = function(){
         WebworkService.filterAnswers(course, set_id, problem_id, part_id,
                                      $scope.filter_function.code).
             success(function(response){
-                console.log(response);
+                //console.log(response);
                 $scope.filtered_list = response.matches;
                 $scope.filter_output = response.output;
+                group_filter_output();
             }).error(function(error){
                 console.error(error);
             });
