@@ -216,12 +216,11 @@ class AssignFilterFunction(ProcessQuery):
         hint_id = int(self.get_argument('hint_id'))
 
         query = '''INSERT INTO assigned_filters
-        (filter_function_id, course, set_id, problem_id, part_id, hint_id)
-        VALUES ({ff_id}, {course}, {set_id}, {problem_id}, {part_id},
-        {hint_id})'''.\
+        (filter_function_id, course, set_id, problem_id, part_id, hint_id, created, updated)
+        VALUES ({ff_id}, '{course}', '{set_id}', {problem_id}, {part_id},
+        {hint_id}, NOW(), NOW())'''.\
             format(course=course, set_id=set_id, problem_id=problem_id,
                    part_id=part_id, hint_id=hint_id, ff_id=filter_function_id)
-
-        res = conn.query(query)
+        res = conn.execute(query)
 
         self.write(json.dumps(res))
