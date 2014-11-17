@@ -162,13 +162,16 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
         return "no matching hint";
     };
 
-    $scope.link_hint = function(id, group){
+    $scope.link_hint = function(hint_id, group){
         //link hint to group here
         this.linked_hint = this.hint.pg_text;
-        var hint = _.find($scope.hints, {hint_id: id});
+        var hint = _.find($scope.hints, {hint_id: hint_id});
         console.log(group);
         var students = _.unique(_.pluck(group.students, 'user_id'));
+        HintsService.assignFilterFunction(course, set_id, problem_id, part_id,
+                                          $scope.filter_function.id, hint_id);
         HintsService.sendHintToUsers(students, hint, course, part_id);
+
         console.log(hint);
         this.input_id = null;
     };
@@ -439,7 +442,8 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
         if(!ff.id){
             HintsService.createFilterFunction(
                 ff.name, ff.course, ff.author, ff.code,
-                ff.set_id, ff.problem_id).success(function(){
+                ff.set_id, ff.problem_id).success(function(new_ff_id){
+                    ff.id = new_ff_id;
                     loadfilters();
                 });
 
