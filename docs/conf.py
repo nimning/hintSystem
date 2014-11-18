@@ -33,9 +33,7 @@ class Mock(MagicMock):
         return Mock()
 
 MOCK_MODULES = ['ply', 'ply.lex', 'ply.yacc', 'jwt', 'tzlocal', 'simplejson',
-                'numpy', 'pandas', 'matplotlib', 'pytz', 'tornado_database',
-                'MySQLdb', 'MySQLdb.converters', 'MySQLdb.constants',
-                'MySQLdb.cursors', 'scipy', 'scipy.stats']
+                'numpy', 'pandas', 'matplotlib', 'pytz', 'scipy', 'scipy.stats']
 sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
 # -- General configuration ------------------------------------------------
