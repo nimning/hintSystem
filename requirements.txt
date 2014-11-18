@@ -12,6 +12,7 @@ zss
 mock
 MySQL-python
 torndb
+six
 python-dateutil
 numpy
 scipy
