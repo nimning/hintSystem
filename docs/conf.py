@@ -32,7 +32,9 @@ class Mock(MagicMock):
     def __getattr__(cls, name):
         return Mock()
 
-MOCK_MODULES = ['ply', 'jwt', 'tzlocal', 'simplejson']
+MOCK_MODULES = ['ply', 'jwt', 'tzlocal', 'simplejson', 'numpy', 'pandas']
+sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
+
 # -- General configuration ------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
