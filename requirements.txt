@@ -1,7 +1,4 @@
 tornado
-numpy
-scipy
-pandas
 tzlocal
 sockjs-tornado
 requests
@@ -10,9 +7,12 @@ alembic
 selenium
 PyJWT
 PyCrypto
-ipython[notebook] >= 2.0
 ply
 zss
 mock
 MySQL-python
 torndb
+numpy
+scipy
+pandas
+ipython[notebook] >= 2.0
