@@ -1,7 +1,7 @@
 Directories and Files
 ---------------------
 
-[![Documentation Status](https://readthedocs.org/projects/webwork-adaptivehints/badge/?version=latest)](https://readthedocs.org/projects/webwork-adaptivehints/?badge=latest)
+[![Documentation Status](https://readthedocs.org/projects/webwork-adaptivehints/badge/)](https://readthedocs.org/projects/webwork-adaptivehints/)
 
 * README.md:    This file  
 * setup.sh    A script for setting the environmental variables. Run _source setup.sh_ at root direcotry.
