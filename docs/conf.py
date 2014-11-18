@@ -14,6 +14,7 @@
 
 import sys
 import os
+from unittest.mock import MagicMock
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -25,6 +26,13 @@ sys.path.insert(0, os.path.abspath('../src/webwork/expr_parser/'))
 sys.path.insert(0, os.path.abspath('../src/python/'))
 print sys.path
 
+# Mock out libraries with C extensions
+class Mock(MagicMock):
+    @classmethod
+    def __getattr__(cls, name):
+        return Mock()
+
+MOCK_MODULES = ['ply', 'jwt', 'tzlocal', 'simplejson']
 # -- General configuration ------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
