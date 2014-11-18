@@ -13,3 +13,4 @@ PyCrypto
 ipython[notebook] >= 2.0
 ply
 zss
+mock
