@@ -21,6 +21,7 @@ import os
 #sys.path.insert(0, os.path.abspath('.'))
 sys.path.insert(0, os.path.abspath('../src/adaptive-hint-servers'))
 sys.path.insert(0, os.path.abspath('../src/webwork/'))
+sys.path.insert(0, os.path.abspath('../src/webwork/expr_parser/'))
 sys.path.insert(0, os.path.abspath('../src/python/'))
 print sys.path
 
