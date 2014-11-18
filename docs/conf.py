@@ -32,7 +32,8 @@ class Mock(MagicMock):
     def __getattr__(cls, name):
         return Mock()
 
-MOCK_MODULES = ['ply', 'ply.lex', 'jwt', 'tzlocal', 'simplejson', 'numpy', 'pandas', 'pytz']
+MOCK_MODULES = ['ply', 'ply.lex', 'ply.yacc', 'jwt', 'tzlocal', 'simplejson',
+                'numpy', 'pandas', 'matplotlib', 'pytz', 'tornado_database']
 sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
 # -- General configuration ------------------------------------------------

@@ -30,8 +30,6 @@ Submodules
    rest_server.render
    rest_server.rest_server
    rest_server.scratch
-   rest_server.tornado_database
-   rest_server.tornado_database_example
    rest_server.webwork
    rest_server.webwork_config
    rest_server.webwork_utils
