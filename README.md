@@ -1,6 +1,8 @@
 Directories and Files
 ---------------------
 
+[![Documentation Status](https://readthedocs.org/projects/webwork-adaptivehints/badge/?version=latest)](https://readthedocs.org/projects/webwork-adaptivehints/?badge=latest)
+
 * README.md:    This file  
 * setup.sh    A script for setting the environmental variables. Run _source setup.sh_ at root direcotry.
 * `setup_mysql_dump.sh`     A script for setting up environment variables to point to a directory containing mysql dumps.  Run `source setup_mysql_dump.sh` as root
