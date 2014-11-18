@@ -2,7 +2,7 @@ import json
 import tornado
 from HTMLParser import HTMLParser
 from tornado.template import Template
-from tornado_database import Connection
+from torndb import Connection
 from tornado.web import RequestHandler
 from get_header_footer import get_header, get_footer
 from json_request_handler import JSONRequestHandler

@@ -15,3 +15,4 @@ ply
 zss
 mock
 MySQL-python
+torndb
