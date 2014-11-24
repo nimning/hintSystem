@@ -87,8 +87,8 @@
         <div class="row">
           <button type="button" class="btn btn-success" ng-click="run_filter()"><span class="glyphicon glyphicon-play"></span> Run Filter</button>
           <button type="button" class="btn btn-primary" ng-click="save_filter()" ng-disabled="!validFilterName() || !filter_function.dirty"><span class="glyphicon glyphicon-floppy-disk"></span> Save <span ng-show="filter_function.dirty">*</span></button>
-          <span>Hint ID <input type="text" style="width:30px;" ng-model="input_id" typeahead="hint.hint_id for hint in hints | filter:$viewValue | limitTo:8" typeahead-template-url="hintSearchResult.html"/></span>
-          <button type="button" class="btn btn-primary" ng-click="send_hint_to_matches()" ng-disabled="filtered_students.length == 0 || filter_function.dirty"><span class="glyphicon glyphicon-send"></span> Link Hint and Send to {{filtered_students.length}} Matching Students</button>
+          <span>Hint ID <input type="text" style="width:30px;" ng-model="selected_hint_id" typeahead="hint.hint_id for hint in hints | filter:$viewValue | limitTo:8" typeahead-template-url="hintSearchResult.html"/></span>
+          <button type="button" class="btn btn-primary" ng-click="send_hint_to_matches()" ng-disabled="linkHintDisabled()"><span class="glyphicon glyphicon-send"></span> Link Hint and Send to {{filtered_students.length}} Matching Students</button>
         </div>
       </form>
       <div id="filter_output">

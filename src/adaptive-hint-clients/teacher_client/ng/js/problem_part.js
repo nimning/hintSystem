@@ -478,6 +478,8 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
             students: $scope.filtered_list
         };
         $scope.filtered_groups.push(data);
+        HintsService.assignFilterFunction(course, set_id, problem_id, part_id, $scope.filter_function.id,
+                                          $scope.selected_hint_id);
     };
     
     $scope.validFilterName = function(){
@@ -489,5 +491,9 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
 
     $scope.filterFunctionChanged = function(){
         $scope.filter_function.dirty = true;
+    };
+
+    $scope.linkHintDisabled = function(){
+        return ($scope.filtered_students.length === 0 || $scope.filter_function.dirty || !$scope.selected_hint_id);
     };
 });
