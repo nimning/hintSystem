@@ -10,7 +10,7 @@ App.controller('CourseCtrl', function($scope, $location, $window, $stateParams, 
     });
 
     $scope.dtOptions = DTOptionsBuilder.newOptions()
-        .withBootstrap();
+        .withBootstrap().withDisplayLength(25);
 
     $scope.dtColumnDefs = [
         DTColumnDefBuilder.newColumnDef(0),
