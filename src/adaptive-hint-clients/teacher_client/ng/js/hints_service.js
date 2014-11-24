@@ -103,6 +103,13 @@ App.factory('HintsService', function($http, $window, $rootScope, $location, $q, 
                 .get(BASE_URL+'/filter_functions',
                      {params: args});
         },
+        assignFilterFunction: function(course, set_id, problem_id, part_id, filter_function_id, hint_id){
+            return $http.post(BASE_URL+'/assign_filter_function', {
+                course: course, set_id: set_id, problem_id: problem_id,
+                part_id: part_id, filter_function_id: filter_function_id,
+                hint_id: hint_id
+            });
+        },
         sendHintToUsers: function(students, hint, course, part_id){
             // Send a hint to multiple users
             var set_id = hint.set_id;
