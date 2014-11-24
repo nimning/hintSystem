@@ -22,8 +22,6 @@ import time
 from websocket import create_connection
 import json
 
-
-
 from sqlalchemy.orm import sessionmaker
 db = 'webwork'
 
@@ -113,7 +111,8 @@ class PastAnswerConverter(object):
                                     'set_id': row['set_id'],
                                     'problem_id': row['problem_id'],
                                     'part_id': part+1,
-                                    'answer_string': answers[part]
+                                    'answer_string': answers[part],
+                                    'score': row['scores'][part]
                                 }}))
                                 print 'Sent', row
                     prev_answers=answers
