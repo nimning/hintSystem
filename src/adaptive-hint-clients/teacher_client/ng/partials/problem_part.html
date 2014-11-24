@@ -83,11 +83,12 @@
           <input type="text" id="filter_function_name" ng-model="filter_function.name" size="50" typeahead="filter.name for filter in filter_functions | filter:$viewValue | limitTo:8" typeahead-template-url="filterTemplate.html"></input>
           <button type="button" class="btn btn-primary" ng-click="load_filter()"><span class="glyphicon glyphicon-folder-open"></span>  Load Filter</button>
         </div>
-        <div ng-model="filter_function.code" ui-codemirror="" ui-codemirror-opts="editorOptions"></div>
+        <div ng-model="filter_function.code" ui-codemirror="" ui-codemirror-opts="editorOptions" ng-change="filterFunctionChanged();"></div>
         <div class="row">
           <button type="button" class="btn btn-success" ng-click="run_filter()"><span class="glyphicon glyphicon-play"></span> Run Filter</button>
-          <button type="button" class="btn btn-primary" ng-click="save_filter()" ng-disabled="!validFilterName()"><span class="glyphicon glyphicon-floppy-disk"></span> Save</button>
-          <button type="button" class="btn btn-primary" ng-click="send_hint_to_matches()" ng-disabled="filtered_students.length == 0"><span class="glyphicon glyphicon-send"></span> Send Hint to {{filtered_students.length}} Matching Students</button>
+          <button type="button" class="btn btn-primary" ng-click="save_filter()" ng-disabled="!validFilterName() || !filter_function.dirty"><span class="glyphicon glyphicon-floppy-disk"></span> Save <span ng-show="filter_function.dirty">*</span></button>
+          <span>Hint ID <input type="text" style="width:30px;" ng-model="input_id" typeahead="hint.hint_id for hint in hints | filter:$viewValue | limitTo:8" typeahead-template-url="hintSearchResult.html"/></span>
+          <button type="button" class="btn btn-primary" ng-click="send_hint_to_matches()" ng-disabled="filtered_students.length == 0 || filter_function.dirty"><span class="glyphicon glyphicon-send"></span> Link Hint and Send to {{filtered_students.length}} Matching Students</button>
         </div>
       </form>
       <div id="filter_output">

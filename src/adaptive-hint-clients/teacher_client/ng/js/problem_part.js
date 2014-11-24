@@ -381,7 +381,8 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
     $scope.filter_function = {
         code: "def answer_filter(answer_string, parse_tree, eval_tree, correct_string, correct_tree, correct_eval, user_vars):\n  print answer_string\n  return True",
         author: Session.user_id,
-        course: course
+        course: course,
+        dirty: true
     };
 
     function group_filter_output(){
@@ -436,6 +437,12 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
     };
     loadfilters();
 
+    $scope.$watch('filter_function.name', function(newVal, oldVal){
+        if(newVal){
+            delete $scope.filter_function.id;
+        }
+    });
+
     $scope.save_filter = function(event){
         var ff = $scope.filter_function;
         console.log(ff);
@@ -454,12 +461,14 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
                     loadfilters();
                 });
         }
+        ff.dirty = false;
     };
 
     $scope.load_filter = function(){
         HintsService.getFilterFunctions({name: $scope.filter_function.name}).
             success(function(data){
                 $scope.filter_function = data[0];
+                $scope.filter_function.dirty = false;
             });
     };
 
@@ -476,5 +485,9 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
             return true;
         else
             return false;
+    };
+
+    $scope.filterFunctionChanged = function(){
+        $scope.filter_function.dirty = true;
     };
 });
