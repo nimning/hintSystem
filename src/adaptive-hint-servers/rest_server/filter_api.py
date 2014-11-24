@@ -9,7 +9,7 @@ from convert_timestamp import utc_to_system_timestamp
 from process_query import ProcessQuery, conn
 from operator import itemgetter
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, timedelta
 from dateutil.tz import tzlocal
 import os
 import re
@@ -158,7 +158,24 @@ class ApplyFilterFunctions(ProcessQuery):
         answer_string = self.get_argument('answer_string')
         pg_file = self.get_source()
 
-        # TODO Get all answers for this part, only run if at least 3 answers and at least 10 minutes since first answer
+        # Only run filters if at least 3 answers and at least 10 minutes since first answer
+        try:
+            answer_count = conn.get('''SELECT COUNT(*) as count from {course}_answers_by_part {WHERE};'''
+                                    .format(course=course, WHERE=self.where_clause('set_id', 'problem_id', 'part_id', 'user_id'))).get('count')
+            first_answer = conn.get('''SELECT timestamp from {course}_answers_by_part {WHERE}
+        ORDER BY timestamp ASC LIMIT 1;'''
+                                    .format(course=course, WHERE=self.where_clause('set_id', 'problem_id', 'part_id', 'user_id'))).get('timestamp')
+            last_answer = conn.get('''SELECT timestamp from {course}_answers_by_part {WHERE}
+        ORDER BY timestamp DESC LIMIT 1;'''
+                                   .format(course=course, WHERE=self.where_clause('set_id', 'problem_id', 'part_id', 'user_id'))).get('timestamp')
+
+            diff = last_answer-first_answer
+            if answer_count < 3 or diff < timedelta(minutes=10):
+                return
+            else:
+                return
+        except:
+            return
         # Get student's variables, parse their answer, their correct answer
         user_variables = conn.query('''SELECT * from {course}_user_variables
         WHERE set_id="{set_id}" AND problem_id = {problem_id} AND user_id = "{user_id}";
