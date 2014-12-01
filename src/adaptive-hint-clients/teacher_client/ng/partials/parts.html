@@ -1,0 +1,21 @@
+<h1>{{course}}</h1>
+
+<h3>Problem Parts</h3>
+<table class="table" id="assignments_table" datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs">
+  <thead>
+    <tr>
+      <th>Set ID</th>
+      <th>Problem ID</th>
+      <th>Part ID</th>
+      <th>Attempts</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="part in answers_by_part" dt-rows="">
+      <td><a ui-sref="set({course: course, set_id: part.set_id})">{{part.set_id}}</a></td>
+      <td><a ui-sref="problem({course: course, set_id: part.set_id, problem_id: part.problem_id})">{{part.problem_id}}</a></td>
+      <td><a ui-sref="problem_part({course: course, set_id: part.set_id, problem_id: part.problem_id, part_id: part.part_id})">{{part.part_id}}</a></td>
+      <td>{{part.attempt_count}}</td>
+    </tr>
+  </tbody>
+</table>

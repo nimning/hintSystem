@@ -48,13 +48,18 @@ App.factory('WebworkService', function($http, $window, $rootScope, $location, $q
                      {params: {course: course, set_id: set_id, user_id: user_id}});
         },
 
-        answersByPart: function(course, set_id, problem_id, user_id) {
+        answersByPart: function(course, set_id, problem_id, user_id, counts) {
             return $http
                 .get(BASE_URL+'/answers_by_part',
                      {params: {course: course, set_id: set_id, problem_id: problem_id,
-                               user_id: user_id}});
+                               user_id: user_id, counts: counts}});
         },
-
+        answersByPartCounts: function(course, set_id, problem_id, user_id) {
+            return $http
+                .get(BASE_URL+'/answers_by_part',
+                     {params: {course: course, set_id: set_id, problem_id: problem_id,
+                               user_id: user_id, counts: true}});
+        },
         render: function(pg_file, seed, psvn) {
             if(pg_file[0]!=='/'){ // Don't base64 encode absolute paths
                 pg_file = btoa(unescape(encodeURIComponent(pg_file)));

@@ -25,6 +25,13 @@ App.config(
                  title: '{{course}}',
                  loginRequired: true
              }).
+             state('parts', {
+                 url: '/courses/:course/parts',
+                 templateUrl: 'partials/parts.html',
+                 controller: 'PartsCtrl',
+                 title: '{{course}} Problem Parts',
+                 loginRequired: true
+             }).
              state('set', {
                  url: '/courses/:course/sets/:set_id',
                  templateUrl: 'partials/set.html',
