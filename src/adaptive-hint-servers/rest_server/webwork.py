@@ -373,19 +373,19 @@ class AnswersByPart(ProcessQuery):
             Response:
                 [{"answer_id": 123..., "answer_string":"42"}, ...]
             '''
-        query_parts = ['select *  from {0}_answers_by_part'.format(
-            self.get_argument('course'))]
-        if self.get_argument('set_id', False):
-            query_parts.append('WHERE set_id = "{0}"'.format(
-                self.get_argument('set_id')))
-        if self.get_argument('problem_id', False):
-            query_parts.append('AND problem_id = {0}'.format(
-                self.get_argument('problem_id')))
-        if self.get_argument('user_id', False):
-            query_parts.append('AND user_id = "{0}"'.format(
-                self.get_argument('user_id')))
+        only_counts = self.get_argument('counts', False)
+        course = self.get_argument('course')
+        if not only_counts:
+            query_parts = ['select *  from {0}_answers_by_part'.format(
+                course)]
+            query_parts.append(self.where_clause('set_id', 'problem_id', 'part_id', 'user_id'))
+            query_parts.append('ORDER BY timestamp ASC;')
 
-        query_parts.append('ORDER BY timestamp ASC;')
+        else:
+            query_parts = ['''SELECT set_id, problem_id, part_id, count(id) as attempt_count
+            FROM {course}_answers_by_part'''.format(course=course)]
+            query_parts.append(self.where_clause('set_id', 'problem_id', 'part_id', 'user_id'))
+            query_parts.append('GROUP BY set_id, problem_id, part_id;')
         query = ' '.join(query_parts)
         result = conn.query(query)
         self.write(json.dumps(result, default=serialize_datetime))
