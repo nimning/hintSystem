@@ -14,7 +14,7 @@ from hints_api import (UserProblemHints, Hint, AssignedHint,
                        HintFilter, AssignedHintFilter,
                        AssignedHintHistoryByHintID, AssignedHintHistoryByProblemPart, AssignedHintHistoryofProblem)
 from filter_api import (FilterFunctions, ApplyFilterFunctions,
-                        AssignFilterFunction)
+                        AssignedFilterFunctions)
 
 from auth import (Login)
 from parsers import ParseString, GroupedPartAnswers, FilterAnswers
@@ -82,7 +82,7 @@ if __name__ == "__main__":
         (r"/export_problem_data", ExportProblemData),
         (r"/filter_answers", FilterAnswers),
         (r"/filter_functions", FilterFunctions),
-        (r"/assign_filter_function", AssignFilterFunction)
+        (r"/assigned_filter_functions", AssignedFilterFunctions)
     ], gzip=True, debug=True)
 
     application.listen(args.port, address=BIND_IP)

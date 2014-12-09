@@ -104,7 +104,7 @@ App.factory('HintsService', function($http, $window, $rootScope, $location, $q, 
                      {params: args});
         },
         assignFilterFunction: function(course, set_id, problem_id, part_id, filter_function_id, hint_id){
-            return $http.post(BASE_URL+'/assign_filter_function', {
+            return $http.post(BASE_URL+'/assigned_filter_functions', {
                 course: course, set_id: set_id, problem_id: problem_id,
                 part_id: part_id, filter_function_id: filter_function_id,
                 hint_id: hint_id

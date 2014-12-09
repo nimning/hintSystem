@@ -157,7 +157,6 @@ class ApplyFilterFunctions(ProcessQuery):
         user_id = self.get_argument('part_id')
         answer_string = self.get_argument('answer_string')
         pg_file = self.get_source()
-
         # Only run filters if at least 3 answers and at least 10 minutes since first answer
         try:
             answer_count = conn.get('''SELECT COUNT(*) as count from {course}_answers_by_part {WHERE};'''
@@ -168,20 +167,25 @@ class ApplyFilterFunctions(ProcessQuery):
             last_answer = conn.get('''SELECT timestamp from {course}_answers_by_part {WHERE}
         ORDER BY timestamp DESC LIMIT 1;'''
                                    .format(course=course, WHERE=self.where_clause('set_id', 'problem_id', 'part_id', 'user_id'))).get('timestamp')
-
             diff = last_answer-first_answer
             if answer_count < 3 or diff < timedelta(minutes=10):
-                return
-            else:
+                self.write(json.dumps({}))
                 return
         except:
+            logger.warn('Error')
+            self.write(json.dumps({}))
             return
+        # Get any hints already assigned to user
+        hints_assigned = conn.query('''SELECT hint_id from {course}_assigned_hint {WHERE} AND pg_id='AnSwEr{part_id:04d}';'''
+                                    .format(course=course,
+                                            WHERE=self.where_clause('set_id', 'problem_id', 'user_id'),
+                                            part_id=part_id))
+        hints_assigned = set([hint['hint_id'] for hint in hints_assigned])
         # Get student's variables, parse their answer, their correct answer
         user_variables = conn.query('''SELECT * from {course}_user_variables
         WHERE set_id="{set_id}" AND problem_id = {problem_id} AND user_id = "{user_id}";
         '''.format(course=course, set_id=set_id, problem_id=problem_id, user_id=user_id))
 
-        logger.debug('Vars: %s', user_variables)
         user_variables = {row['name']: row['value'] for row in user_variables}
         # re.compile(r'\[__+\]{(?:Compute\(")?(.+?)(?:"\))?}')
         answer_re = re.compile('\[__+\]{(?:(?:Compute\(")(.+?)(?:"\))(?:.*)|(.+?))}')
@@ -201,6 +205,8 @@ class ApplyFilterFunctions(ProcessQuery):
 
         ret = {}
         for func in filter_funcs:
+            if func.hint_id in hints_assigned:
+                continue
             code = func['code']
             parent, child = Pipe()
             p = Process(target=apply_filter, args=(answer_data, user_variables, code, child))
@@ -219,8 +225,17 @@ class ApplyFilterFunctions(ProcessQuery):
 
         self.write(json.dumps(ret))
 
+class AssignedFilterFunctions(ProcessQuery):
+    def get(self):
+        '''
+        Assigns a filter function to a given part and hint.
+        '''
+        query = '''SELECT * FROM assigned_filters {WHERE}'''.\
+            format(self.where_clause('course', 'set_id', 'problem_id', 'part_id'))
+        res = conn.query(query)
 
-class AssignFilterFunction(ProcessQuery):
+        self.write(json.dumps(res))
+
     def post(self):
         '''
         Assigns a filter function to a given part and hint.
