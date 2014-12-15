@@ -8,6 +8,14 @@ Welcome to Webwork Adaptive Hints's documentation!
 
 Contents:
 
+1. :ref:`ta_ui`
+
+2. :ref:`architecture`
+
+3. Communication Sequences
+
+4. Issues/Areas of Improvement
+
 .. toctree::
    :maxdepth: 2
 
