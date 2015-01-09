@@ -1,8 +1,8 @@
 .. _ta_ui:
 
-=============
+===========================
 Using the Teacher Interface
-=============
+===========================
 
 The teacher interface provides the instructional staff with an overview of
 students' performance on Webwork assignments, allows creating and sending inline
@@ -10,9 +10,9 @@ hints to a student's Webwork page, and facilitates finding common issues and
 sending hints automatically to students based on programmatically defined
 criteria.
 
-===========
+========================
 Navigating the Interface
-===========
+========================
 
 The TA interface can be accessed at http://webwork.cse.ucsd.edu/teacher/ng/ (the
 old, hint-only interface is at http://webwork.cse.ucsd.edu/teacher/ ). Log in
