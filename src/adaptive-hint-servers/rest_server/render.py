@@ -11,10 +11,13 @@ import logging
 logger = logging.getLogger(__name__)
 
 def task_render(pg_file, seed, psvn=1234, callback=None):
+    '''Async task to perform the XMLRPC request to render the problem'''
     callback(pg_wrapper.render_pg_xmlrpc(pg_file, int(seed), psvn))
  
 class Render(JSONRequestHandler, tornado.web.RequestHandler):
-    """Interface with Webwork/PG for rendering a PG
+    """Interface with Webwork/PG for rendering a PG file problem.
+
+    Uses XMLRPC to perform the request.
     """
 
     @tornado.web.asynchronous
@@ -28,7 +31,8 @@ class Render(JSONRequestHandler, tornado.web.RequestHandler):
             encoded with Base64.
           seed
             Random seed
-            
+        Returns:
+          Rendered HTML of the provided PG file.
         """
         pg_file = self.get_argument("pg_file")
         seed = self.get_argument("seed")

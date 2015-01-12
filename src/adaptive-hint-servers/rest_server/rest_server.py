@@ -2,7 +2,7 @@ import tornado.ioloop
 import tornado.web
 import logging
 import argparse
-
+# Request handlers
 from render import Render
 from checkanswer import CheckAnswer
 from webwork import (ProblemSeed, ProblemPGPath, ProblemPGFile,
@@ -48,7 +48,7 @@ if __name__ == "__main__":
                                                    backupCount=5)
     handler.setFormatter(formatter)
     logger.addHandler(handler)
-
+    # Application server
     application = tornado.web.Application([
         (r"/render", Render),
         (r"/checkanswer", CheckAnswer),
@@ -84,7 +84,7 @@ if __name__ == "__main__":
         (r"/filter_functions", FilterFunctions),
         (r"/assigned_filter_functions", AssignedFilterFunctions)
     ], gzip=True, debug=True)
-
+    # Start server
     application.listen(args.port, address=BIND_IP)
     logging.info(" [*] Listening on %s:%d"%(BIND_IP,args.port))
 

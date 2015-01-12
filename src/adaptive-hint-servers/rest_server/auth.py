@@ -18,18 +18,15 @@ class Login(JSONRequestHandler, tornado.web.RequestHandler):
     def post(self):
         ''' For authenticating users against a Webwork course.
 
-            Sample arguments:
+        Arguments:
             course="CompoundProblems",
             user_id="iawwal",
             password="mypassword",
 
-            Returning: [
-                {
+        Returns: {
                     "user_id": "iawwal",
                     "permission": 5
-                },
-                ...
-            ]
+                }
         '''
         data = tornado.escape.json_decode(self.request.body)
         course = data.get("course")
