@@ -16,6 +16,11 @@ depending on the type of request. It *does not* have access to current
 student sessions, so the SockJS server must be used for any real time
 communication purposes.
 
+The REST server is built using Tornado Web, an asynchronous processing
+framework. The list of entry points/possible requests is in
+the rest_server module, and the different request handlers are in the other
+classes in this package.
+
 Subpackages
 -----------
 
