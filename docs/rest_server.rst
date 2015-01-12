@@ -1,6 +1,21 @@
 rest_server package
 ===================
 
+The REST server is an HTTP server which serves as the main API for the
+Adaptive Hints system. It provides access to information from the
+Webwork MySQL database, renders and checks answers to Webwork problems
+in PG file format, allows CRUD operations on hints, runs filters on
+student answers to perform automatic hint assignment, and performs
+other types of analytics on student performance.
+
+The REST server is a standard HTTP request-response server. It has
+access to the Webwork MySQL database (which includes hint-related
+tables), and also Webwork itself via XMLRPC calls. Request parameters
+can be formatted as JSON, or as GET parameters or form fields
+depending on the type of request. It *does not* have access to current
+student sessions, so the SockJS server must be used for any real time
+communication purposes.
+
 Subpackages
 -----------
 
