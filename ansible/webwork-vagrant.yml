@@ -5,6 +5,10 @@
     webwork_version: "WeBWorK-2.7-adaptive-hints"
     pg_version: "PG-2.7"
   tasks:
+    - name: update server
+      apt: update_cache=yes
+    - name: upgrade server
+      apt: upgrade=dist
     - name: Install Webwork dependencies
       apt:
         name: "{{ item }}"
@@ -52,7 +56,7 @@
     - name: Install other dependencies
       apt:
         name: "{{ item }}"
-        state: "installed"
+        state: latest
       with_items:
         - cpanminus
         - python-mysqldb
@@ -64,6 +68,10 @@
         - curl
         - ipython
         - libfreetype6-dev
+        - libatlas-base-dev
+        - gfortran
+    - name: Update python setuptools
+      command: sudo pip install -U setuptools
     - name: Install perl dependencies from CPAN
       cpanm:
         name: "{{ item }}"
@@ -152,7 +160,7 @@
         - restart apache
     - name: Copy Nginx conf
       copy:
-        src: conf/hint_server.conf
+        src: hint_server.conf
         dest: /etc/nginx/sites-available/
     - name: Symlink nginx configuration
       file:
