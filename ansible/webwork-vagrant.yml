@@ -179,16 +179,30 @@
         state: present
         priv: webwork.*:SELECT,INSERT,UPDATE,DELETE,CREATE,ALTER,DROP,LOCK TABLES
         password: "webwork"
+    - name: Restore database dump
+      mysql_db:
+        name: webwork
+        state: import
+        target: /vagrant/webwork.sql
     - name: Install dependencies for python servers
       pip:
         requirements: /vagrant/requirements.txt
+    #- name: Add python system path
+    #  command: export PYTHONPATH="$PYTHONPATH:/usr/local/bin"
     # - name: Start SockJS server
     #   command: python /vagrant/src/adaptive-hints-servers/sockjs_server/sockjs_server.py
     # - name: Start ReST server
     #   command: python /vagrant/src/adaptive-hints-servers/rest_server/rest_server.py
+    - name: Replace Nginx default file
+      copy:
+        src: /vagrant/default
+        dest: /etc/nginx/sites-available/
+    - name: Place courses files
+      command: tar -xf /vagrant/CSE103_Fall14.tar.bz2 -C /opt/webwork/courses/
+
     - name: Make hints log directory
       file:
-        path: /var/log/hints
+        path: /var/log/hint
         state: directory
     - name: Symlink teacher client
       file:
