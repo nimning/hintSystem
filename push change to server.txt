@@ -1,0 +1,4 @@
+ssh into username@webwork.cse.ucsd.edu
+cd into /opt/Webwork_AdaptiveHints
+do a github pull
+bash src/adaptive-hint-servers/init-scripts/restart_servers.sh
