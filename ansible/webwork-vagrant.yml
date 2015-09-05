@@ -195,7 +195,7 @@
     #   command: python /vagrant/src/adaptive-hints-servers/rest_server/rest_server.py
     - name: Replace Nginx default file
       copy:
-        src: /vagrant/default
+        src: ../default
         dest: /etc/nginx/sites-available/
     - name: Place courses files
       command: tar -xf /vagrant/CSE103_Fall14.tar.bz2 -C /opt/webwork/courses/
