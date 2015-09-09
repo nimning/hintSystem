@@ -6,13 +6,14 @@
       <div ng-model="hint.pg_text" ui-codemirror="" ui-codemirror-opts="editorOptions"></div>
       <div class="hint_html" ng-bind-html="hint_editor_preview"></div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-6" ng-class="[submitted]">
       <div ng-model="pgFile" ui-codemirror="" ui-codemirror-opts="pgFileEditorOptions"></div>
       <div ng-if="!partId">
         <label for="part-id-selector">Part</label>
         <select name="part-id-selector" ng-model="hint.part_id" ng-options="''+x for x in part_ids"></select>
+        <span class="help-inline" ng-show="submitted && !hint.part_id"><font color="red">Part ID Required</font></span>
       </div>
-      <button type="button" class="btn btn-primary" ng-click="save_hint(hint)">
+      <button type="button" class="btn btn-primary" ng-click="save_hint(hint); submitted = true">
         Save Hint
       </button>
       <button type="button" class="btn btn-success ladda-button" ng-click="check_answers(hint)" data-ui-ladda="checking_hint" data-style="expand-right">

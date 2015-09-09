@@ -130,12 +130,18 @@ angular.module('ta-console.directives')
                 };
 
                 $scope.save_hint = function(hint){
+                    if(!hint.part_id){
+                        console.log('no part id')
+                    }
+                    if(!hint.pg_text){
+                        console.log('no hint content')
+                    }
                     if(hint.hint_id){ // Hint is already in DB
                         HintsService.updateHint($scope.course, hint.hint_id, hint.pg_text, hint.part_id).
                             success(function(data){
                                 $scope.hint=false;
                             });
-                    }else{
+                    }else if(hint.part_id && hint.pg_text){
                         HintsService.createHint($scope.course, hint.set_id,
                                                 hint.problem_id, hint.part_id, hint.author, hint.pg_text).
                             success(function(new_hint_id){
