@@ -1,0 +1,1386 @@
+Created by PLY version 3.4 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> statement
+Rule 1     statement -> expression
+Rule 2     statement -> list
+Rule 3     expression -> expression PLUS expression
+Rule 4     expression -> expression MINUS expression
+Rule 5     expression -> expression TIMES expression
+Rule 6     expression -> expression DIVIDE expression
+Rule 7     expression -> expression EXP expression
+Rule 8     expression -> expression expression
+Rule 9     expression -> MINUS expression
+Rule 10    expression -> expression FACTORIAL
+Rule 11    expression -> LPAREN expression RPAREN
+Rule 12    expression -> LBRACKET expression RBRACKET
+Rule 13    expression -> LSET list RSET
+Rule 14    expression -> LSET expression RSET
+Rule 15    expression -> LSET RSET
+Rule 16    expression -> LPAREN list RPAREN
+Rule 17    list -> expression COMMA
+Rule 18    list -> list expression COMMA
+Rule 19    list -> list expression
+Rule 20    expression -> NUMBER
+Rule 21    expression -> VARIABLE
+
+Terminals, with rules where they appear
+
+COMMA                : 17 18
+DIVIDE               : 6
+EXP                  : 7
+FACTORIAL            : 10
+LBRACKET             : 12
+LPAREN               : 11 16
+LSET                 : 13 14 15
+MINUS                : 4 9
+NUMBER               : 20
+PLUS                 : 3
+RBRACKET             : 12
+RPAREN               : 11 16
+RSET                 : 13 14 15
+TIMES                : 5
+VARIABLE             : 21
+error                : 
+
+Nonterminals, with rules where they appear
+
+expression           : 1 3 3 4 4 5 5 6 6 7 7 8 8 9 10 11 12 14 17 18 19
+list                 : 2 13 16 18 19
+statement            : 0
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . statement
+    (1) statement -> . expression
+    (2) statement -> . list
+    (3) expression -> . expression PLUS expression
+    (4) expression -> . expression MINUS expression
+    (5) expression -> . expression TIMES expression
+    (6) expression -> . expression DIVIDE expression
+    (7) expression -> . expression EXP expression
+    (8) expression -> . expression expression
+    (9) expression -> . MINUS expression
+    (10) expression -> . expression FACTORIAL
+    (11) expression -> . LPAREN expression RPAREN
+    (12) expression -> . LBRACKET expression RBRACKET
+    (13) expression -> . LSET list RSET
+    (14) expression -> . LSET expression RSET
+    (15) expression -> . LSET RSET
+    (16) expression -> . LPAREN list RPAREN
+    (20) expression -> . NUMBER
+    (21) expression -> . VARIABLE
+    (17) list -> . expression COMMA
+    (18) list -> . list expression COMMA
+    (19) list -> . list expression
+
+    MINUS           shift and go to state 9
+    LPAREN          shift and go to state 7
+    LBRACKET        shift and go to state 3
+    LSET            shift and go to state 5
+    NUMBER          shift and go to state 2
+    VARIABLE        shift and go to state 4
+
+    list                           shift and go to state 1
+    expression                     shift and go to state 8
+    statement                      shift and go to state 6
+
+state 1
+
+    (2) statement -> list .
+    (18) list -> list . expression COMMA
+    (19) list -> list . expression
+    (3) expression -> . expression PLUS expression
+    (4) expression -> . expression MINUS expression
+    (5) expression -> . expression TIMES expression
+    (6) expression -> . expression DIVIDE expression
+    (7) expression -> . expression EXP expression
+    (8) expression -> . expression expression
+    (9) expression -> . MINUS expression
+    (10) expression -> . expression FACTORIAL
+    (11) expression -> . LPAREN expression RPAREN
+    (12) expression -> . LBRACKET expression RBRACKET
+    (13) expression -> . LSET list RSET
+    (14) expression -> . LSET expression RSET
+    (15) expression -> . LSET RSET
+    (16) expression -> . LPAREN list RPAREN
+    (20) expression -> . NUMBER
+    (21) expression -> . VARIABLE
+
+    $end            reduce using rule 2 (statement -> list .)
+    MINUS           shift and go to state 9
+    LPAREN          shift and go to state 7
+    LBRACKET        shift and go to state 3
+    LSET            shift and go to state 5
+    NUMBER          shift and go to state 2
+    VARIABLE        shift and go to state 4
+
+    expression                     shift and go to state 10
+
+state 2
+
+    (20) expression -> NUMBER .
+
+    PLUS            reduce using rule 20 (expression -> NUMBER .)
+    MINUS           reduce using rule 20 (expression -> NUMBER .)
+    TIMES           reduce using rule 20 (expression -> NUMBER .)
+    DIVIDE          reduce using rule 20 (expression -> NUMBER .)
+    EXP             reduce using rule 20 (expression -> NUMBER .)
+    FACTORIAL       reduce using rule 20 (expression -> NUMBER .)
+    LPAREN          reduce using rule 20 (expression -> NUMBER .)
+    LBRACKET        reduce using rule 20 (expression -> NUMBER .)
+    LSET            reduce using rule 20 (expression -> NUMBER .)
+    NUMBER          reduce using rule 20 (expression -> NUMBER .)
+    VARIABLE        reduce using rule 20 (expression -> NUMBER .)
+    COMMA           reduce using rule 20 (expression -> NUMBER .)
+    $end            reduce using rule 20 (expression -> NUMBER .)
+    RBRACKET        reduce using rule 20 (expression -> NUMBER .)
+    RSET            reduce using rule 20 (expression -> NUMBER .)
+    RPAREN          reduce using rule 20 (expression -> NUMBER .)
+
+
+state 3
+
+    (12) expression -> LBRACKET . expression RBRACKET
+    (3) expression -> . expression PLUS expression
+    (4) expression -> . expression MINUS expression
+    (5) expression -> . expression TIMES expression
+    (6) expression -> . expression DIVIDE expression
+    (7) expression -> . expression EXP expression
+    (8) expression -> . expression expression
+    (9) expression -> . MINUS expression
+    (10) expression -> . expression FACTORIAL
+    (11) expression -> . LPAREN expression RPAREN
+    (12) expression -> . LBRACKET expression RBRACKET
+    (13) expression -> . LSET list RSET
+    (14) expression -> . LSET expression RSET
+    (15) expression -> . LSET RSET
+    (16) expression -> . LPAREN list RPAREN
+    (20) expression -> . NUMBER
+    (21) expression -> . VARIABLE
+
+    MINUS           shift and go to state 9
+    LPAREN          shift and go to state 7
+    LBRACKET        shift and go to state 3
+    LSET            shift and go to state 5
+    NUMBER          shift and go to state 2
+    VARIABLE        shift and go to state 4
+
+    expression                     shift and go to state 11
+
+state 4
+
+    (21) expression -> VARIABLE .
+
+    PLUS            reduce using rule 21 (expression -> VARIABLE .)
+    MINUS           reduce using rule 21 (expression -> VARIABLE .)
+    TIMES           reduce using rule 21 (expression -> VARIABLE .)
+    DIVIDE          reduce using rule 21 (expression -> VARIABLE .)
+    EXP             reduce using rule 21 (expression -> VARIABLE .)
+    FACTORIAL       reduce using rule 21 (expression -> VARIABLE .)
+    LPAREN          reduce using rule 21 (expression -> VARIABLE .)
+    LBRACKET        reduce using rule 21 (expression -> VARIABLE .)
+    LSET            reduce using rule 21 (expression -> VARIABLE .)
+    NUMBER          reduce using rule 21 (expression -> VARIABLE .)
+    VARIABLE        reduce using rule 21 (expression -> VARIABLE .)
+    COMMA           reduce using rule 21 (expression -> VARIABLE .)
+    $end            reduce using rule 21 (expression -> VARIABLE .)
+    RBRACKET        reduce using rule 21 (expression -> VARIABLE .)
+    RSET            reduce using rule 21 (expression -> VARIABLE .)
+    RPAREN          reduce using rule 21 (expression -> VARIABLE .)
+
+
+state 5
+
+    (13) expression -> LSET . list RSET
+    (14) expression -> LSET . expression RSET
+    (15) expression -> LSET . RSET
+    (17) list -> . expression COMMA
+    (18) list -> . list expression COMMA
+    (19) list -> . list expression
+    (3) expression -> . expression PLUS expression
+    (4) expression -> . expression MINUS expression
+    (5) expression -> . expression TIMES expression
+    (6) expression -> . expression DIVIDE expression
+    (7) expression -> . expression EXP expression
+    (8) expression -> . expression expression
+    (9) expression -> . MINUS expression
+    (10) expression -> . expression FACTORIAL
+    (11) expression -> . LPAREN expression RPAREN
+    (12) expression -> . LBRACKET expression RBRACKET
+    (13) expression -> . LSET list RSET
+    (14) expression -> . LSET expression RSET
+    (15) expression -> . LSET RSET
+    (16) expression -> . LPAREN list RPAREN
+    (20) expression -> . NUMBER
+    (21) expression -> . VARIABLE
+
+    RSET            shift and go to state 13
+    MINUS           shift and go to state 9
+    LPAREN          shift and go to state 7
+    LBRACKET        shift and go to state 3
+    LSET            shift and go to state 5
+    NUMBER          shift and go to state 2
+    VARIABLE        shift and go to state 4
+
+    expression                     shift and go to state 14
+    list                           shift and go to state 12
+
+state 6
+
+    (0) S' -> statement .
+
+
+
+state 7
+
+    (11) expression -> LPAREN . expression RPAREN
+    (16) expression -> LPAREN . list RPAREN
+    (3) expression -> . expression PLUS expression
+    (4) expression -> . expression MINUS expression
+    (5) expression -> . expression TIMES expression
+    (6) expression -> . expression DIVIDE expression
+    (7) expression -> . expression EXP expression
+    (8) expression -> . expression expression
+    (9) expression -> . MINUS expression
+    (10) expression -> . expression FACTORIAL
+    (11) expression -> . LPAREN expression RPAREN
+    (12) expression -> . LBRACKET expression RBRACKET
+    (13) expression -> . LSET list RSET
+    (14) expression -> . LSET expression RSET
+    (15) expression -> . LSET RSET
+    (16) expression -> . LPAREN list RPAREN
+    (20) expression -> . NUMBER
+    (21) expression -> . VARIABLE
+    (17) list -> . expression COMMA
+    (18) list -> . list expression COMMA
+    (19) list -> . list expression
+
+    MINUS           shift and go to state 9
+    LPAREN          shift and go to state 7
+    LBRACKET        shift and go to state 3
+    LSET            shift and go to state 5
+    NUMBER          shift and go to state 2
+    VARIABLE        shift and go to state 4
+
+    list                           shift and go to state 15
+    expression                     shift and go to state 16
+
+state 8
+
+    (1) statement -> expression .
+    (3) expression -> expression . PLUS expression
+    (4) expression -> expression . MINUS expression
+    (5) expression -> expression . TIMES expression
+    (6) expression -> expression . DIVIDE expression
+    (7) expression -> expression . EXP expression
+    (8) expression -> expression . expression
+    (10) expression -> expression . FACTORIAL
+    (17) list -> expression . COMMA
+    (3) expression -> . expression PLUS expression
+    (4) expression -> . expression MINUS expression
+    (5) expression -> . expression TIMES expression
+    (6) expression -> . expression DIVIDE expression
+    (7) expression -> . expression EXP expression
+    (8) expression -> . expression expression
+    (9) expression -> . MINUS expression
+    (10) expression -> . expression FACTORIAL
+    (11) expression -> . LPAREN expression RPAREN
+    (12) expression -> . LBRACKET expression RBRACKET
+    (13) expression -> . LSET list RSET
+    (14) expression -> . LSET expression RSET
+    (15) expression -> . LSET RSET
+    (16) expression -> . LPAREN list RPAREN
+    (20) expression -> . NUMBER
+    (21) expression -> . VARIABLE
+
+    $end            reduce using rule 1 (statement -> expression .)
+    PLUS            shift and go to state 20
+    MINUS           shift and go to state 24
+    TIMES           shift and go to state 19
+    DIVIDE          shift and go to state 17
+    EXP             shift and go to state 21
+    FACTORIAL       shift and go to state 18
+    COMMA           shift and go to state 22
+    LPAREN          shift and go to state 7
+    LBRACKET        shift and go to state 3
+    LSET            shift and go to state 5
+    NUMBER          shift and go to state 2
+    VARIABLE        shift and go to state 4
+
+    expression                     shift and go to state 23
+
+state 9
+
+    (9) expression -> MINUS . expression
+    (3) expression -> . expression PLUS expression
+    (4) expression -> . expression MINUS expression
+    (5) expression -> . expression TIMES expression
+    (6) expression -> . expression DIVIDE expression
+    (7) expression -> . expression EXP expression
+    (8) expression -> . expression expression
+    (9) expression -> . MINUS expression
+    (10) expression -> . expression FACTORIAL
+    (11) expression -> . LPAREN expression RPAREN
+    (12) expression -> . LBRACKET expression RBRACKET
+    (13) expression -> . LSET list RSET
+    (14) expression -> . LSET expression RSET
+    (15) expression -> . LSET RSET
+    (16) expression -> . LPAREN list RPAREN
+    (20) expression -> . NUMBER
+    (21) expression -> . VARIABLE
+
+    MINUS           shift and go to state 9
+    LPAREN          shift and go to state 7
+    LBRACKET        shift and go to state 3
+    LSET            shift and go to state 5
+    NUMBER          shift and go to state 2
+    VARIABLE        shift and go to state 4
+
+    expression                     shift and go to state 25
+
+state 10
+
+    (18) list -> list expression . COMMA
+    (19) list -> list expression .
+    (3) expression -> expression . PLUS expression
+    (4) expression -> expression . MINUS expression
+    (5) expression -> expression . TIMES expression
+    (6) expression -> expression . DIVIDE expression
+    (7) expression -> expression . EXP expression
+    (8) expression -> expression . expression
+    (10) expression -> expression . FACTORIAL
+    (3) expression -> . expression PLUS expression
+    (4) expression -> . expression MINUS expression
+    (5) expression -> . expression TIMES expression
+    (6) expression -> . expression DIVIDE expression
+    (7) expression -> . expression EXP expression
+    (8) expression -> . expression expression
+    (9) expression -> . MINUS expression
+    (10) expression -> . expression FACTORIAL
+    (11) expression -> . LPAREN expression RPAREN
+    (12) expression -> . LBRACKET expression RBRACKET
+    (13) expression -> . LSET list RSET
+    (14) expression -> . LSET expression RSET
+    (15) expression -> . LSET RSET
+    (16) expression -> . LPAREN list RPAREN
+    (20) expression -> . NUMBER
+    (21) expression -> . VARIABLE
+
+    COMMA           shift and go to state 26
+    RPAREN          reduce using rule 19 (list -> list expression .)
+    LPAREN          reduce using rule 19 (list -> list expression .)
+    LBRACKET        reduce using rule 19 (list -> list expression .)
+    LSET            reduce using rule 19 (list -> list expression .)
+    NUMBER          reduce using rule 19 (list -> list expression .)
+    VARIABLE        reduce using rule 19 (list -> list expression .)
+    RSET            reduce using rule 19 (list -> list expression .)
+    $end            reduce using rule 19 (list -> list expression .)
+    PLUS            shift and go to state 20
+    MINUS           shift and go to state 24
+    TIMES           shift and go to state 19
+    DIVIDE          shift and go to state 17
+    EXP             shift and go to state 21
+    FACTORIAL       shift and go to state 18
+
+  ! MINUS           [ reduce using rule 19 (list -> list expression .) ]
+  ! LPAREN          [ shift and go to state 7 ]
+  ! LBRACKET        [ shift and go to state 3 ]
+  ! LSET            [ shift and go to state 5 ]
+  ! NUMBER          [ shift and go to state 2 ]
+  ! VARIABLE        [ shift and go to state 4 ]
+
+    expression                     shift and go to state 23
+
+state 11
+
+    (12) expression -> LBRACKET expression . RBRACKET
+    (3) expression -> expression . PLUS expression
+    (4) expression -> expression . MINUS expression
+    (5) expression -> expression . TIMES expression
+    (6) expression -> expression . DIVIDE expression
+    (7) expression -> expression . EXP expression
+    (8) expression -> expression . expression
+    (10) expression -> expression . FACTORIAL
+    (3) expression -> . expression PLUS expression
+    (4) expression -> . expression MINUS expression
+    (5) expression -> . expression TIMES expression
+    (6) expression -> . expression DIVIDE expression
+    (7) expression -> . expression EXP expression
+    (8) expression -> . expression expression
+    (9) expression -> . MINUS expression
+    (10) expression -> . expression FACTORIAL
+    (11) expression -> . LPAREN expression RPAREN
+    (12) expression -> . LBRACKET expression RBRACKET
+    (13) expression -> . LSET list RSET
+    (14) expression -> . LSET expression RSET
+    (15) expression -> . LSET RSET
+    (16) expression -> . LPAREN list RPAREN
+    (20) expression -> . NUMBER
+    (21) expression -> . VARIABLE
+
+    RBRACKET        shift and go to state 27
+    PLUS            shift and go to state 20
+    MINUS           shift and go to state 24
+    TIMES           shift and go to state 19
+    DIVIDE          shift and go to state 17
+    EXP             shift and go to state 21
+    FACTORIAL       shift and go to state 18
+    LPAREN          shift and go to state 7
+    LBRACKET        shift and go to state 3
+    LSET            shift and go to state 5
+    NUMBER          shift and go to state 2
+    VARIABLE        shift and go to state 4
+
+    expression                     shift and go to state 23
+
+state 12
+
+    (13) expression -> LSET list . RSET
+    (18) list -> list . expression COMMA
+    (19) list -> list . expression
+    (3) expression -> . expression PLUS expression
+    (4) expression -> . expression MINUS expression
+    (5) expression -> . expression TIMES expression
+    (6) expression -> . expression DIVIDE expression
+    (7) expression -> . expression EXP expression
+    (8) expression -> . expression expression
+    (9) expression -> . MINUS expression
+    (10) expression -> . expression FACTORIAL
+    (11) expression -> . LPAREN expression RPAREN
+    (12) expression -> . LBRACKET expression RBRACKET
+    (13) expression -> . LSET list RSET
+    (14) expression -> . LSET expression RSET
+    (15) expression -> . LSET RSET
+    (16) expression -> . LPAREN list RPAREN
+    (20) expression -> . NUMBER
+    (21) expression -> . VARIABLE
+
+    RSET            shift and go to state 28
+    MINUS           shift and go to state 9
+    LPAREN          shift and go to state 7
+    LBRACKET        shift and go to state 3
+    LSET            shift and go to state 5
+    NUMBER          shift and go to state 2
+    VARIABLE        shift and go to state 4
+
+    expression                     shift and go to state 10
+
+state 13
+
+    (15) expression -> LSET RSET .
+
+    PLUS            reduce using rule 15 (expression -> LSET RSET .)
+    MINUS           reduce using rule 15 (expression -> LSET RSET .)
+    TIMES           reduce using rule 15 (expression -> LSET RSET .)
+    DIVIDE          reduce using rule 15 (expression -> LSET RSET .)
+    EXP             reduce using rule 15 (expression -> LSET RSET .)
+    FACTORIAL       reduce using rule 15 (expression -> LSET RSET .)
+    LPAREN          reduce using rule 15 (expression -> LSET RSET .)
+    LBRACKET        reduce using rule 15 (expression -> LSET RSET .)
+    LSET            reduce using rule 15 (expression -> LSET RSET .)
+    NUMBER          reduce using rule 15 (expression -> LSET RSET .)
+    VARIABLE        reduce using rule 15 (expression -> LSET RSET .)
+    COMMA           reduce using rule 15 (expression -> LSET RSET .)
+    $end            reduce using rule 15 (expression -> LSET RSET .)
+    RBRACKET        reduce using rule 15 (expression -> LSET RSET .)
+    RSET            reduce using rule 15 (expression -> LSET RSET .)
+    RPAREN          reduce using rule 15 (expression -> LSET RSET .)
+
+
+state 14
+
+    (14) expression -> LSET expression . RSET
+    (17) list -> expression . COMMA
+    (3) expression -> expression . PLUS expression
+    (4) expression -> expression . MINUS expression
+    (5) expression -> expression . TIMES expression
+    (6) expression -> expression . DIVIDE expression
+    (7) expression -> expression . EXP expression
+    (8) expression -> expression . expression
+    (10) expression -> expression . FACTORIAL
+    (3) expression -> . expression PLUS expression
+    (4) expression -> . expression MINUS expression
+    (5) expression -> . expression TIMES expression
+    (6) expression -> . expression DIVIDE expression
+    (7) expression -> . expression EXP expression
+    (8) expression -> . expression expression
+    (9) expression -> . MINUS expression
+    (10) expression -> . expression FACTORIAL
+    (11) expression -> . LPAREN expression RPAREN
+    (12) expression -> . LBRACKET expression RBRACKET
+    (13) expression -> . LSET list RSET
+    (14) expression -> . LSET expression RSET
+    (15) expression -> . LSET RSET
+    (16) expression -> . LPAREN list RPAREN
+    (20) expression -> . NUMBER
+    (21) expression -> . VARIABLE
+
+    RSET            shift and go to state 29
+    COMMA           shift and go to state 22
+    PLUS            shift and go to state 20
+    MINUS           shift and go to state 24
+    TIMES           shift and go to state 19
+    DIVIDE          shift and go to state 17
+    EXP             shift and go to state 21
+    FACTORIAL       shift and go to state 18
+    LPAREN          shift and go to state 7
+    LBRACKET        shift and go to state 3
+    LSET            shift and go to state 5
+    NUMBER          shift and go to state 2
+    VARIABLE        shift and go to state 4
+
+    expression                     shift and go to state 23
+
+state 15
+
+    (16) expression -> LPAREN list . RPAREN
+    (18) list -> list . expression COMMA
+    (19) list -> list . expression
+    (3) expression -> . expression PLUS expression
+    (4) expression -> . expression MINUS expression
+    (5) expression -> . expression TIMES expression
+    (6) expression -> . expression DIVIDE expression
+    (7) expression -> . expression EXP expression
+    (8) expression -> . expression expression
+    (9) expression -> . MINUS expression
+    (10) expression -> . expression FACTORIAL
+    (11) expression -> . LPAREN expression RPAREN
+    (12) expression -> . LBRACKET expression RBRACKET
+    (13) expression -> . LSET list RSET
+    (14) expression -> . LSET expression RSET
+    (15) expression -> . LSET RSET
+    (16) expression -> . LPAREN list RPAREN
+    (20) expression -> . NUMBER
+    (21) expression -> . VARIABLE
+
+    RPAREN          shift and go to state 30
+    MINUS           shift and go to state 9
+    LPAREN          shift and go to state 7
+    LBRACKET        shift and go to state 3
+    LSET            shift and go to state 5
+    NUMBER          shift and go to state 2
+    VARIABLE        shift and go to state 4
+
+    expression                     shift and go to state 10
+
+state 16
+
+    (11) expression -> LPAREN expression . RPAREN
+    (3) expression -> expression . PLUS expression
+    (4) expression -> expression . MINUS expression
+    (5) expression -> expression . TIMES expression
+    (6) expression -> expression . DIVIDE expression
+    (7) expression -> expression . EXP expression
+    (8) expression -> expression . expression
+    (10) expression -> expression . FACTORIAL
+    (17) list -> expression . COMMA
+    (3) expression -> . expression PLUS expression
+    (4) expression -> . expression MINUS expression
+    (5) expression -> . expression TIMES expression
+    (6) expression -> . expression DIVIDE expression
+    (7) expression -> . expression EXP expression
+    (8) expression -> . expression expression
+    (9) expression -> . MINUS expression
+    (10) expression -> . expression FACTORIAL
+    (11) expression -> . LPAREN expression RPAREN
+    (12) expression -> . LBRACKET expression RBRACKET
+    (13) expression -> . LSET list RSET
+    (14) expression -> . LSET expression RSET
+    (15) expression -> . LSET RSET
+    (16) expression -> . LPAREN list RPAREN
+    (20) expression -> . NUMBER
+    (21) expression -> . VARIABLE
+
+    RPAREN          shift and go to state 31
+    PLUS            shift and go to state 20
+    MINUS           shift and go to state 24
+    TIMES           shift and go to state 19
+    DIVIDE          shift and go to state 17
+    EXP             shift and go to state 21
+    FACTORIAL       shift and go to state 18
+    COMMA           shift and go to state 22
+    LPAREN          shift and go to state 7
+    LBRACKET        shift and go to state 3
+    LSET            shift and go to state 5
+    NUMBER          shift and go to state 2
+    VARIABLE        shift and go to state 4
+
+    expression                     shift and go to state 23
+
+state 17
+
+    (6) expression -> expression DIVIDE . expression
+    (3) expression -> . expression PLUS expression
+    (4) expression -> . expression MINUS expression
+    (5) expression -> . expression TIMES expression
+    (6) expression -> . expression DIVIDE expression
+    (7) expression -> . expression EXP expression
+    (8) expression -> . expression expression
+    (9) expression -> . MINUS expression
+    (10) expression -> . expression FACTORIAL
+    (11) expression -> . LPAREN expression RPAREN
+    (12) expression -> . LBRACKET expression RBRACKET
+    (13) expression -> . LSET list RSET
+    (14) expression -> . LSET expression RSET
+    (15) expression -> . LSET RSET
+    (16) expression -> . LPAREN list RPAREN
+    (20) expression -> . NUMBER
+    (21) expression -> . VARIABLE
+
+    MINUS           shift and go to state 9
+    LPAREN          shift and go to state 7
+    LBRACKET        shift and go to state 3
+    LSET            shift and go to state 5
+    NUMBER          shift and go to state 2
+    VARIABLE        shift and go to state 4
+
+    expression                     shift and go to state 32
+
+state 18
+
+    (10) expression -> expression FACTORIAL .
+
+    PLUS            reduce using rule 10 (expression -> expression FACTORIAL .)
+    MINUS           reduce using rule 10 (expression -> expression FACTORIAL .)
+    TIMES           reduce using rule 10 (expression -> expression FACTORIAL .)
+    DIVIDE          reduce using rule 10 (expression -> expression FACTORIAL .)
+    EXP             reduce using rule 10 (expression -> expression FACTORIAL .)
+    FACTORIAL       reduce using rule 10 (expression -> expression FACTORIAL .)
+    LPAREN          reduce using rule 10 (expression -> expression FACTORIAL .)
+    LBRACKET        reduce using rule 10 (expression -> expression FACTORIAL .)
+    LSET            reduce using rule 10 (expression -> expression FACTORIAL .)
+    NUMBER          reduce using rule 10 (expression -> expression FACTORIAL .)
+    VARIABLE        reduce using rule 10 (expression -> expression FACTORIAL .)
+    COMMA           reduce using rule 10 (expression -> expression FACTORIAL .)
+    $end            reduce using rule 10 (expression -> expression FACTORIAL .)
+    RBRACKET        reduce using rule 10 (expression -> expression FACTORIAL .)
+    RSET            reduce using rule 10 (expression -> expression FACTORIAL .)
+    RPAREN          reduce using rule 10 (expression -> expression FACTORIAL .)
+
+
+state 19
+
+    (5) expression -> expression TIMES . expression
+    (3) expression -> . expression PLUS expression
+    (4) expression -> . expression MINUS expression
+    (5) expression -> . expression TIMES expression
+    (6) expression -> . expression DIVIDE expression
+    (7) expression -> . expression EXP expression
+    (8) expression -> . expression expression
+    (9) expression -> . MINUS expression
+    (10) expression -> . expression FACTORIAL
+    (11) expression -> . LPAREN expression RPAREN
+    (12) expression -> . LBRACKET expression RBRACKET
+    (13) expression -> . LSET list RSET
+    (14) expression -> . LSET expression RSET
+    (15) expression -> . LSET RSET
+    (16) expression -> . LPAREN list RPAREN
+    (20) expression -> . NUMBER
+    (21) expression -> . VARIABLE
+
+    MINUS           shift and go to state 9
+    LPAREN          shift and go to state 7
+    LBRACKET        shift and go to state 3
+    LSET            shift and go to state 5
+    NUMBER          shift and go to state 2
+    VARIABLE        shift and go to state 4
+
+    expression                     shift and go to state 33
+
+state 20
+
+    (3) expression -> expression PLUS . expression
+    (3) expression -> . expression PLUS expression
+    (4) expression -> . expression MINUS expression
+    (5) expression -> . expression TIMES expression
+    (6) expression -> . expression DIVIDE expression
+    (7) expression -> . expression EXP expression
+    (8) expression -> . expression expression
+    (9) expression -> . MINUS expression
+    (10) expression -> . expression FACTORIAL
+    (11) expression -> . LPAREN expression RPAREN
+    (12) expression -> . LBRACKET expression RBRACKET
+    (13) expression -> . LSET list RSET
+    (14) expression -> . LSET expression RSET
+    (15) expression -> . LSET RSET
+    (16) expression -> . LPAREN list RPAREN
+    (20) expression -> . NUMBER
+    (21) expression -> . VARIABLE
+
+    MINUS           shift and go to state 9
+    LPAREN          shift and go to state 7
+    LBRACKET        shift and go to state 3
+    LSET            shift and go to state 5
+    NUMBER          shift and go to state 2
+    VARIABLE        shift and go to state 4
+
+    expression                     shift and go to state 34
+
+state 21
+
+    (7) expression -> expression EXP . expression
+    (3) expression -> . expression PLUS expression
+    (4) expression -> . expression MINUS expression
+    (5) expression -> . expression TIMES expression
+    (6) expression -> . expression DIVIDE expression
+    (7) expression -> . expression EXP expression
+    (8) expression -> . expression expression
+    (9) expression -> . MINUS expression
+    (10) expression -> . expression FACTORIAL
+    (11) expression -> . LPAREN expression RPAREN
+    (12) expression -> . LBRACKET expression RBRACKET
+    (13) expression -> . LSET list RSET
+    (14) expression -> . LSET expression RSET
+    (15) expression -> . LSET RSET
+    (16) expression -> . LPAREN list RPAREN
+    (20) expression -> . NUMBER
+    (21) expression -> . VARIABLE
+
+    MINUS           shift and go to state 9
+    LPAREN          shift and go to state 7
+    LBRACKET        shift and go to state 3
+    LSET            shift and go to state 5
+    NUMBER          shift and go to state 2
+    VARIABLE        shift and go to state 4
+
+    expression                     shift and go to state 35
+
+state 22
+
+    (17) list -> expression COMMA .
+
+    RPAREN          reduce using rule 17 (list -> expression COMMA .)
+    MINUS           reduce using rule 17 (list -> expression COMMA .)
+    LPAREN          reduce using rule 17 (list -> expression COMMA .)
+    LBRACKET        reduce using rule 17 (list -> expression COMMA .)
+    LSET            reduce using rule 17 (list -> expression COMMA .)
+    NUMBER          reduce using rule 17 (list -> expression COMMA .)
+    VARIABLE        reduce using rule 17 (list -> expression COMMA .)
+    RSET            reduce using rule 17 (list -> expression COMMA .)
+    $end            reduce using rule 17 (list -> expression COMMA .)
+
+
+state 23
+
+    (8) expression -> expression expression .
+    (3) expression -> expression . PLUS expression
+    (4) expression -> expression . MINUS expression
+    (5) expression -> expression . TIMES expression
+    (6) expression -> expression . DIVIDE expression
+    (7) expression -> expression . EXP expression
+    (8) expression -> expression . expression
+    (10) expression -> expression . FACTORIAL
+    (3) expression -> . expression PLUS expression
+    (4) expression -> . expression MINUS expression
+    (5) expression -> . expression TIMES expression
+    (6) expression -> . expression DIVIDE expression
+    (7) expression -> . expression EXP expression
+    (8) expression -> . expression expression
+    (9) expression -> . MINUS expression
+    (10) expression -> . expression FACTORIAL
+    (11) expression -> . LPAREN expression RPAREN
+    (12) expression -> . LBRACKET expression RBRACKET
+    (13) expression -> . LSET list RSET
+    (14) expression -> . LSET expression RSET
+    (15) expression -> . LSET RSET
+    (16) expression -> . LPAREN list RPAREN
+    (20) expression -> . NUMBER
+    (21) expression -> . VARIABLE
+
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+  ! shift/reduce conflict for TIMES resolved as shift
+  ! shift/reduce conflict for DIVIDE resolved as shift
+  ! shift/reduce conflict for EXP resolved as shift
+  ! shift/reduce conflict for FACTORIAL resolved as shift
+  ! shift/reduce conflict for LPAREN resolved as shift
+  ! shift/reduce conflict for LBRACKET resolved as shift
+  ! shift/reduce conflict for LSET resolved as shift
+  ! shift/reduce conflict for NUMBER resolved as shift
+  ! shift/reduce conflict for VARIABLE resolved as shift
+    COMMA           reduce using rule 8 (expression -> expression expression .)
+    $end            reduce using rule 8 (expression -> expression expression .)
+    RBRACKET        reduce using rule 8 (expression -> expression expression .)
+    RSET            reduce using rule 8 (expression -> expression expression .)
+    RPAREN          reduce using rule 8 (expression -> expression expression .)
+    PLUS            shift and go to state 20
+    MINUS           shift and go to state 24
+    TIMES           shift and go to state 19
+    DIVIDE          shift and go to state 17
+    EXP             shift and go to state 21
+    FACTORIAL       shift and go to state 18
+    LPAREN          shift and go to state 7
+    LBRACKET        shift and go to state 3
+    LSET            shift and go to state 5
+    NUMBER          shift and go to state 2
+    VARIABLE        shift and go to state 4
+
+  ! PLUS            [ reduce using rule 8 (expression -> expression expression .) ]
+  ! MINUS           [ reduce using rule 8 (expression -> expression expression .) ]
+  ! TIMES           [ reduce using rule 8 (expression -> expression expression .) ]
+  ! DIVIDE          [ reduce using rule 8 (expression -> expression expression .) ]
+  ! EXP             [ reduce using rule 8 (expression -> expression expression .) ]
+  ! FACTORIAL       [ reduce using rule 8 (expression -> expression expression .) ]
+  ! LPAREN          [ reduce using rule 8 (expression -> expression expression .) ]
+  ! LBRACKET        [ reduce using rule 8 (expression -> expression expression .) ]
+  ! LSET            [ reduce using rule 8 (expression -> expression expression .) ]
+  ! NUMBER          [ reduce using rule 8 (expression -> expression expression .) ]
+  ! VARIABLE        [ reduce using rule 8 (expression -> expression expression .) ]
+
+    expression                     shift and go to state 23
+
+state 24
+
+    (4) expression -> expression MINUS . expression
+    (9) expression -> MINUS . expression
+    (3) expression -> . expression PLUS expression
+    (4) expression -> . expression MINUS expression
+    (5) expression -> . expression TIMES expression
+    (6) expression -> . expression DIVIDE expression
+    (7) expression -> . expression EXP expression
+    (8) expression -> . expression expression
+    (9) expression -> . MINUS expression
+    (10) expression -> . expression FACTORIAL
+    (11) expression -> . LPAREN expression RPAREN
+    (12) expression -> . LBRACKET expression RBRACKET
+    (13) expression -> . LSET list RSET
+    (14) expression -> . LSET expression RSET
+    (15) expression -> . LSET RSET
+    (16) expression -> . LPAREN list RPAREN
+    (20) expression -> . NUMBER
+    (21) expression -> . VARIABLE
+
+    MINUS           shift and go to state 9
+    LPAREN          shift and go to state 7
+    LBRACKET        shift and go to state 3
+    LSET            shift and go to state 5
+    NUMBER          shift and go to state 2
+    VARIABLE        shift and go to state 4
+
+    expression                     shift and go to state 36
+
+state 25
+
+    (9) expression -> MINUS expression .
+    (3) expression -> expression . PLUS expression
+    (4) expression -> expression . MINUS expression
+    (5) expression -> expression . TIMES expression
+    (6) expression -> expression . DIVIDE expression
+    (7) expression -> expression . EXP expression
+    (8) expression -> expression . expression
+    (10) expression -> expression . FACTORIAL
+    (3) expression -> . expression PLUS expression
+    (4) expression -> . expression MINUS expression
+    (5) expression -> . expression TIMES expression
+    (6) expression -> . expression DIVIDE expression
+    (7) expression -> . expression EXP expression
+    (8) expression -> . expression expression
+    (9) expression -> . MINUS expression
+    (10) expression -> . expression FACTORIAL
+    (11) expression -> . LPAREN expression RPAREN
+    (12) expression -> . LBRACKET expression RBRACKET
+    (13) expression -> . LSET list RSET
+    (14) expression -> . LSET expression RSET
+    (15) expression -> . LSET RSET
+    (16) expression -> . LPAREN list RPAREN
+    (20) expression -> . NUMBER
+    (21) expression -> . VARIABLE
+
+    PLUS            reduce using rule 9 (expression -> MINUS expression .)
+    MINUS           reduce using rule 9 (expression -> MINUS expression .)
+    TIMES           reduce using rule 9 (expression -> MINUS expression .)
+    DIVIDE          reduce using rule 9 (expression -> MINUS expression .)
+    EXP             reduce using rule 9 (expression -> MINUS expression .)
+    FACTORIAL       reduce using rule 9 (expression -> MINUS expression .)
+    LPAREN          reduce using rule 9 (expression -> MINUS expression .)
+    LBRACKET        reduce using rule 9 (expression -> MINUS expression .)
+    LSET            reduce using rule 9 (expression -> MINUS expression .)
+    NUMBER          reduce using rule 9 (expression -> MINUS expression .)
+    VARIABLE        reduce using rule 9 (expression -> MINUS expression .)
+    COMMA           reduce using rule 9 (expression -> MINUS expression .)
+    $end            reduce using rule 9 (expression -> MINUS expression .)
+    RBRACKET        reduce using rule 9 (expression -> MINUS expression .)
+    RSET            reduce using rule 9 (expression -> MINUS expression .)
+    RPAREN          reduce using rule 9 (expression -> MINUS expression .)
+
+  ! PLUS            [ shift and go to state 20 ]
+  ! MINUS           [ shift and go to state 24 ]
+  ! TIMES           [ shift and go to state 19 ]
+  ! DIVIDE          [ shift and go to state 17 ]
+  ! EXP             [ shift and go to state 21 ]
+  ! FACTORIAL       [ shift and go to state 18 ]
+  ! LPAREN          [ shift and go to state 7 ]
+  ! LBRACKET        [ shift and go to state 3 ]
+  ! LSET            [ shift and go to state 5 ]
+  ! NUMBER          [ shift and go to state 2 ]
+  ! VARIABLE        [ shift and go to state 4 ]
+
+    expression                     shift and go to state 23
+
+state 26
+
+    (18) list -> list expression COMMA .
+
+    RPAREN          reduce using rule 18 (list -> list expression COMMA .)
+    MINUS           reduce using rule 18 (list -> list expression COMMA .)
+    LPAREN          reduce using rule 18 (list -> list expression COMMA .)
+    LBRACKET        reduce using rule 18 (list -> list expression COMMA .)
+    LSET            reduce using rule 18 (list -> list expression COMMA .)
+    NUMBER          reduce using rule 18 (list -> list expression COMMA .)
+    VARIABLE        reduce using rule 18 (list -> list expression COMMA .)
+    RSET            reduce using rule 18 (list -> list expression COMMA .)
+    $end            reduce using rule 18 (list -> list expression COMMA .)
+
+
+state 27
+
+    (12) expression -> LBRACKET expression RBRACKET .
+
+    PLUS            reduce using rule 12 (expression -> LBRACKET expression RBRACKET .)
+    MINUS           reduce using rule 12 (expression -> LBRACKET expression RBRACKET .)
+    TIMES           reduce using rule 12 (expression -> LBRACKET expression RBRACKET .)
+    DIVIDE          reduce using rule 12 (expression -> LBRACKET expression RBRACKET .)
+    EXP             reduce using rule 12 (expression -> LBRACKET expression RBRACKET .)
+    FACTORIAL       reduce using rule 12 (expression -> LBRACKET expression RBRACKET .)
+    LPAREN          reduce using rule 12 (expression -> LBRACKET expression RBRACKET .)
+    LBRACKET        reduce using rule 12 (expression -> LBRACKET expression RBRACKET .)
+    LSET            reduce using rule 12 (expression -> LBRACKET expression RBRACKET .)
+    NUMBER          reduce using rule 12 (expression -> LBRACKET expression RBRACKET .)
+    VARIABLE        reduce using rule 12 (expression -> LBRACKET expression RBRACKET .)
+    COMMA           reduce using rule 12 (expression -> LBRACKET expression RBRACKET .)
+    $end            reduce using rule 12 (expression -> LBRACKET expression RBRACKET .)
+    RBRACKET        reduce using rule 12 (expression -> LBRACKET expression RBRACKET .)
+    RSET            reduce using rule 12 (expression -> LBRACKET expression RBRACKET .)
+    RPAREN          reduce using rule 12 (expression -> LBRACKET expression RBRACKET .)
+
+
+state 28
+
+    (13) expression -> LSET list RSET .
+
+    PLUS            reduce using rule 13 (expression -> LSET list RSET .)
+    MINUS           reduce using rule 13 (expression -> LSET list RSET .)
+    TIMES           reduce using rule 13 (expression -> LSET list RSET .)
+    DIVIDE          reduce using rule 13 (expression -> LSET list RSET .)
+    EXP             reduce using rule 13 (expression -> LSET list RSET .)
+    FACTORIAL       reduce using rule 13 (expression -> LSET list RSET .)
+    LPAREN          reduce using rule 13 (expression -> LSET list RSET .)
+    LBRACKET        reduce using rule 13 (expression -> LSET list RSET .)
+    LSET            reduce using rule 13 (expression -> LSET list RSET .)
+    NUMBER          reduce using rule 13 (expression -> LSET list RSET .)
+    VARIABLE        reduce using rule 13 (expression -> LSET list RSET .)
+    COMMA           reduce using rule 13 (expression -> LSET list RSET .)
+    $end            reduce using rule 13 (expression -> LSET list RSET .)
+    RBRACKET        reduce using rule 13 (expression -> LSET list RSET .)
+    RSET            reduce using rule 13 (expression -> LSET list RSET .)
+    RPAREN          reduce using rule 13 (expression -> LSET list RSET .)
+
+
+state 29
+
+    (14) expression -> LSET expression RSET .
+
+    PLUS            reduce using rule 14 (expression -> LSET expression RSET .)
+    MINUS           reduce using rule 14 (expression -> LSET expression RSET .)
+    TIMES           reduce using rule 14 (expression -> LSET expression RSET .)
+    DIVIDE          reduce using rule 14 (expression -> LSET expression RSET .)
+    EXP             reduce using rule 14 (expression -> LSET expression RSET .)
+    FACTORIAL       reduce using rule 14 (expression -> LSET expression RSET .)
+    LPAREN          reduce using rule 14 (expression -> LSET expression RSET .)
+    LBRACKET        reduce using rule 14 (expression -> LSET expression RSET .)
+    LSET            reduce using rule 14 (expression -> LSET expression RSET .)
+    NUMBER          reduce using rule 14 (expression -> LSET expression RSET .)
+    VARIABLE        reduce using rule 14 (expression -> LSET expression RSET .)
+    COMMA           reduce using rule 14 (expression -> LSET expression RSET .)
+    $end            reduce using rule 14 (expression -> LSET expression RSET .)
+    RBRACKET        reduce using rule 14 (expression -> LSET expression RSET .)
+    RSET            reduce using rule 14 (expression -> LSET expression RSET .)
+    RPAREN          reduce using rule 14 (expression -> LSET expression RSET .)
+
+
+state 30
+
+    (16) expression -> LPAREN list RPAREN .
+
+    PLUS            reduce using rule 16 (expression -> LPAREN list RPAREN .)
+    MINUS           reduce using rule 16 (expression -> LPAREN list RPAREN .)
+    TIMES           reduce using rule 16 (expression -> LPAREN list RPAREN .)
+    DIVIDE          reduce using rule 16 (expression -> LPAREN list RPAREN .)
+    EXP             reduce using rule 16 (expression -> LPAREN list RPAREN .)
+    FACTORIAL       reduce using rule 16 (expression -> LPAREN list RPAREN .)
+    LPAREN          reduce using rule 16 (expression -> LPAREN list RPAREN .)
+    LBRACKET        reduce using rule 16 (expression -> LPAREN list RPAREN .)
+    LSET            reduce using rule 16 (expression -> LPAREN list RPAREN .)
+    NUMBER          reduce using rule 16 (expression -> LPAREN list RPAREN .)
+    VARIABLE        reduce using rule 16 (expression -> LPAREN list RPAREN .)
+    COMMA           reduce using rule 16 (expression -> LPAREN list RPAREN .)
+    $end            reduce using rule 16 (expression -> LPAREN list RPAREN .)
+    RBRACKET        reduce using rule 16 (expression -> LPAREN list RPAREN .)
+    RSET            reduce using rule 16 (expression -> LPAREN list RPAREN .)
+    RPAREN          reduce using rule 16 (expression -> LPAREN list RPAREN .)
+
+
+state 31
+
+    (11) expression -> LPAREN expression RPAREN .
+
+    PLUS            reduce using rule 11 (expression -> LPAREN expression RPAREN .)
+    MINUS           reduce using rule 11 (expression -> LPAREN expression RPAREN .)
+    TIMES           reduce using rule 11 (expression -> LPAREN expression RPAREN .)
+    DIVIDE          reduce using rule 11 (expression -> LPAREN expression RPAREN .)
+    EXP             reduce using rule 11 (expression -> LPAREN expression RPAREN .)
+    FACTORIAL       reduce using rule 11 (expression -> LPAREN expression RPAREN .)
+    LPAREN          reduce using rule 11 (expression -> LPAREN expression RPAREN .)
+    LBRACKET        reduce using rule 11 (expression -> LPAREN expression RPAREN .)
+    LSET            reduce using rule 11 (expression -> LPAREN expression RPAREN .)
+    NUMBER          reduce using rule 11 (expression -> LPAREN expression RPAREN .)
+    VARIABLE        reduce using rule 11 (expression -> LPAREN expression RPAREN .)
+    COMMA           reduce using rule 11 (expression -> LPAREN expression RPAREN .)
+    $end            reduce using rule 11 (expression -> LPAREN expression RPAREN .)
+    RBRACKET        reduce using rule 11 (expression -> LPAREN expression RPAREN .)
+    RSET            reduce using rule 11 (expression -> LPAREN expression RPAREN .)
+    RPAREN          reduce using rule 11 (expression -> LPAREN expression RPAREN .)
+
+
+state 32
+
+    (6) expression -> expression DIVIDE expression .
+    (3) expression -> expression . PLUS expression
+    (4) expression -> expression . MINUS expression
+    (5) expression -> expression . TIMES expression
+    (6) expression -> expression . DIVIDE expression
+    (7) expression -> expression . EXP expression
+    (8) expression -> expression . expression
+    (10) expression -> expression . FACTORIAL
+    (3) expression -> . expression PLUS expression
+    (4) expression -> . expression MINUS expression
+    (5) expression -> . expression TIMES expression
+    (6) expression -> . expression DIVIDE expression
+    (7) expression -> . expression EXP expression
+    (8) expression -> . expression expression
+    (9) expression -> . MINUS expression
+    (10) expression -> . expression FACTORIAL
+    (11) expression -> . LPAREN expression RPAREN
+    (12) expression -> . LBRACKET expression RBRACKET
+    (13) expression -> . LSET list RSET
+    (14) expression -> . LSET expression RSET
+    (15) expression -> . LSET RSET
+    (16) expression -> . LPAREN list RPAREN
+    (20) expression -> . NUMBER
+    (21) expression -> . VARIABLE
+
+    PLUS            reduce using rule 6 (expression -> expression DIVIDE expression .)
+    MINUS           reduce using rule 6 (expression -> expression DIVIDE expression .)
+    TIMES           reduce using rule 6 (expression -> expression DIVIDE expression .)
+    DIVIDE          reduce using rule 6 (expression -> expression DIVIDE expression .)
+    LPAREN          reduce using rule 6 (expression -> expression DIVIDE expression .)
+    LBRACKET        reduce using rule 6 (expression -> expression DIVIDE expression .)
+    LSET            reduce using rule 6 (expression -> expression DIVIDE expression .)
+    NUMBER          reduce using rule 6 (expression -> expression DIVIDE expression .)
+    VARIABLE        reduce using rule 6 (expression -> expression DIVIDE expression .)
+    COMMA           reduce using rule 6 (expression -> expression DIVIDE expression .)
+    $end            reduce using rule 6 (expression -> expression DIVIDE expression .)
+    RBRACKET        reduce using rule 6 (expression -> expression DIVIDE expression .)
+    RSET            reduce using rule 6 (expression -> expression DIVIDE expression .)
+    RPAREN          reduce using rule 6 (expression -> expression DIVIDE expression .)
+    EXP             shift and go to state 21
+    FACTORIAL       shift and go to state 18
+
+  ! EXP             [ reduce using rule 6 (expression -> expression DIVIDE expression .) ]
+  ! FACTORIAL       [ reduce using rule 6 (expression -> expression DIVIDE expression .) ]
+  ! PLUS            [ shift and go to state 20 ]
+  ! MINUS           [ shift and go to state 24 ]
+  ! TIMES           [ shift and go to state 19 ]
+  ! DIVIDE          [ shift and go to state 17 ]
+  ! LPAREN          [ shift and go to state 7 ]
+  ! LBRACKET        [ shift and go to state 3 ]
+  ! LSET            [ shift and go to state 5 ]
+  ! NUMBER          [ shift and go to state 2 ]
+  ! VARIABLE        [ shift and go to state 4 ]
+
+    expression                     shift and go to state 23
+
+state 33
+
+    (5) expression -> expression TIMES expression .
+    (3) expression -> expression . PLUS expression
+    (4) expression -> expression . MINUS expression
+    (5) expression -> expression . TIMES expression
+    (6) expression -> expression . DIVIDE expression
+    (7) expression -> expression . EXP expression
+    (8) expression -> expression . expression
+    (10) expression -> expression . FACTORIAL
+    (3) expression -> . expression PLUS expression
+    (4) expression -> . expression MINUS expression
+    (5) expression -> . expression TIMES expression
+    (6) expression -> . expression DIVIDE expression
+    (7) expression -> . expression EXP expression
+    (8) expression -> . expression expression
+    (9) expression -> . MINUS expression
+    (10) expression -> . expression FACTORIAL
+    (11) expression -> . LPAREN expression RPAREN
+    (12) expression -> . LBRACKET expression RBRACKET
+    (13) expression -> . LSET list RSET
+    (14) expression -> . LSET expression RSET
+    (15) expression -> . LSET RSET
+    (16) expression -> . LPAREN list RPAREN
+    (20) expression -> . NUMBER
+    (21) expression -> . VARIABLE
+
+    PLUS            reduce using rule 5 (expression -> expression TIMES expression .)
+    MINUS           reduce using rule 5 (expression -> expression TIMES expression .)
+    TIMES           reduce using rule 5 (expression -> expression TIMES expression .)
+    DIVIDE          reduce using rule 5 (expression -> expression TIMES expression .)
+    LPAREN          reduce using rule 5 (expression -> expression TIMES expression .)
+    LBRACKET        reduce using rule 5 (expression -> expression TIMES expression .)
+    LSET            reduce using rule 5 (expression -> expression TIMES expression .)
+    NUMBER          reduce using rule 5 (expression -> expression TIMES expression .)
+    VARIABLE        reduce using rule 5 (expression -> expression TIMES expression .)
+    COMMA           reduce using rule 5 (expression -> expression TIMES expression .)
+    $end            reduce using rule 5 (expression -> expression TIMES expression .)
+    RBRACKET        reduce using rule 5 (expression -> expression TIMES expression .)
+    RSET            reduce using rule 5 (expression -> expression TIMES expression .)
+    RPAREN          reduce using rule 5 (expression -> expression TIMES expression .)
+    EXP             shift and go to state 21
+    FACTORIAL       shift and go to state 18
+
+  ! EXP             [ reduce using rule 5 (expression -> expression TIMES expression .) ]
+  ! FACTORIAL       [ reduce using rule 5 (expression -> expression TIMES expression .) ]
+  ! PLUS            [ shift and go to state 20 ]
+  ! MINUS           [ shift and go to state 24 ]
+  ! TIMES           [ shift and go to state 19 ]
+  ! DIVIDE          [ shift and go to state 17 ]
+  ! LPAREN          [ shift and go to state 7 ]
+  ! LBRACKET        [ shift and go to state 3 ]
+  ! LSET            [ shift and go to state 5 ]
+  ! NUMBER          [ shift and go to state 2 ]
+  ! VARIABLE        [ shift and go to state 4 ]
+
+    expression                     shift and go to state 23
+
+state 34
+
+    (3) expression -> expression PLUS expression .
+    (3) expression -> expression . PLUS expression
+    (4) expression -> expression . MINUS expression
+    (5) expression -> expression . TIMES expression
+    (6) expression -> expression . DIVIDE expression
+    (7) expression -> expression . EXP expression
+    (8) expression -> expression . expression
+    (10) expression -> expression . FACTORIAL
+    (3) expression -> . expression PLUS expression
+    (4) expression -> . expression MINUS expression
+    (5) expression -> . expression TIMES expression
+    (6) expression -> . expression DIVIDE expression
+    (7) expression -> . expression EXP expression
+    (8) expression -> . expression expression
+    (9) expression -> . MINUS expression
+    (10) expression -> . expression FACTORIAL
+    (11) expression -> . LPAREN expression RPAREN
+    (12) expression -> . LBRACKET expression RBRACKET
+    (13) expression -> . LSET list RSET
+    (14) expression -> . LSET expression RSET
+    (15) expression -> . LSET RSET
+    (16) expression -> . LPAREN list RPAREN
+    (20) expression -> . NUMBER
+    (21) expression -> . VARIABLE
+
+    PLUS            reduce using rule 3 (expression -> expression PLUS expression .)
+    MINUS           reduce using rule 3 (expression -> expression PLUS expression .)
+    LPAREN          reduce using rule 3 (expression -> expression PLUS expression .)
+    LBRACKET        reduce using rule 3 (expression -> expression PLUS expression .)
+    LSET            reduce using rule 3 (expression -> expression PLUS expression .)
+    NUMBER          reduce using rule 3 (expression -> expression PLUS expression .)
+    VARIABLE        reduce using rule 3 (expression -> expression PLUS expression .)
+    COMMA           reduce using rule 3 (expression -> expression PLUS expression .)
+    $end            reduce using rule 3 (expression -> expression PLUS expression .)
+    RBRACKET        reduce using rule 3 (expression -> expression PLUS expression .)
+    RSET            reduce using rule 3 (expression -> expression PLUS expression .)
+    RPAREN          reduce using rule 3 (expression -> expression PLUS expression .)
+    TIMES           shift and go to state 19
+    DIVIDE          shift and go to state 17
+    EXP             shift and go to state 21
+    FACTORIAL       shift and go to state 18
+
+  ! TIMES           [ reduce using rule 3 (expression -> expression PLUS expression .) ]
+  ! DIVIDE          [ reduce using rule 3 (expression -> expression PLUS expression .) ]
+  ! EXP             [ reduce using rule 3 (expression -> expression PLUS expression .) ]
+  ! FACTORIAL       [ reduce using rule 3 (expression -> expression PLUS expression .) ]
+  ! PLUS            [ shift and go to state 20 ]
+  ! MINUS           [ shift and go to state 24 ]
+  ! LPAREN          [ shift and go to state 7 ]
+  ! LBRACKET        [ shift and go to state 3 ]
+  ! LSET            [ shift and go to state 5 ]
+  ! NUMBER          [ shift and go to state 2 ]
+  ! VARIABLE        [ shift and go to state 4 ]
+
+    expression                     shift and go to state 23
+
+state 35
+
+    (7) expression -> expression EXP expression .
+    (3) expression -> expression . PLUS expression
+    (4) expression -> expression . MINUS expression
+    (5) expression -> expression . TIMES expression
+    (6) expression -> expression . DIVIDE expression
+    (7) expression -> expression . EXP expression
+    (8) expression -> expression . expression
+    (10) expression -> expression . FACTORIAL
+    (3) expression -> . expression PLUS expression
+    (4) expression -> . expression MINUS expression
+    (5) expression -> . expression TIMES expression
+    (6) expression -> . expression DIVIDE expression
+    (7) expression -> . expression EXP expression
+    (8) expression -> . expression expression
+    (9) expression -> . MINUS expression
+    (10) expression -> . expression FACTORIAL
+    (11) expression -> . LPAREN expression RPAREN
+    (12) expression -> . LBRACKET expression RBRACKET
+    (13) expression -> . LSET list RSET
+    (14) expression -> . LSET expression RSET
+    (15) expression -> . LSET RSET
+    (16) expression -> . LPAREN list RPAREN
+    (20) expression -> . NUMBER
+    (21) expression -> . VARIABLE
+
+    PLUS            reduce using rule 7 (expression -> expression EXP expression .)
+    MINUS           reduce using rule 7 (expression -> expression EXP expression .)
+    TIMES           reduce using rule 7 (expression -> expression EXP expression .)
+    DIVIDE          reduce using rule 7 (expression -> expression EXP expression .)
+    EXP             reduce using rule 7 (expression -> expression EXP expression .)
+    LPAREN          reduce using rule 7 (expression -> expression EXP expression .)
+    LBRACKET        reduce using rule 7 (expression -> expression EXP expression .)
+    LSET            reduce using rule 7 (expression -> expression EXP expression .)
+    NUMBER          reduce using rule 7 (expression -> expression EXP expression .)
+    VARIABLE        reduce using rule 7 (expression -> expression EXP expression .)
+    COMMA           reduce using rule 7 (expression -> expression EXP expression .)
+    $end            reduce using rule 7 (expression -> expression EXP expression .)
+    RBRACKET        reduce using rule 7 (expression -> expression EXP expression .)
+    RSET            reduce using rule 7 (expression -> expression EXP expression .)
+    RPAREN          reduce using rule 7 (expression -> expression EXP expression .)
+    FACTORIAL       shift and go to state 18
+
+  ! FACTORIAL       [ reduce using rule 7 (expression -> expression EXP expression .) ]
+  ! PLUS            [ shift and go to state 20 ]
+  ! MINUS           [ shift and go to state 24 ]
+  ! TIMES           [ shift and go to state 19 ]
+  ! DIVIDE          [ shift and go to state 17 ]
+  ! EXP             [ shift and go to state 21 ]
+  ! LPAREN          [ shift and go to state 7 ]
+  ! LBRACKET        [ shift and go to state 3 ]
+  ! LSET            [ shift and go to state 5 ]
+  ! NUMBER          [ shift and go to state 2 ]
+  ! VARIABLE        [ shift and go to state 4 ]
+
+    expression                     shift and go to state 23
+
+state 36
+
+    (4) expression -> expression MINUS expression .
+    (9) expression -> MINUS expression .
+    (3) expression -> expression . PLUS expression
+    (4) expression -> expression . MINUS expression
+    (5) expression -> expression . TIMES expression
+    (6) expression -> expression . DIVIDE expression
+    (7) expression -> expression . EXP expression
+    (8) expression -> expression . expression
+    (10) expression -> expression . FACTORIAL
+    (3) expression -> . expression PLUS expression
+    (4) expression -> . expression MINUS expression
+    (5) expression -> . expression TIMES expression
+    (6) expression -> . expression DIVIDE expression
+    (7) expression -> . expression EXP expression
+    (8) expression -> . expression expression
+    (9) expression -> . MINUS expression
+    (10) expression -> . expression FACTORIAL
+    (11) expression -> . LPAREN expression RPAREN
+    (12) expression -> . LBRACKET expression RBRACKET
+    (13) expression -> . LSET list RSET
+    (14) expression -> . LSET expression RSET
+    (15) expression -> . LSET RSET
+    (16) expression -> . LPAREN list RPAREN
+    (20) expression -> . NUMBER
+    (21) expression -> . VARIABLE
+
+  ! reduce/reduce conflict for PLUS resolved using rule 4 (expression -> expression MINUS expression .)
+  ! reduce/reduce conflict for MINUS resolved using rule 4 (expression -> expression MINUS expression .)
+  ! reduce/reduce conflict for TIMES resolved using rule 4 (expression -> expression MINUS expression .)
+  ! reduce/reduce conflict for DIVIDE resolved using rule 4 (expression -> expression MINUS expression .)
+  ! reduce/reduce conflict for EXP resolved using rule 4 (expression -> expression MINUS expression .)
+  ! reduce/reduce conflict for FACTORIAL resolved using rule 4 (expression -> expression MINUS expression .)
+  ! reduce/reduce conflict for LPAREN resolved using rule 4 (expression -> expression MINUS expression .)
+  ! reduce/reduce conflict for LBRACKET resolved using rule 4 (expression -> expression MINUS expression .)
+  ! reduce/reduce conflict for LSET resolved using rule 4 (expression -> expression MINUS expression .)
+  ! reduce/reduce conflict for NUMBER resolved using rule 4 (expression -> expression MINUS expression .)
+  ! reduce/reduce conflict for VARIABLE resolved using rule 4 (expression -> expression MINUS expression .)
+  ! reduce/reduce conflict for COMMA resolved using rule 4 (expression -> expression MINUS expression .)
+  ! reduce/reduce conflict for $end resolved using rule 4 (expression -> expression MINUS expression .)
+  ! reduce/reduce conflict for RBRACKET resolved using rule 4 (expression -> expression MINUS expression .)
+  ! reduce/reduce conflict for RSET resolved using rule 4 (expression -> expression MINUS expression .)
+  ! reduce/reduce conflict for RPAREN resolved using rule 4 (expression -> expression MINUS expression .)
+    PLUS            reduce using rule 4 (expression -> expression MINUS expression .)
+    MINUS           reduce using rule 4 (expression -> expression MINUS expression .)
+    LPAREN          reduce using rule 4 (expression -> expression MINUS expression .)
+    LBRACKET        reduce using rule 4 (expression -> expression MINUS expression .)
+    LSET            reduce using rule 4 (expression -> expression MINUS expression .)
+    NUMBER          reduce using rule 4 (expression -> expression MINUS expression .)
+    VARIABLE        reduce using rule 4 (expression -> expression MINUS expression .)
+    COMMA           reduce using rule 4 (expression -> expression MINUS expression .)
+    $end            reduce using rule 4 (expression -> expression MINUS expression .)
+    RBRACKET        reduce using rule 4 (expression -> expression MINUS expression .)
+    RSET            reduce using rule 4 (expression -> expression MINUS expression .)
+    RPAREN          reduce using rule 4 (expression -> expression MINUS expression .)
+    TIMES           shift and go to state 19
+    DIVIDE          shift and go to state 17
+    EXP             shift and go to state 21
+    FACTORIAL       shift and go to state 18
+
+  ! TIMES           [ reduce using rule 4 (expression -> expression MINUS expression .) ]
+  ! DIVIDE          [ reduce using rule 4 (expression -> expression MINUS expression .) ]
+  ! EXP             [ reduce using rule 4 (expression -> expression MINUS expression .) ]
+  ! FACTORIAL       [ reduce using rule 4 (expression -> expression MINUS expression .) ]
+  ! PLUS            [ reduce using rule 9 (expression -> MINUS expression .) ]
+  ! MINUS           [ reduce using rule 9 (expression -> MINUS expression .) ]
+  ! TIMES           [ reduce using rule 9 (expression -> MINUS expression .) ]
+  ! DIVIDE          [ reduce using rule 9 (expression -> MINUS expression .) ]
+  ! EXP             [ reduce using rule 9 (expression -> MINUS expression .) ]
+  ! FACTORIAL       [ reduce using rule 9 (expression -> MINUS expression .) ]
+  ! LPAREN          [ reduce using rule 9 (expression -> MINUS expression .) ]
+  ! LBRACKET        [ reduce using rule 9 (expression -> MINUS expression .) ]
+  ! LSET            [ reduce using rule 9 (expression -> MINUS expression .) ]
+  ! NUMBER          [ reduce using rule 9 (expression -> MINUS expression .) ]
+  ! VARIABLE        [ reduce using rule 9 (expression -> MINUS expression .) ]
+  ! COMMA           [ reduce using rule 9 (expression -> MINUS expression .) ]
+  ! $end            [ reduce using rule 9 (expression -> MINUS expression .) ]
+  ! RBRACKET        [ reduce using rule 9 (expression -> MINUS expression .) ]
+  ! RSET            [ reduce using rule 9 (expression -> MINUS expression .) ]
+  ! RPAREN          [ reduce using rule 9 (expression -> MINUS expression .) ]
+  ! PLUS            [ shift and go to state 20 ]
+  ! MINUS           [ shift and go to state 24 ]
+  ! LPAREN          [ shift and go to state 7 ]
+  ! LBRACKET        [ shift and go to state 3 ]
+  ! LSET            [ shift and go to state 5 ]
+  ! NUMBER          [ shift and go to state 2 ]
+  ! VARIABLE        [ shift and go to state 4 ]
+
+    expression                     shift and go to state 23
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for PLUS in state 23 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 23 resolved as shift
+WARNING: shift/reduce conflict for TIMES in state 23 resolved as shift
+WARNING: shift/reduce conflict for DIVIDE in state 23 resolved as shift
+WARNING: shift/reduce conflict for EXP in state 23 resolved as shift
+WARNING: shift/reduce conflict for FACTORIAL in state 23 resolved as shift
+WARNING: shift/reduce conflict for LPAREN in state 23 resolved as shift
+WARNING: shift/reduce conflict for LBRACKET in state 23 resolved as shift
+WARNING: shift/reduce conflict for LSET in state 23 resolved as shift
+WARNING: shift/reduce conflict for NUMBER in state 23 resolved as shift
+WARNING: shift/reduce conflict for VARIABLE in state 23 resolved as shift
+WARNING: reduce/reduce conflict in state 36 resolved using rule (expression -> expression MINUS expression)
+WARNING: rejected rule (expression -> MINUS expression) in state 36
