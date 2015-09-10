@@ -4,4 +4,4 @@ data/*
 parselog.txt
 docs/_build/
 .vagrant/*
-
+local_server/webwork.sql
