@@ -12,9 +12,15 @@ Contents:
 
 2. :ref:`architecture`
 
-3. Communication Sequences
+3. Python modules
 
-4. Issues/Areas of Improvement
+4. Javascript Modules
+
+5. Database schemas
+
+6. Communication Sequences
+
+7. Issues/Areas of Improvement
 
 .. toctree::
    :maxdepth: 2
