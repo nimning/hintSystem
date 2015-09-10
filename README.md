@@ -1,9 +1,11 @@
 Directories and Files
 ---------------------
 
-[Documentation in Sphinx](https://readthedocs.org/projects/webwork-adaptivehints/) (figure out how to build after making changes in github)
-[Architecture Diagram](https://docs.google.com/drawings/d/19nmZt2Dzaz0_3F8tUUwOE_SmPAN_-e9J-Xx3GqYPA24/edit) (Update and move to lucidchart which has better templates for block diagrams)
+## Pointers to documentation
+* [Documentation in Sphinx](https://readthedocs.org/projects/webwork-adaptivehints/) (figure out how to build after making changes in github)
+* [Architecture Diagram](https://docs.google.com/drawings/d/19nmZt2Dzaz0_3F8tUUwOE_SmPAN_-e9J-Xx3GqYPA24/edit) (Update and move to lucidchart which has better templates for block diagrams)
 
+## Structure of this github
 * README.md:    This file  
 * setup.sh    A script for setting the environmental variables. Run _source setup.sh_ at root direcotry.
 * `setup_mysql_dump.sh`     A script for setting up environment variables to point to a directory containing mysql dumps.  Run `source setup_mysql_dump.sh` as root
