@@ -205,12 +205,12 @@
         state: directory
     - name: Symlink teacher client
       file:
-        src: /vagrant/src/adaptive-hint-clients/teacher_client
+        src: /vagrant/src/clients/teacher_client
         path: /var/www/teacher
         state: link
     - name: Symlink adaptive hints JS
       file:
-        src: /vagrant/src/adaptive-hint-clients/webwork_js/adaptive_hints.js
+        src: /vagrant/src/clients/webwork_js/adaptive_hints.js
         path: /opt/webwork/webwork2/htdocs/js/adaptive_hints.js
         state: link
     - name: Download PhantomJS
