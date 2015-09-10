@@ -12,6 +12,8 @@ Directories and Files
 * src         **DIR** All of the code
 * data        **DIR** All of the data
 
+### ansible
+* Ansible is a tool for provisioning/configuring development environments
 
 ### src
 * README.md: A markdown file explaining how to use the student\_adaptive\_server
