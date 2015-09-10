@@ -14,6 +14,7 @@ Directories and Files
 
 ### ansible
 * Ansible is a tool for provisioning/configuring development environments
+* We use this to configure local server
 
 ### src
 * README.md: A markdown file explaining how to use the student\_adaptive\_server
