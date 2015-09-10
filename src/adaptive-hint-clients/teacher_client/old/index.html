@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<!--
+  Created using jsbin.com
+  Source can be edited via http://jsbin.com/UniciTu/60/edit
+-->
+<head>
+  <meta charset=utf-8 />
+  <title>TA Console</title>
+  <link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css">
+  <link rel="stylesheet" type="text/css" href="css/console.css">
+</head>
+<body>
+  <input type="hidden" id="sockjs_port" value="4350"/>
+  <input type="hidden" id="rest_port" value="4351"/>
+  <input type="hidden" id="current_set_id" value=""/>
+
+  <div class="login_panel">
+    TeacherID: <span id="teacher_id_label"></span>
+    <select id="teacher_id">
+      <option value="yfreund">yfreund</option>
+      <option value="scheaman">scheaman</option>
+      <option value="melkherj">melkherj</option>
+      <option value="yuncong">yuncong</option>
+      <option value="tutor1_rose">tutor1_rose</option>
+      <option value="tutor2_zhen">tutor2_zhen</option>
+      <option value="tutor3">tutor3</option>
+    </select>
+    <button id="login_button">Login</button>
+    <button id="logout_button">Logout</button>
+    <a href="/teacher/ng/#/CSE103_Fall14">New Console</a>
+  </div>
+
+  <div id="after_login">
+    <div><button id="create_hint">Create new hints</button></div>
+    <div><h2>Unasssigned students</h2></div>
+    <div>Assignment Filter: <span id="assignment_filter"></span></div>
+    <div>Problem Filter: <span id="problem_filter"></span></div>
+    <div class="table_container">
+      <table id="unassigned_students">
+        <thead>
+          <tr>
+            <th>Student</th>
+            <th>Set</th>
+            <th>Problem</th>
+            <th>Time since last incorrect</th>
+            <th>Total incorrect tries</th>
+            <th>Incorrect tries (last 15 mins)</th>
+            <th>Time since last hint</th>
+	    <th>Online</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+
+    <div><h2>My students</h2></div>
+    <div class="table_container">
+      <table id="my_students">
+        <thead>
+          <tr>
+            <th>Student</th>
+            <th>Set</th>
+            <th>Problem</th>
+            <th>Time since last incorrect</th>
+            <th>Total incorrect tries</th>
+            <th>Incorrect tries (last 15 mins)</th>
+            <th>Time since last hint</th>
+	    <th>Online</th>
+	    <th>Solved</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
+  <script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/console.js"></script>
+</body>
+</html>
