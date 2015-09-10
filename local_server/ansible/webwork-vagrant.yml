@@ -183,10 +183,10 @@
       mysql_db:
         name: webwork
         state: import
-        target: /vagrant/webwork.sql
+        target: /vagrant/local_server/webwork.sql
     - name: Install dependencies for python servers
       pip:
-        requirements: /vagrant/requirements.txt
+        requirements: /vagrant/local_server/requirements.txt
     #- name: Add python system path
     #  command: export PYTHONPATH="$PYTHONPATH:/usr/local/bin"
     # - name: Start SockJS server
@@ -195,11 +195,10 @@
     #   command: python /vagrant/src/adaptive-hints-servers/rest_server/rest_server.py
     - name: Replace Nginx default file
       copy:
-        src: ../default
+        src: ../../local_server/default
         dest: /etc/nginx/sites-available/
     - name: Place courses files
-      command: tar -xf /vagrant/CSE103_Fall14.tar.bz2 -C /opt/webwork/courses/
-
+      command: tar -xf /vagrant/local_server/CSE103_Fall14.tar.bz2 -C /opt/webwork/courses/
     - name: Make hints log directory
       file:
         path: /var/log/hint
