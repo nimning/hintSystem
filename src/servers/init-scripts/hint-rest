@@ -13,7 +13,7 @@ export NEW_RELIC_CONFIG_FILE="$SERVER_PATH/newrelic.ini"
 case "$1" in
   start)
         echo -n "Starting "$NAME
-        start-stop-daemon --make-pidfile --start --pidfile $PIDFILE --exec $DAEMON $DAEMON_ARG
+        start-stop-daemon --make-pidfile --background --start --pidfile $PIDFILE --exec $DAEMON $DAEMON_ARG
         echo "."
         ;;
   stop)
