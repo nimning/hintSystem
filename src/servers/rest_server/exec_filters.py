@@ -1,6 +1,11 @@
 import logging
 logger = logging.getLogger(__name__)
 
+""" 
+This is the function that executes the filter. This is fine for running the filter in the development window. However when running the filter in production the pattern is different: we have a single attempt and we are running it against a bunch of filters. I think a better approach in this case is to have a parallel process (or processes) that are sent the attept information and send back the hint string (or nothing).
+
+Also, it would make thing run faster if the code is compiled before it is executed.
+""" 
 
 def filtered_answers(answers, correct_string, correct_tree,
                      user_vars, filter_function_string, pipe, queue):

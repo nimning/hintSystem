@@ -1,7 +1,11 @@
 ## The Architecture of the REST API
 
 
-## Files
+## Code Files
+We need to see which of thes files are needed, remove the ones that
+are not needed, and document the ones that are needed (briefly here
+and mostly in the code itself)
+
 - [rest_server.py](rest_server.py) -- Start the ReSTful services.
 - [pg_wrapper.py](pg_wrapper.py) -- Python interfaces to PG scripts.
 - [checkanswer.py](checkanswer.py) -- Handler for `/checkanswer`.
@@ -13,6 +17,15 @@
 - [webwork_config.py](webwork_config.py) -- Configuration file for the local WebWork installation.
 - [scripts/renderPG.pl](scripts/renderPG.pl) -- Perl script for rendering a PG file.
 - [scripts/checkanswer.pl](scripts/checkanswer.pl) -- Perl script for checking answers with a PG file.
+
+## Filter processing (new approach using parsed trees)
+  These to files need to be aggressivly refactored and documented.
+
+- [parsers.py](parsers.py) - a monster of a python file which does too much,
+  including calling exec_filters.py
+- [exec_filters.py](exec_filters.py) - The function that executes an externally defined
+  filter function.
+
 
 ## Interaction with PG
 - Read [pg_wrapper.md](pg_wrapper.md)

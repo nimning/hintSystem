@@ -15,9 +15,10 @@
 	- contains files for sockjs server and a README.md inside folder
 - **/hint_filters**
 - **/nagios_plugins**
+	- Connects the application to Nagios which is a system monitoring software. I (yoav) regularly get email messages from Nagios when the system is overloaded.
 	
 
-### \parsetrees ---> a python module for parsing expression###
+### \parsetrees ---> a python module for parsing expressions ###
 - **/expr_parser**
 	- contains python modules to parse expression
 - **/zhang_sasha**

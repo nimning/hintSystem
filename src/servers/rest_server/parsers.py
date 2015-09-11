@@ -1,4 +1,8 @@
-"""Webwork Answer Parsing API"""
+"""Webwork Answer Parsing API
+
+Yoav: This code does too many things and is too complex. Needs to be aggressively refactored
+
+"""
 import os.path
 from process_query import ProcessQuery, conn
 from webwork_config import webwork_dir
@@ -110,6 +114,10 @@ class GroupedPartAnswers(JSONRequestHandler, tornado.web.RequestHandler):
                 correct_exps.append(answer[k])
         return correct_exps
 
+    """This get method is most in need of refactoring, it queries for,
+    parses and evaluates a set of user answers. Finally it dumps the
+    results to a json file (pipe is "out")
+    """
     def get(self):
         '''
             Parses all expressions for a given question
@@ -270,7 +278,7 @@ class FilterAnswers(JSONRequestHandler, tornado.web.RequestHandler):
             ptree, etree = parse_eval(a['answer_string'])
             if ptree and etree:
                 student_answers.append({'string': a['answer_string'], 'parsed': ptree, 'evaled': etree, 'user_id': user_id, 'correct_eval': ans})
-
+        # This is the code that starts a parallel process and  calls "filtered answers" in it.
         parent, child = Pipe()
         queue = Queue()
         p = Process(target=filtered_answers, args=(student_answers, self.part_answer, self.answer_tree, self.variables_df, filter_function, child, queue))
