@@ -1,0 +1,14 @@
+{
+  "name": "jsjws",
+  "homepage": "https://github.com/kjur/jsjws",
+  "version": "3.0.2",
+  "_release": "3.0.2",
+  "_resolution": {
+    "type": "version",
+    "tag": "3.0.2",
+    "commit": "2205d52070b81d1b88a88bddc5a9b67b66f504b4"
+  },
+  "_source": "git://github.com/kjur/jsjws.git",
+  "_target": "~3.0.2",
+  "_originalSource": "jsjws"
+}
