@@ -4,16 +4,16 @@ PORT=7250
 NAME="hint-rest-"$PORT
 PIDFILE=/var/run/$NAME.pid
 
-SERVER_PATH="/opt/Webwork_AdaptiveHints/src/adaptive-hint-servers/rest_server"
+SERVER_PATH="/opt/Webwork_AdaptiveHints/src/servers/rest_server"
 DAEMON="/usr/bin/python"
 DAEMON_ARG=$SERVER_PATH"/rest_server.py -- --debug --port="$PORT
-export PYTHONPATH=/opt/Webwork_AdaptiveHints/src/webwork/expr_parser:$PYTHONPATH
+export PYTHONPATH=/vagrant/src/servers:/vagrant/src/parsetrees/expr_parser/:vagrant/src/servers/rest_server:/vagrant/src:/vagrant/src/servers/rest_server/filter$PYTHONPATH
 export NEW_RELIC_CONFIG_FILE="$SERVER_PATH/newrelic.ini"
 
 case "$1" in
   start)
         echo -n "Starting "$NAME
-        start-stop-daemon --make-pidfile --background --start --pidfile $PIDFILE --exec $DAEMON $DAEMON_ARG
+        start-stop-daemon --make-pidfile --start --pidfile $PIDFILE --exec $DAEMON $DAEMON_ARG
         echo "."
         ;;
   stop)

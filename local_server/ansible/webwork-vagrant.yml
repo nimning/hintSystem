@@ -187,8 +187,6 @@
     - name: Install dependencies for python servers
       pip:
         requirements: /vagrant/local_server/requirements.txt
-    #- name: Add python system path
-    #  command: export PYTHONPATH="$PYTHONPATH:/usr/local/bin"
     # - name: Start SockJS server
     #   command: python /vagrant/src/adaptive-hints-servers/sockjs_server/sockjs_server.py
     # - name: Start ReST server
