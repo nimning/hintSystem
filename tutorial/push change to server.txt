@@ -1,6 +1,0 @@
-ssh into username@webwork.cse.ucsd.edu
-cd into /opt/Webwork_AdaptiveHints
-do a git stash
-do a github pull
-do a git stash apply
-bash src/adaptive-hint-servers/init-scripts/restart_servers.sh
