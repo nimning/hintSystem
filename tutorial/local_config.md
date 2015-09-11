@@ -13,16 +13,11 @@
 ## Download database:
 	scp username@webwork.cse.ucsd.edu:../zzhai/webwork.sql Webwork_AdaptiveHints/local_server`
 
-## Start Vagrant- In the directory Webwork_AdaptiveHints (make sure you get the most current pull), do ```
-vagrant up
-```
+## Start Vagrant- In the directory Webwork_AdaptiveHints (make sure you get the most current pull), do `vagrant up`
 	- This will download a base VM image, install all the necessary dependencies for Webwork and Python stuff,
 	  and configure (almost) everything you need for a development environment for the adaptive hints infrastructure	- If the provisioning fails, make note of what failed
 	- Email Zhen the error
-	- Re-run the provisioning
-	```
-	vagrant provision
-	```
+	- Re-run the provisioning `	vagrant provision`
 
 ## Config Development Environment- Replace references to **webwork.cse.ucsd.edu** with **192.168.33.10** in:	- src/clients/teacher_client/js/constants.js	- src/servers/rest_server/scripts/checkanswer.pl	- src/servers/rest_server/scripts/renderPG.pl- Set default database username and password in
 	- src/servers/rest_server/webwork_config.py
