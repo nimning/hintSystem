@@ -4,7 +4,7 @@
 - **/teacher_client**
 	- front-end code for adaptive hints interface
 - **/webwork_js**
-	- not sure whether this is old
+	- js file to keep track of students' answers and send hints lives
 
 ### \servers ---> back-end code ###
 - **/init-scripts**	
