@@ -379,7 +379,7 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
     };
 
     $scope.filter_function = {
-        code: "def answer_filter(answer_string, parse_tree, eval_tree, correct_string, correct_tree, correct_eval, user_vars):\n  print answer_string\n  return True",
+        code: "def answer_filter(answer_string, parse_tree, eval_tree, correct_string, correct_tree, correct_eval, user_vars):\n  import json\n  print json.dumps((answer_string, parse_tree, eval_tree, correct_string, correct_tree, correct_eval, user_vars))\n return False",
         author: Session.user_id,
         course: course,
         dirty: true,
@@ -416,6 +416,7 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
                 console.log($scope.filtered_students);
             }).error(function(error){
                 console.error(error);
+                $scope.filter_output = 'An error occurred while trying to run filter.';
             });
     };
 
