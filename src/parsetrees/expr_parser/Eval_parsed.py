@@ -95,9 +95,10 @@ def eval_parsed(e, variables = None):
         else:
             raise Exception('Unrecognized expression form: %s'%e)
     except Exception as ex:
-        #print 'Eval_parsed Exception:',ex
-        #traceback.print_exc()
-        raise WebworkParseException(ex)
+        print 'Eval_parsed Exception:',ex
+        traceback.print_exc()
+        return None
+        #raise WebworkParseException(ex)
         # return ((e[0][0], None, e[0][1]),)
 
 
