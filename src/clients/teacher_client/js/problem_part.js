@@ -38,7 +38,7 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
             $scope.answers = answersByPart[part_id];
     });
 
-    WebworkService.groupedPartAnswers(course, set_id, problem_id, part_id).success(function(data){
+    /*WebworkService.groupedPartAnswers(course, set_id, problem_id, part_id).success(function(data){
         $scope.grouped_answers = data.correct;
         $scope.shown_answers_array = [];
         angular.forEach($scope.grouped_answers, function(value,group){sort_answers(value,group);});
@@ -47,7 +47,7 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
         $scope.grouped_answers = [];
         console.error(data);
         MessageService.addError('An error occurred while trying to group student answers.');
-    });
+    });*/
 
     function sort_answers(value, group){
         var answer_object = {};
@@ -382,7 +382,8 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
         code: "def answer_filter(answer_string, parse_tree, eval_tree, correct_string, correct_tree, correct_eval, user_vars):\n  print answer_string\n  return True",
         author: Session.user_id,
         course: course,
-        dirty: true
+        dirty: true,
+        name: null
     };
 
     function group_filter_output(){

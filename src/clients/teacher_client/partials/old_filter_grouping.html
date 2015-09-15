@@ -1,0 +1,171 @@
+    <h3>Group By Filter
+      <button type="button" class="btn btn-primary" ng-click="toggle_filter_groups()">
+        <span class="glyphicon" ng-class="{'glyphicon-chevron-right': !showFilterGroups, 'glyphicon-chevron-down': showFilterGroups}"></span>
+        Toggle
+      </button>
+    </h3>
+
+    <section id="filter_group" style="padding-bottom:20px;" collapse="!showFilterGroups">
+      <!--header of the table-->
+      <div class="row" id="students_table" style="border-bottom:2px solid #ccc;">
+          <div class="col-md-1"><h5># of Students</h5></div>
+          <div class="col-md-2"><h5>Filter</h5></div>
+          <div class="col-md-2"><h5>Answers</h5></div>
+          <div class="col-md-2"><h5>Attempted Students</h5></div>
+          <div class="col-md-5"><h5>Linked Hint</h5></div>
+      </div>
+      <!--loading img-->
+      <img src="ajax-loader.gif" ng-show="!grouped_answers"></img>
+      <!--table content-->
+      <div class="row" style="padding-top: 5px; padding-bottom: 5px; border-bottom:2px solid #ccc;" ng-repeat = "group in filtered_groups"><!-- ng-repeat="item in shown_answers_array | orderBy:'-sum':ture"-->
+        <!--1st column: the total number of students of each group-->
+        <div class = "col-md-1">
+          {{group.students.length}}
+        </div>
+        <!--2nd column: signature of each group-->
+        <div class = "col-md-2" style="word-wrap: break-word;">
+          {{group.filter_function.name}}
+        </div>
+        <!--3rd column: list all the answers in the group-->
+        <div class="col-md-4">
+          <!-- expandable answer list -->
+          <div class="panel-heading" style="padding:0;">
+            <a data-toggle="collapse" data-parent="#users_list" data-target="#collapse{{$index}}">
+              -->
+            </a>
+          </div>
+          <div id ="collapse{{$index}}" class="panel-collapse collapse">
+            <!-- TODO Update -->
+            <div class = "row" ng-repeat="(idx, expression) in group.students">
+              <div class = "col-md-12" style="word-wrap: break-word;">
+                {{expression.user_id}}, {{expression.answer_string}}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--4th column: linked hint for each group-->
+        <div class="col-md-5" id="linked_hints">
+          <!--id input box for hints--> <!-- need to implement database update here-->
+          <div class = "row">
+            <div class="col-md-3" id="linked_hints_id" style="padding-right:0px;">
+              ID <input type="text" style="width:30px;" ng-model="input_id" typeahead="hint.hint_id for hint in hints | filter:$viewValue | limitTo:8" typeahead-template-url="hintSearchResult.html"/> :
+            </div>
+            <!--corresponding hint content in pg-->
+            <div class="col-md-7" style="padding:0px;">
+              {{match_hint_id(input_id)}}
+            </div>
+            <!--send button-->
+            <div class="col-md-2" style="padding:0px;">
+              <button type="button" class="btn btn-primary" ng-click="link_hint(input_id, group)" ng-disabled="!validID()">Link</button>
+            </div>
+          </div>
+          <!-- row to show linked hint -->
+          <div class = "row">
+            <div class="col-md-10" id="linked_hint" style="padding-right:0px;">
+              {{linked_hint}}
+            </div>
+            <!--remove button-->
+            <div class="col-md-2" style="padding:0px; padding-top:3px;">
+              <button type="button" class="btn btn-primary" ng-click="remove_linked_hint()" ng-hide="!validLink()">X</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--div st-pagination="" st-items-by-page="10" st-displayed-pages="10"></div-->
+    </section>
+
+
+
+
+    <h3>Group By Answer
+      <button type="button" class="btn btn-primary" ng-click="toggle_groups()">
+        <span class="glyphicon" ng-class="{'glyphicon-chevron-right': !showGroups, 'glyphicon-chevron-down': showGroups}"></span>
+        Toggle
+      </button>
+    </h3>
+
+    <section id="answers_group" style="padding-bottom:20px;" collapse="!showGroups">
+      <div class="row" id="correct_terms_row">
+        <button type="button" class="btn btn-default" ng-class="{'btn-default': !term_selected(term), 'btn-primary': term_selected(term)}" style="margin-right: 1em" ng-repeat="term in correct_terms" ng-click="toggle_term(term)">{{term}}</button>
+      </div>
+      <!--header of the table-->
+      <div class="row" id="students_table" style="border-bottom:2px solid #ccc;">
+          <div class="col-md-1"><h5># of Students</h5></div>
+          <div class="col-md-2"><h5>Signature</h5></div>
+          <div class="col-md-2"><h5>Answers in group</h5></div>
+          <div class="col-md-2"><h5>Attempted Students</h5></div>
+          <div class="col-md-5"><h5>Linked Hint</h5></div>
+      </div>
+      <!--loading img-->
+      <img src="ajax-loader.gif" ng-show="!grouped_answers"></img>
+      <!--table content-->
+      <div class="row" style="padding-top: 5px; padding-bottom: 5px; border-bottom:2px solid #ccc;" ng-repeat="item in shown_answers_array | orderBy:'-sum':ture">
+        <!--1st column: the total number of students of each group-->
+        <div class = "col-md-1">
+          {{item.sum}}
+        </div>
+        <!--2nd column: signature of each group-->
+        <div class = "col-md-2" style="word-wrap: break-word;">
+          {{item.signature}}
+        </div>
+        <!--3rd column: list all the answers in the group-->
+        <div class="col-md-4">
+          <!-- expandable answer list -->
+          <div class="panel-heading" style="padding:0;">
+            <a data-toggle="collapse" data-parent="#users_list" data-target="#collapse{{$index}}">
+              -->
+            </a>
+          </div>
+          <div id ="collapse{{$index}}" class="panel-collapse collapse">
+            <div class = "row" ng-repeat="(expression, users) in item.student_list">
+              <div class = "col-md-6" style="word-wrap: break-word;">
+                {{expression}}
+              </div>
+              <div class = "col-md-6" id="users_list">
+                <!-- expandable student list -->
+                <div class="panel-heading" style="padding:0;">
+                    <a data-toggle="collapse" data-parent="#users_list" data-target="#collapse{{$parent.$index}}_{{$index}}">
+                    show {{users.length}} student(s)-->
+                    </a>
+                </div>
+                <div id="collapse{{$parent.$index}}_{{$index}}" class="panel-collapse collapse">
+                  <div class="panel-body" style="padding:0; border:1px solid #ccc;">
+                      <a ng-repeat="user in users" ui-sref="problem_user({course: course, set_id: set_id, problem_id: problem_id, user_id: user})">{{user}} </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--4th column: linked hint for each group-->
+        <div class="col-md-5" id="linked_hints">
+          <!--id input box for hints--> <!-- need to implement database update here-->
+          <div class = "row">
+            <div class="col-md-3" id="linked_hints_id" style="padding-right:0px;">
+              ID <input type="text" style="width:30px;" ng-model="input_id" typeahead="hint.hint_id for hint in hints | filter:$viewValue | limitTo:8" typeahead-template-url="hintSearchResult.html"/> :
+            </div>
+            <!--corresponding hint content in pg-->
+            <div class="col-md-7" style="padding:0px;">
+              {{match_hint_id(input_id)}}
+            </div>
+            <!--send button-->
+            <div class="col-md-2" style="padding:0px;">
+              <button type="button" class="btn btn-primary" ng-click="link_hint(input_id,item)" ng-disabled="!validID()">Link</button>
+            </div>
+          </div>
+          <!-- row to show linked hint -->
+          <div class = "row">
+            <div class="col-md-10" id="linked_hint" style="padding-right:0px;">
+              {{linked_hint}}
+            </div>
+            <!--remove button-->
+            <div class="col-md-2" style="padding:0px; padding-top:3px;">
+              <button type="button" class="btn btn-primary" ng-click="remove_linked_hint()" ng-hide="!validLink()">X</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--div st-pagination="" st-items-by-page="10" st-displayed-pages="10"></div-->
+    </section>
