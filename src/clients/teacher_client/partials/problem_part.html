@@ -11,7 +11,7 @@
   <div class="col-sm-10">
 
     <section id="problem" style="padding-bottom:20px;">
-      <h3><a ui-sref="set({course: course, set_id: set_id})">{{set_id}}</a> <a ui-sref="problem({course: course, set_id: set_id, problem_id: problem_id})">Problem {{problem_id}}</a> Part {{part_id}}</h3>
+      <h3><a ui-sref="course({course: course})">{{course}}</a> / <a ui-sref="set({course: course, set_id: set_id})">{{set_id}}</a> / <a ui-sref="problem({course: course, set_id: set_id, problem_id: problem_id})">Problem {{problem_id}}</a> / Part {{part_id}}</h3>
       <div id="problem" pg-file-preview pg-file="pg_file" seed="1234" show-hint-buttons="false"></div>
     </section>
 
@@ -61,7 +61,7 @@
     </section>
 
 
-    <h3>Filter By Function
+    <h3>Filter Function
       <button type="button" class="btn btn-primary" ng-click="toggle_filter_function()">
         <span class="glyphicon" ng-class="{'glyphicon-chevron-right': !showFilterFunction, 'glyphicon-chevron-down': showFilterFunction}"></span>
         Toggle
@@ -127,9 +127,8 @@
       <h3>Navigation</h3>
       <ul class="nav nav-stacked nav-pills bs-sidenav" >
         <li><a href="#problem" ng-click="scrollTo($event)">Problem</a></li>
-        <li><a href="#filter_function" ng-click="scrollTo($event)">Filter By Function</a></li>
-        <li><a href="#filter_group" ng-click="scrollTo($event)">Group By Filter</a></li>
-        <li><a href="#answers_group" ng-click="scrollTo($event)">Group By Answer Terms</a></li>
+        <li><a href="#filter_function" ng-click="scrollTo($event)">Filter Function</a></li>
+        <!-- Navigation to Group by filter was here -->
         <li><a href="#hints" ng-click="scrollTo($event)">Hints</a></li>
       </ul>
     </div>
