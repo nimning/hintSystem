@@ -21,8 +21,7 @@
 - In the directory Webwork_AdaptiveHints (make sure you get the most current pull), do `vagrant up`
 	- This will download a base VM image, install all the necessary dependencies for Webwork and Python stuff,
 	  and configure (almost) everything you need for a development environment for the adaptive hints infrastructure
-	- If the provisioning fails, make note of what failed
-	- Email Zhen the error
+	- If the provisioning fails, make note of what failed and Email Zhen the error
 	- Re-run the provisioning `	vagrant provision`
 
 ## Config Development Environment
