@@ -415,6 +415,14 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
                 $scope.filtered_students = _.unique(_.pluck(response.matches, 'user_id'));
                 group_filter_output();
                 console.log($scope.filtered_students);
+                
+                //This allows for the filter output to be downloaded as a text file
+                var filter_output_for_download = set_id + " Problem" + problem_id + " Part" + part_id + "\n"
+                    + $scope.answer_expression + "\n" + $scope.filter_output;
+                var downloadFilterOutputLinkElement = $("#downloadFilterDataLink");
+                downloadFilterOutputLinkElement[0].href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(filter_output_for_download);
+                downloadFilterOutputLinkElement[0].download = course + "_" + set_id + "_problem" + problem_id + "_part" + part_id + ".txt";
+                downloadFilterOutputLinkElement.removeClass("hidden");
             }).error(function(error){
                 console.error(error);
                 $scope.filter_output = 'An error occurred while trying to run filter.';
