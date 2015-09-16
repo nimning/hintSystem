@@ -27,4 +27,6 @@
 - **/oneoffs**
 - **/test**
 
+### \databases ---> scripts to manage database tables
+
 ### \old ---> contains old code for adaptive hints front-end and back-end ###
