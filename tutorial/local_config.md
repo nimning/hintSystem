@@ -23,4 +23,4 @@
 	- src/servers/rest_server/webwork_config.py
 	- username: webworkWrite
 	- password: webwork- Configure and run services by typing `vagrant ssh`
-	- cd into directory /vagrant/src/servers/init-scripts	- run `sudo bash deploy.sh`	- run `bash restart-servers.sh`- Restart apache2/nginx	- `sudo service apache2 restart`	- `sudo service nginx restart`- Browse to [http://192.168.33.10/webwork2](http://192.168.33.10/webwork2), see if webwork runs- Browse to [http://192.168.33.10/teacher](http://192.168.33.10/teacher), see if hint client works## Remember, do not push any of the change above to github.
+	- cd into directory /vagrant/src/servers/init-scripts	- run `bash runall.sh`- Browse to [http://192.168.33.10/webwork2](http://192.168.33.10/webwork2), see if webwork runs- Browse to [http://192.168.33.10/teacher](http://192.168.33.10/teacher), see if hint client works## Remember, do not push any of the change above to github.
