@@ -34,7 +34,7 @@
 	- src/servers/rest_server/webwork_config.py
 	- username: webworkWrite
 	- password: webwork
-- Alternatively to prforming the previous changess manually you can run the script `bash rename.sh'
+- Alternatively to prforming the previous changess manually you can run the script `bash rename.sh`
 - Configure and run services by typing `vagrant ssh`
 	- cd into directory /vagrant/src/servers/init-scripts
 	- run `bash runall.sh`
