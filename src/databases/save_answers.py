@@ -79,7 +79,10 @@ def get_answers(problem_text, filename, seed, psvn, part_count, var_names):
             try:
                 variables[var_names[part_id-part_count-1]] = value['correct_ans']
             except:
-                print "Could not find variable"
+                print "Could not find variable", var_names[part_id-part_count-1]
+                print key
+                print value
+                print res['answers'].keys()
     print '.',
     return part_answers, variables
 

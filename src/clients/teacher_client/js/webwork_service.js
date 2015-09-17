@@ -35,7 +35,7 @@ App.factory('WebworkService', function($http, $window, $rootScope, $location, $q
             return $http
                 .get(BASE_URL+'/pg_path',
                      {params: {course: course, set_id: set_id, problem_id: problem_id}});
-        },
+	},
         problemSeed: function(course, set_id, problem_id, user_id) {
             return $http
                 .get(BASE_URL+'/problem_seed',
