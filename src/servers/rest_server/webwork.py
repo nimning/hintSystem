@@ -72,6 +72,7 @@ class SetPsvn(ProcessQuery):
 # GET /pg_path?
 class ProblemPGPath(ProcessQuery):
     def get(self):
+        logger.info("Zhen: webwork.ProblemPGPath")
         '''
             Get the path to the PG file of a given problem
 
@@ -105,6 +106,7 @@ class ProblemPGPath(ProcessQuery):
                 return ''
 
         self.process_query(query_template, dehydrate=_dump_pg_path)
+        logger.info("Zhen: Finishing ProblemPGPath")
 
 
 # GET /pg_file?
