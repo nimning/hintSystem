@@ -26,7 +26,7 @@ App.config(
                  title: '{{course}}',
                  loginRequired: true
              }).*/
-             state('parts', {
+             state('courses', {
                  url: '/courses/:course',
                  templateUrl: 'partials/parts.html',
                  controller: 'PartsCtrl',
