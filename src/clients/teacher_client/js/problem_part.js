@@ -22,9 +22,9 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
     $scope.hints = [];
     $scope.filtered_students = [];
     $scope.filtered_groups = [];
-    angular.forEach(hints, function(value, key){
+    /*angular.forEach(hints, function(value, key){
         $scope.hints.push(value);
-    });
+    });*/
 
     WebworkService.answersByPart(course, set_id, problem_id).
         success(function(data){
@@ -367,6 +367,11 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
         });
     }
 
+    $scope.show_filter_code = function(filterCode) {
+        $("#filter_code_text").removeClass("hidden");
+        $("#filter_code_text").html(filterCode);
+    }
+
     generate_hint_table();
     $interval(function(){generate_hint_table();}, 10000);
 
@@ -383,7 +388,7 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
             + "import json\n  print json.dumps((answer_string, parse_tree, eval_tree, correct_string, correct_tree, correct_eval, user_vars))\n  return False",
         author: Session.user_id,
         course: course,
-        dirty: true,
+        dirty: false,
         name: null
     };
 
