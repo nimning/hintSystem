@@ -55,6 +55,7 @@ App.factory('WebworkService', function($http, $window, $rootScope, $location, $q
                                user_id: user_id, counts: counts}});
         },
         answersByPartCounts: function(course, set_id, problem_id, user_id) {
+            $('.customAjaxLoaderScreen').addClass("visible");
             return $http
                 .get(BASE_URL+'/answers_by_part',
                      {params: {course: course, set_id: set_id, problem_id: problem_id,
