@@ -77,18 +77,35 @@
       </a>
     </script>
     <section id="filter_function" style="padding-bottom:20px;" collapse="!showFilterFunction">
+
+      <h4>Filter Library</h4>
+      <table class="table" id="filter_table" datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs">
+        <thead>
+          <tr>
+            <th>Filter Name</th>
+            <th>Filter Description</th>
+            <th>Author</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="filter in filter_list" dt-rows="" ng-click="show_filter_code(filter.code)">
+            <td>{{filter.name}}</td>
+            <td>{{filter.code}}</td>
+            <td>{{filter.author}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <div>
+        <p id="filter_code_text" class="well hidden">
+        </p>
+      </div>
+
       <form class="form-inline">
-        <div class="form-group">
-          <label for="filter_function_name">Name</label>
-          <input type="text" id="filter_function_name" ng-model="filter_function.name" size="50" typeahead="filter.name for filter in filter_functions | filter:$viewValue | limitTo:8" typeahead-template-url="filterTemplate.html"></input>
-          <button type="button" class="btn btn-primary" ng-click="load_filter()"><span class="glyphicon glyphicon-folder-open"></span>  Load Filter</button>
-        </div>
         <div ng-model="filter_function.code" ui-codemirror="" ui-codemirror-opts="editorOptions" ng-change="filterFunctionChanged();"></div>
         <div class="row">
           <button type="button" class="btn btn-success" ng-click="run_filter()"><span class="glyphicon glyphicon-play"></span> Run Filter</button>
           <a class="btn btn-info hidden" id="downloadFilterDataLink">Download Filter Output</a>
-          <button type="button" class="btn btn-primary" ng-click="save_filter()" ng-disabled="!validFilterName() || !filter_function.dirty"><span class="glyphicon glyphicon-floppy-disk"></span> Save <span ng-show="filter_function.dirty">*</span></button>
-          <span>Hint ID <input type="text" style="width:30px;" ng-model="selected_hint_id" typeahead="hint.hint_id for hint in hints | filter:$viewValue | limitTo:8" typeahead-template-url="hintSearchResult.html"/></span>
+          <button type="button" class="btn btn-primary" ng-click="save_filter()" ng-disabled="!filter_function.dirty"><span class="glyphicon glyphicon-floppy-disk"></span> Save <span ng-show="filter_function.dirty">*</span></button>
           <button type="button" class="btn btn-primary" ng-click="send_hint_to_matches()" ng-disabled="linkHintDisabled()"><span class="glyphicon glyphicon-send"></span> Link Hint and Send to {{filtered_students.length}} Matching Students</button>
         </div>
       </form>
@@ -109,11 +126,8 @@
 
     <!-- Group by filter was here -->
 
-    <!--hint table-->
-    <section id="hints">
-      <div hint-table="" hints="hints" course="course" set-id="set_id" problem-id="problem_id" part_id="part_id" seed="1234" edited-hint="edited_hint" pg-header="pg_header" pg-footer="pg_footer" enable-send="false"></div>
-      <div hint-editor="" hint="edited_hint" pg-file="pg_file" seed="1234" course="course" part-id="part_id"></div>
-    </section>
+    <!--hint table was here-->
+    
   </div>
 
   <!--navigation-->
@@ -130,7 +144,7 @@
         <li><a href="#problem" ng-click="scrollTo($event)">Problem</a></li>
         <li><a href="#filter_function" ng-click="scrollTo($event)">Filter Function</a></li>
         <!-- Navigation to Group by filter was here -->
-        <li><a href="#hints" ng-click="scrollTo($event)">Hints</a></li>
+        <!-- Navigation to Hints was here -->
       </ul>
     </div>
   </div>
