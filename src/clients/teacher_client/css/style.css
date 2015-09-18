@@ -15,10 +15,6 @@
 	width: 100%;
 	background-color: black;
 	opacity: 0.3;
-	display: none;
-}
-
-.customAjaxLoaderScreen.visible {
 	display: block;
 }
 
