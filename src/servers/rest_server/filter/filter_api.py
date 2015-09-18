@@ -212,16 +212,18 @@ class ApplyFilterFunctions(ProcessQuery):
             p = Process(target=apply_filter, args=(answer_data, user_variables, code, child))
             p.start()
             # TODO Can we do this without blocking the process?
-            p.join(timeout=.5)
+            p.join(timeout=15)
             if p.is_alive():
                 logger.warn("Function took too long, we killed it.")
                 p.terminate()
-            result = parent.recv()
-            logger.debug("Got this back: %s", result)
-            if type(result) == str:
-                ret[func.hint_id] = result
-            else:
                 ret[func.hint_id] = None
+            else:
+                result = parent.recv()
+                logger.debug("Got this back: %s", result)
+                if type(result) == str:
+                    ret[func.hint_id] = result
+                else:
+                    ret[func.hint_id] = None
 
         self.write(json.dumps(ret))
 
