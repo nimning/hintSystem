@@ -289,12 +289,15 @@ class FilterAnswers(JSONRequestHandler, tornado.web.RequestHandler):
         if p.is_alive():
             logger.warn("Function took too long, we killed it.")
             p.terminate()
-        matches = parent.recv()
-
-        if not queue.empty():
-            output = queue.get()
+            matches = [] # Communicating with the subprocess doesn't work after you kill it
+            output = "Function timed out"
         else:
-            output=""
+            matches = parent.recv()
+
+            if not queue.empty():
+                output = queue.get()
+            else:
+                output=""
         out = {
             'output': output,
             'matches': matches

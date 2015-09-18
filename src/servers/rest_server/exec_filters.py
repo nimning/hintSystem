@@ -50,7 +50,6 @@ def filtered_answers(answers, correct_string, correct_tree,
                 student_vars = dict(user_vars[user_vars['user_id']==user_id][['name', 'value']].values.tolist())
             else:
                 student_vars = {}
-            logger.debug('vars: %s', student_vars)
             # This function must be defined by the exec'd code
             ret = answer_filter(a['string'], a['parsed'], a['evaled'], correct_string, correct_tree, a['correct_eval'], student_vars)
             if ret:
