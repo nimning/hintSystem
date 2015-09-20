@@ -5,6 +5,8 @@ import logging
 logger = logging.getLogger(__name__)
 
 import sys
+import glob
+import string
 import json
 import traceback
 from TimeoutError import timeout # a decorator that creates a time-out interrupt for a given function.
@@ -20,6 +22,19 @@ class filter_bank:
     def get_env_keys(self):
         return self.env.keys()
 
+    def import_filters_from_files(self,filter_dir):
+        for filename in glob.glob(filter_dir+'*.py'):
+            filtername=filename[len(filter_dir):-3]
+            code=open(filename,'r').read()
+            self.add_filter(filtername,code)
+        return self.get_env_keys()
+
+    def get_docstring(self,filter_name):
+        if self.env.has_key(filter_name):
+            return self.env[filter_name].__doc__
+        else:
+            return 'no filter named '+filter_name
+    
     def add_filter(self,name,code,replace=False):
         '''
         make_filter takes a function source string as input and returns a pointer to the executable function
@@ -100,13 +115,31 @@ class filter_bank:
 
 if __name__=="__main__": 
     """ Testing filter_bank """
+
+    logger.setLevel(logging.DEBUG)
+    logger.addHandler(logging.StreamHandler()) # direct logs to stderr
+
+    filters=filter_bank()
+
+    print filters.import_filters_from_files('filter_helpers/')
+    print filters.import_filters_from_files('filters/')
+
+    for filtername in ['answer_should_be_int', 'answer_is_not_expression', 'flatten']:
+        print filters.get_docstring(filtername)
+
+
+    ###
+    # testing adding filters with different errors in the code
+    ###
+
     #the common part of the code defining the filter
     common_code="""def answer_filter(params):
     import json
     print json.dumps(params)
     %s
     return 'this is a hint'
-"""
+    """
+
     filtername='answer_filter'
 
     # Lines that are inserted into the code (at the %s location)
@@ -122,12 +155,6 @@ if __name__=="__main__":
     # Representative input lines that define the parameters to the filter in json format
     input_lines={'good line':'["22/36", [["/", [0, 3]], 22, 36], [["/", 0.6111111111111112, [0, 3]], [22.0], [36.0]], "", null, 0, {"$n2": 3.0}]',
                  'bad_line':'[1,2]'}
-
-
-    logger.setLevel(logging.DEBUG)
-    logger.addHandler(logging.StreamHandler()) # direct logs to stderr
-
-    filters=filter_bank()
 
     for error_type in error_lines.keys():
         code=common_code%error_lines[error_type]
