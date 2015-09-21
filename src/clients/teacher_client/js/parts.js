@@ -10,7 +10,8 @@ App.controller('PartsCtrl', function($scope, $location, $window, $stateParams, $
     });
 
     $scope.dtOptions = DTOptionsBuilder.newOptions()
-        .withOption('paging', false);
+        .withBootstrap().withDisplayLength(25);
+        //.withOption('paging', false);
 
     $scope.dtColumnDefs = [
         DTColumnDefBuilder.newColumnDef(0),
