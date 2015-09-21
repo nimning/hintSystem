@@ -20,13 +20,13 @@ App.controller('PartsCtrl', function($scope, $location, $window, $stateParams, $
     ];
 
     $scope.$on('event:dataTableLoaded', function(event, loadedDT) {
-        loadedDT.dataTable.rowGrouping({
+        loadedDT.dataTable && loadedDT.dataTable.rowGrouping && loadedDT.dataTable.rowGrouping({
             iGroupingColumnIndex:0,
             sGroupingColumnSortDirection: "asc",
             bExpandableGrouping: true,
             asExpandedGroups: [],
         });
-        loadedDT.DataTable.search("week").draw();
+        loadedDT.DataTable && loadedDT.DataTable.search("week").draw();
     });
 
 });
