@@ -27,7 +27,6 @@ App.controller('PartsCtrl', function($scope, $location, $window, $stateParams, $
             asExpandedGroups: [],
         });
         loadedDT.DataTable.search("week").draw();
-        $('#custom_http_loader').addClass("hidden");
     });
 
 });
