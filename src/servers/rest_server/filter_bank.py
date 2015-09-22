@@ -76,6 +76,19 @@ class filter_bank:
                 return 'code failed to generate function named '+name+'\n'+message
 
     def exec_filter(self,filtername,input):
+        """ execute a filter on a given input.
+
+        params:
+            filtername:  the name of the filter (a string)
+            input: the input to the filter (a tuple containing all parameters)
+
+        returns:   status, hint/error, stdout
+
+                status indicates whether or not execution succeeded
+                if status = True then second element is the hint (empty if no match)
+                if status = False then second element is the error message (caught exception)
+                stdout is what the filter "print"s during execution.
+        """
         self.env['input']=input
         command='out=%s(input)'%filtername
 
