@@ -296,7 +296,7 @@ class FilterAnswers(JSONRequestHandler, tornado.web.RequestHandler):
             selected_answers += [(a['string'], a['parsed'], a['evaled'], correct_string, correct_tree, a['correct_eval'], student_vars)]
         output = ""
         for s in selected_answers:
-            output += ", ".join([str(a) for a in s]) + '\n'
+            output += json.dumps(s) + '\n'
         out = {
            'output': output,
            'matches': ""
