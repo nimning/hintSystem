@@ -278,25 +278,52 @@ class FilterAnswers(JSONRequestHandler, tornado.web.RequestHandler):
             ptree, etree = parse_eval(a['answer_string'])
             if ptree and etree:
                 student_answers.append({'string': a['answer_string'], 'parsed': ptree, 'evaled': etree, 'user_id': user_id, 'correct_eval': ans})
-        # This is the code that starts a parallel process and  calls "filtered answers" in it.
-        parent, child = Pipe()
-        queue = Queue()
-        p = Process(target=filtered_answers, args=(student_answers, self.part_answer, self.answer_tree, self.variables_df, filter_function, child, queue))
-        p.start()
-        p.join(timeout=30)
 
-        logger.debug('Done waiting')
-        if p.is_alive():
-            logger.warn("Function took too long, we killed it.")
-            p.terminate()
-        matches = parent.recv()
-
-        if not queue.empty():
-            output = queue.get()
-        else:
-            output=""
+        # hardcoded to print all the parameters
+        # without reading the actual content of the passed in function
+        ###### Hardcoded begin #######
+        correct_string = self.part_answer
+        correct_tree = self.answer_tree
+        user_vars = self.variables_df
+        selected_answers = []
+        for a in student_answers:
+            user_id = a['user_id']
+            if len(user_vars) > 0:
+                student_vars = dict(user_vars[user_vars['user_id']==user_id][['name', 'value']].values.tolist())
+            else:
+                student_vars = {}
+            logger.debug('vars: %s', student_vars)
+            selected_answers += [(a['string'], a['parsed'], a['evaled'], correct_string, correct_tree, a['correct_eval'], student_vars)]
+        output = ""
+        for s in selected_answers:
+            output += ", ".join([str(a) for a in s]) + '\n'
         out = {
-            'output': output,
-            'matches': matches
+           'output': output,
+           'matches': ""
         }
         self.write(json.dumps(out))
+        ###### Hardcoded end #######
+
+        # This is the code that starts a parallel process and  calls "filtered answers" in it.
+#        parent, child = Pipe()
+#        queue = Queue()
+#        p = Process(target=filtered_answers, args=(student_answers, self.part_answer, self.answer_tree, self.variables_df, filter_function, child, queue))
+#        p.start()
+#        p.join(timeout=60)
+
+#        logger.debug('Done waiting')
+#        if p.is_alive():
+#            logger.warn("Function took too long, we killed it.")
+#            p.terminate()
+#        matches = parent.recv()
+
+#        if not queue.empty():
+#            output = queue.get()
+#        else:
+#            output=""
+#        out = {
+#            'output': output,
+#            'matches': matches
+#        }
+
+#        self.write(json.dumps(out))

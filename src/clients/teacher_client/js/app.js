@@ -18,15 +18,16 @@ App.config(
          $httpProvider.interceptors.push('authInterceptor');
          $urlRouterProvider.otherwise('/courses/CSE103_Fall14');
          $stateProvider.
-             state('course', {
+            /*Parts and Courses were here in the same landing page.  Now only parts is shown in the landing page*/
+             /*state('course', {
                  url: '/courses/:course',
                  templateUrl: 'partials/course.html',
                  controller: 'CourseCtrl',
                  title: '{{course}}',
                  loginRequired: true
-             }).
-             state('parts', {
-                 url: '/courses/:course/parts',
+             }).*/
+             state('course', {
+                 url: '/courses/:course',
                  templateUrl: 'partials/parts.html',
                  controller: 'PartsCtrl',
                  title: '{{course}} Problem Parts',
