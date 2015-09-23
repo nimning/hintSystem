@@ -315,6 +315,33 @@ class FilterAnswers(JSONRequestHandler, tornado.web.RequestHandler):
             'matches': _hints
         }
 
+        ################ hardcoded for filter functions to output parameters only #################
+        #         student_answers.append({'string': a['answer_string'], 'parsed': ptree, 'evaled': etree, 'user_id': user_id, 'correct_eval': ans})
+
+        # # hardcoded to print all the parameters
+        # # without reading the actual content of the passed in function
+        # ###### Hardcoded begin #######
+        # correct_string = self.part_answer
+        # correct_tree = self.answer_tree
+        # user_vars = self.variables_df
+        # selected_answers = []
+        # for a in student_answers:
+        #     user_id = a['user_id']
+        #     if len(user_vars) > 0:
+        #         student_vars = dict(user_vars[user_vars['user_id']==user_id][['name', 'value']].values.tolist())
+        #     else:
+        #         student_vars = {}
+        #     logger.debug('vars: %s', student_vars)
+        #     selected_answers += [(a['string'], a['parsed'], a['evaled'], correct_string, correct_tree, a['correct_eval'], student_vars)]
+        # output = ""
+        # for s in selected_answers:
+        #     output += json.dumps(s) + '\n'
+        # out = {
+        #    'output': output,
+        #    'matches': ""
+        #}
+        ###### Hardcoded end #######
+
         self.write(json.dumps(out))
         logger.debug('finished post')
 
@@ -341,7 +368,9 @@ class FilterAnswers(JSONRequestHandler, tornado.web.RequestHandler):
 #             'output': output,
 #             'matches': matches
 #         }
+#        self.write(json.dumps(out))
 # ################## to be changed   ################## end
 
 
 ## Create a main for testing purposes.
+

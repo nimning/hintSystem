@@ -11,6 +11,7 @@ App.controller('PartsCtrl', function($scope, $location, $window, $stateParams, $
 
     $scope.dtOptions = DTOptionsBuilder.newOptions()
         .withBootstrap().withDisplayLength(25);
+        //.withOption('paging', false);
 
     $scope.dtColumnDefs = [
         DTColumnDefBuilder.newColumnDef(0),
@@ -18,5 +19,15 @@ App.controller('PartsCtrl', function($scope, $location, $window, $stateParams, $
         DTColumnDefBuilder.newColumnDef(2),
         DTColumnDefBuilder.newColumnDef(2)
     ];
+
+    $scope.$on('event:dataTableLoaded', function(event, loadedDT) {
+        loadedDT.dataTable && loadedDT.dataTable.rowGrouping && loadedDT.dataTable.rowGrouping({
+            iGroupingColumnIndex:0,
+            sGroupingColumnSortDirection: "asc",
+            bExpandableGrouping: true,
+            asExpandedGroups: [],
+        });
+        loadedDT.DataTable && loadedDT.DataTable.search("week").draw();
+    });
 
 });
