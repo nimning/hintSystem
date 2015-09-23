@@ -1,0 +1,110 @@
+import logging
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+ch = logging.StreamHandler(open('/var/log/exec_filter.log','w'))
+ch.setLevel(logging.DEBUG)
+logger.addHandler(ch)
+
+""" 
+This is the function that executes the filter. This is fine for running the filter in the development window. However when running the filter in production the pattern is different: we have a single attempt and we are running it against a bunch of filters. I think a better approach in this case is to have a parallel process (or processes) that are sent the attept information and send back the hint string (or nothing).
+
+Also, it would make thing run faster if the code is compiled before it is executed.
+""" 
+
+""" make_function takes a function source string as input and returns a pointer to the executable function
+
+Parameters: 
+        name: name of the function (should be consistent with the name used in the code)
+        code: A string containing the code
+
+Returns:
+        if type==function: a pointer to the executable function
+        if type==str: An error message
+"""
+def make_function(name,code):
+    locals().pop(name,'clearing keypair')
+    try:
+        bytecode=compile(source=code,filename='filter source code',mode='exec')
+        exec(bytecode)
+    except SyntaxError, e:
+        message='Syntax error:  line=%d, offset=%d text=%s'%(e.lineno,e.offset,e.text)
+        return message
+    
+    if locals().has_key(name):
+        return locals()[name]
+    else:
+        return 'code failed to generate function named '+name
+
+def filtered_answers(answers, correct_string, correct_tree,
+                     user_vars, filter_function_string, pipe, queue):
+    '''
+    This function represents a process which runs the filter function
+    on a set of answers. It is intended to be run in a subprocess
+    using the multiprocessing module.
+
+    Returns a list of students who matched the filter, along with their answer,
+    like
+    [{user_id: 'iawwal', answer_string: '1+1'},..]
+    '''
+    import os
+    import sys
+    import StringIO
+    import tempfile
+    USER_ID = 1009
+
+    logger.debug('###############  Starting filtered_answers')
+
+    tempdir = tempfile.mkdtemp()
+    os.chown(tempdir, USER_ID, -1)
+    os.chroot(tempdir)
+    os.setuid(USER_ID)
+
+    # This code is for redirecting the standard output of the function to a queue connecting this child process to the parent.
+
+    class QueueStringIO(StringIO.StringIO):
+         def __init__(self, queue, *args, **kwargs):
+             StringIO.StringIO.__init__(self, *args, **kwargs)
+             self.queue = queue
+
+         def flush(self):
+             self.queue.put(self.getvalue())
+             self.truncate(0)
+
+    selected_answers = []
+    
+    out = QueueStringIO(queue)
+    sys.stderr = sys.stdout = out
+
+    logger.debug('before exec filter_function_string')
+    filter_exe=make_function('answer_filter',filter_function_string)
+    if type(filter_exe)==str:
+        print str
+        logger.warning('error parsing the answer_filter'+filter_exe)
+    logger.debug('after exec filter_function_string')
+
+    logger.debug('about to process %d attempts'%len(answers))
+
+    for a in answers:
+        logger.debug('processing answer '+str(a))
+        try:
+            user_id = a['user_id']
+            if len(user_vars) > 0:
+                student_vars = dict(user_vars[user_vars['user_id']==user_id][['name', 'value']].values.tolist())
+            else:
+                student_vars = {}
+            #logger.debug('vars: %s', student_vars)
+            ret = filter_exe(a['string'], a['parsed'], a['evaled'], correct_string, correct_tree, a['correct_eval'], student_vars)
+            if ret:
+                selected_answers.append({'user_id': user_id, 'answer_string': a['string']})
+        except Exception, e:
+            logger.error("Error in filter function: %s", e)
+            print e
+            continue
+    logger.debug('###############  Wrapping up filtered_answers')
+    pipe.send(selected_answers)
+    logger.debug('###############  sent results to pipe')
+    #pipe.close()
+    #out.flush()
+    #out.close()
+    logger.debug('###############  Ended filtered_answers')
+
