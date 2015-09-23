@@ -1,0 +1,8 @@
+env keys= ['ascii_lowercase', 'upper', 'punctuation', 'letters', 'lstrip', 'uppercase', 'ascii_letters', 'replace', 'capwords', 'index_error', 'rfind', 'Template', 'strip', 'ljust', 'octdigits', 'index', 'ascii_uppercase', 'whitespace', 'rindex', 'rsplit', 'atol_error', 'find', 'printable', 'splitfields', 'split', 'rstrip', 'translate', 'digits', 'joinfields', 'rjust', '__builtins__', 'swapcase', 'atof_error', 'atoi', 'hexdigits', 'atol', 'atof', 'lowercase', 'count', 'lower', 'join', 'center', 'f', 'expandtabs', 'atoi_error', 'maketrans', 'capitalize', 'zfill', 'Formatter']
+<function f at 0x106e03668> <type 'function'>
+2
+4
+First line.
+Second line.
+
+0 1 2 3 4 5 6 7 8 9 STREAM ioctl timeout

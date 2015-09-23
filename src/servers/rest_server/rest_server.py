@@ -36,7 +36,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # set up the root logger
-    logger = logging.getLogger()
+    logger = logging.getLogger(__name__)
     logger.setLevel(logging.DEBUG)
 
     formatter = logging.Formatter('%(asctime)s - %(name)s - '
@@ -48,6 +48,9 @@ if __name__ == "__main__":
                                                    backupCount=5)
     handler.setFormatter(formatter)
     logger.addHandler(handler)
+    logger.debug('debugging started')
+    print 'logging started'
+
     # Application server
     application = tornado.web.Application([
         (r"/render", Render),

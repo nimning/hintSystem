@@ -18,6 +18,8 @@ def filtered_answers(answers, correct_string, correct_tree,
     like
     [{user_id: 'iawwal', answer_string: '1+1'},..]
     '''
+    logger.debug('finished  filtered_answers')
+
     import os
     import sys
     import StringIO
@@ -43,14 +45,18 @@ def filtered_answers(answers, correct_string, correct_tree,
     sys.stderr = sys.stdout = out
 
     try:
+        logger.debug('About to exec filter function definition')
         exec filter_function_string in globals(), locals()
+        logger.debug('About to start processing %d attempts'%len(answers))
         for a in answers:
             user_id = a['user_id']
+            logger.debug('processing '+user_id)
+
             if len(user_vars) > 0:
                 student_vars = dict(user_vars[user_vars['user_id']==user_id][['name', 'value']].values.tolist())
             else:
-                student_vars = {}
-            logger.debug('vars: %s', student_vars)
+                 student_vars = {}
+            #logger.debug('vars: %s', student_vars)
             # This function must be defined by the exec'd code
             ret = answer_filter(a['string'], a['parsed'], a['evaled'], correct_string, correct_tree, a['correct_eval'], student_vars)
             if ret:
@@ -58,6 +64,12 @@ def filtered_answers(answers, correct_string, correct_tree,
     except Exception, e:
         logger.error("Error in filter function: %s", e)
         print e
+        continue
+
     pipe.send(selected_answers)
     out.flush()
+    logger.debug('finished  filtered_answers')
     return
+
+if __name__=='__main__':
+    
