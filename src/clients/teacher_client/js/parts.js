@@ -11,6 +11,9 @@ App.controller('PartsCtrl', function($scope, $location, $window, $stateParams, $
 
     $scope.dtOptions = DTOptionsBuilder.newOptions()
         .withBootstrap().withDisplayLength(25);
+        /* Enable this for pagination and display length of maximum 25 entries */
+        //.withBootstrap().withDisplayLength(25);
+        .withOption('paging', false);
 
     $scope.dtColumnDefs = [
         DTColumnDefBuilder.newColumnDef(0),
