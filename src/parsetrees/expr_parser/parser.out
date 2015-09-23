@@ -1,4 +1,4 @@
-Created by PLY version 3.7 (http://www.dabeaz.com/ply)
+Created by PLY version 3.4 (http://www.dabeaz.com/ply)
 
 Grammar
 
@@ -17,56 +17,53 @@ Rule 11    factor -> factor factor
 Rule 12    factor -> MINUS factor
 Rule 13    factor -> factor FACTORIAL
 Rule 14    factor -> CHOOSE LPAREN list RPAREN
-Rule 15    factor -> Q LPAREN factor RPAREN
-Rule 16    factor -> Q LPAREN expression RPAREN
-Rule 17    factor -> LPAREN expression RPAREN
-Rule 18    factor -> LBRACKET expression RBRACKET
-Rule 19    factor -> LPAREN factor RPAREN
-Rule 20    factor -> LBRACKET factor RBRACKET
-Rule 21    factor -> LPAREN expression
-Rule 22    factor -> LBRACKET expression
-Rule 23    factor -> LPAREN factor
-Rule 24    factor -> LBRACKET factor
-Rule 25    factor -> CHOOSE LPAREN list
-Rule 26    factor -> LSET list RSET
-Rule 27    factor -> LSET expression RSET
-Rule 28    factor -> LSET RSET
-Rule 29    factor -> LPAREN list RPAREN
-Rule 30    list -> expression COMMA
-Rule 31    list -> list expression COMMA
-Rule 32    list -> list expression
-Rule 33    list -> factor COMMA
-Rule 34    list -> list factor COMMA
-Rule 35    list -> list factor
-Rule 36    factor -> NUMBER
-Rule 37    factor -> VARIABLE
+Rule 15    factor -> LPAREN expression RPAREN
+Rule 16    factor -> LBRACKET expression RBRACKET
+Rule 17    factor -> LPAREN factor RPAREN
+Rule 18    factor -> LBRACKET factor RBRACKET
+Rule 19    factor -> LPAREN expression
+Rule 20    factor -> LBRACKET expression
+Rule 21    factor -> LPAREN factor
+Rule 22    factor -> LBRACKET factor
+Rule 23    factor -> CHOOSE LPAREN list
+Rule 24    factor -> LSET list RSET
+Rule 25    factor -> LSET expression RSET
+Rule 26    factor -> LSET RSET
+Rule 27    factor -> LPAREN list RPAREN
+Rule 28    list -> expression COMMA
+Rule 29    list -> list expression COMMA
+Rule 30    list -> list expression
+Rule 31    list -> factor COMMA
+Rule 32    list -> list factor COMMA
+Rule 33    list -> list factor
+Rule 34    factor -> NUMBER
+Rule 35    factor -> VARIABLE
 
 Terminals, with rules where they appear
 
-CHOOSE               : 14 25
-COMMA                : 30 31 33 34
+CHOOSE               : 14 23
+COMMA                : 28 29 31 32
 DIVIDE               : 9
 EXP                  : 10
 FACTORIAL            : 13
-LBRACKET             : 18 20 22 24
-LPAREN               : 14 15 16 17 19 21 23 25 29
-LSET                 : 26 27 28
+LBRACKET             : 16 18 20 22
+LPAREN               : 14 15 17 19 21 23 27
+LSET                 : 24 25 26
 MINUS                : 6 7 12
-NUMBER               : 36
+NUMBER               : 34
 PLUS                 : 4 5
-Q                    : 15 16
-RBRACKET             : 18 20
-RPAREN               : 14 15 16 17 19 29
-RSET                 : 26 27 28
+RBRACKET             : 16 18
+RPAREN               : 14 15 17 27
+RSET                 : 24 25 26
 TIMES                : 8
-VARIABLE             : 37
+VARIABLE             : 35
 error                : 
 
 Nonterminals, with rules where they appear
 
-expression           : 1 4 6 16 17 18 21 22 27 30 31 32
-factor               : 2 4 5 5 6 7 7 8 8 9 9 10 10 11 11 12 13 15 19 20 23 24 33 34 35
-list                 : 3 14 25 26 29 31 32 34 35
+expression           : 1 4 6 15 16 19 20 25 28 29 30
+factor               : 2 4 5 5 6 7 7 8 8 9 9 10 10 11 11 12 13 17 18 21 22 31 32 33
+list                 : 3 14 23 24 27 29 30 32 33
 statement            : 0
 
 Parsing method: LALR
@@ -88,50 +85,48 @@ state 0
     (12) factor -> . MINUS factor
     (13) factor -> . factor FACTORIAL
     (14) factor -> . CHOOSE LPAREN list RPAREN
-    (15) factor -> . Q LPAREN factor RPAREN
-    (16) factor -> . Q LPAREN expression RPAREN
-    (17) factor -> . LPAREN expression RPAREN
-    (18) factor -> . LBRACKET expression RBRACKET
-    (19) factor -> . LPAREN factor RPAREN
-    (20) factor -> . LBRACKET factor RBRACKET
-    (21) factor -> . LPAREN expression
-    (22) factor -> . LBRACKET expression
-    (23) factor -> . LPAREN factor
-    (24) factor -> . LBRACKET factor
-    (25) factor -> . CHOOSE LPAREN list
-    (26) factor -> . LSET list RSET
-    (27) factor -> . LSET expression RSET
-    (28) factor -> . LSET RSET
-    (29) factor -> . LPAREN list RPAREN
-    (36) factor -> . NUMBER
-    (37) factor -> . VARIABLE
-    (30) list -> . expression COMMA
-    (31) list -> . list expression COMMA
-    (32) list -> . list expression
-    (33) list -> . factor COMMA
-    (34) list -> . list factor COMMA
-    (35) list -> . list factor
+    (15) factor -> . LPAREN expression RPAREN
+    (16) factor -> . LBRACKET expression RBRACKET
+    (17) factor -> . LPAREN factor RPAREN
+    (18) factor -> . LBRACKET factor RBRACKET
+    (19) factor -> . LPAREN expression
+    (20) factor -> . LBRACKET expression
+    (21) factor -> . LPAREN factor
+    (22) factor -> . LBRACKET factor
+    (23) factor -> . CHOOSE LPAREN list
+    (24) factor -> . LSET list RSET
+    (25) factor -> . LSET expression RSET
+    (26) factor -> . LSET RSET
+    (27) factor -> . LPAREN list RPAREN
+    (34) factor -> . NUMBER
+    (35) factor -> . VARIABLE
+    (28) list -> . expression COMMA
+    (29) list -> . list expression COMMA
+    (30) list -> . list expression
+    (31) list -> . factor COMMA
+    (32) list -> . list factor COMMA
+    (33) list -> . list factor
 
-    MINUS           shift and go to state 12
-    CHOOSE          shift and go to state 7
-    Q               shift and go to state 4
-    LPAREN          shift and go to state 10
-    LBRACKET        shift and go to state 1
-    LSET            shift and go to state 6
-    NUMBER          shift and go to state 3
-    VARIABLE        shift and go to state 5
+    MINUS           shift and go to state 11
+    CHOOSE          shift and go to state 6
+    LPAREN          shift and go to state 9
+    LBRACKET        shift and go to state 3
+    LSET            shift and go to state 5
+    NUMBER          shift and go to state 2
+    VARIABLE        shift and go to state 4
 
-    list                           shift and go to state 2
-    expression                     shift and go to state 11
-    statement                      shift and go to state 8
-    factor                         shift and go to state 9
+    list                           shift and go to state 1
+    expression                     shift and go to state 10
+    statement                      shift and go to state 7
+    factor                         shift and go to state 8
 
 state 1
 
-    (18) factor -> LBRACKET . expression RBRACKET
-    (20) factor -> LBRACKET . factor RBRACKET
-    (22) factor -> LBRACKET . expression
-    (24) factor -> LBRACKET . factor
+    (3) statement -> list .
+    (29) list -> list . expression COMMA
+    (30) list -> list . expression
+    (32) list -> list . factor COMMA
+    (33) list -> list . factor
     (4) expression -> . expression PLUS factor
     (5) expression -> . factor PLUS factor
     (6) expression -> . expression MINUS factor
@@ -143,43 +138,63 @@ state 1
     (12) factor -> . MINUS factor
     (13) factor -> . factor FACTORIAL
     (14) factor -> . CHOOSE LPAREN list RPAREN
-    (15) factor -> . Q LPAREN factor RPAREN
-    (16) factor -> . Q LPAREN expression RPAREN
-    (17) factor -> . LPAREN expression RPAREN
-    (18) factor -> . LBRACKET expression RBRACKET
-    (19) factor -> . LPAREN factor RPAREN
-    (20) factor -> . LBRACKET factor RBRACKET
-    (21) factor -> . LPAREN expression
-    (22) factor -> . LBRACKET expression
-    (23) factor -> . LPAREN factor
-    (24) factor -> . LBRACKET factor
-    (25) factor -> . CHOOSE LPAREN list
-    (26) factor -> . LSET list RSET
-    (27) factor -> . LSET expression RSET
-    (28) factor -> . LSET RSET
-    (29) factor -> . LPAREN list RPAREN
-    (36) factor -> . NUMBER
-    (37) factor -> . VARIABLE
+    (15) factor -> . LPAREN expression RPAREN
+    (16) factor -> . LBRACKET expression RBRACKET
+    (17) factor -> . LPAREN factor RPAREN
+    (18) factor -> . LBRACKET factor RBRACKET
+    (19) factor -> . LPAREN expression
+    (20) factor -> . LBRACKET expression
+    (21) factor -> . LPAREN factor
+    (22) factor -> . LBRACKET factor
+    (23) factor -> . CHOOSE LPAREN list
+    (24) factor -> . LSET list RSET
+    (25) factor -> . LSET expression RSET
+    (26) factor -> . LSET RSET
+    (27) factor -> . LPAREN list RPAREN
+    (34) factor -> . NUMBER
+    (35) factor -> . VARIABLE
 
-    MINUS           shift and go to state 12
-    CHOOSE          shift and go to state 7
-    Q               shift and go to state 4
-    LPAREN          shift and go to state 10
-    LBRACKET        shift and go to state 1
-    LSET            shift and go to state 6
-    NUMBER          shift and go to state 3
-    VARIABLE        shift and go to state 5
+    $end            reduce using rule 3 (statement -> list .)
+    MINUS           shift and go to state 11
+    CHOOSE          shift and go to state 6
+    LPAREN          shift and go to state 9
+    LBRACKET        shift and go to state 3
+    LSET            shift and go to state 5
+    NUMBER          shift and go to state 2
+    VARIABLE        shift and go to state 4
 
-    expression                     shift and go to state 14
-    factor                         shift and go to state 13
+    expression                     shift and go to state 13
+    factor                         shift and go to state 12
 
 state 2
 
-    (3) statement -> list .
-    (31) list -> list . expression COMMA
-    (32) list -> list . expression
-    (34) list -> list . factor COMMA
-    (35) list -> list . factor
+    (34) factor -> NUMBER .
+
+    TIMES           reduce using rule 34 (factor -> NUMBER .)
+    DIVIDE          reduce using rule 34 (factor -> NUMBER .)
+    EXP             reduce using rule 34 (factor -> NUMBER .)
+    FACTORIAL       reduce using rule 34 (factor -> NUMBER .)
+    MINUS           reduce using rule 34 (factor -> NUMBER .)
+    CHOOSE          reduce using rule 34 (factor -> NUMBER .)
+    LPAREN          reduce using rule 34 (factor -> NUMBER .)
+    LBRACKET        reduce using rule 34 (factor -> NUMBER .)
+    LSET            reduce using rule 34 (factor -> NUMBER .)
+    NUMBER          reduce using rule 34 (factor -> NUMBER .)
+    VARIABLE        reduce using rule 34 (factor -> NUMBER .)
+    COMMA           reduce using rule 34 (factor -> NUMBER .)
+    PLUS            reduce using rule 34 (factor -> NUMBER .)
+    RBRACKET        reduce using rule 34 (factor -> NUMBER .)
+    $end            reduce using rule 34 (factor -> NUMBER .)
+    RPAREN          reduce using rule 34 (factor -> NUMBER .)
+    RSET            reduce using rule 34 (factor -> NUMBER .)
+
+
+state 3
+
+    (16) factor -> LBRACKET . expression RBRACKET
+    (18) factor -> LBRACKET . factor RBRACKET
+    (20) factor -> LBRACKET . expression
+    (22) factor -> LBRACKET . factor
     (4) expression -> . expression PLUS factor
     (5) expression -> . factor PLUS factor
     (6) expression -> . expression MINUS factor
@@ -191,104 +206,67 @@ state 2
     (12) factor -> . MINUS factor
     (13) factor -> . factor FACTORIAL
     (14) factor -> . CHOOSE LPAREN list RPAREN
-    (15) factor -> . Q LPAREN factor RPAREN
-    (16) factor -> . Q LPAREN expression RPAREN
-    (17) factor -> . LPAREN expression RPAREN
-    (18) factor -> . LBRACKET expression RBRACKET
-    (19) factor -> . LPAREN factor RPAREN
-    (20) factor -> . LBRACKET factor RBRACKET
-    (21) factor -> . LPAREN expression
-    (22) factor -> . LBRACKET expression
-    (23) factor -> . LPAREN factor
-    (24) factor -> . LBRACKET factor
-    (25) factor -> . CHOOSE LPAREN list
-    (26) factor -> . LSET list RSET
-    (27) factor -> . LSET expression RSET
-    (28) factor -> . LSET RSET
-    (29) factor -> . LPAREN list RPAREN
-    (36) factor -> . NUMBER
-    (37) factor -> . VARIABLE
+    (15) factor -> . LPAREN expression RPAREN
+    (16) factor -> . LBRACKET expression RBRACKET
+    (17) factor -> . LPAREN factor RPAREN
+    (18) factor -> . LBRACKET factor RBRACKET
+    (19) factor -> . LPAREN expression
+    (20) factor -> . LBRACKET expression
+    (21) factor -> . LPAREN factor
+    (22) factor -> . LBRACKET factor
+    (23) factor -> . CHOOSE LPAREN list
+    (24) factor -> . LSET list RSET
+    (25) factor -> . LSET expression RSET
+    (26) factor -> . LSET RSET
+    (27) factor -> . LPAREN list RPAREN
+    (34) factor -> . NUMBER
+    (35) factor -> . VARIABLE
 
-    $end            reduce using rule 3 (statement -> list .)
-    MINUS           shift and go to state 12
-    CHOOSE          shift and go to state 7
-    Q               shift and go to state 4
-    LPAREN          shift and go to state 10
-    LBRACKET        shift and go to state 1
-    LSET            shift and go to state 6
-    NUMBER          shift and go to state 3
-    VARIABLE        shift and go to state 5
+    MINUS           shift and go to state 11
+    CHOOSE          shift and go to state 6
+    LPAREN          shift and go to state 9
+    LBRACKET        shift and go to state 3
+    LSET            shift and go to state 5
+    NUMBER          shift and go to state 2
+    VARIABLE        shift and go to state 4
 
-    expression                     shift and go to state 16
-    factor                         shift and go to state 15
-
-state 3
-
-    (36) factor -> NUMBER .
-
-    COMMA           reduce using rule 36 (factor -> NUMBER .)
-    PLUS            reduce using rule 36 (factor -> NUMBER .)
-    MINUS           reduce using rule 36 (factor -> NUMBER .)
-    TIMES           reduce using rule 36 (factor -> NUMBER .)
-    DIVIDE          reduce using rule 36 (factor -> NUMBER .)
-    EXP             reduce using rule 36 (factor -> NUMBER .)
-    FACTORIAL       reduce using rule 36 (factor -> NUMBER .)
-    CHOOSE          reduce using rule 36 (factor -> NUMBER .)
-    Q               reduce using rule 36 (factor -> NUMBER .)
-    LPAREN          reduce using rule 36 (factor -> NUMBER .)
-    LBRACKET        reduce using rule 36 (factor -> NUMBER .)
-    LSET            reduce using rule 36 (factor -> NUMBER .)
-    NUMBER          reduce using rule 36 (factor -> NUMBER .)
-    VARIABLE        reduce using rule 36 (factor -> NUMBER .)
-    RSET            reduce using rule 36 (factor -> NUMBER .)
-    RBRACKET        reduce using rule 36 (factor -> NUMBER .)
-    $end            reduce using rule 36 (factor -> NUMBER .)
-    RPAREN          reduce using rule 36 (factor -> NUMBER .)
-
+    expression                     shift and go to state 15
+    factor                         shift and go to state 14
 
 state 4
 
-    (15) factor -> Q . LPAREN factor RPAREN
-    (16) factor -> Q . LPAREN expression RPAREN
+    (35) factor -> VARIABLE .
 
-    LPAREN          shift and go to state 17
+    TIMES           reduce using rule 35 (factor -> VARIABLE .)
+    DIVIDE          reduce using rule 35 (factor -> VARIABLE .)
+    EXP             reduce using rule 35 (factor -> VARIABLE .)
+    FACTORIAL       reduce using rule 35 (factor -> VARIABLE .)
+    MINUS           reduce using rule 35 (factor -> VARIABLE .)
+    CHOOSE          reduce using rule 35 (factor -> VARIABLE .)
+    LPAREN          reduce using rule 35 (factor -> VARIABLE .)
+    LBRACKET        reduce using rule 35 (factor -> VARIABLE .)
+    LSET            reduce using rule 35 (factor -> VARIABLE .)
+    NUMBER          reduce using rule 35 (factor -> VARIABLE .)
+    VARIABLE        reduce using rule 35 (factor -> VARIABLE .)
+    COMMA           reduce using rule 35 (factor -> VARIABLE .)
+    PLUS            reduce using rule 35 (factor -> VARIABLE .)
+    RBRACKET        reduce using rule 35 (factor -> VARIABLE .)
+    $end            reduce using rule 35 (factor -> VARIABLE .)
+    RPAREN          reduce using rule 35 (factor -> VARIABLE .)
+    RSET            reduce using rule 35 (factor -> VARIABLE .)
 
 
 state 5
 
-    (37) factor -> VARIABLE .
-
-    COMMA           reduce using rule 37 (factor -> VARIABLE .)
-    PLUS            reduce using rule 37 (factor -> VARIABLE .)
-    MINUS           reduce using rule 37 (factor -> VARIABLE .)
-    TIMES           reduce using rule 37 (factor -> VARIABLE .)
-    DIVIDE          reduce using rule 37 (factor -> VARIABLE .)
-    EXP             reduce using rule 37 (factor -> VARIABLE .)
-    FACTORIAL       reduce using rule 37 (factor -> VARIABLE .)
-    CHOOSE          reduce using rule 37 (factor -> VARIABLE .)
-    Q               reduce using rule 37 (factor -> VARIABLE .)
-    LPAREN          reduce using rule 37 (factor -> VARIABLE .)
-    LBRACKET        reduce using rule 37 (factor -> VARIABLE .)
-    LSET            reduce using rule 37 (factor -> VARIABLE .)
-    NUMBER          reduce using rule 37 (factor -> VARIABLE .)
-    VARIABLE        reduce using rule 37 (factor -> VARIABLE .)
-    RSET            reduce using rule 37 (factor -> VARIABLE .)
-    RBRACKET        reduce using rule 37 (factor -> VARIABLE .)
-    $end            reduce using rule 37 (factor -> VARIABLE .)
-    RPAREN          reduce using rule 37 (factor -> VARIABLE .)
-
-
-state 6
-
-    (26) factor -> LSET . list RSET
-    (27) factor -> LSET . expression RSET
-    (28) factor -> LSET . RSET
-    (30) list -> . expression COMMA
-    (31) list -> . list expression COMMA
-    (32) list -> . list expression
-    (33) list -> . factor COMMA
-    (34) list -> . list factor COMMA
-    (35) list -> . list factor
+    (24) factor -> LSET . list RSET
+    (25) factor -> LSET . expression RSET
+    (26) factor -> LSET . RSET
+    (28) list -> . expression COMMA
+    (29) list -> . list expression COMMA
+    (30) list -> . list expression
+    (31) list -> . factor COMMA
+    (32) list -> . list factor COMMA
+    (33) list -> . list factor
     (4) expression -> . expression PLUS factor
     (5) expression -> . factor PLUS factor
     (6) expression -> . expression MINUS factor
@@ -300,53 +278,50 @@ state 6
     (12) factor -> . MINUS factor
     (13) factor -> . factor FACTORIAL
     (14) factor -> . CHOOSE LPAREN list RPAREN
-    (15) factor -> . Q LPAREN factor RPAREN
-    (16) factor -> . Q LPAREN expression RPAREN
-    (17) factor -> . LPAREN expression RPAREN
-    (18) factor -> . LBRACKET expression RBRACKET
-    (19) factor -> . LPAREN factor RPAREN
-    (20) factor -> . LBRACKET factor RBRACKET
-    (21) factor -> . LPAREN expression
-    (22) factor -> . LBRACKET expression
-    (23) factor -> . LPAREN factor
-    (24) factor -> . LBRACKET factor
-    (25) factor -> . CHOOSE LPAREN list
-    (26) factor -> . LSET list RSET
-    (27) factor -> . LSET expression RSET
-    (28) factor -> . LSET RSET
-    (29) factor -> . LPAREN list RPAREN
-    (36) factor -> . NUMBER
-    (37) factor -> . VARIABLE
+    (15) factor -> . LPAREN expression RPAREN
+    (16) factor -> . LBRACKET expression RBRACKET
+    (17) factor -> . LPAREN factor RPAREN
+    (18) factor -> . LBRACKET factor RBRACKET
+    (19) factor -> . LPAREN expression
+    (20) factor -> . LBRACKET expression
+    (21) factor -> . LPAREN factor
+    (22) factor -> . LBRACKET factor
+    (23) factor -> . CHOOSE LPAREN list
+    (24) factor -> . LSET list RSET
+    (25) factor -> . LSET expression RSET
+    (26) factor -> . LSET RSET
+    (27) factor -> . LPAREN list RPAREN
+    (34) factor -> . NUMBER
+    (35) factor -> . VARIABLE
 
-    RSET            shift and go to state 19
-    MINUS           shift and go to state 12
-    CHOOSE          shift and go to state 7
-    Q               shift and go to state 4
-    LPAREN          shift and go to state 10
-    LBRACKET        shift and go to state 1
-    LSET            shift and go to state 6
-    NUMBER          shift and go to state 3
-    VARIABLE        shift and go to state 5
+    RSET            shift and go to state 17
+    MINUS           shift and go to state 11
+    CHOOSE          shift and go to state 6
+    LPAREN          shift and go to state 9
+    LBRACKET        shift and go to state 3
+    LSET            shift and go to state 5
+    NUMBER          shift and go to state 2
+    VARIABLE        shift and go to state 4
 
-    expression                     shift and go to state 21
-    list                           shift and go to state 18
-    factor                         shift and go to state 20
+    expression                     shift and go to state 19
+    list                           shift and go to state 16
+    factor                         shift and go to state 18
 
-state 7
+state 6
 
     (14) factor -> CHOOSE . LPAREN list RPAREN
-    (25) factor -> CHOOSE . LPAREN list
+    (23) factor -> CHOOSE . LPAREN list
 
-    LPAREN          shift and go to state 22
+    LPAREN          shift and go to state 20
 
 
-state 8
+state 7
 
     (0) S' -> statement .
 
 
 
-state 9
+state 8
 
     (2) statement -> factor .
     (5) expression -> factor . PLUS factor
@@ -356,7 +331,7 @@ state 9
     (10) factor -> factor . EXP factor
     (11) factor -> factor . factor
     (13) factor -> factor . FACTORIAL
-    (33) list -> factor . COMMA
+    (31) list -> factor . COMMA
     (8) factor -> . factor TIMES factor
     (9) factor -> . factor DIVIDE factor
     (10) factor -> . factor EXP factor
@@ -364,49 +339,46 @@ state 9
     (12) factor -> . MINUS factor
     (13) factor -> . factor FACTORIAL
     (14) factor -> . CHOOSE LPAREN list RPAREN
-    (15) factor -> . Q LPAREN factor RPAREN
-    (16) factor -> . Q LPAREN expression RPAREN
-    (17) factor -> . LPAREN expression RPAREN
-    (18) factor -> . LBRACKET expression RBRACKET
-    (19) factor -> . LPAREN factor RPAREN
-    (20) factor -> . LBRACKET factor RBRACKET
-    (21) factor -> . LPAREN expression
-    (22) factor -> . LBRACKET expression
-    (23) factor -> . LPAREN factor
-    (24) factor -> . LBRACKET factor
-    (25) factor -> . CHOOSE LPAREN list
-    (26) factor -> . LSET list RSET
-    (27) factor -> . LSET expression RSET
-    (28) factor -> . LSET RSET
-    (29) factor -> . LPAREN list RPAREN
-    (36) factor -> . NUMBER
-    (37) factor -> . VARIABLE
+    (15) factor -> . LPAREN expression RPAREN
+    (16) factor -> . LBRACKET expression RBRACKET
+    (17) factor -> . LPAREN factor RPAREN
+    (18) factor -> . LBRACKET factor RBRACKET
+    (19) factor -> . LPAREN expression
+    (20) factor -> . LBRACKET expression
+    (21) factor -> . LPAREN factor
+    (22) factor -> . LBRACKET factor
+    (23) factor -> . CHOOSE LPAREN list
+    (24) factor -> . LSET list RSET
+    (25) factor -> . LSET expression RSET
+    (26) factor -> . LSET RSET
+    (27) factor -> . LPAREN list RPAREN
+    (34) factor -> . NUMBER
+    (35) factor -> . VARIABLE
 
     $end            reduce using rule 2 (statement -> factor .)
-    PLUS            shift and go to state 26
-    MINUS           shift and go to state 30
-    TIMES           shift and go to state 25
-    DIVIDE          shift and go to state 23
-    EXP             shift and go to state 27
-    FACTORIAL       shift and go to state 24
-    COMMA           shift and go to state 29
-    CHOOSE          shift and go to state 7
-    Q               shift and go to state 4
-    LPAREN          shift and go to state 10
-    LBRACKET        shift and go to state 1
-    LSET            shift and go to state 6
-    NUMBER          shift and go to state 3
-    VARIABLE        shift and go to state 5
+    PLUS            shift and go to state 24
+    MINUS           shift and go to state 28
+    TIMES           shift and go to state 23
+    DIVIDE          shift and go to state 21
+    EXP             shift and go to state 25
+    FACTORIAL       shift and go to state 22
+    COMMA           shift and go to state 27
+    CHOOSE          shift and go to state 6
+    LPAREN          shift and go to state 9
+    LBRACKET        shift and go to state 3
+    LSET            shift and go to state 5
+    NUMBER          shift and go to state 2
+    VARIABLE        shift and go to state 4
 
-    factor                         shift and go to state 28
+    factor                         shift and go to state 26
 
-state 10
+state 9
 
-    (17) factor -> LPAREN . expression RPAREN
-    (19) factor -> LPAREN . factor RPAREN
-    (21) factor -> LPAREN . expression
-    (23) factor -> LPAREN . factor
-    (29) factor -> LPAREN . list RPAREN
+    (15) factor -> LPAREN . expression RPAREN
+    (17) factor -> LPAREN . factor RPAREN
+    (19) factor -> LPAREN . expression
+    (21) factor -> LPAREN . factor
+    (27) factor -> LPAREN . list RPAREN
     (4) expression -> . expression PLUS factor
     (5) expression -> . factor PLUS factor
     (6) expression -> . expression MINUS factor
@@ -418,57 +390,54 @@ state 10
     (12) factor -> . MINUS factor
     (13) factor -> . factor FACTORIAL
     (14) factor -> . CHOOSE LPAREN list RPAREN
-    (15) factor -> . Q LPAREN factor RPAREN
-    (16) factor -> . Q LPAREN expression RPAREN
-    (17) factor -> . LPAREN expression RPAREN
-    (18) factor -> . LBRACKET expression RBRACKET
-    (19) factor -> . LPAREN factor RPAREN
-    (20) factor -> . LBRACKET factor RBRACKET
-    (21) factor -> . LPAREN expression
-    (22) factor -> . LBRACKET expression
-    (23) factor -> . LPAREN factor
-    (24) factor -> . LBRACKET factor
-    (25) factor -> . CHOOSE LPAREN list
-    (26) factor -> . LSET list RSET
-    (27) factor -> . LSET expression RSET
-    (28) factor -> . LSET RSET
-    (29) factor -> . LPAREN list RPAREN
-    (36) factor -> . NUMBER
-    (37) factor -> . VARIABLE
-    (30) list -> . expression COMMA
-    (31) list -> . list expression COMMA
-    (32) list -> . list expression
-    (33) list -> . factor COMMA
-    (34) list -> . list factor COMMA
-    (35) list -> . list factor
+    (15) factor -> . LPAREN expression RPAREN
+    (16) factor -> . LBRACKET expression RBRACKET
+    (17) factor -> . LPAREN factor RPAREN
+    (18) factor -> . LBRACKET factor RBRACKET
+    (19) factor -> . LPAREN expression
+    (20) factor -> . LBRACKET expression
+    (21) factor -> . LPAREN factor
+    (22) factor -> . LBRACKET factor
+    (23) factor -> . CHOOSE LPAREN list
+    (24) factor -> . LSET list RSET
+    (25) factor -> . LSET expression RSET
+    (26) factor -> . LSET RSET
+    (27) factor -> . LPAREN list RPAREN
+    (34) factor -> . NUMBER
+    (35) factor -> . VARIABLE
+    (28) list -> . expression COMMA
+    (29) list -> . list expression COMMA
+    (30) list -> . list expression
+    (31) list -> . factor COMMA
+    (32) list -> . list factor COMMA
+    (33) list -> . list factor
 
-    MINUS           shift and go to state 12
-    CHOOSE          shift and go to state 7
-    Q               shift and go to state 4
-    LPAREN          shift and go to state 10
-    LBRACKET        shift and go to state 1
-    LSET            shift and go to state 6
-    NUMBER          shift and go to state 3
-    VARIABLE        shift and go to state 5
+    MINUS           shift and go to state 11
+    CHOOSE          shift and go to state 6
+    LPAREN          shift and go to state 9
+    LBRACKET        shift and go to state 3
+    LSET            shift and go to state 5
+    NUMBER          shift and go to state 2
+    VARIABLE        shift and go to state 4
 
-    list                           shift and go to state 31
-    expression                     shift and go to state 33
-    factor                         shift and go to state 32
+    list                           shift and go to state 29
+    expression                     shift and go to state 31
+    factor                         shift and go to state 30
 
-state 11
+state 10
 
     (1) statement -> expression .
     (4) expression -> expression . PLUS factor
     (6) expression -> expression . MINUS factor
-    (30) list -> expression . COMMA
+    (28) list -> expression . COMMA
 
     $end            reduce using rule 1 (statement -> expression .)
-    PLUS            shift and go to state 34
-    MINUS           shift and go to state 36
-    COMMA           shift and go to state 35
+    PLUS            shift and go to state 32
+    MINUS           shift and go to state 34
+    COMMA           shift and go to state 33
 
 
-state 12
+state 11
 
     (12) factor -> MINUS . factor
     (8) factor -> . factor TIMES factor
@@ -478,39 +447,36 @@ state 12
     (12) factor -> . MINUS factor
     (13) factor -> . factor FACTORIAL
     (14) factor -> . CHOOSE LPAREN list RPAREN
-    (15) factor -> . Q LPAREN factor RPAREN
-    (16) factor -> . Q LPAREN expression RPAREN
-    (17) factor -> . LPAREN expression RPAREN
-    (18) factor -> . LBRACKET expression RBRACKET
-    (19) factor -> . LPAREN factor RPAREN
-    (20) factor -> . LBRACKET factor RBRACKET
-    (21) factor -> . LPAREN expression
-    (22) factor -> . LBRACKET expression
-    (23) factor -> . LPAREN factor
-    (24) factor -> . LBRACKET factor
-    (25) factor -> . CHOOSE LPAREN list
-    (26) factor -> . LSET list RSET
-    (27) factor -> . LSET expression RSET
-    (28) factor -> . LSET RSET
-    (29) factor -> . LPAREN list RPAREN
-    (36) factor -> . NUMBER
-    (37) factor -> . VARIABLE
+    (15) factor -> . LPAREN expression RPAREN
+    (16) factor -> . LBRACKET expression RBRACKET
+    (17) factor -> . LPAREN factor RPAREN
+    (18) factor -> . LBRACKET factor RBRACKET
+    (19) factor -> . LPAREN expression
+    (20) factor -> . LBRACKET expression
+    (21) factor -> . LPAREN factor
+    (22) factor -> . LBRACKET factor
+    (23) factor -> . CHOOSE LPAREN list
+    (24) factor -> . LSET list RSET
+    (25) factor -> . LSET expression RSET
+    (26) factor -> . LSET RSET
+    (27) factor -> . LPAREN list RPAREN
+    (34) factor -> . NUMBER
+    (35) factor -> . VARIABLE
 
-    MINUS           shift and go to state 12
-    CHOOSE          shift and go to state 7
-    Q               shift and go to state 4
-    LPAREN          shift and go to state 10
-    LBRACKET        shift and go to state 1
-    LSET            shift and go to state 6
-    NUMBER          shift and go to state 3
-    VARIABLE        shift and go to state 5
+    MINUS           shift and go to state 11
+    CHOOSE          shift and go to state 6
+    LPAREN          shift and go to state 9
+    LBRACKET        shift and go to state 3
+    LSET            shift and go to state 5
+    NUMBER          shift and go to state 2
+    VARIABLE        shift and go to state 4
 
-    factor                         shift and go to state 37
+    factor                         shift and go to state 35
 
-state 13
+state 12
 
-    (20) factor -> LBRACKET factor . RBRACKET
-    (24) factor -> LBRACKET factor .
+    (32) list -> list factor . COMMA
+    (33) list -> list factor .
     (5) expression -> factor . PLUS factor
     (7) expression -> factor . MINUS factor
     (8) factor -> factor . TIMES factor
@@ -525,23 +491,121 @@ state 13
     (12) factor -> . MINUS factor
     (13) factor -> . factor FACTORIAL
     (14) factor -> . CHOOSE LPAREN list RPAREN
-    (15) factor -> . Q LPAREN factor RPAREN
-    (16) factor -> . Q LPAREN expression RPAREN
-    (17) factor -> . LPAREN expression RPAREN
-    (18) factor -> . LBRACKET expression RBRACKET
-    (19) factor -> . LPAREN factor RPAREN
-    (20) factor -> . LBRACKET factor RBRACKET
-    (21) factor -> . LPAREN expression
-    (22) factor -> . LBRACKET expression
-    (23) factor -> . LPAREN factor
-    (24) factor -> . LBRACKET factor
-    (25) factor -> . CHOOSE LPAREN list
-    (26) factor -> . LSET list RSET
-    (27) factor -> . LSET expression RSET
-    (28) factor -> . LSET RSET
-    (29) factor -> . LPAREN list RPAREN
-    (36) factor -> . NUMBER
-    (37) factor -> . VARIABLE
+    (15) factor -> . LPAREN expression RPAREN
+    (16) factor -> . LBRACKET expression RBRACKET
+    (17) factor -> . LPAREN factor RPAREN
+    (18) factor -> . LBRACKET factor RBRACKET
+    (19) factor -> . LPAREN expression
+    (20) factor -> . LBRACKET expression
+    (21) factor -> . LPAREN factor
+    (22) factor -> . LBRACKET factor
+    (23) factor -> . CHOOSE LPAREN list
+    (24) factor -> . LSET list RSET
+    (25) factor -> . LSET expression RSET
+    (26) factor -> . LSET RSET
+    (27) factor -> . LPAREN list RPAREN
+    (34) factor -> . NUMBER
+    (35) factor -> . VARIABLE
+
+    COMMA           shift and go to state 36
+    RBRACKET        reduce using rule 33 (list -> list factor .)
+    LPAREN          reduce using rule 33 (list -> list factor .)
+    LBRACKET        reduce using rule 33 (list -> list factor .)
+    LSET            reduce using rule 33 (list -> list factor .)
+    NUMBER          reduce using rule 33 (list -> list factor .)
+    VARIABLE        reduce using rule 33 (list -> list factor .)
+    $end            reduce using rule 33 (list -> list factor .)
+    RPAREN          reduce using rule 33 (list -> list factor .)
+    RSET            reduce using rule 33 (list -> list factor .)
+    PLUS            shift and go to state 24
+    MINUS           shift and go to state 28
+    TIMES           shift and go to state 23
+    DIVIDE          shift and go to state 21
+    EXP             shift and go to state 25
+    FACTORIAL       shift and go to state 22
+    CHOOSE          shift and go to state 6
+
+  ! PLUS            [ reduce using rule 33 (list -> list factor .) ]
+  ! MINUS           [ reduce using rule 33 (list -> list factor .) ]
+  ! TIMES           [ reduce using rule 33 (list -> list factor .) ]
+  ! DIVIDE          [ reduce using rule 33 (list -> list factor .) ]
+  ! EXP             [ reduce using rule 33 (list -> list factor .) ]
+  ! FACTORIAL       [ reduce using rule 33 (list -> list factor .) ]
+  ! COMMA           [ reduce using rule 33 (list -> list factor .) ]
+  ! CHOOSE          [ reduce using rule 33 (list -> list factor .) ]
+  ! LPAREN          [ shift and go to state 9 ]
+  ! LBRACKET        [ shift and go to state 3 ]
+  ! LSET            [ shift and go to state 5 ]
+  ! NUMBER          [ shift and go to state 2 ]
+  ! VARIABLE        [ shift and go to state 4 ]
+
+    factor                         shift and go to state 26
+
+state 13
+
+    (29) list -> list expression . COMMA
+    (30) list -> list expression .
+    (4) expression -> expression . PLUS factor
+    (6) expression -> expression . MINUS factor
+
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+    COMMA           shift and go to state 37
+    RBRACKET        reduce using rule 30 (list -> list expression .)
+    TIMES           reduce using rule 30 (list -> list expression .)
+    DIVIDE          reduce using rule 30 (list -> list expression .)
+    EXP             reduce using rule 30 (list -> list expression .)
+    FACTORIAL       reduce using rule 30 (list -> list expression .)
+    CHOOSE          reduce using rule 30 (list -> list expression .)
+    LPAREN          reduce using rule 30 (list -> list expression .)
+    LBRACKET        reduce using rule 30 (list -> list expression .)
+    LSET            reduce using rule 30 (list -> list expression .)
+    NUMBER          reduce using rule 30 (list -> list expression .)
+    VARIABLE        reduce using rule 30 (list -> list expression .)
+    $end            reduce using rule 30 (list -> list expression .)
+    RPAREN          reduce using rule 30 (list -> list expression .)
+    RSET            reduce using rule 30 (list -> list expression .)
+    PLUS            shift and go to state 32
+    MINUS           shift and go to state 34
+
+  ! PLUS            [ reduce using rule 30 (list -> list expression .) ]
+  ! MINUS           [ reduce using rule 30 (list -> list expression .) ]
+  ! COMMA           [ reduce using rule 30 (list -> list expression .) ]
+
+
+state 14
+
+    (18) factor -> LBRACKET factor . RBRACKET
+    (22) factor -> LBRACKET factor .
+    (5) expression -> factor . PLUS factor
+    (7) expression -> factor . MINUS factor
+    (8) factor -> factor . TIMES factor
+    (9) factor -> factor . DIVIDE factor
+    (10) factor -> factor . EXP factor
+    (11) factor -> factor . factor
+    (13) factor -> factor . FACTORIAL
+    (8) factor -> . factor TIMES factor
+    (9) factor -> . factor DIVIDE factor
+    (10) factor -> . factor EXP factor
+    (11) factor -> . factor factor
+    (12) factor -> . MINUS factor
+    (13) factor -> . factor FACTORIAL
+    (14) factor -> . CHOOSE LPAREN list RPAREN
+    (15) factor -> . LPAREN expression RPAREN
+    (16) factor -> . LBRACKET expression RBRACKET
+    (17) factor -> . LPAREN factor RPAREN
+    (18) factor -> . LBRACKET factor RBRACKET
+    (19) factor -> . LPAREN expression
+    (20) factor -> . LBRACKET expression
+    (21) factor -> . LPAREN factor
+    (22) factor -> . LBRACKET factor
+    (23) factor -> . CHOOSE LPAREN list
+    (24) factor -> . LSET list RSET
+    (25) factor -> . LSET expression RSET
+    (26) factor -> . LSET RSET
+    (27) factor -> . LPAREN list RPAREN
+    (34) factor -> . NUMBER
+    (35) factor -> . VARIABLE
 
   ! shift/reduce conflict for RBRACKET resolved as shift
   ! shift/reduce conflict for PLUS resolved as shift
@@ -551,52 +615,49 @@ state 13
   ! shift/reduce conflict for EXP resolved as shift
   ! shift/reduce conflict for FACTORIAL resolved as shift
   ! shift/reduce conflict for CHOOSE resolved as shift
-  ! shift/reduce conflict for Q resolved as shift
   ! shift/reduce conflict for LPAREN resolved as shift
   ! shift/reduce conflict for LBRACKET resolved as shift
   ! shift/reduce conflict for LSET resolved as shift
   ! shift/reduce conflict for NUMBER resolved as shift
   ! shift/reduce conflict for VARIABLE resolved as shift
     RBRACKET        shift and go to state 38
-    COMMA           reduce using rule 24 (factor -> LBRACKET factor .)
-    RSET            reduce using rule 24 (factor -> LBRACKET factor .)
-    $end            reduce using rule 24 (factor -> LBRACKET factor .)
-    RPAREN          reduce using rule 24 (factor -> LBRACKET factor .)
-    PLUS            shift and go to state 26
-    MINUS           shift and go to state 30
-    TIMES           shift and go to state 25
-    DIVIDE          shift and go to state 23
-    EXP             shift and go to state 27
-    FACTORIAL       shift and go to state 24
-    CHOOSE          shift and go to state 7
-    Q               shift and go to state 4
-    LPAREN          shift and go to state 10
-    LBRACKET        shift and go to state 1
-    LSET            shift and go to state 6
-    NUMBER          shift and go to state 3
-    VARIABLE        shift and go to state 5
+    COMMA           reduce using rule 22 (factor -> LBRACKET factor .)
+    $end            reduce using rule 22 (factor -> LBRACKET factor .)
+    RPAREN          reduce using rule 22 (factor -> LBRACKET factor .)
+    RSET            reduce using rule 22 (factor -> LBRACKET factor .)
+    PLUS            shift and go to state 24
+    MINUS           shift and go to state 28
+    TIMES           shift and go to state 23
+    DIVIDE          shift and go to state 21
+    EXP             shift and go to state 25
+    FACTORIAL       shift and go to state 22
+    CHOOSE          shift and go to state 6
+    LPAREN          shift and go to state 9
+    LBRACKET        shift and go to state 3
+    LSET            shift and go to state 5
+    NUMBER          shift and go to state 2
+    VARIABLE        shift and go to state 4
 
-  ! PLUS            [ reduce using rule 24 (factor -> LBRACKET factor .) ]
-  ! MINUS           [ reduce using rule 24 (factor -> LBRACKET factor .) ]
-  ! TIMES           [ reduce using rule 24 (factor -> LBRACKET factor .) ]
-  ! DIVIDE          [ reduce using rule 24 (factor -> LBRACKET factor .) ]
-  ! EXP             [ reduce using rule 24 (factor -> LBRACKET factor .) ]
-  ! FACTORIAL       [ reduce using rule 24 (factor -> LBRACKET factor .) ]
-  ! CHOOSE          [ reduce using rule 24 (factor -> LBRACKET factor .) ]
-  ! Q               [ reduce using rule 24 (factor -> LBRACKET factor .) ]
-  ! LPAREN          [ reduce using rule 24 (factor -> LBRACKET factor .) ]
-  ! LBRACKET        [ reduce using rule 24 (factor -> LBRACKET factor .) ]
-  ! LSET            [ reduce using rule 24 (factor -> LBRACKET factor .) ]
-  ! NUMBER          [ reduce using rule 24 (factor -> LBRACKET factor .) ]
-  ! VARIABLE        [ reduce using rule 24 (factor -> LBRACKET factor .) ]
-  ! RBRACKET        [ reduce using rule 24 (factor -> LBRACKET factor .) ]
+  ! TIMES           [ reduce using rule 22 (factor -> LBRACKET factor .) ]
+  ! DIVIDE          [ reduce using rule 22 (factor -> LBRACKET factor .) ]
+  ! EXP             [ reduce using rule 22 (factor -> LBRACKET factor .) ]
+  ! FACTORIAL       [ reduce using rule 22 (factor -> LBRACKET factor .) ]
+  ! MINUS           [ reduce using rule 22 (factor -> LBRACKET factor .) ]
+  ! CHOOSE          [ reduce using rule 22 (factor -> LBRACKET factor .) ]
+  ! LPAREN          [ reduce using rule 22 (factor -> LBRACKET factor .) ]
+  ! LBRACKET        [ reduce using rule 22 (factor -> LBRACKET factor .) ]
+  ! LSET            [ reduce using rule 22 (factor -> LBRACKET factor .) ]
+  ! NUMBER          [ reduce using rule 22 (factor -> LBRACKET factor .) ]
+  ! VARIABLE        [ reduce using rule 22 (factor -> LBRACKET factor .) ]
+  ! PLUS            [ reduce using rule 22 (factor -> LBRACKET factor .) ]
+  ! RBRACKET        [ reduce using rule 22 (factor -> LBRACKET factor .) ]
 
-    factor                         shift and go to state 28
+    factor                         shift and go to state 26
 
-state 14
+state 15
 
-    (18) factor -> LBRACKET expression . RBRACKET
-    (22) factor -> LBRACKET expression .
+    (16) factor -> LBRACKET expression . RBRACKET
+    (20) factor -> LBRACKET expression .
     (4) expression -> expression . PLUS factor
     (6) expression -> expression . MINUS factor
 
@@ -604,33 +665,100 @@ state 14
   ! shift/reduce conflict for PLUS resolved as shift
   ! shift/reduce conflict for MINUS resolved as shift
     RBRACKET        shift and go to state 39
-    COMMA           reduce using rule 22 (factor -> LBRACKET expression .)
-    TIMES           reduce using rule 22 (factor -> LBRACKET expression .)
-    DIVIDE          reduce using rule 22 (factor -> LBRACKET expression .)
-    EXP             reduce using rule 22 (factor -> LBRACKET expression .)
-    FACTORIAL       reduce using rule 22 (factor -> LBRACKET expression .)
-    CHOOSE          reduce using rule 22 (factor -> LBRACKET expression .)
-    Q               reduce using rule 22 (factor -> LBRACKET expression .)
-    LPAREN          reduce using rule 22 (factor -> LBRACKET expression .)
-    LBRACKET        reduce using rule 22 (factor -> LBRACKET expression .)
-    LSET            reduce using rule 22 (factor -> LBRACKET expression .)
-    NUMBER          reduce using rule 22 (factor -> LBRACKET expression .)
-    VARIABLE        reduce using rule 22 (factor -> LBRACKET expression .)
-    RSET            reduce using rule 22 (factor -> LBRACKET expression .)
-    $end            reduce using rule 22 (factor -> LBRACKET expression .)
-    RPAREN          reduce using rule 22 (factor -> LBRACKET expression .)
-    PLUS            shift and go to state 34
-    MINUS           shift and go to state 36
+    TIMES           reduce using rule 20 (factor -> LBRACKET expression .)
+    DIVIDE          reduce using rule 20 (factor -> LBRACKET expression .)
+    EXP             reduce using rule 20 (factor -> LBRACKET expression .)
+    FACTORIAL       reduce using rule 20 (factor -> LBRACKET expression .)
+    CHOOSE          reduce using rule 20 (factor -> LBRACKET expression .)
+    LPAREN          reduce using rule 20 (factor -> LBRACKET expression .)
+    LBRACKET        reduce using rule 20 (factor -> LBRACKET expression .)
+    LSET            reduce using rule 20 (factor -> LBRACKET expression .)
+    NUMBER          reduce using rule 20 (factor -> LBRACKET expression .)
+    VARIABLE        reduce using rule 20 (factor -> LBRACKET expression .)
+    COMMA           reduce using rule 20 (factor -> LBRACKET expression .)
+    $end            reduce using rule 20 (factor -> LBRACKET expression .)
+    RPAREN          reduce using rule 20 (factor -> LBRACKET expression .)
+    RSET            reduce using rule 20 (factor -> LBRACKET expression .)
+    PLUS            shift and go to state 32
+    MINUS           shift and go to state 34
 
-  ! PLUS            [ reduce using rule 22 (factor -> LBRACKET expression .) ]
-  ! MINUS           [ reduce using rule 22 (factor -> LBRACKET expression .) ]
-  ! RBRACKET        [ reduce using rule 22 (factor -> LBRACKET expression .) ]
+  ! MINUS           [ reduce using rule 20 (factor -> LBRACKET expression .) ]
+  ! PLUS            [ reduce using rule 20 (factor -> LBRACKET expression .) ]
+  ! RBRACKET        [ reduce using rule 20 (factor -> LBRACKET expression .) ]
 
 
-state 15
+state 16
 
-    (34) list -> list factor . COMMA
-    (35) list -> list factor .
+    (24) factor -> LSET list . RSET
+    (29) list -> list . expression COMMA
+    (30) list -> list . expression
+    (32) list -> list . factor COMMA
+    (33) list -> list . factor
+    (4) expression -> . expression PLUS factor
+    (5) expression -> . factor PLUS factor
+    (6) expression -> . expression MINUS factor
+    (7) expression -> . factor MINUS factor
+    (8) factor -> . factor TIMES factor
+    (9) factor -> . factor DIVIDE factor
+    (10) factor -> . factor EXP factor
+    (11) factor -> . factor factor
+    (12) factor -> . MINUS factor
+    (13) factor -> . factor FACTORIAL
+    (14) factor -> . CHOOSE LPAREN list RPAREN
+    (15) factor -> . LPAREN expression RPAREN
+    (16) factor -> . LBRACKET expression RBRACKET
+    (17) factor -> . LPAREN factor RPAREN
+    (18) factor -> . LBRACKET factor RBRACKET
+    (19) factor -> . LPAREN expression
+    (20) factor -> . LBRACKET expression
+    (21) factor -> . LPAREN factor
+    (22) factor -> . LBRACKET factor
+    (23) factor -> . CHOOSE LPAREN list
+    (24) factor -> . LSET list RSET
+    (25) factor -> . LSET expression RSET
+    (26) factor -> . LSET RSET
+    (27) factor -> . LPAREN list RPAREN
+    (34) factor -> . NUMBER
+    (35) factor -> . VARIABLE
+
+    RSET            shift and go to state 40
+    MINUS           shift and go to state 11
+    CHOOSE          shift and go to state 6
+    LPAREN          shift and go to state 9
+    LBRACKET        shift and go to state 3
+    LSET            shift and go to state 5
+    NUMBER          shift and go to state 2
+    VARIABLE        shift and go to state 4
+
+    expression                     shift and go to state 13
+    factor                         shift and go to state 12
+
+state 17
+
+    (26) factor -> LSET RSET .
+
+    TIMES           reduce using rule 26 (factor -> LSET RSET .)
+    DIVIDE          reduce using rule 26 (factor -> LSET RSET .)
+    EXP             reduce using rule 26 (factor -> LSET RSET .)
+    FACTORIAL       reduce using rule 26 (factor -> LSET RSET .)
+    MINUS           reduce using rule 26 (factor -> LSET RSET .)
+    CHOOSE          reduce using rule 26 (factor -> LSET RSET .)
+    LPAREN          reduce using rule 26 (factor -> LSET RSET .)
+    LBRACKET        reduce using rule 26 (factor -> LSET RSET .)
+    LSET            reduce using rule 26 (factor -> LSET RSET .)
+    NUMBER          reduce using rule 26 (factor -> LSET RSET .)
+    VARIABLE        reduce using rule 26 (factor -> LSET RSET .)
+    COMMA           reduce using rule 26 (factor -> LSET RSET .)
+    PLUS            reduce using rule 26 (factor -> LSET RSET .)
+    RBRACKET        reduce using rule 26 (factor -> LSET RSET .)
+    $end            reduce using rule 26 (factor -> LSET RSET .)
+    RPAREN          reduce using rule 26 (factor -> LSET RSET .)
+    RSET            reduce using rule 26 (factor -> LSET RSET .)
+
+
+state 18
+
+    (31) list -> factor . COMMA
     (5) expression -> factor . PLUS factor
     (7) expression -> factor . MINUS factor
     (8) factor -> factor . TIMES factor
@@ -645,286 +773,61 @@ state 15
     (12) factor -> . MINUS factor
     (13) factor -> . factor FACTORIAL
     (14) factor -> . CHOOSE LPAREN list RPAREN
-    (15) factor -> . Q LPAREN factor RPAREN
-    (16) factor -> . Q LPAREN expression RPAREN
-    (17) factor -> . LPAREN expression RPAREN
-    (18) factor -> . LBRACKET expression RBRACKET
-    (19) factor -> . LPAREN factor RPAREN
-    (20) factor -> . LBRACKET factor RBRACKET
-    (21) factor -> . LPAREN expression
-    (22) factor -> . LBRACKET expression
-    (23) factor -> . LPAREN factor
-    (24) factor -> . LBRACKET factor
-    (25) factor -> . CHOOSE LPAREN list
-    (26) factor -> . LSET list RSET
-    (27) factor -> . LSET expression RSET
-    (28) factor -> . LSET RSET
-    (29) factor -> . LPAREN list RPAREN
-    (36) factor -> . NUMBER
-    (37) factor -> . VARIABLE
+    (15) factor -> . LPAREN expression RPAREN
+    (16) factor -> . LBRACKET expression RBRACKET
+    (17) factor -> . LPAREN factor RPAREN
+    (18) factor -> . LBRACKET factor RBRACKET
+    (19) factor -> . LPAREN expression
+    (20) factor -> . LBRACKET expression
+    (21) factor -> . LPAREN factor
+    (22) factor -> . LBRACKET factor
+    (23) factor -> . CHOOSE LPAREN list
+    (24) factor -> . LSET list RSET
+    (25) factor -> . LSET expression RSET
+    (26) factor -> . LSET RSET
+    (27) factor -> . LPAREN list RPAREN
+    (34) factor -> . NUMBER
+    (35) factor -> . VARIABLE
 
-    COMMA           shift and go to state 40
-    RPAREN          reduce using rule 35 (list -> list factor .)
-    LPAREN          reduce using rule 35 (list -> list factor .)
-    LBRACKET        reduce using rule 35 (list -> list factor .)
-    LSET            reduce using rule 35 (list -> list factor .)
-    NUMBER          reduce using rule 35 (list -> list factor .)
-    VARIABLE        reduce using rule 35 (list -> list factor .)
-    RBRACKET        reduce using rule 35 (list -> list factor .)
-    $end            reduce using rule 35 (list -> list factor .)
-    RSET            reduce using rule 35 (list -> list factor .)
-    PLUS            shift and go to state 26
-    MINUS           shift and go to state 30
-    TIMES           shift and go to state 25
-    DIVIDE          shift and go to state 23
-    EXP             shift and go to state 27
-    FACTORIAL       shift and go to state 24
-    CHOOSE          shift and go to state 7
-    Q               shift and go to state 4
+    COMMA           shift and go to state 27
+    PLUS            shift and go to state 24
+    MINUS           shift and go to state 28
+    TIMES           shift and go to state 23
+    DIVIDE          shift and go to state 21
+    EXP             shift and go to state 25
+    FACTORIAL       shift and go to state 22
+    CHOOSE          shift and go to state 6
+    LPAREN          shift and go to state 9
+    LBRACKET        shift and go to state 3
+    LSET            shift and go to state 5
+    NUMBER          shift and go to state 2
+    VARIABLE        shift and go to state 4
 
-  ! MINUS           [ reduce using rule 35 (list -> list factor .) ]
-  ! CHOOSE          [ reduce using rule 35 (list -> list factor .) ]
-  ! Q               [ reduce using rule 35 (list -> list factor .) ]
-  ! PLUS            [ reduce using rule 35 (list -> list factor .) ]
-  ! TIMES           [ reduce using rule 35 (list -> list factor .) ]
-  ! DIVIDE          [ reduce using rule 35 (list -> list factor .) ]
-  ! EXP             [ reduce using rule 35 (list -> list factor .) ]
-  ! FACTORIAL       [ reduce using rule 35 (list -> list factor .) ]
-  ! COMMA           [ reduce using rule 35 (list -> list factor .) ]
-  ! LPAREN          [ shift and go to state 10 ]
-  ! LBRACKET        [ shift and go to state 1 ]
-  ! LSET            [ shift and go to state 6 ]
-  ! NUMBER          [ shift and go to state 3 ]
-  ! VARIABLE        [ shift and go to state 5 ]
-
-    factor                         shift and go to state 28
-
-state 16
-
-    (31) list -> list expression . COMMA
-    (32) list -> list expression .
-    (4) expression -> expression . PLUS factor
-    (6) expression -> expression . MINUS factor
-
-  ! shift/reduce conflict for PLUS resolved as shift
-  ! shift/reduce conflict for MINUS resolved as shift
-    COMMA           shift and go to state 41
-    RPAREN          reduce using rule 32 (list -> list expression .)
-    CHOOSE          reduce using rule 32 (list -> list expression .)
-    Q               reduce using rule 32 (list -> list expression .)
-    LPAREN          reduce using rule 32 (list -> list expression .)
-    LBRACKET        reduce using rule 32 (list -> list expression .)
-    LSET            reduce using rule 32 (list -> list expression .)
-    NUMBER          reduce using rule 32 (list -> list expression .)
-    VARIABLE        reduce using rule 32 (list -> list expression .)
-    RBRACKET        reduce using rule 32 (list -> list expression .)
-    TIMES           reduce using rule 32 (list -> list expression .)
-    DIVIDE          reduce using rule 32 (list -> list expression .)
-    EXP             reduce using rule 32 (list -> list expression .)
-    FACTORIAL       reduce using rule 32 (list -> list expression .)
-    $end            reduce using rule 32 (list -> list expression .)
-    RSET            reduce using rule 32 (list -> list expression .)
-    PLUS            shift and go to state 34
-    MINUS           shift and go to state 36
-
-  ! MINUS           [ reduce using rule 32 (list -> list expression .) ]
-  ! PLUS            [ reduce using rule 32 (list -> list expression .) ]
-  ! COMMA           [ reduce using rule 32 (list -> list expression .) ]
-
-
-state 17
-
-    (15) factor -> Q LPAREN . factor RPAREN
-    (16) factor -> Q LPAREN . expression RPAREN
-    (8) factor -> . factor TIMES factor
-    (9) factor -> . factor DIVIDE factor
-    (10) factor -> . factor EXP factor
-    (11) factor -> . factor factor
-    (12) factor -> . MINUS factor
-    (13) factor -> . factor FACTORIAL
-    (14) factor -> . CHOOSE LPAREN list RPAREN
-    (15) factor -> . Q LPAREN factor RPAREN
-    (16) factor -> . Q LPAREN expression RPAREN
-    (17) factor -> . LPAREN expression RPAREN
-    (18) factor -> . LBRACKET expression RBRACKET
-    (19) factor -> . LPAREN factor RPAREN
-    (20) factor -> . LBRACKET factor RBRACKET
-    (21) factor -> . LPAREN expression
-    (22) factor -> . LBRACKET expression
-    (23) factor -> . LPAREN factor
-    (24) factor -> . LBRACKET factor
-    (25) factor -> . CHOOSE LPAREN list
-    (26) factor -> . LSET list RSET
-    (27) factor -> . LSET expression RSET
-    (28) factor -> . LSET RSET
-    (29) factor -> . LPAREN list RPAREN
-    (36) factor -> . NUMBER
-    (37) factor -> . VARIABLE
-    (4) expression -> . expression PLUS factor
-    (5) expression -> . factor PLUS factor
-    (6) expression -> . expression MINUS factor
-    (7) expression -> . factor MINUS factor
-
-    MINUS           shift and go to state 12
-    CHOOSE          shift and go to state 7
-    Q               shift and go to state 4
-    LPAREN          shift and go to state 10
-    LBRACKET        shift and go to state 1
-    LSET            shift and go to state 6
-    NUMBER          shift and go to state 3
-    VARIABLE        shift and go to state 5
-
-    expression                     shift and go to state 43
-    factor                         shift and go to state 42
-
-state 18
-
-    (26) factor -> LSET list . RSET
-    (31) list -> list . expression COMMA
-    (32) list -> list . expression
-    (34) list -> list . factor COMMA
-    (35) list -> list . factor
-    (4) expression -> . expression PLUS factor
-    (5) expression -> . factor PLUS factor
-    (6) expression -> . expression MINUS factor
-    (7) expression -> . factor MINUS factor
-    (8) factor -> . factor TIMES factor
-    (9) factor -> . factor DIVIDE factor
-    (10) factor -> . factor EXP factor
-    (11) factor -> . factor factor
-    (12) factor -> . MINUS factor
-    (13) factor -> . factor FACTORIAL
-    (14) factor -> . CHOOSE LPAREN list RPAREN
-    (15) factor -> . Q LPAREN factor RPAREN
-    (16) factor -> . Q LPAREN expression RPAREN
-    (17) factor -> . LPAREN expression RPAREN
-    (18) factor -> . LBRACKET expression RBRACKET
-    (19) factor -> . LPAREN factor RPAREN
-    (20) factor -> . LBRACKET factor RBRACKET
-    (21) factor -> . LPAREN expression
-    (22) factor -> . LBRACKET expression
-    (23) factor -> . LPAREN factor
-    (24) factor -> . LBRACKET factor
-    (25) factor -> . CHOOSE LPAREN list
-    (26) factor -> . LSET list RSET
-    (27) factor -> . LSET expression RSET
-    (28) factor -> . LSET RSET
-    (29) factor -> . LPAREN list RPAREN
-    (36) factor -> . NUMBER
-    (37) factor -> . VARIABLE
-
-    RSET            shift and go to state 44
-    MINUS           shift and go to state 12
-    CHOOSE          shift and go to state 7
-    Q               shift and go to state 4
-    LPAREN          shift and go to state 10
-    LBRACKET        shift and go to state 1
-    LSET            shift and go to state 6
-    NUMBER          shift and go to state 3
-    VARIABLE        shift and go to state 5
-
-    expression                     shift and go to state 16
-    factor                         shift and go to state 15
+    factor                         shift and go to state 26
 
 state 19
 
-    (28) factor -> LSET RSET .
+    (25) factor -> LSET expression . RSET
+    (28) list -> expression . COMMA
+    (4) expression -> expression . PLUS factor
+    (6) expression -> expression . MINUS factor
 
-    COMMA           reduce using rule 28 (factor -> LSET RSET .)
-    PLUS            reduce using rule 28 (factor -> LSET RSET .)
-    MINUS           reduce using rule 28 (factor -> LSET RSET .)
-    TIMES           reduce using rule 28 (factor -> LSET RSET .)
-    DIVIDE          reduce using rule 28 (factor -> LSET RSET .)
-    EXP             reduce using rule 28 (factor -> LSET RSET .)
-    FACTORIAL       reduce using rule 28 (factor -> LSET RSET .)
-    CHOOSE          reduce using rule 28 (factor -> LSET RSET .)
-    Q               reduce using rule 28 (factor -> LSET RSET .)
-    LPAREN          reduce using rule 28 (factor -> LSET RSET .)
-    LBRACKET        reduce using rule 28 (factor -> LSET RSET .)
-    LSET            reduce using rule 28 (factor -> LSET RSET .)
-    NUMBER          reduce using rule 28 (factor -> LSET RSET .)
-    VARIABLE        reduce using rule 28 (factor -> LSET RSET .)
-    RSET            reduce using rule 28 (factor -> LSET RSET .)
-    RBRACKET        reduce using rule 28 (factor -> LSET RSET .)
-    $end            reduce using rule 28 (factor -> LSET RSET .)
-    RPAREN          reduce using rule 28 (factor -> LSET RSET .)
+    RSET            shift and go to state 41
+    COMMA           shift and go to state 33
+    PLUS            shift and go to state 32
+    MINUS           shift and go to state 34
 
 
 state 20
 
-    (33) list -> factor . COMMA
-    (5) expression -> factor . PLUS factor
-    (7) expression -> factor . MINUS factor
-    (8) factor -> factor . TIMES factor
-    (9) factor -> factor . DIVIDE factor
-    (10) factor -> factor . EXP factor
-    (11) factor -> factor . factor
-    (13) factor -> factor . FACTORIAL
-    (8) factor -> . factor TIMES factor
-    (9) factor -> . factor DIVIDE factor
-    (10) factor -> . factor EXP factor
-    (11) factor -> . factor factor
-    (12) factor -> . MINUS factor
-    (13) factor -> . factor FACTORIAL
-    (14) factor -> . CHOOSE LPAREN list RPAREN
-    (15) factor -> . Q LPAREN factor RPAREN
-    (16) factor -> . Q LPAREN expression RPAREN
-    (17) factor -> . LPAREN expression RPAREN
-    (18) factor -> . LBRACKET expression RBRACKET
-    (19) factor -> . LPAREN factor RPAREN
-    (20) factor -> . LBRACKET factor RBRACKET
-    (21) factor -> . LPAREN expression
-    (22) factor -> . LBRACKET expression
-    (23) factor -> . LPAREN factor
-    (24) factor -> . LBRACKET factor
-    (25) factor -> . CHOOSE LPAREN list
-    (26) factor -> . LSET list RSET
-    (27) factor -> . LSET expression RSET
-    (28) factor -> . LSET RSET
-    (29) factor -> . LPAREN list RPAREN
-    (36) factor -> . NUMBER
-    (37) factor -> . VARIABLE
-
-    COMMA           shift and go to state 29
-    PLUS            shift and go to state 26
-    MINUS           shift and go to state 30
-    TIMES           shift and go to state 25
-    DIVIDE          shift and go to state 23
-    EXP             shift and go to state 27
-    FACTORIAL       shift and go to state 24
-    CHOOSE          shift and go to state 7
-    Q               shift and go to state 4
-    LPAREN          shift and go to state 10
-    LBRACKET        shift and go to state 1
-    LSET            shift and go to state 6
-    NUMBER          shift and go to state 3
-    VARIABLE        shift and go to state 5
-
-    factor                         shift and go to state 28
-
-state 21
-
-    (27) factor -> LSET expression . RSET
-    (30) list -> expression . COMMA
-    (4) expression -> expression . PLUS factor
-    (6) expression -> expression . MINUS factor
-
-    RSET            shift and go to state 45
-    COMMA           shift and go to state 35
-    PLUS            shift and go to state 34
-    MINUS           shift and go to state 36
-
-
-state 22
-
     (14) factor -> CHOOSE LPAREN . list RPAREN
-    (25) factor -> CHOOSE LPAREN . list
-    (30) list -> . expression COMMA
-    (31) list -> . list expression COMMA
-    (32) list -> . list expression
-    (33) list -> . factor COMMA
-    (34) list -> . list factor COMMA
-    (35) list -> . list factor
+    (23) factor -> CHOOSE LPAREN . list
+    (28) list -> . expression COMMA
+    (29) list -> . list expression COMMA
+    (30) list -> . list expression
+    (31) list -> . factor COMMA
+    (32) list -> . list factor COMMA
+    (33) list -> . list factor
     (4) expression -> . expression PLUS factor
     (5) expression -> . factor PLUS factor
     (6) expression -> . expression MINUS factor
@@ -936,38 +839,35 @@ state 22
     (12) factor -> . MINUS factor
     (13) factor -> . factor FACTORIAL
     (14) factor -> . CHOOSE LPAREN list RPAREN
-    (15) factor -> . Q LPAREN factor RPAREN
-    (16) factor -> . Q LPAREN expression RPAREN
-    (17) factor -> . LPAREN expression RPAREN
-    (18) factor -> . LBRACKET expression RBRACKET
-    (19) factor -> . LPAREN factor RPAREN
-    (20) factor -> . LBRACKET factor RBRACKET
-    (21) factor -> . LPAREN expression
-    (22) factor -> . LBRACKET expression
-    (23) factor -> . LPAREN factor
-    (24) factor -> . LBRACKET factor
-    (25) factor -> . CHOOSE LPAREN list
-    (26) factor -> . LSET list RSET
-    (27) factor -> . LSET expression RSET
-    (28) factor -> . LSET RSET
-    (29) factor -> . LPAREN list RPAREN
-    (36) factor -> . NUMBER
-    (37) factor -> . VARIABLE
+    (15) factor -> . LPAREN expression RPAREN
+    (16) factor -> . LBRACKET expression RBRACKET
+    (17) factor -> . LPAREN factor RPAREN
+    (18) factor -> . LBRACKET factor RBRACKET
+    (19) factor -> . LPAREN expression
+    (20) factor -> . LBRACKET expression
+    (21) factor -> . LPAREN factor
+    (22) factor -> . LBRACKET factor
+    (23) factor -> . CHOOSE LPAREN list
+    (24) factor -> . LSET list RSET
+    (25) factor -> . LSET expression RSET
+    (26) factor -> . LSET RSET
+    (27) factor -> . LPAREN list RPAREN
+    (34) factor -> . NUMBER
+    (35) factor -> . VARIABLE
 
-    MINUS           shift and go to state 12
-    CHOOSE          shift and go to state 7
-    Q               shift and go to state 4
-    LPAREN          shift and go to state 10
-    LBRACKET        shift and go to state 1
-    LSET            shift and go to state 6
-    NUMBER          shift and go to state 3
-    VARIABLE        shift and go to state 5
+    MINUS           shift and go to state 11
+    CHOOSE          shift and go to state 6
+    LPAREN          shift and go to state 9
+    LBRACKET        shift and go to state 3
+    LSET            shift and go to state 5
+    NUMBER          shift and go to state 2
+    VARIABLE        shift and go to state 4
 
-    expression                     shift and go to state 47
-    list                           shift and go to state 46
-    factor                         shift and go to state 20
+    expression                     shift and go to state 43
+    list                           shift and go to state 42
+    factor                         shift and go to state 18
 
-state 23
+state 21
 
     (9) factor -> factor DIVIDE . factor
     (8) factor -> . factor TIMES factor
@@ -977,60 +877,56 @@ state 23
     (12) factor -> . MINUS factor
     (13) factor -> . factor FACTORIAL
     (14) factor -> . CHOOSE LPAREN list RPAREN
-    (15) factor -> . Q LPAREN factor RPAREN
-    (16) factor -> . Q LPAREN expression RPAREN
-    (17) factor -> . LPAREN expression RPAREN
-    (18) factor -> . LBRACKET expression RBRACKET
-    (19) factor -> . LPAREN factor RPAREN
-    (20) factor -> . LBRACKET factor RBRACKET
-    (21) factor -> . LPAREN expression
-    (22) factor -> . LBRACKET expression
-    (23) factor -> . LPAREN factor
-    (24) factor -> . LBRACKET factor
-    (25) factor -> . CHOOSE LPAREN list
-    (26) factor -> . LSET list RSET
-    (27) factor -> . LSET expression RSET
-    (28) factor -> . LSET RSET
-    (29) factor -> . LPAREN list RPAREN
-    (36) factor -> . NUMBER
-    (37) factor -> . VARIABLE
+    (15) factor -> . LPAREN expression RPAREN
+    (16) factor -> . LBRACKET expression RBRACKET
+    (17) factor -> . LPAREN factor RPAREN
+    (18) factor -> . LBRACKET factor RBRACKET
+    (19) factor -> . LPAREN expression
+    (20) factor -> . LBRACKET expression
+    (21) factor -> . LPAREN factor
+    (22) factor -> . LBRACKET factor
+    (23) factor -> . CHOOSE LPAREN list
+    (24) factor -> . LSET list RSET
+    (25) factor -> . LSET expression RSET
+    (26) factor -> . LSET RSET
+    (27) factor -> . LPAREN list RPAREN
+    (34) factor -> . NUMBER
+    (35) factor -> . VARIABLE
 
-    MINUS           shift and go to state 12
-    CHOOSE          shift and go to state 7
-    Q               shift and go to state 4
-    LPAREN          shift and go to state 10
-    LBRACKET        shift and go to state 1
-    LSET            shift and go to state 6
-    NUMBER          shift and go to state 3
-    VARIABLE        shift and go to state 5
+    MINUS           shift and go to state 11
+    CHOOSE          shift and go to state 6
+    LPAREN          shift and go to state 9
+    LBRACKET        shift and go to state 3
+    LSET            shift and go to state 5
+    NUMBER          shift and go to state 2
+    VARIABLE        shift and go to state 4
 
-    factor                         shift and go to state 48
+    factor                         shift and go to state 44
 
-state 24
+state 22
 
     (13) factor -> factor FACTORIAL .
 
-    COMMA           reduce using rule 13 (factor -> factor FACTORIAL .)
-    PLUS            reduce using rule 13 (factor -> factor FACTORIAL .)
-    MINUS           reduce using rule 13 (factor -> factor FACTORIAL .)
     TIMES           reduce using rule 13 (factor -> factor FACTORIAL .)
     DIVIDE          reduce using rule 13 (factor -> factor FACTORIAL .)
     EXP             reduce using rule 13 (factor -> factor FACTORIAL .)
     FACTORIAL       reduce using rule 13 (factor -> factor FACTORIAL .)
+    MINUS           reduce using rule 13 (factor -> factor FACTORIAL .)
     CHOOSE          reduce using rule 13 (factor -> factor FACTORIAL .)
-    Q               reduce using rule 13 (factor -> factor FACTORIAL .)
     LPAREN          reduce using rule 13 (factor -> factor FACTORIAL .)
     LBRACKET        reduce using rule 13 (factor -> factor FACTORIAL .)
     LSET            reduce using rule 13 (factor -> factor FACTORIAL .)
     NUMBER          reduce using rule 13 (factor -> factor FACTORIAL .)
     VARIABLE        reduce using rule 13 (factor -> factor FACTORIAL .)
-    RSET            reduce using rule 13 (factor -> factor FACTORIAL .)
+    COMMA           reduce using rule 13 (factor -> factor FACTORIAL .)
+    PLUS            reduce using rule 13 (factor -> factor FACTORIAL .)
     RBRACKET        reduce using rule 13 (factor -> factor FACTORIAL .)
     $end            reduce using rule 13 (factor -> factor FACTORIAL .)
     RPAREN          reduce using rule 13 (factor -> factor FACTORIAL .)
+    RSET            reduce using rule 13 (factor -> factor FACTORIAL .)
 
 
-state 25
+state 23
 
     (8) factor -> factor TIMES . factor
     (8) factor -> . factor TIMES factor
@@ -1040,36 +936,33 @@ state 25
     (12) factor -> . MINUS factor
     (13) factor -> . factor FACTORIAL
     (14) factor -> . CHOOSE LPAREN list RPAREN
-    (15) factor -> . Q LPAREN factor RPAREN
-    (16) factor -> . Q LPAREN expression RPAREN
-    (17) factor -> . LPAREN expression RPAREN
-    (18) factor -> . LBRACKET expression RBRACKET
-    (19) factor -> . LPAREN factor RPAREN
-    (20) factor -> . LBRACKET factor RBRACKET
-    (21) factor -> . LPAREN expression
-    (22) factor -> . LBRACKET expression
-    (23) factor -> . LPAREN factor
-    (24) factor -> . LBRACKET factor
-    (25) factor -> . CHOOSE LPAREN list
-    (26) factor -> . LSET list RSET
-    (27) factor -> . LSET expression RSET
-    (28) factor -> . LSET RSET
-    (29) factor -> . LPAREN list RPAREN
-    (36) factor -> . NUMBER
-    (37) factor -> . VARIABLE
+    (15) factor -> . LPAREN expression RPAREN
+    (16) factor -> . LBRACKET expression RBRACKET
+    (17) factor -> . LPAREN factor RPAREN
+    (18) factor -> . LBRACKET factor RBRACKET
+    (19) factor -> . LPAREN expression
+    (20) factor -> . LBRACKET expression
+    (21) factor -> . LPAREN factor
+    (22) factor -> . LBRACKET factor
+    (23) factor -> . CHOOSE LPAREN list
+    (24) factor -> . LSET list RSET
+    (25) factor -> . LSET expression RSET
+    (26) factor -> . LSET RSET
+    (27) factor -> . LPAREN list RPAREN
+    (34) factor -> . NUMBER
+    (35) factor -> . VARIABLE
 
-    MINUS           shift and go to state 12
-    CHOOSE          shift and go to state 7
-    Q               shift and go to state 4
-    LPAREN          shift and go to state 10
-    LBRACKET        shift and go to state 1
-    LSET            shift and go to state 6
-    NUMBER          shift and go to state 3
-    VARIABLE        shift and go to state 5
+    MINUS           shift and go to state 11
+    CHOOSE          shift and go to state 6
+    LPAREN          shift and go to state 9
+    LBRACKET        shift and go to state 3
+    LSET            shift and go to state 5
+    NUMBER          shift and go to state 2
+    VARIABLE        shift and go to state 4
 
-    factor                         shift and go to state 49
+    factor                         shift and go to state 45
 
-state 26
+state 24
 
     (5) expression -> factor PLUS . factor
     (8) factor -> . factor TIMES factor
@@ -1079,36 +972,33 @@ state 26
     (12) factor -> . MINUS factor
     (13) factor -> . factor FACTORIAL
     (14) factor -> . CHOOSE LPAREN list RPAREN
-    (15) factor -> . Q LPAREN factor RPAREN
-    (16) factor -> . Q LPAREN expression RPAREN
-    (17) factor -> . LPAREN expression RPAREN
-    (18) factor -> . LBRACKET expression RBRACKET
-    (19) factor -> . LPAREN factor RPAREN
-    (20) factor -> . LBRACKET factor RBRACKET
-    (21) factor -> . LPAREN expression
-    (22) factor -> . LBRACKET expression
-    (23) factor -> . LPAREN factor
-    (24) factor -> . LBRACKET factor
-    (25) factor -> . CHOOSE LPAREN list
-    (26) factor -> . LSET list RSET
-    (27) factor -> . LSET expression RSET
-    (28) factor -> . LSET RSET
-    (29) factor -> . LPAREN list RPAREN
-    (36) factor -> . NUMBER
-    (37) factor -> . VARIABLE
+    (15) factor -> . LPAREN expression RPAREN
+    (16) factor -> . LBRACKET expression RBRACKET
+    (17) factor -> . LPAREN factor RPAREN
+    (18) factor -> . LBRACKET factor RBRACKET
+    (19) factor -> . LPAREN expression
+    (20) factor -> . LBRACKET expression
+    (21) factor -> . LPAREN factor
+    (22) factor -> . LBRACKET factor
+    (23) factor -> . CHOOSE LPAREN list
+    (24) factor -> . LSET list RSET
+    (25) factor -> . LSET expression RSET
+    (26) factor -> . LSET RSET
+    (27) factor -> . LPAREN list RPAREN
+    (34) factor -> . NUMBER
+    (35) factor -> . VARIABLE
 
-    MINUS           shift and go to state 12
-    CHOOSE          shift and go to state 7
-    Q               shift and go to state 4
-    LPAREN          shift and go to state 10
-    LBRACKET        shift and go to state 1
-    LSET            shift and go to state 6
-    NUMBER          shift and go to state 3
-    VARIABLE        shift and go to state 5
+    MINUS           shift and go to state 11
+    CHOOSE          shift and go to state 6
+    LPAREN          shift and go to state 9
+    LBRACKET        shift and go to state 3
+    LSET            shift and go to state 5
+    NUMBER          shift and go to state 2
+    VARIABLE        shift and go to state 4
 
-    factor                         shift and go to state 50
+    factor                         shift and go to state 46
 
-state 27
+state 25
 
     (10) factor -> factor EXP . factor
     (8) factor -> . factor TIMES factor
@@ -1118,36 +1008,33 @@ state 27
     (12) factor -> . MINUS factor
     (13) factor -> . factor FACTORIAL
     (14) factor -> . CHOOSE LPAREN list RPAREN
-    (15) factor -> . Q LPAREN factor RPAREN
-    (16) factor -> . Q LPAREN expression RPAREN
-    (17) factor -> . LPAREN expression RPAREN
-    (18) factor -> . LBRACKET expression RBRACKET
-    (19) factor -> . LPAREN factor RPAREN
-    (20) factor -> . LBRACKET factor RBRACKET
-    (21) factor -> . LPAREN expression
-    (22) factor -> . LBRACKET expression
-    (23) factor -> . LPAREN factor
-    (24) factor -> . LBRACKET factor
-    (25) factor -> . CHOOSE LPAREN list
-    (26) factor -> . LSET list RSET
-    (27) factor -> . LSET expression RSET
-    (28) factor -> . LSET RSET
-    (29) factor -> . LPAREN list RPAREN
-    (36) factor -> . NUMBER
-    (37) factor -> . VARIABLE
+    (15) factor -> . LPAREN expression RPAREN
+    (16) factor -> . LBRACKET expression RBRACKET
+    (17) factor -> . LPAREN factor RPAREN
+    (18) factor -> . LBRACKET factor RBRACKET
+    (19) factor -> . LPAREN expression
+    (20) factor -> . LBRACKET expression
+    (21) factor -> . LPAREN factor
+    (22) factor -> . LBRACKET factor
+    (23) factor -> . CHOOSE LPAREN list
+    (24) factor -> . LSET list RSET
+    (25) factor -> . LSET expression RSET
+    (26) factor -> . LSET RSET
+    (27) factor -> . LPAREN list RPAREN
+    (34) factor -> . NUMBER
+    (35) factor -> . VARIABLE
 
-    MINUS           shift and go to state 12
-    CHOOSE          shift and go to state 7
-    Q               shift and go to state 4
-    LPAREN          shift and go to state 10
-    LBRACKET        shift and go to state 1
-    LSET            shift and go to state 6
-    NUMBER          shift and go to state 3
-    VARIABLE        shift and go to state 5
+    MINUS           shift and go to state 11
+    CHOOSE          shift and go to state 6
+    LPAREN          shift and go to state 9
+    LBRACKET        shift and go to state 3
+    LSET            shift and go to state 5
+    NUMBER          shift and go to state 2
+    VARIABLE        shift and go to state 4
 
-    factor                         shift and go to state 51
+    factor                         shift and go to state 47
 
-state 28
+state 26
 
     (11) factor -> factor factor .
     (8) factor -> factor . TIMES factor
@@ -1162,83 +1049,78 @@ state 28
     (12) factor -> . MINUS factor
     (13) factor -> . factor FACTORIAL
     (14) factor -> . CHOOSE LPAREN list RPAREN
-    (15) factor -> . Q LPAREN factor RPAREN
-    (16) factor -> . Q LPAREN expression RPAREN
-    (17) factor -> . LPAREN expression RPAREN
-    (18) factor -> . LBRACKET expression RBRACKET
-    (19) factor -> . LPAREN factor RPAREN
-    (20) factor -> . LBRACKET factor RBRACKET
-    (21) factor -> . LPAREN expression
-    (22) factor -> . LBRACKET expression
-    (23) factor -> . LPAREN factor
-    (24) factor -> . LBRACKET factor
-    (25) factor -> . CHOOSE LPAREN list
-    (26) factor -> . LSET list RSET
-    (27) factor -> . LSET expression RSET
-    (28) factor -> . LSET RSET
-    (29) factor -> . LPAREN list RPAREN
-    (36) factor -> . NUMBER
-    (37) factor -> . VARIABLE
+    (15) factor -> . LPAREN expression RPAREN
+    (16) factor -> . LBRACKET expression RBRACKET
+    (17) factor -> . LPAREN factor RPAREN
+    (18) factor -> . LBRACKET factor RBRACKET
+    (19) factor -> . LPAREN expression
+    (20) factor -> . LBRACKET expression
+    (21) factor -> . LPAREN factor
+    (22) factor -> . LBRACKET factor
+    (23) factor -> . CHOOSE LPAREN list
+    (24) factor -> . LSET list RSET
+    (25) factor -> . LSET expression RSET
+    (26) factor -> . LSET RSET
+    (27) factor -> . LPAREN list RPAREN
+    (34) factor -> . NUMBER
+    (35) factor -> . VARIABLE
 
-    COMMA           reduce using rule 11 (factor -> factor factor .)
-    PLUS            reduce using rule 11 (factor -> factor factor .)
     LPAREN          reduce using rule 11 (factor -> factor factor .)
     LBRACKET        reduce using rule 11 (factor -> factor factor .)
     LSET            reduce using rule 11 (factor -> factor factor .)
     NUMBER          reduce using rule 11 (factor -> factor factor .)
     VARIABLE        reduce using rule 11 (factor -> factor factor .)
-    RSET            reduce using rule 11 (factor -> factor factor .)
+    COMMA           reduce using rule 11 (factor -> factor factor .)
+    PLUS            reduce using rule 11 (factor -> factor factor .)
     RBRACKET        reduce using rule 11 (factor -> factor factor .)
     $end            reduce using rule 11 (factor -> factor factor .)
     RPAREN          reduce using rule 11 (factor -> factor factor .)
-    TIMES           shift and go to state 25
-    DIVIDE          shift and go to state 23
-    EXP             shift and go to state 27
-    FACTORIAL       shift and go to state 24
-    MINUS           shift and go to state 12
-    CHOOSE          shift and go to state 7
-    Q               shift and go to state 4
+    RSET            reduce using rule 11 (factor -> factor factor .)
+    TIMES           shift and go to state 23
+    DIVIDE          shift and go to state 21
+    EXP             shift and go to state 25
+    FACTORIAL       shift and go to state 22
+    MINUS           shift and go to state 11
+    CHOOSE          shift and go to state 6
 
-  ! MINUS           [ reduce using rule 11 (factor -> factor factor .) ]
   ! TIMES           [ reduce using rule 11 (factor -> factor factor .) ]
   ! DIVIDE          [ reduce using rule 11 (factor -> factor factor .) ]
   ! EXP             [ reduce using rule 11 (factor -> factor factor .) ]
   ! FACTORIAL       [ reduce using rule 11 (factor -> factor factor .) ]
+  ! MINUS           [ reduce using rule 11 (factor -> factor factor .) ]
   ! CHOOSE          [ reduce using rule 11 (factor -> factor factor .) ]
-  ! Q               [ reduce using rule 11 (factor -> factor factor .) ]
-  ! LPAREN          [ shift and go to state 10 ]
-  ! LBRACKET        [ shift and go to state 1 ]
-  ! LSET            [ shift and go to state 6 ]
-  ! NUMBER          [ shift and go to state 3 ]
-  ! VARIABLE        [ shift and go to state 5 ]
+  ! LPAREN          [ shift and go to state 9 ]
+  ! LBRACKET        [ shift and go to state 3 ]
+  ! LSET            [ shift and go to state 5 ]
+  ! NUMBER          [ shift and go to state 2 ]
+  ! VARIABLE        [ shift and go to state 4 ]
 
-    factor                         shift and go to state 28
+    factor                         shift and go to state 26
 
-state 29
+state 27
 
-    (33) list -> factor COMMA .
+    (31) list -> factor COMMA .
 
-    RPAREN          reduce using rule 33 (list -> factor COMMA .)
-    MINUS           reduce using rule 33 (list -> factor COMMA .)
-    CHOOSE          reduce using rule 33 (list -> factor COMMA .)
-    Q               reduce using rule 33 (list -> factor COMMA .)
-    LPAREN          reduce using rule 33 (list -> factor COMMA .)
-    LBRACKET        reduce using rule 33 (list -> factor COMMA .)
-    LSET            reduce using rule 33 (list -> factor COMMA .)
-    NUMBER          reduce using rule 33 (list -> factor COMMA .)
-    VARIABLE        reduce using rule 33 (list -> factor COMMA .)
-    RBRACKET        reduce using rule 33 (list -> factor COMMA .)
-    PLUS            reduce using rule 33 (list -> factor COMMA .)
-    TIMES           reduce using rule 33 (list -> factor COMMA .)
-    DIVIDE          reduce using rule 33 (list -> factor COMMA .)
-    EXP             reduce using rule 33 (list -> factor COMMA .)
-    FACTORIAL       reduce using rule 33 (list -> factor COMMA .)
-    COMMA           reduce using rule 33 (list -> factor COMMA .)
-    $end            reduce using rule 33 (list -> factor COMMA .)
-    RSET            reduce using rule 33 (list -> factor COMMA .)
+    RBRACKET        reduce using rule 31 (list -> factor COMMA .)
+    PLUS            reduce using rule 31 (list -> factor COMMA .)
+    MINUS           reduce using rule 31 (list -> factor COMMA .)
+    TIMES           reduce using rule 31 (list -> factor COMMA .)
+    DIVIDE          reduce using rule 31 (list -> factor COMMA .)
+    EXP             reduce using rule 31 (list -> factor COMMA .)
+    FACTORIAL       reduce using rule 31 (list -> factor COMMA .)
+    COMMA           reduce using rule 31 (list -> factor COMMA .)
+    CHOOSE          reduce using rule 31 (list -> factor COMMA .)
+    LPAREN          reduce using rule 31 (list -> factor COMMA .)
+    LBRACKET        reduce using rule 31 (list -> factor COMMA .)
+    LSET            reduce using rule 31 (list -> factor COMMA .)
+    NUMBER          reduce using rule 31 (list -> factor COMMA .)
+    VARIABLE        reduce using rule 31 (list -> factor COMMA .)
+    $end            reduce using rule 31 (list -> factor COMMA .)
+    RPAREN          reduce using rule 31 (list -> factor COMMA .)
+    RSET            reduce using rule 31 (list -> factor COMMA .)
 
 
-state 30
+state 28
 
     (7) expression -> factor MINUS . factor
     (12) factor -> MINUS . factor
@@ -1249,42 +1131,39 @@ state 30
     (12) factor -> . MINUS factor
     (13) factor -> . factor FACTORIAL
     (14) factor -> . CHOOSE LPAREN list RPAREN
-    (15) factor -> . Q LPAREN factor RPAREN
-    (16) factor -> . Q LPAREN expression RPAREN
-    (17) factor -> . LPAREN expression RPAREN
-    (18) factor -> . LBRACKET expression RBRACKET
-    (19) factor -> . LPAREN factor RPAREN
-    (20) factor -> . LBRACKET factor RBRACKET
-    (21) factor -> . LPAREN expression
-    (22) factor -> . LBRACKET expression
-    (23) factor -> . LPAREN factor
-    (24) factor -> . LBRACKET factor
-    (25) factor -> . CHOOSE LPAREN list
-    (26) factor -> . LSET list RSET
-    (27) factor -> . LSET expression RSET
-    (28) factor -> . LSET RSET
-    (29) factor -> . LPAREN list RPAREN
-    (36) factor -> . NUMBER
-    (37) factor -> . VARIABLE
+    (15) factor -> . LPAREN expression RPAREN
+    (16) factor -> . LBRACKET expression RBRACKET
+    (17) factor -> . LPAREN factor RPAREN
+    (18) factor -> . LBRACKET factor RBRACKET
+    (19) factor -> . LPAREN expression
+    (20) factor -> . LBRACKET expression
+    (21) factor -> . LPAREN factor
+    (22) factor -> . LBRACKET factor
+    (23) factor -> . CHOOSE LPAREN list
+    (24) factor -> . LSET list RSET
+    (25) factor -> . LSET expression RSET
+    (26) factor -> . LSET RSET
+    (27) factor -> . LPAREN list RPAREN
+    (34) factor -> . NUMBER
+    (35) factor -> . VARIABLE
 
-    MINUS           shift and go to state 12
-    CHOOSE          shift and go to state 7
-    Q               shift and go to state 4
-    LPAREN          shift and go to state 10
-    LBRACKET        shift and go to state 1
-    LSET            shift and go to state 6
-    NUMBER          shift and go to state 3
-    VARIABLE        shift and go to state 5
+    MINUS           shift and go to state 11
+    CHOOSE          shift and go to state 6
+    LPAREN          shift and go to state 9
+    LBRACKET        shift and go to state 3
+    LSET            shift and go to state 5
+    NUMBER          shift and go to state 2
+    VARIABLE        shift and go to state 4
 
-    factor                         shift and go to state 52
+    factor                         shift and go to state 48
 
-state 31
+state 29
 
-    (29) factor -> LPAREN list . RPAREN
-    (31) list -> list . expression COMMA
-    (32) list -> list . expression
-    (34) list -> list . factor COMMA
-    (35) list -> list . factor
+    (27) factor -> LPAREN list . RPAREN
+    (29) list -> list . expression COMMA
+    (30) list -> list . expression
+    (32) list -> list . factor COMMA
+    (33) list -> list . factor
     (4) expression -> . expression PLUS factor
     (5) expression -> . factor PLUS factor
     (6) expression -> . expression MINUS factor
@@ -1296,41 +1175,38 @@ state 31
     (12) factor -> . MINUS factor
     (13) factor -> . factor FACTORIAL
     (14) factor -> . CHOOSE LPAREN list RPAREN
-    (15) factor -> . Q LPAREN factor RPAREN
-    (16) factor -> . Q LPAREN expression RPAREN
-    (17) factor -> . LPAREN expression RPAREN
-    (18) factor -> . LBRACKET expression RBRACKET
-    (19) factor -> . LPAREN factor RPAREN
-    (20) factor -> . LBRACKET factor RBRACKET
-    (21) factor -> . LPAREN expression
-    (22) factor -> . LBRACKET expression
-    (23) factor -> . LPAREN factor
-    (24) factor -> . LBRACKET factor
-    (25) factor -> . CHOOSE LPAREN list
-    (26) factor -> . LSET list RSET
-    (27) factor -> . LSET expression RSET
-    (28) factor -> . LSET RSET
-    (29) factor -> . LPAREN list RPAREN
-    (36) factor -> . NUMBER
-    (37) factor -> . VARIABLE
+    (15) factor -> . LPAREN expression RPAREN
+    (16) factor -> . LBRACKET expression RBRACKET
+    (17) factor -> . LPAREN factor RPAREN
+    (18) factor -> . LBRACKET factor RBRACKET
+    (19) factor -> . LPAREN expression
+    (20) factor -> . LBRACKET expression
+    (21) factor -> . LPAREN factor
+    (22) factor -> . LBRACKET factor
+    (23) factor -> . CHOOSE LPAREN list
+    (24) factor -> . LSET list RSET
+    (25) factor -> . LSET expression RSET
+    (26) factor -> . LSET RSET
+    (27) factor -> . LPAREN list RPAREN
+    (34) factor -> . NUMBER
+    (35) factor -> . VARIABLE
 
-    RPAREN          shift and go to state 53
-    MINUS           shift and go to state 12
-    CHOOSE          shift and go to state 7
-    Q               shift and go to state 4
-    LPAREN          shift and go to state 10
-    LBRACKET        shift and go to state 1
-    LSET            shift and go to state 6
-    NUMBER          shift and go to state 3
-    VARIABLE        shift and go to state 5
+    RPAREN          shift and go to state 49
+    MINUS           shift and go to state 11
+    CHOOSE          shift and go to state 6
+    LPAREN          shift and go to state 9
+    LBRACKET        shift and go to state 3
+    LSET            shift and go to state 5
+    NUMBER          shift and go to state 2
+    VARIABLE        shift and go to state 4
 
-    expression                     shift and go to state 16
-    factor                         shift and go to state 15
+    expression                     shift and go to state 13
+    factor                         shift and go to state 12
 
-state 32
+state 30
 
-    (19) factor -> LPAREN factor . RPAREN
-    (23) factor -> LPAREN factor .
+    (17) factor -> LPAREN factor . RPAREN
+    (21) factor -> LPAREN factor .
     (5) expression -> factor . PLUS factor
     (7) expression -> factor . MINUS factor
     (8) factor -> factor . TIMES factor
@@ -1338,7 +1214,7 @@ state 32
     (10) factor -> factor . EXP factor
     (11) factor -> factor . factor
     (13) factor -> factor . FACTORIAL
-    (33) list -> factor . COMMA
+    (31) list -> factor . COMMA
     (8) factor -> . factor TIMES factor
     (9) factor -> . factor DIVIDE factor
     (10) factor -> . factor EXP factor
@@ -1346,23 +1222,21 @@ state 32
     (12) factor -> . MINUS factor
     (13) factor -> . factor FACTORIAL
     (14) factor -> . CHOOSE LPAREN list RPAREN
-    (15) factor -> . Q LPAREN factor RPAREN
-    (16) factor -> . Q LPAREN expression RPAREN
-    (17) factor -> . LPAREN expression RPAREN
-    (18) factor -> . LBRACKET expression RBRACKET
-    (19) factor -> . LPAREN factor RPAREN
-    (20) factor -> . LBRACKET factor RBRACKET
-    (21) factor -> . LPAREN expression
-    (22) factor -> . LBRACKET expression
-    (23) factor -> . LPAREN factor
-    (24) factor -> . LBRACKET factor
-    (25) factor -> . CHOOSE LPAREN list
-    (26) factor -> . LSET list RSET
-    (27) factor -> . LSET expression RSET
-    (28) factor -> . LSET RSET
-    (29) factor -> . LPAREN list RPAREN
-    (36) factor -> . NUMBER
-    (37) factor -> . VARIABLE
+    (15) factor -> . LPAREN expression RPAREN
+    (16) factor -> . LBRACKET expression RBRACKET
+    (17) factor -> . LPAREN factor RPAREN
+    (18) factor -> . LBRACKET factor RBRACKET
+    (19) factor -> . LPAREN expression
+    (20) factor -> . LBRACKET expression
+    (21) factor -> . LPAREN factor
+    (22) factor -> . LBRACKET factor
+    (23) factor -> . CHOOSE LPAREN list
+    (24) factor -> . LSET list RSET
+    (25) factor -> . LSET expression RSET
+    (26) factor -> . LSET RSET
+    (27) factor -> . LPAREN list RPAREN
+    (34) factor -> . NUMBER
+    (35) factor -> . VARIABLE
 
   ! shift/reduce conflict for RPAREN resolved as shift
   ! shift/reduce conflict for PLUS resolved as shift
@@ -1373,87 +1247,83 @@ state 32
   ! shift/reduce conflict for FACTORIAL resolved as shift
   ! shift/reduce conflict for COMMA resolved as shift
   ! shift/reduce conflict for CHOOSE resolved as shift
-  ! shift/reduce conflict for Q resolved as shift
   ! shift/reduce conflict for LPAREN resolved as shift
   ! shift/reduce conflict for LBRACKET resolved as shift
   ! shift/reduce conflict for LSET resolved as shift
   ! shift/reduce conflict for NUMBER resolved as shift
   ! shift/reduce conflict for VARIABLE resolved as shift
-    RPAREN          shift and go to state 54
-    RSET            reduce using rule 23 (factor -> LPAREN factor .)
-    RBRACKET        reduce using rule 23 (factor -> LPAREN factor .)
-    $end            reduce using rule 23 (factor -> LPAREN factor .)
-    PLUS            shift and go to state 26
-    MINUS           shift and go to state 30
-    TIMES           shift and go to state 25
-    DIVIDE          shift and go to state 23
-    EXP             shift and go to state 27
-    FACTORIAL       shift and go to state 24
-    COMMA           shift and go to state 29
-    CHOOSE          shift and go to state 7
-    Q               shift and go to state 4
-    LPAREN          shift and go to state 10
-    LBRACKET        shift and go to state 1
-    LSET            shift and go to state 6
-    NUMBER          shift and go to state 3
-    VARIABLE        shift and go to state 5
+    RPAREN          shift and go to state 50
+    RBRACKET        reduce using rule 21 (factor -> LPAREN factor .)
+    $end            reduce using rule 21 (factor -> LPAREN factor .)
+    RSET            reduce using rule 21 (factor -> LPAREN factor .)
+    PLUS            shift and go to state 24
+    MINUS           shift and go to state 28
+    TIMES           shift and go to state 23
+    DIVIDE          shift and go to state 21
+    EXP             shift and go to state 25
+    FACTORIAL       shift and go to state 22
+    COMMA           shift and go to state 27
+    CHOOSE          shift and go to state 6
+    LPAREN          shift and go to state 9
+    LBRACKET        shift and go to state 3
+    LSET            shift and go to state 5
+    NUMBER          shift and go to state 2
+    VARIABLE        shift and go to state 4
 
-  ! COMMA           [ reduce using rule 23 (factor -> LPAREN factor .) ]
-  ! PLUS            [ reduce using rule 23 (factor -> LPAREN factor .) ]
-  ! MINUS           [ reduce using rule 23 (factor -> LPAREN factor .) ]
-  ! TIMES           [ reduce using rule 23 (factor -> LPAREN factor .) ]
-  ! DIVIDE          [ reduce using rule 23 (factor -> LPAREN factor .) ]
-  ! EXP             [ reduce using rule 23 (factor -> LPAREN factor .) ]
-  ! FACTORIAL       [ reduce using rule 23 (factor -> LPAREN factor .) ]
-  ! CHOOSE          [ reduce using rule 23 (factor -> LPAREN factor .) ]
-  ! Q               [ reduce using rule 23 (factor -> LPAREN factor .) ]
-  ! LPAREN          [ reduce using rule 23 (factor -> LPAREN factor .) ]
-  ! LBRACKET        [ reduce using rule 23 (factor -> LPAREN factor .) ]
-  ! LSET            [ reduce using rule 23 (factor -> LPAREN factor .) ]
-  ! NUMBER          [ reduce using rule 23 (factor -> LPAREN factor .) ]
-  ! VARIABLE        [ reduce using rule 23 (factor -> LPAREN factor .) ]
-  ! RPAREN          [ reduce using rule 23 (factor -> LPAREN factor .) ]
+  ! TIMES           [ reduce using rule 21 (factor -> LPAREN factor .) ]
+  ! DIVIDE          [ reduce using rule 21 (factor -> LPAREN factor .) ]
+  ! EXP             [ reduce using rule 21 (factor -> LPAREN factor .) ]
+  ! FACTORIAL       [ reduce using rule 21 (factor -> LPAREN factor .) ]
+  ! MINUS           [ reduce using rule 21 (factor -> LPAREN factor .) ]
+  ! CHOOSE          [ reduce using rule 21 (factor -> LPAREN factor .) ]
+  ! LPAREN          [ reduce using rule 21 (factor -> LPAREN factor .) ]
+  ! LBRACKET        [ reduce using rule 21 (factor -> LPAREN factor .) ]
+  ! LSET            [ reduce using rule 21 (factor -> LPAREN factor .) ]
+  ! NUMBER          [ reduce using rule 21 (factor -> LPAREN factor .) ]
+  ! VARIABLE        [ reduce using rule 21 (factor -> LPAREN factor .) ]
+  ! COMMA           [ reduce using rule 21 (factor -> LPAREN factor .) ]
+  ! PLUS            [ reduce using rule 21 (factor -> LPAREN factor .) ]
+  ! RPAREN          [ reduce using rule 21 (factor -> LPAREN factor .) ]
 
-    factor                         shift and go to state 28
+    factor                         shift and go to state 26
 
-state 33
+state 31
 
-    (17) factor -> LPAREN expression . RPAREN
-    (21) factor -> LPAREN expression .
+    (15) factor -> LPAREN expression . RPAREN
+    (19) factor -> LPAREN expression .
     (4) expression -> expression . PLUS factor
     (6) expression -> expression . MINUS factor
-    (30) list -> expression . COMMA
+    (28) list -> expression . COMMA
 
   ! shift/reduce conflict for RPAREN resolved as shift
   ! shift/reduce conflict for PLUS resolved as shift
   ! shift/reduce conflict for MINUS resolved as shift
   ! shift/reduce conflict for COMMA resolved as shift
-    RPAREN          shift and go to state 55
-    TIMES           reduce using rule 21 (factor -> LPAREN expression .)
-    DIVIDE          reduce using rule 21 (factor -> LPAREN expression .)
-    EXP             reduce using rule 21 (factor -> LPAREN expression .)
-    FACTORIAL       reduce using rule 21 (factor -> LPAREN expression .)
-    CHOOSE          reduce using rule 21 (factor -> LPAREN expression .)
-    Q               reduce using rule 21 (factor -> LPAREN expression .)
-    LPAREN          reduce using rule 21 (factor -> LPAREN expression .)
-    LBRACKET        reduce using rule 21 (factor -> LPAREN expression .)
-    LSET            reduce using rule 21 (factor -> LPAREN expression .)
-    NUMBER          reduce using rule 21 (factor -> LPAREN expression .)
-    VARIABLE        reduce using rule 21 (factor -> LPAREN expression .)
-    RSET            reduce using rule 21 (factor -> LPAREN expression .)
-    RBRACKET        reduce using rule 21 (factor -> LPAREN expression .)
-    $end            reduce using rule 21 (factor -> LPAREN expression .)
-    PLUS            shift and go to state 34
-    MINUS           shift and go to state 36
-    COMMA           shift and go to state 35
+    RPAREN          shift and go to state 51
+    TIMES           reduce using rule 19 (factor -> LPAREN expression .)
+    DIVIDE          reduce using rule 19 (factor -> LPAREN expression .)
+    EXP             reduce using rule 19 (factor -> LPAREN expression .)
+    FACTORIAL       reduce using rule 19 (factor -> LPAREN expression .)
+    CHOOSE          reduce using rule 19 (factor -> LPAREN expression .)
+    LPAREN          reduce using rule 19 (factor -> LPAREN expression .)
+    LBRACKET        reduce using rule 19 (factor -> LPAREN expression .)
+    LSET            reduce using rule 19 (factor -> LPAREN expression .)
+    NUMBER          reduce using rule 19 (factor -> LPAREN expression .)
+    VARIABLE        reduce using rule 19 (factor -> LPAREN expression .)
+    RBRACKET        reduce using rule 19 (factor -> LPAREN expression .)
+    $end            reduce using rule 19 (factor -> LPAREN expression .)
+    RSET            reduce using rule 19 (factor -> LPAREN expression .)
+    PLUS            shift and go to state 32
+    MINUS           shift and go to state 34
+    COMMA           shift and go to state 33
 
-  ! COMMA           [ reduce using rule 21 (factor -> LPAREN expression .) ]
-  ! PLUS            [ reduce using rule 21 (factor -> LPAREN expression .) ]
-  ! MINUS           [ reduce using rule 21 (factor -> LPAREN expression .) ]
-  ! RPAREN          [ reduce using rule 21 (factor -> LPAREN expression .) ]
+  ! MINUS           [ reduce using rule 19 (factor -> LPAREN expression .) ]
+  ! COMMA           [ reduce using rule 19 (factor -> LPAREN expression .) ]
+  ! PLUS            [ reduce using rule 19 (factor -> LPAREN expression .) ]
+  ! RPAREN          [ reduce using rule 19 (factor -> LPAREN expression .) ]
 
 
-state 34
+state 32
 
     (4) expression -> expression PLUS . factor
     (8) factor -> . factor TIMES factor
@@ -1463,60 +1333,56 @@ state 34
     (12) factor -> . MINUS factor
     (13) factor -> . factor FACTORIAL
     (14) factor -> . CHOOSE LPAREN list RPAREN
-    (15) factor -> . Q LPAREN factor RPAREN
-    (16) factor -> . Q LPAREN expression RPAREN
-    (17) factor -> . LPAREN expression RPAREN
-    (18) factor -> . LBRACKET expression RBRACKET
-    (19) factor -> . LPAREN factor RPAREN
-    (20) factor -> . LBRACKET factor RBRACKET
-    (21) factor -> . LPAREN expression
-    (22) factor -> . LBRACKET expression
-    (23) factor -> . LPAREN factor
-    (24) factor -> . LBRACKET factor
-    (25) factor -> . CHOOSE LPAREN list
-    (26) factor -> . LSET list RSET
-    (27) factor -> . LSET expression RSET
-    (28) factor -> . LSET RSET
-    (29) factor -> . LPAREN list RPAREN
-    (36) factor -> . NUMBER
-    (37) factor -> . VARIABLE
+    (15) factor -> . LPAREN expression RPAREN
+    (16) factor -> . LBRACKET expression RBRACKET
+    (17) factor -> . LPAREN factor RPAREN
+    (18) factor -> . LBRACKET factor RBRACKET
+    (19) factor -> . LPAREN expression
+    (20) factor -> . LBRACKET expression
+    (21) factor -> . LPAREN factor
+    (22) factor -> . LBRACKET factor
+    (23) factor -> . CHOOSE LPAREN list
+    (24) factor -> . LSET list RSET
+    (25) factor -> . LSET expression RSET
+    (26) factor -> . LSET RSET
+    (27) factor -> . LPAREN list RPAREN
+    (34) factor -> . NUMBER
+    (35) factor -> . VARIABLE
 
-    MINUS           shift and go to state 12
-    CHOOSE          shift and go to state 7
-    Q               shift and go to state 4
-    LPAREN          shift and go to state 10
-    LBRACKET        shift and go to state 1
-    LSET            shift and go to state 6
-    NUMBER          shift and go to state 3
-    VARIABLE        shift and go to state 5
+    MINUS           shift and go to state 11
+    CHOOSE          shift and go to state 6
+    LPAREN          shift and go to state 9
+    LBRACKET        shift and go to state 3
+    LSET            shift and go to state 5
+    NUMBER          shift and go to state 2
+    VARIABLE        shift and go to state 4
 
-    factor                         shift and go to state 56
+    factor                         shift and go to state 52
 
-state 35
+state 33
 
-    (30) list -> expression COMMA .
+    (28) list -> expression COMMA .
 
-    RPAREN          reduce using rule 30 (list -> expression COMMA .)
-    MINUS           reduce using rule 30 (list -> expression COMMA .)
-    CHOOSE          reduce using rule 30 (list -> expression COMMA .)
-    Q               reduce using rule 30 (list -> expression COMMA .)
-    LPAREN          reduce using rule 30 (list -> expression COMMA .)
-    LBRACKET        reduce using rule 30 (list -> expression COMMA .)
-    LSET            reduce using rule 30 (list -> expression COMMA .)
-    NUMBER          reduce using rule 30 (list -> expression COMMA .)
-    VARIABLE        reduce using rule 30 (list -> expression COMMA .)
-    RBRACKET        reduce using rule 30 (list -> expression COMMA .)
-    PLUS            reduce using rule 30 (list -> expression COMMA .)
-    TIMES           reduce using rule 30 (list -> expression COMMA .)
-    DIVIDE          reduce using rule 30 (list -> expression COMMA .)
-    EXP             reduce using rule 30 (list -> expression COMMA .)
-    FACTORIAL       reduce using rule 30 (list -> expression COMMA .)
-    COMMA           reduce using rule 30 (list -> expression COMMA .)
-    $end            reduce using rule 30 (list -> expression COMMA .)
-    RSET            reduce using rule 30 (list -> expression COMMA .)
+    RBRACKET        reduce using rule 28 (list -> expression COMMA .)
+    PLUS            reduce using rule 28 (list -> expression COMMA .)
+    MINUS           reduce using rule 28 (list -> expression COMMA .)
+    TIMES           reduce using rule 28 (list -> expression COMMA .)
+    DIVIDE          reduce using rule 28 (list -> expression COMMA .)
+    EXP             reduce using rule 28 (list -> expression COMMA .)
+    FACTORIAL       reduce using rule 28 (list -> expression COMMA .)
+    COMMA           reduce using rule 28 (list -> expression COMMA .)
+    CHOOSE          reduce using rule 28 (list -> expression COMMA .)
+    LPAREN          reduce using rule 28 (list -> expression COMMA .)
+    LBRACKET        reduce using rule 28 (list -> expression COMMA .)
+    LSET            reduce using rule 28 (list -> expression COMMA .)
+    NUMBER          reduce using rule 28 (list -> expression COMMA .)
+    VARIABLE        reduce using rule 28 (list -> expression COMMA .)
+    $end            reduce using rule 28 (list -> expression COMMA .)
+    RPAREN          reduce using rule 28 (list -> expression COMMA .)
+    RSET            reduce using rule 28 (list -> expression COMMA .)
 
 
-state 36
+state 34
 
     (6) expression -> expression MINUS . factor
     (8) factor -> . factor TIMES factor
@@ -1526,36 +1392,33 @@ state 36
     (12) factor -> . MINUS factor
     (13) factor -> . factor FACTORIAL
     (14) factor -> . CHOOSE LPAREN list RPAREN
-    (15) factor -> . Q LPAREN factor RPAREN
-    (16) factor -> . Q LPAREN expression RPAREN
-    (17) factor -> . LPAREN expression RPAREN
-    (18) factor -> . LBRACKET expression RBRACKET
-    (19) factor -> . LPAREN factor RPAREN
-    (20) factor -> . LBRACKET factor RBRACKET
-    (21) factor -> . LPAREN expression
-    (22) factor -> . LBRACKET expression
-    (23) factor -> . LPAREN factor
-    (24) factor -> . LBRACKET factor
-    (25) factor -> . CHOOSE LPAREN list
-    (26) factor -> . LSET list RSET
-    (27) factor -> . LSET expression RSET
-    (28) factor -> . LSET RSET
-    (29) factor -> . LPAREN list RPAREN
-    (36) factor -> . NUMBER
-    (37) factor -> . VARIABLE
+    (15) factor -> . LPAREN expression RPAREN
+    (16) factor -> . LBRACKET expression RBRACKET
+    (17) factor -> . LPAREN factor RPAREN
+    (18) factor -> . LBRACKET factor RBRACKET
+    (19) factor -> . LPAREN expression
+    (20) factor -> . LBRACKET expression
+    (21) factor -> . LPAREN factor
+    (22) factor -> . LBRACKET factor
+    (23) factor -> . CHOOSE LPAREN list
+    (24) factor -> . LSET list RSET
+    (25) factor -> . LSET expression RSET
+    (26) factor -> . LSET RSET
+    (27) factor -> . LPAREN list RPAREN
+    (34) factor -> . NUMBER
+    (35) factor -> . VARIABLE
 
-    MINUS           shift and go to state 12
-    CHOOSE          shift and go to state 7
-    Q               shift and go to state 4
-    LPAREN          shift and go to state 10
-    LBRACKET        shift and go to state 1
-    LSET            shift and go to state 6
-    NUMBER          shift and go to state 3
-    VARIABLE        shift and go to state 5
+    MINUS           shift and go to state 11
+    CHOOSE          shift and go to state 6
+    LPAREN          shift and go to state 9
+    LBRACKET        shift and go to state 3
+    LSET            shift and go to state 5
+    NUMBER          shift and go to state 2
+    VARIABLE        shift and go to state 4
 
-    factor                         shift and go to state 57
+    factor                         shift and go to state 53
 
-state 37
+state 35
 
     (12) factor -> MINUS factor .
     (8) factor -> factor . TIMES factor
@@ -1570,23 +1433,21 @@ state 37
     (12) factor -> . MINUS factor
     (13) factor -> . factor FACTORIAL
     (14) factor -> . CHOOSE LPAREN list RPAREN
-    (15) factor -> . Q LPAREN factor RPAREN
-    (16) factor -> . Q LPAREN expression RPAREN
-    (17) factor -> . LPAREN expression RPAREN
-    (18) factor -> . LBRACKET expression RBRACKET
-    (19) factor -> . LPAREN factor RPAREN
-    (20) factor -> . LBRACKET factor RBRACKET
-    (21) factor -> . LPAREN expression
-    (22) factor -> . LBRACKET expression
-    (23) factor -> . LPAREN factor
-    (24) factor -> . LBRACKET factor
-    (25) factor -> . CHOOSE LPAREN list
-    (26) factor -> . LSET list RSET
-    (27) factor -> . LSET expression RSET
-    (28) factor -> . LSET RSET
-    (29) factor -> . LPAREN list RPAREN
-    (36) factor -> . NUMBER
-    (37) factor -> . VARIABLE
+    (15) factor -> . LPAREN expression RPAREN
+    (16) factor -> . LBRACKET expression RBRACKET
+    (17) factor -> . LPAREN factor RPAREN
+    (18) factor -> . LBRACKET factor RBRACKET
+    (19) factor -> . LPAREN expression
+    (20) factor -> . LBRACKET expression
+    (21) factor -> . LPAREN factor
+    (22) factor -> . LBRACKET factor
+    (23) factor -> . CHOOSE LPAREN list
+    (24) factor -> . LSET list RSET
+    (25) factor -> . LSET expression RSET
+    (26) factor -> . LSET RSET
+    (27) factor -> . LPAREN list RPAREN
+    (34) factor -> . NUMBER
+    (35) factor -> . VARIABLE
 
     COMMA           reduce using rule 12 (factor -> MINUS factor .)
     PLUS            reduce using rule 12 (factor -> MINUS factor .)
@@ -1595,17 +1456,16 @@ state 37
     LSET            reduce using rule 12 (factor -> MINUS factor .)
     NUMBER          reduce using rule 12 (factor -> MINUS factor .)
     VARIABLE        reduce using rule 12 (factor -> MINUS factor .)
-    RSET            reduce using rule 12 (factor -> MINUS factor .)
     RBRACKET        reduce using rule 12 (factor -> MINUS factor .)
     $end            reduce using rule 12 (factor -> MINUS factor .)
     RPAREN          reduce using rule 12 (factor -> MINUS factor .)
-    TIMES           shift and go to state 25
-    DIVIDE          shift and go to state 23
-    EXP             shift and go to state 27
-    FACTORIAL       shift and go to state 24
-    MINUS           shift and go to state 12
-    CHOOSE          shift and go to state 7
-    Q               shift and go to state 4
+    RSET            reduce using rule 12 (factor -> MINUS factor .)
+    TIMES           shift and go to state 23
+    DIVIDE          shift and go to state 21
+    EXP             shift and go to state 25
+    FACTORIAL       shift and go to state 22
+    MINUS           shift and go to state 11
+    CHOOSE          shift and go to state 6
 
   ! MINUS           [ reduce using rule 12 (factor -> MINUS factor .) ]
   ! TIMES           [ reduce using rule 12 (factor -> MINUS factor .) ]
@@ -1613,230 +1473,160 @@ state 37
   ! EXP             [ reduce using rule 12 (factor -> MINUS factor .) ]
   ! FACTORIAL       [ reduce using rule 12 (factor -> MINUS factor .) ]
   ! CHOOSE          [ reduce using rule 12 (factor -> MINUS factor .) ]
-  ! Q               [ reduce using rule 12 (factor -> MINUS factor .) ]
-  ! LPAREN          [ shift and go to state 10 ]
-  ! LBRACKET        [ shift and go to state 1 ]
-  ! LSET            [ shift and go to state 6 ]
-  ! NUMBER          [ shift and go to state 3 ]
-  ! VARIABLE        [ shift and go to state 5 ]
+  ! LPAREN          [ shift and go to state 9 ]
+  ! LBRACKET        [ shift and go to state 3 ]
+  ! LSET            [ shift and go to state 5 ]
+  ! NUMBER          [ shift and go to state 2 ]
+  ! VARIABLE        [ shift and go to state 4 ]
 
-    factor                         shift and go to state 28
+    factor                         shift and go to state 26
+
+state 36
+
+    (32) list -> list factor COMMA .
+
+    RBRACKET        reduce using rule 32 (list -> list factor COMMA .)
+    PLUS            reduce using rule 32 (list -> list factor COMMA .)
+    MINUS           reduce using rule 32 (list -> list factor COMMA .)
+    TIMES           reduce using rule 32 (list -> list factor COMMA .)
+    DIVIDE          reduce using rule 32 (list -> list factor COMMA .)
+    EXP             reduce using rule 32 (list -> list factor COMMA .)
+    FACTORIAL       reduce using rule 32 (list -> list factor COMMA .)
+    COMMA           reduce using rule 32 (list -> list factor COMMA .)
+    CHOOSE          reduce using rule 32 (list -> list factor COMMA .)
+    LPAREN          reduce using rule 32 (list -> list factor COMMA .)
+    LBRACKET        reduce using rule 32 (list -> list factor COMMA .)
+    LSET            reduce using rule 32 (list -> list factor COMMA .)
+    NUMBER          reduce using rule 32 (list -> list factor COMMA .)
+    VARIABLE        reduce using rule 32 (list -> list factor COMMA .)
+    $end            reduce using rule 32 (list -> list factor COMMA .)
+    RPAREN          reduce using rule 32 (list -> list factor COMMA .)
+    RSET            reduce using rule 32 (list -> list factor COMMA .)
+
+
+state 37
+
+    (29) list -> list expression COMMA .
+
+    RBRACKET        reduce using rule 29 (list -> list expression COMMA .)
+    PLUS            reduce using rule 29 (list -> list expression COMMA .)
+    MINUS           reduce using rule 29 (list -> list expression COMMA .)
+    TIMES           reduce using rule 29 (list -> list expression COMMA .)
+    DIVIDE          reduce using rule 29 (list -> list expression COMMA .)
+    EXP             reduce using rule 29 (list -> list expression COMMA .)
+    FACTORIAL       reduce using rule 29 (list -> list expression COMMA .)
+    COMMA           reduce using rule 29 (list -> list expression COMMA .)
+    CHOOSE          reduce using rule 29 (list -> list expression COMMA .)
+    LPAREN          reduce using rule 29 (list -> list expression COMMA .)
+    LBRACKET        reduce using rule 29 (list -> list expression COMMA .)
+    LSET            reduce using rule 29 (list -> list expression COMMA .)
+    NUMBER          reduce using rule 29 (list -> list expression COMMA .)
+    VARIABLE        reduce using rule 29 (list -> list expression COMMA .)
+    $end            reduce using rule 29 (list -> list expression COMMA .)
+    RPAREN          reduce using rule 29 (list -> list expression COMMA .)
+    RSET            reduce using rule 29 (list -> list expression COMMA .)
+
 
 state 38
 
-    (20) factor -> LBRACKET factor RBRACKET .
+    (18) factor -> LBRACKET factor RBRACKET .
 
-    COMMA           reduce using rule 20 (factor -> LBRACKET factor RBRACKET .)
-    PLUS            reduce using rule 20 (factor -> LBRACKET factor RBRACKET .)
-    MINUS           reduce using rule 20 (factor -> LBRACKET factor RBRACKET .)
-    TIMES           reduce using rule 20 (factor -> LBRACKET factor RBRACKET .)
-    DIVIDE          reduce using rule 20 (factor -> LBRACKET factor RBRACKET .)
-    EXP             reduce using rule 20 (factor -> LBRACKET factor RBRACKET .)
-    FACTORIAL       reduce using rule 20 (factor -> LBRACKET factor RBRACKET .)
-    CHOOSE          reduce using rule 20 (factor -> LBRACKET factor RBRACKET .)
-    Q               reduce using rule 20 (factor -> LBRACKET factor RBRACKET .)
-    LPAREN          reduce using rule 20 (factor -> LBRACKET factor RBRACKET .)
-    LBRACKET        reduce using rule 20 (factor -> LBRACKET factor RBRACKET .)
-    LSET            reduce using rule 20 (factor -> LBRACKET factor RBRACKET .)
-    NUMBER          reduce using rule 20 (factor -> LBRACKET factor RBRACKET .)
-    VARIABLE        reduce using rule 20 (factor -> LBRACKET factor RBRACKET .)
-    RSET            reduce using rule 20 (factor -> LBRACKET factor RBRACKET .)
-    RBRACKET        reduce using rule 20 (factor -> LBRACKET factor RBRACKET .)
-    $end            reduce using rule 20 (factor -> LBRACKET factor RBRACKET .)
-    RPAREN          reduce using rule 20 (factor -> LBRACKET factor RBRACKET .)
+    TIMES           reduce using rule 18 (factor -> LBRACKET factor RBRACKET .)
+    DIVIDE          reduce using rule 18 (factor -> LBRACKET factor RBRACKET .)
+    EXP             reduce using rule 18 (factor -> LBRACKET factor RBRACKET .)
+    FACTORIAL       reduce using rule 18 (factor -> LBRACKET factor RBRACKET .)
+    MINUS           reduce using rule 18 (factor -> LBRACKET factor RBRACKET .)
+    CHOOSE          reduce using rule 18 (factor -> LBRACKET factor RBRACKET .)
+    LPAREN          reduce using rule 18 (factor -> LBRACKET factor RBRACKET .)
+    LBRACKET        reduce using rule 18 (factor -> LBRACKET factor RBRACKET .)
+    LSET            reduce using rule 18 (factor -> LBRACKET factor RBRACKET .)
+    NUMBER          reduce using rule 18 (factor -> LBRACKET factor RBRACKET .)
+    VARIABLE        reduce using rule 18 (factor -> LBRACKET factor RBRACKET .)
+    COMMA           reduce using rule 18 (factor -> LBRACKET factor RBRACKET .)
+    PLUS            reduce using rule 18 (factor -> LBRACKET factor RBRACKET .)
+    RBRACKET        reduce using rule 18 (factor -> LBRACKET factor RBRACKET .)
+    $end            reduce using rule 18 (factor -> LBRACKET factor RBRACKET .)
+    RPAREN          reduce using rule 18 (factor -> LBRACKET factor RBRACKET .)
+    RSET            reduce using rule 18 (factor -> LBRACKET factor RBRACKET .)
 
 
 state 39
 
-    (18) factor -> LBRACKET expression RBRACKET .
+    (16) factor -> LBRACKET expression RBRACKET .
 
-    COMMA           reduce using rule 18 (factor -> LBRACKET expression RBRACKET .)
-    PLUS            reduce using rule 18 (factor -> LBRACKET expression RBRACKET .)
-    MINUS           reduce using rule 18 (factor -> LBRACKET expression RBRACKET .)
-    TIMES           reduce using rule 18 (factor -> LBRACKET expression RBRACKET .)
-    DIVIDE          reduce using rule 18 (factor -> LBRACKET expression RBRACKET .)
-    EXP             reduce using rule 18 (factor -> LBRACKET expression RBRACKET .)
-    FACTORIAL       reduce using rule 18 (factor -> LBRACKET expression RBRACKET .)
-    CHOOSE          reduce using rule 18 (factor -> LBRACKET expression RBRACKET .)
-    Q               reduce using rule 18 (factor -> LBRACKET expression RBRACKET .)
-    LPAREN          reduce using rule 18 (factor -> LBRACKET expression RBRACKET .)
-    LBRACKET        reduce using rule 18 (factor -> LBRACKET expression RBRACKET .)
-    LSET            reduce using rule 18 (factor -> LBRACKET expression RBRACKET .)
-    NUMBER          reduce using rule 18 (factor -> LBRACKET expression RBRACKET .)
-    VARIABLE        reduce using rule 18 (factor -> LBRACKET expression RBRACKET .)
-    RSET            reduce using rule 18 (factor -> LBRACKET expression RBRACKET .)
-    RBRACKET        reduce using rule 18 (factor -> LBRACKET expression RBRACKET .)
-    $end            reduce using rule 18 (factor -> LBRACKET expression RBRACKET .)
-    RPAREN          reduce using rule 18 (factor -> LBRACKET expression RBRACKET .)
+    TIMES           reduce using rule 16 (factor -> LBRACKET expression RBRACKET .)
+    DIVIDE          reduce using rule 16 (factor -> LBRACKET expression RBRACKET .)
+    EXP             reduce using rule 16 (factor -> LBRACKET expression RBRACKET .)
+    FACTORIAL       reduce using rule 16 (factor -> LBRACKET expression RBRACKET .)
+    MINUS           reduce using rule 16 (factor -> LBRACKET expression RBRACKET .)
+    CHOOSE          reduce using rule 16 (factor -> LBRACKET expression RBRACKET .)
+    LPAREN          reduce using rule 16 (factor -> LBRACKET expression RBRACKET .)
+    LBRACKET        reduce using rule 16 (factor -> LBRACKET expression RBRACKET .)
+    LSET            reduce using rule 16 (factor -> LBRACKET expression RBRACKET .)
+    NUMBER          reduce using rule 16 (factor -> LBRACKET expression RBRACKET .)
+    VARIABLE        reduce using rule 16 (factor -> LBRACKET expression RBRACKET .)
+    COMMA           reduce using rule 16 (factor -> LBRACKET expression RBRACKET .)
+    PLUS            reduce using rule 16 (factor -> LBRACKET expression RBRACKET .)
+    RBRACKET        reduce using rule 16 (factor -> LBRACKET expression RBRACKET .)
+    $end            reduce using rule 16 (factor -> LBRACKET expression RBRACKET .)
+    RPAREN          reduce using rule 16 (factor -> LBRACKET expression RBRACKET .)
+    RSET            reduce using rule 16 (factor -> LBRACKET expression RBRACKET .)
 
 
 state 40
 
-    (34) list -> list factor COMMA .
+    (24) factor -> LSET list RSET .
 
-    RPAREN          reduce using rule 34 (list -> list factor COMMA .)
-    MINUS           reduce using rule 34 (list -> list factor COMMA .)
-    CHOOSE          reduce using rule 34 (list -> list factor COMMA .)
-    Q               reduce using rule 34 (list -> list factor COMMA .)
-    LPAREN          reduce using rule 34 (list -> list factor COMMA .)
-    LBRACKET        reduce using rule 34 (list -> list factor COMMA .)
-    LSET            reduce using rule 34 (list -> list factor COMMA .)
-    NUMBER          reduce using rule 34 (list -> list factor COMMA .)
-    VARIABLE        reduce using rule 34 (list -> list factor COMMA .)
-    RBRACKET        reduce using rule 34 (list -> list factor COMMA .)
-    PLUS            reduce using rule 34 (list -> list factor COMMA .)
-    TIMES           reduce using rule 34 (list -> list factor COMMA .)
-    DIVIDE          reduce using rule 34 (list -> list factor COMMA .)
-    EXP             reduce using rule 34 (list -> list factor COMMA .)
-    FACTORIAL       reduce using rule 34 (list -> list factor COMMA .)
-    COMMA           reduce using rule 34 (list -> list factor COMMA .)
-    $end            reduce using rule 34 (list -> list factor COMMA .)
-    RSET            reduce using rule 34 (list -> list factor COMMA .)
+    TIMES           reduce using rule 24 (factor -> LSET list RSET .)
+    DIVIDE          reduce using rule 24 (factor -> LSET list RSET .)
+    EXP             reduce using rule 24 (factor -> LSET list RSET .)
+    FACTORIAL       reduce using rule 24 (factor -> LSET list RSET .)
+    MINUS           reduce using rule 24 (factor -> LSET list RSET .)
+    CHOOSE          reduce using rule 24 (factor -> LSET list RSET .)
+    LPAREN          reduce using rule 24 (factor -> LSET list RSET .)
+    LBRACKET        reduce using rule 24 (factor -> LSET list RSET .)
+    LSET            reduce using rule 24 (factor -> LSET list RSET .)
+    NUMBER          reduce using rule 24 (factor -> LSET list RSET .)
+    VARIABLE        reduce using rule 24 (factor -> LSET list RSET .)
+    COMMA           reduce using rule 24 (factor -> LSET list RSET .)
+    PLUS            reduce using rule 24 (factor -> LSET list RSET .)
+    RBRACKET        reduce using rule 24 (factor -> LSET list RSET .)
+    $end            reduce using rule 24 (factor -> LSET list RSET .)
+    RPAREN          reduce using rule 24 (factor -> LSET list RSET .)
+    RSET            reduce using rule 24 (factor -> LSET list RSET .)
 
 
 state 41
 
-    (31) list -> list expression COMMA .
+    (25) factor -> LSET expression RSET .
 
-    RPAREN          reduce using rule 31 (list -> list expression COMMA .)
-    MINUS           reduce using rule 31 (list -> list expression COMMA .)
-    CHOOSE          reduce using rule 31 (list -> list expression COMMA .)
-    Q               reduce using rule 31 (list -> list expression COMMA .)
-    LPAREN          reduce using rule 31 (list -> list expression COMMA .)
-    LBRACKET        reduce using rule 31 (list -> list expression COMMA .)
-    LSET            reduce using rule 31 (list -> list expression COMMA .)
-    NUMBER          reduce using rule 31 (list -> list expression COMMA .)
-    VARIABLE        reduce using rule 31 (list -> list expression COMMA .)
-    RBRACKET        reduce using rule 31 (list -> list expression COMMA .)
-    PLUS            reduce using rule 31 (list -> list expression COMMA .)
-    TIMES           reduce using rule 31 (list -> list expression COMMA .)
-    DIVIDE          reduce using rule 31 (list -> list expression COMMA .)
-    EXP             reduce using rule 31 (list -> list expression COMMA .)
-    FACTORIAL       reduce using rule 31 (list -> list expression COMMA .)
-    COMMA           reduce using rule 31 (list -> list expression COMMA .)
-    $end            reduce using rule 31 (list -> list expression COMMA .)
-    RSET            reduce using rule 31 (list -> list expression COMMA .)
+    TIMES           reduce using rule 25 (factor -> LSET expression RSET .)
+    DIVIDE          reduce using rule 25 (factor -> LSET expression RSET .)
+    EXP             reduce using rule 25 (factor -> LSET expression RSET .)
+    FACTORIAL       reduce using rule 25 (factor -> LSET expression RSET .)
+    MINUS           reduce using rule 25 (factor -> LSET expression RSET .)
+    CHOOSE          reduce using rule 25 (factor -> LSET expression RSET .)
+    LPAREN          reduce using rule 25 (factor -> LSET expression RSET .)
+    LBRACKET        reduce using rule 25 (factor -> LSET expression RSET .)
+    LSET            reduce using rule 25 (factor -> LSET expression RSET .)
+    NUMBER          reduce using rule 25 (factor -> LSET expression RSET .)
+    VARIABLE        reduce using rule 25 (factor -> LSET expression RSET .)
+    COMMA           reduce using rule 25 (factor -> LSET expression RSET .)
+    PLUS            reduce using rule 25 (factor -> LSET expression RSET .)
+    RBRACKET        reduce using rule 25 (factor -> LSET expression RSET .)
+    $end            reduce using rule 25 (factor -> LSET expression RSET .)
+    RPAREN          reduce using rule 25 (factor -> LSET expression RSET .)
+    RSET            reduce using rule 25 (factor -> LSET expression RSET .)
 
 
 state 42
 
-    (15) factor -> Q LPAREN factor . RPAREN
-    (8) factor -> factor . TIMES factor
-    (9) factor -> factor . DIVIDE factor
-    (10) factor -> factor . EXP factor
-    (11) factor -> factor . factor
-    (13) factor -> factor . FACTORIAL
-    (5) expression -> factor . PLUS factor
-    (7) expression -> factor . MINUS factor
-    (8) factor -> . factor TIMES factor
-    (9) factor -> . factor DIVIDE factor
-    (10) factor -> . factor EXP factor
-    (11) factor -> . factor factor
-    (12) factor -> . MINUS factor
-    (13) factor -> . factor FACTORIAL
-    (14) factor -> . CHOOSE LPAREN list RPAREN
-    (15) factor -> . Q LPAREN factor RPAREN
-    (16) factor -> . Q LPAREN expression RPAREN
-    (17) factor -> . LPAREN expression RPAREN
-    (18) factor -> . LBRACKET expression RBRACKET
-    (19) factor -> . LPAREN factor RPAREN
-    (20) factor -> . LBRACKET factor RBRACKET
-    (21) factor -> . LPAREN expression
-    (22) factor -> . LBRACKET expression
-    (23) factor -> . LPAREN factor
-    (24) factor -> . LBRACKET factor
-    (25) factor -> . CHOOSE LPAREN list
-    (26) factor -> . LSET list RSET
-    (27) factor -> . LSET expression RSET
-    (28) factor -> . LSET RSET
-    (29) factor -> . LPAREN list RPAREN
-    (36) factor -> . NUMBER
-    (37) factor -> . VARIABLE
-
-    RPAREN          shift and go to state 58
-    TIMES           shift and go to state 25
-    DIVIDE          shift and go to state 23
-    EXP             shift and go to state 27
-    FACTORIAL       shift and go to state 24
-    PLUS            shift and go to state 26
-    MINUS           shift and go to state 30
-    CHOOSE          shift and go to state 7
-    Q               shift and go to state 4
-    LPAREN          shift and go to state 10
-    LBRACKET        shift and go to state 1
-    LSET            shift and go to state 6
-    NUMBER          shift and go to state 3
-    VARIABLE        shift and go to state 5
-
-    factor                         shift and go to state 28
-
-state 43
-
-    (16) factor -> Q LPAREN expression . RPAREN
-    (4) expression -> expression . PLUS factor
-    (6) expression -> expression . MINUS factor
-
-    RPAREN          shift and go to state 59
-    PLUS            shift and go to state 34
-    MINUS           shift and go to state 36
-
-
-state 44
-
-    (26) factor -> LSET list RSET .
-
-    COMMA           reduce using rule 26 (factor -> LSET list RSET .)
-    PLUS            reduce using rule 26 (factor -> LSET list RSET .)
-    MINUS           reduce using rule 26 (factor -> LSET list RSET .)
-    TIMES           reduce using rule 26 (factor -> LSET list RSET .)
-    DIVIDE          reduce using rule 26 (factor -> LSET list RSET .)
-    EXP             reduce using rule 26 (factor -> LSET list RSET .)
-    FACTORIAL       reduce using rule 26 (factor -> LSET list RSET .)
-    CHOOSE          reduce using rule 26 (factor -> LSET list RSET .)
-    Q               reduce using rule 26 (factor -> LSET list RSET .)
-    LPAREN          reduce using rule 26 (factor -> LSET list RSET .)
-    LBRACKET        reduce using rule 26 (factor -> LSET list RSET .)
-    LSET            reduce using rule 26 (factor -> LSET list RSET .)
-    NUMBER          reduce using rule 26 (factor -> LSET list RSET .)
-    VARIABLE        reduce using rule 26 (factor -> LSET list RSET .)
-    RSET            reduce using rule 26 (factor -> LSET list RSET .)
-    RBRACKET        reduce using rule 26 (factor -> LSET list RSET .)
-    $end            reduce using rule 26 (factor -> LSET list RSET .)
-    RPAREN          reduce using rule 26 (factor -> LSET list RSET .)
-
-
-state 45
-
-    (27) factor -> LSET expression RSET .
-
-    COMMA           reduce using rule 27 (factor -> LSET expression RSET .)
-    PLUS            reduce using rule 27 (factor -> LSET expression RSET .)
-    MINUS           reduce using rule 27 (factor -> LSET expression RSET .)
-    TIMES           reduce using rule 27 (factor -> LSET expression RSET .)
-    DIVIDE          reduce using rule 27 (factor -> LSET expression RSET .)
-    EXP             reduce using rule 27 (factor -> LSET expression RSET .)
-    FACTORIAL       reduce using rule 27 (factor -> LSET expression RSET .)
-    CHOOSE          reduce using rule 27 (factor -> LSET expression RSET .)
-    Q               reduce using rule 27 (factor -> LSET expression RSET .)
-    LPAREN          reduce using rule 27 (factor -> LSET expression RSET .)
-    LBRACKET        reduce using rule 27 (factor -> LSET expression RSET .)
-    LSET            reduce using rule 27 (factor -> LSET expression RSET .)
-    NUMBER          reduce using rule 27 (factor -> LSET expression RSET .)
-    VARIABLE        reduce using rule 27 (factor -> LSET expression RSET .)
-    RSET            reduce using rule 27 (factor -> LSET expression RSET .)
-    RBRACKET        reduce using rule 27 (factor -> LSET expression RSET .)
-    $end            reduce using rule 27 (factor -> LSET expression RSET .)
-    RPAREN          reduce using rule 27 (factor -> LSET expression RSET .)
-
-
-state 46
-
     (14) factor -> CHOOSE LPAREN list . RPAREN
-    (25) factor -> CHOOSE LPAREN list .
-    (31) list -> list . expression COMMA
-    (32) list -> list . expression
-    (34) list -> list . factor COMMA
-    (35) list -> list . factor
+    (23) factor -> CHOOSE LPAREN list .
+    (29) list -> list . expression COMMA
+    (30) list -> list . expression
+    (32) list -> list . factor COMMA
+    (33) list -> list . factor
     (4) expression -> . expression PLUS factor
     (5) expression -> . factor PLUS factor
     (6) expression -> . expression MINUS factor
@@ -1848,77 +1638,72 @@ state 46
     (12) factor -> . MINUS factor
     (13) factor -> . factor FACTORIAL
     (14) factor -> . CHOOSE LPAREN list RPAREN
-    (15) factor -> . Q LPAREN factor RPAREN
-    (16) factor -> . Q LPAREN expression RPAREN
-    (17) factor -> . LPAREN expression RPAREN
-    (18) factor -> . LBRACKET expression RBRACKET
-    (19) factor -> . LPAREN factor RPAREN
-    (20) factor -> . LBRACKET factor RBRACKET
-    (21) factor -> . LPAREN expression
-    (22) factor -> . LBRACKET expression
-    (23) factor -> . LPAREN factor
-    (24) factor -> . LBRACKET factor
-    (25) factor -> . CHOOSE LPAREN list
-    (26) factor -> . LSET list RSET
-    (27) factor -> . LSET expression RSET
-    (28) factor -> . LSET RSET
-    (29) factor -> . LPAREN list RPAREN
-    (36) factor -> . NUMBER
-    (37) factor -> . VARIABLE
+    (15) factor -> . LPAREN expression RPAREN
+    (16) factor -> . LBRACKET expression RBRACKET
+    (17) factor -> . LPAREN factor RPAREN
+    (18) factor -> . LBRACKET factor RBRACKET
+    (19) factor -> . LPAREN expression
+    (20) factor -> . LBRACKET expression
+    (21) factor -> . LPAREN factor
+    (22) factor -> . LBRACKET factor
+    (23) factor -> . CHOOSE LPAREN list
+    (24) factor -> . LSET list RSET
+    (25) factor -> . LSET expression RSET
+    (26) factor -> . LSET RSET
+    (27) factor -> . LPAREN list RPAREN
+    (34) factor -> . NUMBER
+    (35) factor -> . VARIABLE
 
   ! shift/reduce conflict for RPAREN resolved as shift
   ! shift/reduce conflict for MINUS resolved as shift
   ! shift/reduce conflict for CHOOSE resolved as shift
-  ! shift/reduce conflict for Q resolved as shift
   ! shift/reduce conflict for LPAREN resolved as shift
   ! shift/reduce conflict for LBRACKET resolved as shift
   ! shift/reduce conflict for LSET resolved as shift
   ! shift/reduce conflict for NUMBER resolved as shift
   ! shift/reduce conflict for VARIABLE resolved as shift
-    RPAREN          shift and go to state 60
-    COMMA           reduce using rule 25 (factor -> CHOOSE LPAREN list .)
-    PLUS            reduce using rule 25 (factor -> CHOOSE LPAREN list .)
-    TIMES           reduce using rule 25 (factor -> CHOOSE LPAREN list .)
-    DIVIDE          reduce using rule 25 (factor -> CHOOSE LPAREN list .)
-    EXP             reduce using rule 25 (factor -> CHOOSE LPAREN list .)
-    FACTORIAL       reduce using rule 25 (factor -> CHOOSE LPAREN list .)
-    RSET            reduce using rule 25 (factor -> CHOOSE LPAREN list .)
-    RBRACKET        reduce using rule 25 (factor -> CHOOSE LPAREN list .)
-    $end            reduce using rule 25 (factor -> CHOOSE LPAREN list .)
-    MINUS           shift and go to state 12
-    CHOOSE          shift and go to state 7
-    Q               shift and go to state 4
-    LPAREN          shift and go to state 10
-    LBRACKET        shift and go to state 1
-    LSET            shift and go to state 6
-    NUMBER          shift and go to state 3
-    VARIABLE        shift and go to state 5
+    RPAREN          shift and go to state 54
+    TIMES           reduce using rule 23 (factor -> CHOOSE LPAREN list .)
+    DIVIDE          reduce using rule 23 (factor -> CHOOSE LPAREN list .)
+    EXP             reduce using rule 23 (factor -> CHOOSE LPAREN list .)
+    FACTORIAL       reduce using rule 23 (factor -> CHOOSE LPAREN list .)
+    COMMA           reduce using rule 23 (factor -> CHOOSE LPAREN list .)
+    PLUS            reduce using rule 23 (factor -> CHOOSE LPAREN list .)
+    RBRACKET        reduce using rule 23 (factor -> CHOOSE LPAREN list .)
+    $end            reduce using rule 23 (factor -> CHOOSE LPAREN list .)
+    RSET            reduce using rule 23 (factor -> CHOOSE LPAREN list .)
+    MINUS           shift and go to state 11
+    CHOOSE          shift and go to state 6
+    LPAREN          shift and go to state 9
+    LBRACKET        shift and go to state 3
+    LSET            shift and go to state 5
+    NUMBER          shift and go to state 2
+    VARIABLE        shift and go to state 4
 
-  ! MINUS           [ reduce using rule 25 (factor -> CHOOSE LPAREN list .) ]
-  ! CHOOSE          [ reduce using rule 25 (factor -> CHOOSE LPAREN list .) ]
-  ! Q               [ reduce using rule 25 (factor -> CHOOSE LPAREN list .) ]
-  ! LPAREN          [ reduce using rule 25 (factor -> CHOOSE LPAREN list .) ]
-  ! LBRACKET        [ reduce using rule 25 (factor -> CHOOSE LPAREN list .) ]
-  ! LSET            [ reduce using rule 25 (factor -> CHOOSE LPAREN list .) ]
-  ! NUMBER          [ reduce using rule 25 (factor -> CHOOSE LPAREN list .) ]
-  ! VARIABLE        [ reduce using rule 25 (factor -> CHOOSE LPAREN list .) ]
-  ! RPAREN          [ reduce using rule 25 (factor -> CHOOSE LPAREN list .) ]
+  ! MINUS           [ reduce using rule 23 (factor -> CHOOSE LPAREN list .) ]
+  ! CHOOSE          [ reduce using rule 23 (factor -> CHOOSE LPAREN list .) ]
+  ! LPAREN          [ reduce using rule 23 (factor -> CHOOSE LPAREN list .) ]
+  ! LBRACKET        [ reduce using rule 23 (factor -> CHOOSE LPAREN list .) ]
+  ! LSET            [ reduce using rule 23 (factor -> CHOOSE LPAREN list .) ]
+  ! NUMBER          [ reduce using rule 23 (factor -> CHOOSE LPAREN list .) ]
+  ! VARIABLE        [ reduce using rule 23 (factor -> CHOOSE LPAREN list .) ]
+  ! RPAREN          [ reduce using rule 23 (factor -> CHOOSE LPAREN list .) ]
 
-    expression                     shift and go to state 16
-    factor                         shift and go to state 15
+    expression                     shift and go to state 13
+    factor                         shift and go to state 12
 
-state 47
+state 43
 
-    (30) list -> expression . COMMA
+    (28) list -> expression . COMMA
     (4) expression -> expression . PLUS factor
     (6) expression -> expression . MINUS factor
 
-    COMMA           shift and go to state 35
-    PLUS            shift and go to state 34
-    MINUS           shift and go to state 36
+    COMMA           shift and go to state 33
+    PLUS            shift and go to state 32
+    MINUS           shift and go to state 34
 
 
-state 48
+state 44
 
     (9) factor -> factor DIVIDE factor .
     (8) factor -> factor . TIMES factor
@@ -1933,59 +1718,55 @@ state 48
     (12) factor -> . MINUS factor
     (13) factor -> . factor FACTORIAL
     (14) factor -> . CHOOSE LPAREN list RPAREN
-    (15) factor -> . Q LPAREN factor RPAREN
-    (16) factor -> . Q LPAREN expression RPAREN
-    (17) factor -> . LPAREN expression RPAREN
-    (18) factor -> . LBRACKET expression RBRACKET
-    (19) factor -> . LPAREN factor RPAREN
-    (20) factor -> . LBRACKET factor RBRACKET
-    (21) factor -> . LPAREN expression
-    (22) factor -> . LBRACKET expression
-    (23) factor -> . LPAREN factor
-    (24) factor -> . LBRACKET factor
-    (25) factor -> . CHOOSE LPAREN list
-    (26) factor -> . LSET list RSET
-    (27) factor -> . LSET expression RSET
-    (28) factor -> . LSET RSET
-    (29) factor -> . LPAREN list RPAREN
-    (36) factor -> . NUMBER
-    (37) factor -> . VARIABLE
+    (15) factor -> . LPAREN expression RPAREN
+    (16) factor -> . LBRACKET expression RBRACKET
+    (17) factor -> . LPAREN factor RPAREN
+    (18) factor -> . LBRACKET factor RBRACKET
+    (19) factor -> . LPAREN expression
+    (20) factor -> . LBRACKET expression
+    (21) factor -> . LPAREN factor
+    (22) factor -> . LBRACKET factor
+    (23) factor -> . CHOOSE LPAREN list
+    (24) factor -> . LSET list RSET
+    (25) factor -> . LSET expression RSET
+    (26) factor -> . LSET RSET
+    (27) factor -> . LPAREN list RPAREN
+    (34) factor -> . NUMBER
+    (35) factor -> . VARIABLE
 
-    COMMA           reduce using rule 9 (factor -> factor DIVIDE factor .)
-    PLUS            reduce using rule 9 (factor -> factor DIVIDE factor .)
-    MINUS           reduce using rule 9 (factor -> factor DIVIDE factor .)
     TIMES           reduce using rule 9 (factor -> factor DIVIDE factor .)
     DIVIDE          reduce using rule 9 (factor -> factor DIVIDE factor .)
+    MINUS           reduce using rule 9 (factor -> factor DIVIDE factor .)
     LPAREN          reduce using rule 9 (factor -> factor DIVIDE factor .)
     LBRACKET        reduce using rule 9 (factor -> factor DIVIDE factor .)
     LSET            reduce using rule 9 (factor -> factor DIVIDE factor .)
     NUMBER          reduce using rule 9 (factor -> factor DIVIDE factor .)
     VARIABLE        reduce using rule 9 (factor -> factor DIVIDE factor .)
-    RSET            reduce using rule 9 (factor -> factor DIVIDE factor .)
+    COMMA           reduce using rule 9 (factor -> factor DIVIDE factor .)
+    PLUS            reduce using rule 9 (factor -> factor DIVIDE factor .)
     RBRACKET        reduce using rule 9 (factor -> factor DIVIDE factor .)
     $end            reduce using rule 9 (factor -> factor DIVIDE factor .)
     RPAREN          reduce using rule 9 (factor -> factor DIVIDE factor .)
-    EXP             shift and go to state 27
-    FACTORIAL       shift and go to state 24
-    CHOOSE          shift and go to state 7
-    Q               shift and go to state 4
+    RSET            reduce using rule 9 (factor -> factor DIVIDE factor .)
+    EXP             shift and go to state 25
+    FACTORIAL       shift and go to state 22
+    CHOOSE          shift and go to state 6
 
   ! EXP             [ reduce using rule 9 (factor -> factor DIVIDE factor .) ]
   ! FACTORIAL       [ reduce using rule 9 (factor -> factor DIVIDE factor .) ]
   ! CHOOSE          [ reduce using rule 9 (factor -> factor DIVIDE factor .) ]
-  ! Q               [ reduce using rule 9 (factor -> factor DIVIDE factor .) ]
-  ! TIMES           [ shift and go to state 25 ]
-  ! DIVIDE          [ shift and go to state 23 ]
-  ! MINUS           [ shift and go to state 12 ]
-  ! LPAREN          [ shift and go to state 10 ]
-  ! LBRACKET        [ shift and go to state 1 ]
-  ! LSET            [ shift and go to state 6 ]
-  ! NUMBER          [ shift and go to state 3 ]
-  ! VARIABLE        [ shift and go to state 5 ]
+  ! TIMES           [ shift and go to state 23 ]
+  ! DIVIDE          [ shift and go to state 21 ]
+  ! MINUS           [ shift and go to state 11 ]
+  ! LPAREN          [ shift and go to state 9 ]
+  ! LBRACKET        [ shift and go to state 3 ]
+  ! LSET            [ shift and go to state 5 ]
+  ! NUMBER          [ shift and go to state 2 ]
+  ! VARIABLE        [ shift and go to state 4 ]
 
-    factor                         shift and go to state 28
+    factor                         shift and go to state 26
 
-state 49
+state 45
 
     (8) factor -> factor TIMES factor .
     (8) factor -> factor . TIMES factor
@@ -2000,59 +1781,55 @@ state 49
     (12) factor -> . MINUS factor
     (13) factor -> . factor FACTORIAL
     (14) factor -> . CHOOSE LPAREN list RPAREN
-    (15) factor -> . Q LPAREN factor RPAREN
-    (16) factor -> . Q LPAREN expression RPAREN
-    (17) factor -> . LPAREN expression RPAREN
-    (18) factor -> . LBRACKET expression RBRACKET
-    (19) factor -> . LPAREN factor RPAREN
-    (20) factor -> . LBRACKET factor RBRACKET
-    (21) factor -> . LPAREN expression
-    (22) factor -> . LBRACKET expression
-    (23) factor -> . LPAREN factor
-    (24) factor -> . LBRACKET factor
-    (25) factor -> . CHOOSE LPAREN list
-    (26) factor -> . LSET list RSET
-    (27) factor -> . LSET expression RSET
-    (28) factor -> . LSET RSET
-    (29) factor -> . LPAREN list RPAREN
-    (36) factor -> . NUMBER
-    (37) factor -> . VARIABLE
+    (15) factor -> . LPAREN expression RPAREN
+    (16) factor -> . LBRACKET expression RBRACKET
+    (17) factor -> . LPAREN factor RPAREN
+    (18) factor -> . LBRACKET factor RBRACKET
+    (19) factor -> . LPAREN expression
+    (20) factor -> . LBRACKET expression
+    (21) factor -> . LPAREN factor
+    (22) factor -> . LBRACKET factor
+    (23) factor -> . CHOOSE LPAREN list
+    (24) factor -> . LSET list RSET
+    (25) factor -> . LSET expression RSET
+    (26) factor -> . LSET RSET
+    (27) factor -> . LPAREN list RPAREN
+    (34) factor -> . NUMBER
+    (35) factor -> . VARIABLE
 
-    COMMA           reduce using rule 8 (factor -> factor TIMES factor .)
-    PLUS            reduce using rule 8 (factor -> factor TIMES factor .)
-    MINUS           reduce using rule 8 (factor -> factor TIMES factor .)
     TIMES           reduce using rule 8 (factor -> factor TIMES factor .)
     DIVIDE          reduce using rule 8 (factor -> factor TIMES factor .)
+    MINUS           reduce using rule 8 (factor -> factor TIMES factor .)
     LPAREN          reduce using rule 8 (factor -> factor TIMES factor .)
     LBRACKET        reduce using rule 8 (factor -> factor TIMES factor .)
     LSET            reduce using rule 8 (factor -> factor TIMES factor .)
     NUMBER          reduce using rule 8 (factor -> factor TIMES factor .)
     VARIABLE        reduce using rule 8 (factor -> factor TIMES factor .)
-    RSET            reduce using rule 8 (factor -> factor TIMES factor .)
+    COMMA           reduce using rule 8 (factor -> factor TIMES factor .)
+    PLUS            reduce using rule 8 (factor -> factor TIMES factor .)
     RBRACKET        reduce using rule 8 (factor -> factor TIMES factor .)
     $end            reduce using rule 8 (factor -> factor TIMES factor .)
     RPAREN          reduce using rule 8 (factor -> factor TIMES factor .)
-    EXP             shift and go to state 27
-    FACTORIAL       shift and go to state 24
-    CHOOSE          shift and go to state 7
-    Q               shift and go to state 4
+    RSET            reduce using rule 8 (factor -> factor TIMES factor .)
+    EXP             shift and go to state 25
+    FACTORIAL       shift and go to state 22
+    CHOOSE          shift and go to state 6
 
   ! EXP             [ reduce using rule 8 (factor -> factor TIMES factor .) ]
   ! FACTORIAL       [ reduce using rule 8 (factor -> factor TIMES factor .) ]
   ! CHOOSE          [ reduce using rule 8 (factor -> factor TIMES factor .) ]
-  ! Q               [ reduce using rule 8 (factor -> factor TIMES factor .) ]
-  ! TIMES           [ shift and go to state 25 ]
-  ! DIVIDE          [ shift and go to state 23 ]
-  ! MINUS           [ shift and go to state 12 ]
-  ! LPAREN          [ shift and go to state 10 ]
-  ! LBRACKET        [ shift and go to state 1 ]
-  ! LSET            [ shift and go to state 6 ]
-  ! NUMBER          [ shift and go to state 3 ]
-  ! VARIABLE        [ shift and go to state 5 ]
+  ! TIMES           [ shift and go to state 23 ]
+  ! DIVIDE          [ shift and go to state 21 ]
+  ! MINUS           [ shift and go to state 11 ]
+  ! LPAREN          [ shift and go to state 9 ]
+  ! LBRACKET        [ shift and go to state 3 ]
+  ! LSET            [ shift and go to state 5 ]
+  ! NUMBER          [ shift and go to state 2 ]
+  ! VARIABLE        [ shift and go to state 4 ]
 
-    factor                         shift and go to state 28
+    factor                         shift and go to state 26
 
-state 50
+state 46
 
     (5) expression -> factor PLUS factor .
     (8) factor -> factor . TIMES factor
@@ -2067,59 +1844,55 @@ state 50
     (12) factor -> . MINUS factor
     (13) factor -> . factor FACTORIAL
     (14) factor -> . CHOOSE LPAREN list RPAREN
-    (15) factor -> . Q LPAREN factor RPAREN
-    (16) factor -> . Q LPAREN expression RPAREN
-    (17) factor -> . LPAREN expression RPAREN
-    (18) factor -> . LBRACKET expression RBRACKET
-    (19) factor -> . LPAREN factor RPAREN
-    (20) factor -> . LBRACKET factor RBRACKET
-    (21) factor -> . LPAREN expression
-    (22) factor -> . LBRACKET expression
-    (23) factor -> . LPAREN factor
-    (24) factor -> . LBRACKET factor
-    (25) factor -> . CHOOSE LPAREN list
-    (26) factor -> . LSET list RSET
-    (27) factor -> . LSET expression RSET
-    (28) factor -> . LSET RSET
-    (29) factor -> . LPAREN list RPAREN
-    (36) factor -> . NUMBER
-    (37) factor -> . VARIABLE
+    (15) factor -> . LPAREN expression RPAREN
+    (16) factor -> . LBRACKET expression RBRACKET
+    (17) factor -> . LPAREN factor RPAREN
+    (18) factor -> . LBRACKET factor RBRACKET
+    (19) factor -> . LPAREN expression
+    (20) factor -> . LBRACKET expression
+    (21) factor -> . LPAREN factor
+    (22) factor -> . LBRACKET factor
+    (23) factor -> . CHOOSE LPAREN list
+    (24) factor -> . LSET list RSET
+    (25) factor -> . LSET expression RSET
+    (26) factor -> . LSET RSET
+    (27) factor -> . LPAREN list RPAREN
+    (34) factor -> . NUMBER
+    (35) factor -> . VARIABLE
 
-    COMMA           reduce using rule 5 (expression -> factor PLUS factor .)
+    RBRACKET        reduce using rule 5 (expression -> factor PLUS factor .)
     PLUS            reduce using rule 5 (expression -> factor PLUS factor .)
     MINUS           reduce using rule 5 (expression -> factor PLUS factor .)
-    RPAREN          reduce using rule 5 (expression -> factor PLUS factor .)
+    COMMA           reduce using rule 5 (expression -> factor PLUS factor .)
     LPAREN          reduce using rule 5 (expression -> factor PLUS factor .)
     LBRACKET        reduce using rule 5 (expression -> factor PLUS factor .)
     LSET            reduce using rule 5 (expression -> factor PLUS factor .)
     NUMBER          reduce using rule 5 (expression -> factor PLUS factor .)
     VARIABLE        reduce using rule 5 (expression -> factor PLUS factor .)
     $end            reduce using rule 5 (expression -> factor PLUS factor .)
+    RPAREN          reduce using rule 5 (expression -> factor PLUS factor .)
     RSET            reduce using rule 5 (expression -> factor PLUS factor .)
-    RBRACKET        reduce using rule 5 (expression -> factor PLUS factor .)
-    TIMES           shift and go to state 25
-    DIVIDE          shift and go to state 23
-    EXP             shift and go to state 27
-    FACTORIAL       shift and go to state 24
-    CHOOSE          shift and go to state 7
-    Q               shift and go to state 4
+    TIMES           shift and go to state 23
+    DIVIDE          shift and go to state 21
+    EXP             shift and go to state 25
+    FACTORIAL       shift and go to state 22
+    CHOOSE          shift and go to state 6
 
-  ! CHOOSE          [ reduce using rule 5 (expression -> factor PLUS factor .) ]
-  ! Q               [ reduce using rule 5 (expression -> factor PLUS factor .) ]
   ! TIMES           [ reduce using rule 5 (expression -> factor PLUS factor .) ]
   ! DIVIDE          [ reduce using rule 5 (expression -> factor PLUS factor .) ]
   ! EXP             [ reduce using rule 5 (expression -> factor PLUS factor .) ]
   ! FACTORIAL       [ reduce using rule 5 (expression -> factor PLUS factor .) ]
-  ! MINUS           [ shift and go to state 12 ]
-  ! LPAREN          [ shift and go to state 10 ]
-  ! LBRACKET        [ shift and go to state 1 ]
-  ! LSET            [ shift and go to state 6 ]
-  ! NUMBER          [ shift and go to state 3 ]
-  ! VARIABLE        [ shift and go to state 5 ]
+  ! CHOOSE          [ reduce using rule 5 (expression -> factor PLUS factor .) ]
+  ! MINUS           [ shift and go to state 11 ]
+  ! LPAREN          [ shift and go to state 9 ]
+  ! LBRACKET        [ shift and go to state 3 ]
+  ! LSET            [ shift and go to state 5 ]
+  ! NUMBER          [ shift and go to state 2 ]
+  ! VARIABLE        [ shift and go to state 4 ]
 
-    factor                         shift and go to state 28
+    factor                         shift and go to state 26
 
-state 51
+state 47
 
     (10) factor -> factor EXP factor .
     (8) factor -> factor . TIMES factor
@@ -2134,59 +1907,55 @@ state 51
     (12) factor -> . MINUS factor
     (13) factor -> . factor FACTORIAL
     (14) factor -> . CHOOSE LPAREN list RPAREN
-    (15) factor -> . Q LPAREN factor RPAREN
-    (16) factor -> . Q LPAREN expression RPAREN
-    (17) factor -> . LPAREN expression RPAREN
-    (18) factor -> . LBRACKET expression RBRACKET
-    (19) factor -> . LPAREN factor RPAREN
-    (20) factor -> . LBRACKET factor RBRACKET
-    (21) factor -> . LPAREN expression
-    (22) factor -> . LBRACKET expression
-    (23) factor -> . LPAREN factor
-    (24) factor -> . LBRACKET factor
-    (25) factor -> . CHOOSE LPAREN list
-    (26) factor -> . LSET list RSET
-    (27) factor -> . LSET expression RSET
-    (28) factor -> . LSET RSET
-    (29) factor -> . LPAREN list RPAREN
-    (36) factor -> . NUMBER
-    (37) factor -> . VARIABLE
+    (15) factor -> . LPAREN expression RPAREN
+    (16) factor -> . LBRACKET expression RBRACKET
+    (17) factor -> . LPAREN factor RPAREN
+    (18) factor -> . LBRACKET factor RBRACKET
+    (19) factor -> . LPAREN expression
+    (20) factor -> . LBRACKET expression
+    (21) factor -> . LPAREN factor
+    (22) factor -> . LBRACKET factor
+    (23) factor -> . CHOOSE LPAREN list
+    (24) factor -> . LSET list RSET
+    (25) factor -> . LSET expression RSET
+    (26) factor -> . LSET RSET
+    (27) factor -> . LPAREN list RPAREN
+    (34) factor -> . NUMBER
+    (35) factor -> . VARIABLE
 
-    COMMA           reduce using rule 10 (factor -> factor EXP factor .)
-    PLUS            reduce using rule 10 (factor -> factor EXP factor .)
-    MINUS           reduce using rule 10 (factor -> factor EXP factor .)
     TIMES           reduce using rule 10 (factor -> factor EXP factor .)
     DIVIDE          reduce using rule 10 (factor -> factor EXP factor .)
     EXP             reduce using rule 10 (factor -> factor EXP factor .)
+    MINUS           reduce using rule 10 (factor -> factor EXP factor .)
     LPAREN          reduce using rule 10 (factor -> factor EXP factor .)
     LBRACKET        reduce using rule 10 (factor -> factor EXP factor .)
     LSET            reduce using rule 10 (factor -> factor EXP factor .)
     NUMBER          reduce using rule 10 (factor -> factor EXP factor .)
     VARIABLE        reduce using rule 10 (factor -> factor EXP factor .)
-    RSET            reduce using rule 10 (factor -> factor EXP factor .)
+    COMMA           reduce using rule 10 (factor -> factor EXP factor .)
+    PLUS            reduce using rule 10 (factor -> factor EXP factor .)
     RBRACKET        reduce using rule 10 (factor -> factor EXP factor .)
     $end            reduce using rule 10 (factor -> factor EXP factor .)
     RPAREN          reduce using rule 10 (factor -> factor EXP factor .)
-    FACTORIAL       shift and go to state 24
-    CHOOSE          shift and go to state 7
-    Q               shift and go to state 4
+    RSET            reduce using rule 10 (factor -> factor EXP factor .)
+    FACTORIAL       shift and go to state 22
+    CHOOSE          shift and go to state 6
 
   ! FACTORIAL       [ reduce using rule 10 (factor -> factor EXP factor .) ]
   ! CHOOSE          [ reduce using rule 10 (factor -> factor EXP factor .) ]
-  ! Q               [ reduce using rule 10 (factor -> factor EXP factor .) ]
-  ! TIMES           [ shift and go to state 25 ]
-  ! DIVIDE          [ shift and go to state 23 ]
-  ! EXP             [ shift and go to state 27 ]
-  ! MINUS           [ shift and go to state 12 ]
-  ! LPAREN          [ shift and go to state 10 ]
-  ! LBRACKET        [ shift and go to state 1 ]
-  ! LSET            [ shift and go to state 6 ]
-  ! NUMBER          [ shift and go to state 3 ]
-  ! VARIABLE        [ shift and go to state 5 ]
+  ! TIMES           [ shift and go to state 23 ]
+  ! DIVIDE          [ shift and go to state 21 ]
+  ! EXP             [ shift and go to state 25 ]
+  ! MINUS           [ shift and go to state 11 ]
+  ! LPAREN          [ shift and go to state 9 ]
+  ! LBRACKET        [ shift and go to state 3 ]
+  ! LSET            [ shift and go to state 5 ]
+  ! NUMBER          [ shift and go to state 2 ]
+  ! VARIABLE        [ shift and go to state 4 ]
 
-    factor                         shift and go to state 28
+    factor                         shift and go to state 26
 
-state 52
+state 48
 
     (7) expression -> factor MINUS factor .
     (12) factor -> MINUS factor .
@@ -2202,23 +1971,21 @@ state 52
     (12) factor -> . MINUS factor
     (13) factor -> . factor FACTORIAL
     (14) factor -> . CHOOSE LPAREN list RPAREN
-    (15) factor -> . Q LPAREN factor RPAREN
-    (16) factor -> . Q LPAREN expression RPAREN
-    (17) factor -> . LPAREN expression RPAREN
-    (18) factor -> . LBRACKET expression RBRACKET
-    (19) factor -> . LPAREN factor RPAREN
-    (20) factor -> . LBRACKET factor RBRACKET
-    (21) factor -> . LPAREN expression
-    (22) factor -> . LBRACKET expression
-    (23) factor -> . LPAREN factor
-    (24) factor -> . LBRACKET factor
-    (25) factor -> . CHOOSE LPAREN list
-    (26) factor -> . LSET list RSET
-    (27) factor -> . LSET expression RSET
-    (28) factor -> . LSET RSET
-    (29) factor -> . LPAREN list RPAREN
-    (36) factor -> . NUMBER
-    (37) factor -> . VARIABLE
+    (15) factor -> . LPAREN expression RPAREN
+    (16) factor -> . LBRACKET expression RBRACKET
+    (17) factor -> . LPAREN factor RPAREN
+    (18) factor -> . LBRACKET factor RBRACKET
+    (19) factor -> . LPAREN expression
+    (20) factor -> . LBRACKET expression
+    (21) factor -> . LPAREN factor
+    (22) factor -> . LBRACKET factor
+    (23) factor -> . CHOOSE LPAREN list
+    (24) factor -> . LSET list RSET
+    (25) factor -> . LSET expression RSET
+    (26) factor -> . LSET RSET
+    (27) factor -> . LPAREN list RPAREN
+    (34) factor -> . NUMBER
+    (35) factor -> . VARIABLE
 
   ! reduce/reduce conflict for TIMES resolved using rule 7 (expression -> factor MINUS factor .)
   ! reduce/reduce conflict for DIVIDE resolved using rule 7 (expression -> factor MINUS factor .)
@@ -2226,7 +1993,6 @@ state 52
   ! reduce/reduce conflict for FACTORIAL resolved using rule 7 (expression -> factor MINUS factor .)
   ! reduce/reduce conflict for MINUS resolved using rule 7 (expression -> factor MINUS factor .)
   ! reduce/reduce conflict for CHOOSE resolved using rule 7 (expression -> factor MINUS factor .)
-  ! reduce/reduce conflict for Q resolved using rule 7 (expression -> factor MINUS factor .)
   ! reduce/reduce conflict for LPAREN resolved using rule 7 (expression -> factor MINUS factor .)
   ! reduce/reduce conflict for LBRACKET resolved using rule 7 (expression -> factor MINUS factor .)
   ! reduce/reduce conflict for LSET resolved using rule 7 (expression -> factor MINUS factor .)
@@ -2238,38 +2004,35 @@ state 52
   ! reduce/reduce conflict for $end resolved using rule 7 (expression -> factor MINUS factor .)
   ! reduce/reduce conflict for RPAREN resolved using rule 7 (expression -> factor MINUS factor .)
   ! reduce/reduce conflict for RSET resolved using rule 7 (expression -> factor MINUS factor .)
-    COMMA           reduce using rule 7 (expression -> factor MINUS factor .)
+    RBRACKET        reduce using rule 7 (expression -> factor MINUS factor .)
     PLUS            reduce using rule 7 (expression -> factor MINUS factor .)
     MINUS           reduce using rule 7 (expression -> factor MINUS factor .)
-    RPAREN          reduce using rule 7 (expression -> factor MINUS factor .)
+    COMMA           reduce using rule 7 (expression -> factor MINUS factor .)
     LPAREN          reduce using rule 7 (expression -> factor MINUS factor .)
     LBRACKET        reduce using rule 7 (expression -> factor MINUS factor .)
     LSET            reduce using rule 7 (expression -> factor MINUS factor .)
     NUMBER          reduce using rule 7 (expression -> factor MINUS factor .)
     VARIABLE        reduce using rule 7 (expression -> factor MINUS factor .)
     $end            reduce using rule 7 (expression -> factor MINUS factor .)
+    RPAREN          reduce using rule 7 (expression -> factor MINUS factor .)
     RSET            reduce using rule 7 (expression -> factor MINUS factor .)
-    RBRACKET        reduce using rule 7 (expression -> factor MINUS factor .)
-    TIMES           shift and go to state 25
-    DIVIDE          shift and go to state 23
-    EXP             shift and go to state 27
-    FACTORIAL       shift and go to state 24
-    CHOOSE          shift and go to state 7
-    Q               shift and go to state 4
+    TIMES           shift and go to state 23
+    DIVIDE          shift and go to state 21
+    EXP             shift and go to state 25
+    FACTORIAL       shift and go to state 22
+    CHOOSE          shift and go to state 6
 
-  ! CHOOSE          [ reduce using rule 7 (expression -> factor MINUS factor .) ]
-  ! Q               [ reduce using rule 7 (expression -> factor MINUS factor .) ]
   ! TIMES           [ reduce using rule 7 (expression -> factor MINUS factor .) ]
   ! DIVIDE          [ reduce using rule 7 (expression -> factor MINUS factor .) ]
   ! EXP             [ reduce using rule 7 (expression -> factor MINUS factor .) ]
   ! FACTORIAL       [ reduce using rule 7 (expression -> factor MINUS factor .) ]
+  ! CHOOSE          [ reduce using rule 7 (expression -> factor MINUS factor .) ]
   ! TIMES           [ reduce using rule 12 (factor -> MINUS factor .) ]
   ! DIVIDE          [ reduce using rule 12 (factor -> MINUS factor .) ]
   ! EXP             [ reduce using rule 12 (factor -> MINUS factor .) ]
   ! FACTORIAL       [ reduce using rule 12 (factor -> MINUS factor .) ]
   ! MINUS           [ reduce using rule 12 (factor -> MINUS factor .) ]
   ! CHOOSE          [ reduce using rule 12 (factor -> MINUS factor .) ]
-  ! Q               [ reduce using rule 12 (factor -> MINUS factor .) ]
   ! LPAREN          [ reduce using rule 12 (factor -> MINUS factor .) ]
   ! LBRACKET        [ reduce using rule 12 (factor -> MINUS factor .) ]
   ! LSET            [ reduce using rule 12 (factor -> MINUS factor .) ]
@@ -2281,88 +2044,85 @@ state 52
   ! $end            [ reduce using rule 12 (factor -> MINUS factor .) ]
   ! RPAREN          [ reduce using rule 12 (factor -> MINUS factor .) ]
   ! RSET            [ reduce using rule 12 (factor -> MINUS factor .) ]
-  ! MINUS           [ shift and go to state 12 ]
-  ! LPAREN          [ shift and go to state 10 ]
-  ! LBRACKET        [ shift and go to state 1 ]
-  ! LSET            [ shift and go to state 6 ]
-  ! NUMBER          [ shift and go to state 3 ]
-  ! VARIABLE        [ shift and go to state 5 ]
+  ! MINUS           [ shift and go to state 11 ]
+  ! LPAREN          [ shift and go to state 9 ]
+  ! LBRACKET        [ shift and go to state 3 ]
+  ! LSET            [ shift and go to state 5 ]
+  ! NUMBER          [ shift and go to state 2 ]
+  ! VARIABLE        [ shift and go to state 4 ]
 
-    factor                         shift and go to state 28
+    factor                         shift and go to state 26
 
-state 53
+state 49
 
-    (29) factor -> LPAREN list RPAREN .
+    (27) factor -> LPAREN list RPAREN .
 
-    COMMA           reduce using rule 29 (factor -> LPAREN list RPAREN .)
-    PLUS            reduce using rule 29 (factor -> LPAREN list RPAREN .)
-    MINUS           reduce using rule 29 (factor -> LPAREN list RPAREN .)
-    TIMES           reduce using rule 29 (factor -> LPAREN list RPAREN .)
-    DIVIDE          reduce using rule 29 (factor -> LPAREN list RPAREN .)
-    EXP             reduce using rule 29 (factor -> LPAREN list RPAREN .)
-    FACTORIAL       reduce using rule 29 (factor -> LPAREN list RPAREN .)
-    CHOOSE          reduce using rule 29 (factor -> LPAREN list RPAREN .)
-    Q               reduce using rule 29 (factor -> LPAREN list RPAREN .)
-    LPAREN          reduce using rule 29 (factor -> LPAREN list RPAREN .)
-    LBRACKET        reduce using rule 29 (factor -> LPAREN list RPAREN .)
-    LSET            reduce using rule 29 (factor -> LPAREN list RPAREN .)
-    NUMBER          reduce using rule 29 (factor -> LPAREN list RPAREN .)
-    VARIABLE        reduce using rule 29 (factor -> LPAREN list RPAREN .)
-    RSET            reduce using rule 29 (factor -> LPAREN list RPAREN .)
-    RBRACKET        reduce using rule 29 (factor -> LPAREN list RPAREN .)
-    $end            reduce using rule 29 (factor -> LPAREN list RPAREN .)
-    RPAREN          reduce using rule 29 (factor -> LPAREN list RPAREN .)
-
-
-state 54
-
-    (19) factor -> LPAREN factor RPAREN .
-
-    COMMA           reduce using rule 19 (factor -> LPAREN factor RPAREN .)
-    PLUS            reduce using rule 19 (factor -> LPAREN factor RPAREN .)
-    MINUS           reduce using rule 19 (factor -> LPAREN factor RPAREN .)
-    TIMES           reduce using rule 19 (factor -> LPAREN factor RPAREN .)
-    DIVIDE          reduce using rule 19 (factor -> LPAREN factor RPAREN .)
-    EXP             reduce using rule 19 (factor -> LPAREN factor RPAREN .)
-    FACTORIAL       reduce using rule 19 (factor -> LPAREN factor RPAREN .)
-    CHOOSE          reduce using rule 19 (factor -> LPAREN factor RPAREN .)
-    Q               reduce using rule 19 (factor -> LPAREN factor RPAREN .)
-    LPAREN          reduce using rule 19 (factor -> LPAREN factor RPAREN .)
-    LBRACKET        reduce using rule 19 (factor -> LPAREN factor RPAREN .)
-    LSET            reduce using rule 19 (factor -> LPAREN factor RPAREN .)
-    NUMBER          reduce using rule 19 (factor -> LPAREN factor RPAREN .)
-    VARIABLE        reduce using rule 19 (factor -> LPAREN factor RPAREN .)
-    RSET            reduce using rule 19 (factor -> LPAREN factor RPAREN .)
-    RBRACKET        reduce using rule 19 (factor -> LPAREN factor RPAREN .)
-    $end            reduce using rule 19 (factor -> LPAREN factor RPAREN .)
-    RPAREN          reduce using rule 19 (factor -> LPAREN factor RPAREN .)
+    TIMES           reduce using rule 27 (factor -> LPAREN list RPAREN .)
+    DIVIDE          reduce using rule 27 (factor -> LPAREN list RPAREN .)
+    EXP             reduce using rule 27 (factor -> LPAREN list RPAREN .)
+    FACTORIAL       reduce using rule 27 (factor -> LPAREN list RPAREN .)
+    MINUS           reduce using rule 27 (factor -> LPAREN list RPAREN .)
+    CHOOSE          reduce using rule 27 (factor -> LPAREN list RPAREN .)
+    LPAREN          reduce using rule 27 (factor -> LPAREN list RPAREN .)
+    LBRACKET        reduce using rule 27 (factor -> LPAREN list RPAREN .)
+    LSET            reduce using rule 27 (factor -> LPAREN list RPAREN .)
+    NUMBER          reduce using rule 27 (factor -> LPAREN list RPAREN .)
+    VARIABLE        reduce using rule 27 (factor -> LPAREN list RPAREN .)
+    COMMA           reduce using rule 27 (factor -> LPAREN list RPAREN .)
+    PLUS            reduce using rule 27 (factor -> LPAREN list RPAREN .)
+    RBRACKET        reduce using rule 27 (factor -> LPAREN list RPAREN .)
+    $end            reduce using rule 27 (factor -> LPAREN list RPAREN .)
+    RPAREN          reduce using rule 27 (factor -> LPAREN list RPAREN .)
+    RSET            reduce using rule 27 (factor -> LPAREN list RPAREN .)
 
 
-state 55
+state 50
 
-    (17) factor -> LPAREN expression RPAREN .
+    (17) factor -> LPAREN factor RPAREN .
 
-    COMMA           reduce using rule 17 (factor -> LPAREN expression RPAREN .)
-    PLUS            reduce using rule 17 (factor -> LPAREN expression RPAREN .)
-    MINUS           reduce using rule 17 (factor -> LPAREN expression RPAREN .)
-    TIMES           reduce using rule 17 (factor -> LPAREN expression RPAREN .)
-    DIVIDE          reduce using rule 17 (factor -> LPAREN expression RPAREN .)
-    EXP             reduce using rule 17 (factor -> LPAREN expression RPAREN .)
-    FACTORIAL       reduce using rule 17 (factor -> LPAREN expression RPAREN .)
-    CHOOSE          reduce using rule 17 (factor -> LPAREN expression RPAREN .)
-    Q               reduce using rule 17 (factor -> LPAREN expression RPAREN .)
-    LPAREN          reduce using rule 17 (factor -> LPAREN expression RPAREN .)
-    LBRACKET        reduce using rule 17 (factor -> LPAREN expression RPAREN .)
-    LSET            reduce using rule 17 (factor -> LPAREN expression RPAREN .)
-    NUMBER          reduce using rule 17 (factor -> LPAREN expression RPAREN .)
-    VARIABLE        reduce using rule 17 (factor -> LPAREN expression RPAREN .)
-    RSET            reduce using rule 17 (factor -> LPAREN expression RPAREN .)
-    RBRACKET        reduce using rule 17 (factor -> LPAREN expression RPAREN .)
-    $end            reduce using rule 17 (factor -> LPAREN expression RPAREN .)
-    RPAREN          reduce using rule 17 (factor -> LPAREN expression RPAREN .)
+    TIMES           reduce using rule 17 (factor -> LPAREN factor RPAREN .)
+    DIVIDE          reduce using rule 17 (factor -> LPAREN factor RPAREN .)
+    EXP             reduce using rule 17 (factor -> LPAREN factor RPAREN .)
+    FACTORIAL       reduce using rule 17 (factor -> LPAREN factor RPAREN .)
+    MINUS           reduce using rule 17 (factor -> LPAREN factor RPAREN .)
+    CHOOSE          reduce using rule 17 (factor -> LPAREN factor RPAREN .)
+    LPAREN          reduce using rule 17 (factor -> LPAREN factor RPAREN .)
+    LBRACKET        reduce using rule 17 (factor -> LPAREN factor RPAREN .)
+    LSET            reduce using rule 17 (factor -> LPAREN factor RPAREN .)
+    NUMBER          reduce using rule 17 (factor -> LPAREN factor RPAREN .)
+    VARIABLE        reduce using rule 17 (factor -> LPAREN factor RPAREN .)
+    COMMA           reduce using rule 17 (factor -> LPAREN factor RPAREN .)
+    PLUS            reduce using rule 17 (factor -> LPAREN factor RPAREN .)
+    RBRACKET        reduce using rule 17 (factor -> LPAREN factor RPAREN .)
+    $end            reduce using rule 17 (factor -> LPAREN factor RPAREN .)
+    RPAREN          reduce using rule 17 (factor -> LPAREN factor RPAREN .)
+    RSET            reduce using rule 17 (factor -> LPAREN factor RPAREN .)
 
 
-state 56
+state 51
+
+    (15) factor -> LPAREN expression RPAREN .
+
+    TIMES           reduce using rule 15 (factor -> LPAREN expression RPAREN .)
+    DIVIDE          reduce using rule 15 (factor -> LPAREN expression RPAREN .)
+    EXP             reduce using rule 15 (factor -> LPAREN expression RPAREN .)
+    FACTORIAL       reduce using rule 15 (factor -> LPAREN expression RPAREN .)
+    MINUS           reduce using rule 15 (factor -> LPAREN expression RPAREN .)
+    CHOOSE          reduce using rule 15 (factor -> LPAREN expression RPAREN .)
+    LPAREN          reduce using rule 15 (factor -> LPAREN expression RPAREN .)
+    LBRACKET        reduce using rule 15 (factor -> LPAREN expression RPAREN .)
+    LSET            reduce using rule 15 (factor -> LPAREN expression RPAREN .)
+    NUMBER          reduce using rule 15 (factor -> LPAREN expression RPAREN .)
+    VARIABLE        reduce using rule 15 (factor -> LPAREN expression RPAREN .)
+    COMMA           reduce using rule 15 (factor -> LPAREN expression RPAREN .)
+    PLUS            reduce using rule 15 (factor -> LPAREN expression RPAREN .)
+    RBRACKET        reduce using rule 15 (factor -> LPAREN expression RPAREN .)
+    $end            reduce using rule 15 (factor -> LPAREN expression RPAREN .)
+    RPAREN          reduce using rule 15 (factor -> LPAREN expression RPAREN .)
+    RSET            reduce using rule 15 (factor -> LPAREN expression RPAREN .)
+
+
+state 52
 
     (4) expression -> expression PLUS factor .
     (8) factor -> factor . TIMES factor
@@ -2377,59 +2137,55 @@ state 56
     (12) factor -> . MINUS factor
     (13) factor -> . factor FACTORIAL
     (14) factor -> . CHOOSE LPAREN list RPAREN
-    (15) factor -> . Q LPAREN factor RPAREN
-    (16) factor -> . Q LPAREN expression RPAREN
-    (17) factor -> . LPAREN expression RPAREN
-    (18) factor -> . LBRACKET expression RBRACKET
-    (19) factor -> . LPAREN factor RPAREN
-    (20) factor -> . LBRACKET factor RBRACKET
-    (21) factor -> . LPAREN expression
-    (22) factor -> . LBRACKET expression
-    (23) factor -> . LPAREN factor
-    (24) factor -> . LBRACKET factor
-    (25) factor -> . CHOOSE LPAREN list
-    (26) factor -> . LSET list RSET
-    (27) factor -> . LSET expression RSET
-    (28) factor -> . LSET RSET
-    (29) factor -> . LPAREN list RPAREN
-    (36) factor -> . NUMBER
-    (37) factor -> . VARIABLE
+    (15) factor -> . LPAREN expression RPAREN
+    (16) factor -> . LBRACKET expression RBRACKET
+    (17) factor -> . LPAREN factor RPAREN
+    (18) factor -> . LBRACKET factor RBRACKET
+    (19) factor -> . LPAREN expression
+    (20) factor -> . LBRACKET expression
+    (21) factor -> . LPAREN factor
+    (22) factor -> . LBRACKET factor
+    (23) factor -> . CHOOSE LPAREN list
+    (24) factor -> . LSET list RSET
+    (25) factor -> . LSET expression RSET
+    (26) factor -> . LSET RSET
+    (27) factor -> . LPAREN list RPAREN
+    (34) factor -> . NUMBER
+    (35) factor -> . VARIABLE
 
-    COMMA           reduce using rule 4 (expression -> expression PLUS factor .)
+    RBRACKET        reduce using rule 4 (expression -> expression PLUS factor .)
     PLUS            reduce using rule 4 (expression -> expression PLUS factor .)
     MINUS           reduce using rule 4 (expression -> expression PLUS factor .)
-    RPAREN          reduce using rule 4 (expression -> expression PLUS factor .)
+    COMMA           reduce using rule 4 (expression -> expression PLUS factor .)
     LPAREN          reduce using rule 4 (expression -> expression PLUS factor .)
     LBRACKET        reduce using rule 4 (expression -> expression PLUS factor .)
     LSET            reduce using rule 4 (expression -> expression PLUS factor .)
     NUMBER          reduce using rule 4 (expression -> expression PLUS factor .)
     VARIABLE        reduce using rule 4 (expression -> expression PLUS factor .)
     $end            reduce using rule 4 (expression -> expression PLUS factor .)
+    RPAREN          reduce using rule 4 (expression -> expression PLUS factor .)
     RSET            reduce using rule 4 (expression -> expression PLUS factor .)
-    RBRACKET        reduce using rule 4 (expression -> expression PLUS factor .)
-    TIMES           shift and go to state 25
-    DIVIDE          shift and go to state 23
-    EXP             shift and go to state 27
-    FACTORIAL       shift and go to state 24
-    CHOOSE          shift and go to state 7
-    Q               shift and go to state 4
+    TIMES           shift and go to state 23
+    DIVIDE          shift and go to state 21
+    EXP             shift and go to state 25
+    FACTORIAL       shift and go to state 22
+    CHOOSE          shift and go to state 6
 
-  ! CHOOSE          [ reduce using rule 4 (expression -> expression PLUS factor .) ]
-  ! Q               [ reduce using rule 4 (expression -> expression PLUS factor .) ]
   ! TIMES           [ reduce using rule 4 (expression -> expression PLUS factor .) ]
   ! DIVIDE          [ reduce using rule 4 (expression -> expression PLUS factor .) ]
   ! EXP             [ reduce using rule 4 (expression -> expression PLUS factor .) ]
   ! FACTORIAL       [ reduce using rule 4 (expression -> expression PLUS factor .) ]
-  ! MINUS           [ shift and go to state 12 ]
-  ! LPAREN          [ shift and go to state 10 ]
-  ! LBRACKET        [ shift and go to state 1 ]
-  ! LSET            [ shift and go to state 6 ]
-  ! NUMBER          [ shift and go to state 3 ]
-  ! VARIABLE        [ shift and go to state 5 ]
+  ! CHOOSE          [ reduce using rule 4 (expression -> expression PLUS factor .) ]
+  ! MINUS           [ shift and go to state 11 ]
+  ! LPAREN          [ shift and go to state 9 ]
+  ! LBRACKET        [ shift and go to state 3 ]
+  ! LSET            [ shift and go to state 5 ]
+  ! NUMBER          [ shift and go to state 2 ]
+  ! VARIABLE        [ shift and go to state 4 ]
 
-    factor                         shift and go to state 28
+    factor                         shift and go to state 26
 
-state 57
+state 53
 
     (6) expression -> expression MINUS factor .
     (8) factor -> factor . TIMES factor
@@ -2444,178 +2200,122 @@ state 57
     (12) factor -> . MINUS factor
     (13) factor -> . factor FACTORIAL
     (14) factor -> . CHOOSE LPAREN list RPAREN
-    (15) factor -> . Q LPAREN factor RPAREN
-    (16) factor -> . Q LPAREN expression RPAREN
-    (17) factor -> . LPAREN expression RPAREN
-    (18) factor -> . LBRACKET expression RBRACKET
-    (19) factor -> . LPAREN factor RPAREN
-    (20) factor -> . LBRACKET factor RBRACKET
-    (21) factor -> . LPAREN expression
-    (22) factor -> . LBRACKET expression
-    (23) factor -> . LPAREN factor
-    (24) factor -> . LBRACKET factor
-    (25) factor -> . CHOOSE LPAREN list
-    (26) factor -> . LSET list RSET
-    (27) factor -> . LSET expression RSET
-    (28) factor -> . LSET RSET
-    (29) factor -> . LPAREN list RPAREN
-    (36) factor -> . NUMBER
-    (37) factor -> . VARIABLE
+    (15) factor -> . LPAREN expression RPAREN
+    (16) factor -> . LBRACKET expression RBRACKET
+    (17) factor -> . LPAREN factor RPAREN
+    (18) factor -> . LBRACKET factor RBRACKET
+    (19) factor -> . LPAREN expression
+    (20) factor -> . LBRACKET expression
+    (21) factor -> . LPAREN factor
+    (22) factor -> . LBRACKET factor
+    (23) factor -> . CHOOSE LPAREN list
+    (24) factor -> . LSET list RSET
+    (25) factor -> . LSET expression RSET
+    (26) factor -> . LSET RSET
+    (27) factor -> . LPAREN list RPAREN
+    (34) factor -> . NUMBER
+    (35) factor -> . VARIABLE
 
-    COMMA           reduce using rule 6 (expression -> expression MINUS factor .)
+    RBRACKET        reduce using rule 6 (expression -> expression MINUS factor .)
     PLUS            reduce using rule 6 (expression -> expression MINUS factor .)
     MINUS           reduce using rule 6 (expression -> expression MINUS factor .)
-    RPAREN          reduce using rule 6 (expression -> expression MINUS factor .)
+    COMMA           reduce using rule 6 (expression -> expression MINUS factor .)
     LPAREN          reduce using rule 6 (expression -> expression MINUS factor .)
     LBRACKET        reduce using rule 6 (expression -> expression MINUS factor .)
     LSET            reduce using rule 6 (expression -> expression MINUS factor .)
     NUMBER          reduce using rule 6 (expression -> expression MINUS factor .)
     VARIABLE        reduce using rule 6 (expression -> expression MINUS factor .)
     $end            reduce using rule 6 (expression -> expression MINUS factor .)
+    RPAREN          reduce using rule 6 (expression -> expression MINUS factor .)
     RSET            reduce using rule 6 (expression -> expression MINUS factor .)
-    RBRACKET        reduce using rule 6 (expression -> expression MINUS factor .)
-    TIMES           shift and go to state 25
-    DIVIDE          shift and go to state 23
-    EXP             shift and go to state 27
-    FACTORIAL       shift and go to state 24
-    CHOOSE          shift and go to state 7
-    Q               shift and go to state 4
+    TIMES           shift and go to state 23
+    DIVIDE          shift and go to state 21
+    EXP             shift and go to state 25
+    FACTORIAL       shift and go to state 22
+    CHOOSE          shift and go to state 6
 
-  ! CHOOSE          [ reduce using rule 6 (expression -> expression MINUS factor .) ]
-  ! Q               [ reduce using rule 6 (expression -> expression MINUS factor .) ]
   ! TIMES           [ reduce using rule 6 (expression -> expression MINUS factor .) ]
   ! DIVIDE          [ reduce using rule 6 (expression -> expression MINUS factor .) ]
   ! EXP             [ reduce using rule 6 (expression -> expression MINUS factor .) ]
   ! FACTORIAL       [ reduce using rule 6 (expression -> expression MINUS factor .) ]
-  ! MINUS           [ shift and go to state 12 ]
-  ! LPAREN          [ shift and go to state 10 ]
-  ! LBRACKET        [ shift and go to state 1 ]
-  ! LSET            [ shift and go to state 6 ]
-  ! NUMBER          [ shift and go to state 3 ]
-  ! VARIABLE        [ shift and go to state 5 ]
+  ! CHOOSE          [ reduce using rule 6 (expression -> expression MINUS factor .) ]
+  ! MINUS           [ shift and go to state 11 ]
+  ! LPAREN          [ shift and go to state 9 ]
+  ! LBRACKET        [ shift and go to state 3 ]
+  ! LSET            [ shift and go to state 5 ]
+  ! NUMBER          [ shift and go to state 2 ]
+  ! VARIABLE        [ shift and go to state 4 ]
 
-    factor                         shift and go to state 28
+    factor                         shift and go to state 26
 
-state 58
-
-    (15) factor -> Q LPAREN factor RPAREN .
-
-    COMMA           reduce using rule 15 (factor -> Q LPAREN factor RPAREN .)
-    PLUS            reduce using rule 15 (factor -> Q LPAREN factor RPAREN .)
-    MINUS           reduce using rule 15 (factor -> Q LPAREN factor RPAREN .)
-    TIMES           reduce using rule 15 (factor -> Q LPAREN factor RPAREN .)
-    DIVIDE          reduce using rule 15 (factor -> Q LPAREN factor RPAREN .)
-    EXP             reduce using rule 15 (factor -> Q LPAREN factor RPAREN .)
-    FACTORIAL       reduce using rule 15 (factor -> Q LPAREN factor RPAREN .)
-    CHOOSE          reduce using rule 15 (factor -> Q LPAREN factor RPAREN .)
-    Q               reduce using rule 15 (factor -> Q LPAREN factor RPAREN .)
-    LPAREN          reduce using rule 15 (factor -> Q LPAREN factor RPAREN .)
-    LBRACKET        reduce using rule 15 (factor -> Q LPAREN factor RPAREN .)
-    LSET            reduce using rule 15 (factor -> Q LPAREN factor RPAREN .)
-    NUMBER          reduce using rule 15 (factor -> Q LPAREN factor RPAREN .)
-    VARIABLE        reduce using rule 15 (factor -> Q LPAREN factor RPAREN .)
-    RSET            reduce using rule 15 (factor -> Q LPAREN factor RPAREN .)
-    RBRACKET        reduce using rule 15 (factor -> Q LPAREN factor RPAREN .)
-    $end            reduce using rule 15 (factor -> Q LPAREN factor RPAREN .)
-    RPAREN          reduce using rule 15 (factor -> Q LPAREN factor RPAREN .)
-
-
-state 59
-
-    (16) factor -> Q LPAREN expression RPAREN .
-
-    COMMA           reduce using rule 16 (factor -> Q LPAREN expression RPAREN .)
-    PLUS            reduce using rule 16 (factor -> Q LPAREN expression RPAREN .)
-    MINUS           reduce using rule 16 (factor -> Q LPAREN expression RPAREN .)
-    TIMES           reduce using rule 16 (factor -> Q LPAREN expression RPAREN .)
-    DIVIDE          reduce using rule 16 (factor -> Q LPAREN expression RPAREN .)
-    EXP             reduce using rule 16 (factor -> Q LPAREN expression RPAREN .)
-    FACTORIAL       reduce using rule 16 (factor -> Q LPAREN expression RPAREN .)
-    CHOOSE          reduce using rule 16 (factor -> Q LPAREN expression RPAREN .)
-    Q               reduce using rule 16 (factor -> Q LPAREN expression RPAREN .)
-    LPAREN          reduce using rule 16 (factor -> Q LPAREN expression RPAREN .)
-    LBRACKET        reduce using rule 16 (factor -> Q LPAREN expression RPAREN .)
-    LSET            reduce using rule 16 (factor -> Q LPAREN expression RPAREN .)
-    NUMBER          reduce using rule 16 (factor -> Q LPAREN expression RPAREN .)
-    VARIABLE        reduce using rule 16 (factor -> Q LPAREN expression RPAREN .)
-    RSET            reduce using rule 16 (factor -> Q LPAREN expression RPAREN .)
-    RBRACKET        reduce using rule 16 (factor -> Q LPAREN expression RPAREN .)
-    $end            reduce using rule 16 (factor -> Q LPAREN expression RPAREN .)
-    RPAREN          reduce using rule 16 (factor -> Q LPAREN expression RPAREN .)
-
-
-state 60
+state 54
 
     (14) factor -> CHOOSE LPAREN list RPAREN .
 
-    COMMA           reduce using rule 14 (factor -> CHOOSE LPAREN list RPAREN .)
-    PLUS            reduce using rule 14 (factor -> CHOOSE LPAREN list RPAREN .)
-    MINUS           reduce using rule 14 (factor -> CHOOSE LPAREN list RPAREN .)
     TIMES           reduce using rule 14 (factor -> CHOOSE LPAREN list RPAREN .)
     DIVIDE          reduce using rule 14 (factor -> CHOOSE LPAREN list RPAREN .)
     EXP             reduce using rule 14 (factor -> CHOOSE LPAREN list RPAREN .)
     FACTORIAL       reduce using rule 14 (factor -> CHOOSE LPAREN list RPAREN .)
+    MINUS           reduce using rule 14 (factor -> CHOOSE LPAREN list RPAREN .)
     CHOOSE          reduce using rule 14 (factor -> CHOOSE LPAREN list RPAREN .)
-    Q               reduce using rule 14 (factor -> CHOOSE LPAREN list RPAREN .)
     LPAREN          reduce using rule 14 (factor -> CHOOSE LPAREN list RPAREN .)
     LBRACKET        reduce using rule 14 (factor -> CHOOSE LPAREN list RPAREN .)
     LSET            reduce using rule 14 (factor -> CHOOSE LPAREN list RPAREN .)
     NUMBER          reduce using rule 14 (factor -> CHOOSE LPAREN list RPAREN .)
     VARIABLE        reduce using rule 14 (factor -> CHOOSE LPAREN list RPAREN .)
-    RSET            reduce using rule 14 (factor -> CHOOSE LPAREN list RPAREN .)
+    COMMA           reduce using rule 14 (factor -> CHOOSE LPAREN list RPAREN .)
+    PLUS            reduce using rule 14 (factor -> CHOOSE LPAREN list RPAREN .)
     RBRACKET        reduce using rule 14 (factor -> CHOOSE LPAREN list RPAREN .)
     $end            reduce using rule 14 (factor -> CHOOSE LPAREN list RPAREN .)
     RPAREN          reduce using rule 14 (factor -> CHOOSE LPAREN list RPAREN .)
+    RSET            reduce using rule 14 (factor -> CHOOSE LPAREN list RPAREN .)
 
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
-WARNING: shift/reduce conflict for RBRACKET in state 13 resolved as shift
 WARNING: shift/reduce conflict for PLUS in state 13 resolved as shift
 WARNING: shift/reduce conflict for MINUS in state 13 resolved as shift
-WARNING: shift/reduce conflict for TIMES in state 13 resolved as shift
-WARNING: shift/reduce conflict for DIVIDE in state 13 resolved as shift
-WARNING: shift/reduce conflict for EXP in state 13 resolved as shift
-WARNING: shift/reduce conflict for FACTORIAL in state 13 resolved as shift
-WARNING: shift/reduce conflict for CHOOSE in state 13 resolved as shift
-WARNING: shift/reduce conflict for Q in state 13 resolved as shift
-WARNING: shift/reduce conflict for LPAREN in state 13 resolved as shift
-WARNING: shift/reduce conflict for LBRACKET in state 13 resolved as shift
-WARNING: shift/reduce conflict for LSET in state 13 resolved as shift
-WARNING: shift/reduce conflict for NUMBER in state 13 resolved as shift
-WARNING: shift/reduce conflict for VARIABLE in state 13 resolved as shift
 WARNING: shift/reduce conflict for RBRACKET in state 14 resolved as shift
 WARNING: shift/reduce conflict for PLUS in state 14 resolved as shift
 WARNING: shift/reduce conflict for MINUS in state 14 resolved as shift
-WARNING: shift/reduce conflict for PLUS in state 16 resolved as shift
-WARNING: shift/reduce conflict for MINUS in state 16 resolved as shift
-WARNING: shift/reduce conflict for RPAREN in state 32 resolved as shift
-WARNING: shift/reduce conflict for PLUS in state 32 resolved as shift
-WARNING: shift/reduce conflict for MINUS in state 32 resolved as shift
-WARNING: shift/reduce conflict for TIMES in state 32 resolved as shift
-WARNING: shift/reduce conflict for DIVIDE in state 32 resolved as shift
-WARNING: shift/reduce conflict for EXP in state 32 resolved as shift
-WARNING: shift/reduce conflict for FACTORIAL in state 32 resolved as shift
-WARNING: shift/reduce conflict for COMMA in state 32 resolved as shift
-WARNING: shift/reduce conflict for CHOOSE in state 32 resolved as shift
-WARNING: shift/reduce conflict for Q in state 32 resolved as shift
-WARNING: shift/reduce conflict for LPAREN in state 32 resolved as shift
-WARNING: shift/reduce conflict for LBRACKET in state 32 resolved as shift
-WARNING: shift/reduce conflict for LSET in state 32 resolved as shift
-WARNING: shift/reduce conflict for NUMBER in state 32 resolved as shift
-WARNING: shift/reduce conflict for VARIABLE in state 32 resolved as shift
-WARNING: shift/reduce conflict for RPAREN in state 33 resolved as shift
-WARNING: shift/reduce conflict for PLUS in state 33 resolved as shift
-WARNING: shift/reduce conflict for MINUS in state 33 resolved as shift
-WARNING: shift/reduce conflict for COMMA in state 33 resolved as shift
-WARNING: shift/reduce conflict for RPAREN in state 46 resolved as shift
-WARNING: shift/reduce conflict for MINUS in state 46 resolved as shift
-WARNING: shift/reduce conflict for CHOOSE in state 46 resolved as shift
-WARNING: shift/reduce conflict for Q in state 46 resolved as shift
-WARNING: shift/reduce conflict for LPAREN in state 46 resolved as shift
-WARNING: shift/reduce conflict for LBRACKET in state 46 resolved as shift
-WARNING: shift/reduce conflict for LSET in state 46 resolved as shift
-WARNING: shift/reduce conflict for NUMBER in state 46 resolved as shift
-WARNING: shift/reduce conflict for VARIABLE in state 46 resolved as shift
-WARNING: reduce/reduce conflict in state 52 resolved using rule (expression -> factor MINUS factor)
-WARNING: rejected rule (factor -> MINUS factor) in state 52
+WARNING: shift/reduce conflict for TIMES in state 14 resolved as shift
+WARNING: shift/reduce conflict for DIVIDE in state 14 resolved as shift
+WARNING: shift/reduce conflict for EXP in state 14 resolved as shift
+WARNING: shift/reduce conflict for FACTORIAL in state 14 resolved as shift
+WARNING: shift/reduce conflict for CHOOSE in state 14 resolved as shift
+WARNING: shift/reduce conflict for LPAREN in state 14 resolved as shift
+WARNING: shift/reduce conflict for LBRACKET in state 14 resolved as shift
+WARNING: shift/reduce conflict for LSET in state 14 resolved as shift
+WARNING: shift/reduce conflict for NUMBER in state 14 resolved as shift
+WARNING: shift/reduce conflict for VARIABLE in state 14 resolved as shift
+WARNING: shift/reduce conflict for RBRACKET in state 15 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 15 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 15 resolved as shift
+WARNING: shift/reduce conflict for RPAREN in state 30 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 30 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 30 resolved as shift
+WARNING: shift/reduce conflict for TIMES in state 30 resolved as shift
+WARNING: shift/reduce conflict for DIVIDE in state 30 resolved as shift
+WARNING: shift/reduce conflict for EXP in state 30 resolved as shift
+WARNING: shift/reduce conflict for FACTORIAL in state 30 resolved as shift
+WARNING: shift/reduce conflict for COMMA in state 30 resolved as shift
+WARNING: shift/reduce conflict for CHOOSE in state 30 resolved as shift
+WARNING: shift/reduce conflict for LPAREN in state 30 resolved as shift
+WARNING: shift/reduce conflict for LBRACKET in state 30 resolved as shift
+WARNING: shift/reduce conflict for LSET in state 30 resolved as shift
+WARNING: shift/reduce conflict for NUMBER in state 30 resolved as shift
+WARNING: shift/reduce conflict for VARIABLE in state 30 resolved as shift
+WARNING: shift/reduce conflict for RPAREN in state 31 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 31 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 31 resolved as shift
+WARNING: shift/reduce conflict for COMMA in state 31 resolved as shift
+WARNING: shift/reduce conflict for RPAREN in state 42 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 42 resolved as shift
+WARNING: shift/reduce conflict for CHOOSE in state 42 resolved as shift
+WARNING: shift/reduce conflict for LPAREN in state 42 resolved as shift
+WARNING: shift/reduce conflict for LBRACKET in state 42 resolved as shift
+WARNING: shift/reduce conflict for LSET in state 42 resolved as shift
+WARNING: shift/reduce conflict for NUMBER in state 42 resolved as shift
+WARNING: shift/reduce conflict for VARIABLE in state 42 resolved as shift
+WARNING: reduce/reduce conflict in state 48 resolved using rule (expression -> factor MINUS factor)
+WARNING: rejected rule (factor -> MINUS factor) in state 48
