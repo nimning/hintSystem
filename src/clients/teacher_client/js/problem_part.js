@@ -22,9 +22,6 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
     $scope.hints = [];
     $scope.filtered_students = [];
     $scope.filtered_groups = [];
-    angular.forEach(hints, function(value, key){
-        $scope.hints.push(value);
-    });
 
     WebworkService.answersByPart(course, set_id, problem_id).
         success(function(data){
