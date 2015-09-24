@@ -1,0 +1,31 @@
+/* Style for collapse and expand button of rows */
+.expanded-group{
+    background: url("../images/minus.jpg") no-repeat scroll left center transparent;
+    padding-left: 15px !important
+}
+
+.collapsed-group{
+    background: url("../images/plus.jpg") no-repeat scroll left center transparent;
+    padding-left: 15px !important
+}
+
+.customAjaxLoaderScreen {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: black;
+    opacity: 0.3;
+    display: none;
+}
+
+.customAjaxLoaderScreen.visible {
+    display: block;
+}
+
+.customAjaxLoaderScreen .loadSpinner {
+    background: url("../ajax-loader.gif") no-repeat scroll center;
+    height: 100%;
+    width: 100%;
+    display: block;
+    position: relative;
+}
