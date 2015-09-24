@@ -22,9 +22,9 @@ for line in file.readlines():
 
     Class=classify_final_value(attempt_flat,answer_flat)
     if Class=='correct' or Class=='int':
-        #print Class
+        print Class
         continue
 
-    print "attempt={:<40} answer={:<40}".format(attempt,answer)
+    #print "attempt={:<40} answer={:<40}".format(attempt,answer)
     hint= find_common(attempt,attempt_flat,answer,answer_flat)
     
