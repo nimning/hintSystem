@@ -24,6 +24,8 @@ from multiprocessing import Process, Pipe, Queue, current_process
 from exec_filters import filtered_answers
 from pg_utils import get_source, get_part_answer
 
+From filter_bank import filter_bank
+
 import logging
 logger = logging.getLogger(__name__)
 
@@ -40,6 +42,7 @@ def parsed(string):
         return (None, None)
 
 def parse_eval(string):
+""" Given an expression, return it's parse tree and it's evaluation tree """
     expr = parse_webwork(string)
     if expr:
         try:
@@ -98,7 +101,7 @@ class GroupedPartAnswers(JSONRequestHandler, tornado.web.RequestHandler):
         if answer:
             return answer
         else:
-            etree = eval_parsed(self.answer_tree, user_vars)
+            etree = eval_parsed(self.answer_ptree, user_vars)
             exps = numbers_and_exps(etree, self.part_answer)
             self.answer_exps[key] = exps
             return exps
@@ -132,6 +135,7 @@ class GroupedPartAnswers(JSONRequestHandler, tornado.web.RequestHandler):
                 ...
             '''
         # Get correct answers
+        logger.debug('Starting get')
         self.answer_exps = {}
         course = self.get_argument('course')
         set_id = self.get_argument('set_id')
@@ -160,7 +164,7 @@ class GroupedPartAnswers(JSONRequestHandler, tornado.web.RequestHandler):
         answer_re = re.compile('\[__+\]{(?:Compute\(")?(.+?)(?:"\))?}')
         answer_boxes = answer_re.findall(pg_file)
         self.part_answer = answer_boxes[part_id-1]
-        self.answer_tree = parse_webwork(self.part_answer)
+        self.answer_ptree = parse_webwork(self.part_answer)
 
         # Get attempts by part
         if include_finished:
@@ -180,7 +184,11 @@ class GroupedPartAnswers(JSONRequestHandler, tornado.web.RequestHandler):
             AND abp.part_id={part_id} AND abp2.user_id IS NULL;
             '''.format(course=course, set_id=set_id, problem_id=problem_id,
                        part_id=part_id)
+
+        logger.debug('Before sending SQL')
         answers = conn.query(query)
+        logger.debug('After sending SQL')
+
         all_correct_terms = set()
         correct_terms_map = defaultdict(lambda: defaultdict(list))
         incorrect_terms_map = defaultdict(lambda: defaultdict(list))
@@ -203,8 +211,10 @@ class GroupedPartAnswers(JSONRequestHandler, tornado.web.RequestHandler):
         out['correct'] = correct_terms_map
         out['correct_terms'] = sorted(all_correct_terms)
         out['incorrect'] = incorrect_terms_map
-        out['answer_tree'] = str(self.answer_tree)
+        out['answer_ptree'] = str(self.answer_ptree)
         self.write(json.dumps(out, default=serialize_datetime))
+        logger.debug('Finished')
+
 
 
 # GET /filter_answers?
@@ -223,12 +233,14 @@ class FilterAnswers(JSONRequestHandler, tornado.web.RequestHandler):
         if answer:
             return answer
         else:
-            etree = eval_parsed(self.answer_tree, user_vars)
+            etree = eval_parsed(self.answer_ptree, user_vars)
             self.answer_exps[key] = etree
             return etree
 
     @require_auth()
     def post(self):
+        logger.debug('post starting')
+
         self.answer_exps = {}
         course = self.get_argument('course')
         set_id = self.get_argument('set_id')
@@ -238,15 +250,18 @@ class FilterAnswers(JSONRequestHandler, tornado.web.RequestHandler):
         filter_function = self.get_argument('filter_function')
 
         pg_file = get_source(course, set_id, problem_id)
-        # name  problem_id set_id   user_id  value
+        # get the variables as set for this user. It seems that there is an alternative code for doing the same thing in the method vars_for_student
         user_variables = conn.query('''SELECT * from {course}_user_variables
         WHERE set_id="{set_id}" AND problem_id = {problem_id};
         '''.format(course=course, set_id=set_id, problem_id=problem_id))
         self.variables_df = pd.DataFrame(user_variables)
+        logger.debug('computing user vars. user_variables=%s, self_variables_df=%s'%(str(user_variables),str(self.variables_df)))
         if len(self.variables_df) == 0:
             logger.warn("No user variables saved for assignment %s, please run the save_answers script", set_id)
+
+        # Get the correct answer and generate a ptree and an etree for it.
         self.part_answer = get_part_answer(pg_file, part_id)
-        self.answer_tree = parse_webwork(self.part_answer)
+        self.answer_ptree, self.answer_etree = parse_eval(self.part_answer)
 
         # Get attempts by part
         if include_finished:
@@ -266,64 +281,67 @@ class FilterAnswers(JSONRequestHandler, tornado.web.RequestHandler):
             AND abp.part_id={part_id} AND abp2.user_id IS NULL;
             '''.format(course=course, set_id=set_id, problem_id=problem_id,
                        part_id=part_id)
+
+        logger.debug('before sending sql query')
         answers = conn.query(query)
+        logger.debug('after sending sql query')
 
-        student_answers = []
+        a_filter_bank=filter_bank()
+        status=a_filter_bank.add_filter('answer_filter',filter_function)
+        if status!=None:
+            print "ERROR LOADING FUNCTION"+status
+            return status
 
+        _stdout=''
+        _hints=[]
         for a in answers:
-            # {'user_id': u'acpatel', 'timestamp': datetime.datetime(2014, 10, 12, 2, 10, 19), 'id': 284488L, 'score': u'1', 'answer_string': u'C(55,6)', 'part_id': 2L, 'problem_id': 10L, 'set_id': u'Week2', 'answer_id': 199326L}
             user_id = a['user_id']
             ans = self.answer_for_student(user_id)
-
-            ptree, etree = parse_eval(a['answer_string'])
+            attempt=a['answer_string']
+            ptree, etree = parse_eval(attempt)
             if ptree and etree:
-                student_answers.append({'string': a['answer_string'], 'parsed': ptree, 'evaled': etree, 'user_id': user_id, 'correct_eval': ans})
-
-        # hardcoded to print all the parameters
-        # without reading the actual content of the passed in function
-        ###### Hardcoded begin #######
-        correct_string = self.part_answer
-        correct_tree = self.answer_tree
-        user_vars = self.variables_df
-        selected_answers = []
-        for a in student_answers:
-            user_id = a['user_id']
-            if len(user_vars) > 0:
-                student_vars = dict(user_vars[user_vars['user_id']==user_id][['name', 'value']].values.tolist())
+                status,hint,output=exec_filter('answer_filter',(attempt, ptree,atree,self.part_answer, self.answer_ptree, self.answer_etree ,self.variables_df))
+                if status:
+                    logger.debug('exec_filter succeeded, attempt=%s,hint=%s,output=%s'%(attempt,hint,output))
+                    _hints.append(hint)
+                    _stdout+=output
+                else:
+                    logger.debug('exec_filter failed attempt=%s,error=%s output=%s'%(attempt,hint,output))
             else:
-                student_vars = {}
-            logger.debug('vars: %s', student_vars)
-            selected_answers += [(a['string'], a['parsed'], a['evaled'], correct_string, correct_tree, a['correct_eval'], student_vars)]
-        output = ""
-        for s in selected_answers:
-            output += json.dumps(s) + '\n'
+                logger.debug('filed to parse attempt=%s, ptree=%s, etree=%s'%(attempt,str(ptree),str(etree)))
+                
         out = {
-           'output': output,
-           'matches': ""
+            'output':  _stdout,
+            'matches': _hints
         }
+
         self.write(json.dumps(out))
-        ###### Hardcoded end #######
+        logger.debug('finished post')
 
-        # This is the code that starts a parallel process and  calls "filtered answers" in it.
-#        parent, child = Pipe()
-#        queue = Queue()
-#        p = Process(target=filtered_answers, args=(student_answers, self.part_answer, self.answer_tree, self.variables_df, filter_function, child, queue))
-#        p.start()
-#        p.join(timeout=60)
+# ################## to be changed   ################## start
+#         # This is the code that starts a parallel process and  calls "filtered answers" in it.
+#         logger.debug('before starting filtered_answers')
+#         parent, child = Pipe()
+#         queue = Queue()
+#         p = Process(target=filtered_answers, args=(student_answers, self.part_answer, self.answer_ptree, self.variables_df, filter_function, child, queue))
+#         p.start()
+#         p.join(timeout=30)
+#         logger.debug('after joining with filtered_answers')
 
-#        logger.debug('Done waiting')
-#        if p.is_alive():
-#            logger.warn("Function took too long, we killed it.")
-#            p.terminate()
-#        matches = parent.recv()
+#         if p.is_alive():
+#             logger.warn("Function took too long, we killed it.")
+#             p.terminate()
+#         matches = parent.recv()
 
-#        if not queue.empty():
-#            output = queue.get()
-#        else:
-#            output=""
-#        out = {
-#            'output': output,
-#            'matches': matches
-#        }
+#         if not queue.empty():
+#             output = queue.get()
+#         else:
+#             output=""
+#         out = {
+#             'output': output,
+#             'matches': matches
+#         }
+# ################## to be changed   ################## end
 
-#        self.write(json.dumps(out))
+
+## Create a main for testing purposes.

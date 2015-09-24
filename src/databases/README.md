@@ -1,4 +1,10 @@
-# Overview #
+#Files#
+
+* create_hint_databases.sh: Take in class name. Will create hint database tables for new class set.
+* save_answers.py: Run with 'python save_answers.py -c <course_name> -s <set_id>'. Create/Update two database tables, 'correct_answers' and 'user_variables'.
+
+
+#Database Overview #
 There are 10 tables associated with each course (eg with tables named UCSD_CSE103_...):
 * past_answer: Expressions entered by students, with timestamps.  
 * set: Problem sets
@@ -12,7 +18,7 @@ There are 10 tables associated with each course (eg with tables named UCSD_CSE10
 * user: Users/instuctors assigned to the course 
 
 
-# past_answer #
+## past_answer ##
 * Description: Stores attempts by users to answer questions.  The expressions entered in text boxes are stored in answer_string, and the correctness is stored in scores.   
 ### user_id ###
 * Example: wentao
@@ -37,7 +43,7 @@ There are 10 tables associated with each course (eg with tables named UCSD_CSE10
 * Example: 1
 
 
-# set #
+## set ##
 ### time_limit_cap ###
 * Example: 0
 ### hide_work ###
@@ -79,7 +85,7 @@ There are 10 tables associated with each course (eg with tables named UCSD_CSE10
 * Example: TestPreparationCB
 
 
-# set_user #
+## set_user ##
 * Description: as you might expect, set x user
 ### time_limit_cap ###
 ### hide_work ###
@@ -114,7 +120,7 @@ There are 10 tables associated with each course (eg with tables named UCSD_CSE10
 * Example: TestPreparationCB
 
 
-# permission #
+## permission ##
 ### user_id ###
 * Example: melkherj
 ### permission ###
@@ -122,7 +128,7 @@ There are 10 tables associated with each course (eg with tables named UCSD_CSE10
 * Description: 10 is probably admin privilege, there was a permission level 20 associated with scheaman for some reason.  
 
 
-# setting #
+## setting ##
 Configuration variables for the course
 ### name ###
 * Example: db_version
@@ -130,7 +136,7 @@ Configuration variables for the course
 * Example: 3.1415926
 
 
-# problem_user #
+## problem_user ##
 * Description: Statistics about user attempts at problems.  This table references both the problem and user tables.  
 ### status ###
 * Example: 0
@@ -158,7 +164,7 @@ Configuration variables for the course
 ### max_attempts ###
 
 
-# key #
+## key ##
 ### timestamp ###
 * Example: 1375711520
 ### key_not_a_keyword ###
@@ -167,7 +173,7 @@ Configuration variables for the course
 * Example: gage
 
 
-# problem #
+## problem ##
 ### value ###
 * Example: 1
 ### source_file ###
@@ -181,14 +187,14 @@ Configuration variables for the course
 * Example: 1
 
 
-# password #
+## password ##
 ### password ###
 * Example: 9JaI2GDutCHx2
 ### user_id ###
 * Example: melkherj
 
 
-# user #
+## user ##
 ### status ###
 * Example: C
 ### comment ###
