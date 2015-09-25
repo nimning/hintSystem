@@ -64,12 +64,11 @@ def filtered_answers(answers, correct_string, correct_tree,
     except Exception, e:
         logger.error("Error in filter function: %s", e)
         print e
-        continue
+        #continue
 
     pipe.send(selected_answers)
     out.flush()
     logger.debug('finished  filtered_answers')
     return
 
-if __name__=='__main__':
-    
+#if __name__=='__main__':

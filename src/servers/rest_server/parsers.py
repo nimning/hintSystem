@@ -24,7 +24,7 @@ from multiprocessing import Process, Pipe, Queue, current_process
 from exec_filters import filtered_answers
 from pg_utils import get_source, get_part_answer
 
-From filter_bank import filter_bank
+from filter_bank import filter_bank
 
 import logging
 logger = logging.getLogger(__name__)
@@ -42,7 +42,7 @@ def parsed(string):
         return (None, None)
 
 def parse_eval(string):
-""" Given an expression, return it's parse tree and it's evaluation tree """
+    """ Given an expression, return it's parse tree and it's evaluation tree """
     expr = parse_webwork(string)
     if expr:
         try:
