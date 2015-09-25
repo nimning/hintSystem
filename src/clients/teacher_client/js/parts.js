@@ -10,8 +10,6 @@ App.controller('PartsCtrl', function($scope, $location, $window, $stateParams, $
     });
 
     $scope.dtOptions = DTOptionsBuilder.newOptions()
-        /* Enable this for pagination and display length of maximum 25 entries */
-        //.withBootstrap().withDisplayLength(25);
         .withOption('paging', false);
 
     $scope.dtColumnDefs = [
@@ -30,5 +28,4 @@ App.controller('PartsCtrl', function($scope, $location, $window, $stateParams, $
         });
         loadedDT.DataTable && loadedDT.DataTable.search("week").draw();
     });
-
 });

@@ -322,6 +322,7 @@
         }, _renderDataTableAndEmitEvent = function ($elem, options, $scope) {
           var oTable = $elem.DataTable(options);
           $scope.$emit('event:dataTableLoaded', { id: $elem.attr('id'), DataTable: oTable, dataTable: $elem.dataTable()});
+
           return oTable;
         }, _doRenderDataTable = function ($elem, options, $scope) {
           // Add $timeout to be sure that angular has finished rendering before calling datatables

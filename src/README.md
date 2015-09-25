@@ -18,7 +18,7 @@
 	- Connects the application to Nagios which is a system monitoring software. I (yoav) regularly get email messages from Nagios when the system is overloaded.
 	
 
-### \parsetrees ---> a python module for parsing expressions ###
+### \parsetrees ---> a python module for parsing and comparing expressions ###
 - **/expr_parser**
 	- contains python modules to parse expression
 - **/zhang_sasha**
@@ -26,5 +26,7 @@
 	- Zhang-Shasha Algorithm is used to compute tree edit distance
 - **/oneoffs**
 - **/test**
+
+### \databases ---> scripts to manage database tables
 
 ### \old ---> contains old code for adaptive hints front-end and back-end ###
