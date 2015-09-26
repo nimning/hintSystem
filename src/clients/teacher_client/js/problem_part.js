@@ -376,8 +376,8 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
     };
 
     $scope.filter_function = {
-        code: "def answer_filter(*args):\n  "
-            + "import json\n  print json.dumps(args)\n  return False",
+        code: "def answer_filter(params):\n  "
+            + "import json\n  print json.dumps(params)\n  return False",
         author: Session.user_id,
         course: course,
         dirty: true,
