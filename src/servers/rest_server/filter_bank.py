@@ -96,7 +96,7 @@ class filter_bank:
             self.env.pop('out')
 
         logger.debug('before executing '+command)
-        #logger.debug('input= '+str(input))
+        logger.debug('input= '+str(input))
         logger.debug('env_keys= '+str(self.env.keys()))
 
         old_stdout=sys.stdout
