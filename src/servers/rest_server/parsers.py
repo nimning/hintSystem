@@ -300,7 +300,7 @@ class FilterAnswers(JSONRequestHandler, tornado.web.RequestHandler):
             attempt=a['answer_string']
             ptree, etree = parse_eval(attempt)
             if ptree and etree:
-                status,hint,output=a_filter_bank.exec_filter('answer_filter',(attempt, ptree, etree, self.part_answer, self.answer_ptree, self.answer_etree, self.variables_df))
+                status,hint,output=a_filter_bank.exec_filter('answer_filter',(attempt, ptree, etree, self.part_answer, self.answer_ptree, self.answer_etree, self.variables_df.to_dict()))
                 if status:
                     logger.debug('exec_filter succeeded, attempt=%s,hint=%s,output=%s'%(attempt,hint,output))
                     _hints.append(hint)
