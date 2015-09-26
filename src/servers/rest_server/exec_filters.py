@@ -70,5 +70,3 @@ def filtered_answers(answers, correct_string, correct_tree,
     out.flush()
     logger.debug('finished  filtered_answers')
     return
-
-#if __name__=='__main__':

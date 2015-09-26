@@ -21,7 +21,7 @@ import requests
 import re
 from auth import require_auth
 from multiprocessing import Process, Pipe, Queue, current_process
-from exec_filters import filtered_answers
+#from exec_filters import filtered_answers
 from pg_utils import get_source, get_part_answer
 
 from filter_bank import filter_bank
@@ -300,11 +300,11 @@ class FilterAnswers(JSONRequestHandler, tornado.web.RequestHandler):
             attempt=a['answer_string']
             ptree, etree = parse_eval(attempt)
             if ptree and etree:
-                status,hint,output=exec_filter('answer_filter',(attempt, ptree,atree,self.part_answer, self.answer_ptree, self.answer_etree ,self.variables_df))
+                status,hint,output=a_filter_bank.exec_filter('answer_filter',(attempt, ptree, etree, self.part_answer, self.answer_ptree, self.answer_etree, self.variables_df))
                 if status:
                     logger.debug('exec_filter succeeded, attempt=%s,hint=%s,output=%s'%(attempt,hint,output))
                     _hints.append(hint)
-                    _stdout+=output
+                    _stdout += output
                 else:
                     logger.debug('exec_filter failed attempt=%s,error=%s output=%s'%(attempt,hint,output))
             else:
