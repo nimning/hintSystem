@@ -296,11 +296,16 @@ class FilterAnswers(JSONRequestHandler, tornado.web.RequestHandler):
         _hints=[]
         for a in answers:
             user_id = a['user_id']
+            user_vars = self.variables_df
+            if len(user_vars) > 0:
+                student_vars = dict(user_vars[user_vars['user_id']==user_id][['name', 'value']].values.tolist())
+            else:
+                student_vars = {}
             ans = self.answer_for_student(user_id)
             attempt=a['answer_string']
             ptree, etree = parse_eval(attempt)
             if ptree and etree:
-                status,hint,output=a_filter_bank.exec_filter('answer_filter',(attempt, ptree, etree, self.part_answer, self.answer_ptree, self.answer_etree, self.variables_df.to_dict()))
+                status,hint,output=a_filter_bank.exec_filter('answer_filter',(attempt, ptree, etree, self.part_answer, self.answer_ptree, self.answer_etree, student_vars))
                 if status:
                     logger.debug('exec_filter succeeded, attempt=%s,hint=%s,output=%s'%(attempt,hint,output))
                     _hints.append(hint)
