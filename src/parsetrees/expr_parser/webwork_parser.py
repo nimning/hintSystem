@@ -139,11 +139,11 @@ def p_statement_expr_list(p):
     p[0] = p[1]
 
 def add_header(t): # append the span of the expression to the header
-    print '-'*50+'add_header got:',type(t)
+    #print '-'*50+'add_header got:',type(t)
     i=0
-    for x in t:
-        print i,str(x), t.lexspan(i)
-        i+=1
+    #for x in t:
+    #    print i,str(x), t.lexspan(i)
+    #    i+=1
     return [[t[0][0],list(t.lexspan(0))],]+t[0][1:]
 
 def p_expression_ops(t):
@@ -299,7 +299,7 @@ def parse_webwork(expr):
         try:
             parsed = parser.parse(expr,tracking=True,debug=log, lexer=lexer.lexer)
             final_range=fix_ranges(parsed)
-            print 'final_range=',final_range
+            #print 'final_range=',final_range
         except  WebworkParseException as e:
             log.error('||%s|| %s', expr, e)
             parsed=None
@@ -314,34 +314,31 @@ def fix_ranges(p):
     corresponds to the beginning of the last literal. This causes problems when parsing expressions such as 
     '200/300' in which case the span of the whoe expression is (0,4) and does not contain the last two digits in 300
     """
-    print 'entered fix_ranges with input  '+str(p),type(p)
+    #print 'entered fix_ranges with input  '+str(p),type(p)
     try:
         if p[0][0]=='X':
-            print 'fix ranges found a number'
+            #print 'fix ranges found a number'
+            pass
         elif type(p[0][0])==str and type(p[0][1])==list and type(p[0][1][0])==int and type(p[0][1][1])==int:
-            print 'fix_ranges found a list whose head is operator,range'
+            #print 'fix_ranges found a list whose head is operator,range'
             mx=[p[0][1][0],p[0][1][1]]
             for item in p[1:]:
-                print 'about to process',item,mx
+                #print 'about to process',item,mx
                 span=fix_ranges(item)
-                print 'span of item = ',span, 'mx=',mx
+                #print 'span of item = ',span, 'mx=',mx
                 mx[0]=min(mx[0],span[0])
                 mx[1]=max(mx[1],span[1])
-                print 'in loop mx=',str(mx),'span=',str(span)
-            print 'outside loop mx=',str(mx),'span=',str(span)
+                #print 'in loop mx=',str(mx),'span=',str(span)
 
             if mx[0]<p[0][1][0] or mx[1]>p[0][1][1]:
-                print 'found error in spans, tree=',str(p),'old=',p[0][1],'new=',mx
+                # print 'found error in spans, tree=',str(p),'old=',p[0][1],'new=',mx
                 p[0][1]=mx
         else:
-            print 'fix_ranges failed to recognize list'  
+            log.error('fix_ranges failed to recognize list'+str(p))
     except:
         print_exc()
 
-    print 'fix_ranges exiting new p='+str(p)
     return p[0][1]
-
-
 
 #if __name__ == '__main__':
 #    webwork = pickle.load(open(os.path.join(sys.argv[1],'pickled_data'),'rb'))
