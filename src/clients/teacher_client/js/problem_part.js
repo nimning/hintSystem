@@ -516,7 +516,11 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
         var iFrame = $("#iFrameToRenderProblem")[0];
         if (iFrame && iFrame.contentDocument.readyState == "complete") {
             if (iFrame.contentWindow.document.getElementsByClassName("PGML")[0]) {
-                $(".PGML")[0].innerHTML = iFrame.contentWindow.document.getElementsByClassName("PGML")[0].innerHTML;
+                if ($(".PGML")[0]) {
+                    $(".PGML")[0].innerHTML = iFrame.contentWindow.document.getElementsByClassName("PGML")[0].innerHTML;
+                } else if ($("#problem-content")[0]) {
+                    $("#problem-content")[0].innerHTML = iFrame.contentWindow.document.getElementsByClassName("PGML")[0].innerHTML;
+                }
                 return;
             } else if (iFrame.contentWindow.document.getElementById("problem-content")) {
                 $("#problem-content")[0].innerHTML = iFrame.contentWindow.document.getElementById("problem-content").innerHTML;
