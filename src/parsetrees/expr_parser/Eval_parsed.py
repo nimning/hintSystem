@@ -39,8 +39,13 @@ def eval_parsed(e, variables = None):
     if variables is None:
         variables = {}
     def get_number(ev):
-        if len(ev)==1: return ev[0]
-        else: return ev[0][1]
+        #print 'get_number got',ev
+        if len(ev)==3 and ev[0]=='X': 
+            return ev[1]
+        elif len(ev)==1:
+            return ev[0]
+        else: 
+            return ev[0][1]
         
     try:
         #print 'eval_parsed, e="',e,'"'
@@ -64,7 +69,10 @@ def eval_parsed(e, variables = None):
             ev=eval_parsed(op, variables)
             v=get_number(ev)
             
-            if f=='-':
+            if f=='X':  # X indicates a single number
+                ans=v
+                return (f,ans,tuple(span))
+            elif f=='-':
                 ans=-v
             elif f=='!':
                 ans=factorial(v)
@@ -72,7 +80,7 @@ def eval_parsed(e, variables = None):
                 ans= 1-norm.cdf(v)
             else:
                 raise Exception('unrecognized unary operator %s in %s'%(f,e))
-            return ((f,ans,span),ev)
+            return ((f,ans,tuple(span)),ev)
         
         elif len(e)==3:
             ((f,span),op1,op2)=e
@@ -91,7 +99,7 @@ def eval_parsed(e, variables = None):
                 ans= ncr(int(v1), int(v2))
             else:
                 raise Exception('unrecognized binary operator %s in %s'%(f,e))
-            return ((f,ans,span),ev1,ev2)
+            return ((f,ans,tuple(span)),ev1,ev2)
         else:
             raise Exception('Unrecognized expression form: %s'%e)
     except Exception as ex:
@@ -141,3 +149,11 @@ def parse_and_eval(string, variables=None):
             return (None, None)
     else:
         return (None, None)
+
+if __name__=="__main__":
+    string=sys.argv[1]
+    print 'input:::',string
+    tree=parse_webwork(string)
+    print 'output:::',tree
+    eval_tree=eval_parsed(tree)
+    print 'Eval_tree:::',eval_tree
