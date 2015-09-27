@@ -12,6 +12,8 @@ Directories and Files
 	* [**reload_vagrant.md**](https://github.com/cse103/Webwork_AdaptiveHints/tree/master/tutorial/reload_vagrant.md)
 	* [**push_to_server.md**](https://github.com/cse103/Webwork_AdaptiveHints/tree/master/tutorial/push_to_server.md)
 		- tutorial for push changes up to the real server
+	* [**github_branching.md**](https://github.com/cse103/Webwork_AdaptiveHints/tree/master/tutorial/github_branching.md)
+		- tutorial for create and manage github branch
 * [**/local_server**](https://github.com/cse103/Webwork_AdaptiveHints/tree/master/local_server) ---> Contains files to setup development environment
 	* [**/ansible**](https://github.com/cse103/Webwork_AdaptiveHints/tree/master/ansible)
 		- a tool for provisioning/configuring local development environments
