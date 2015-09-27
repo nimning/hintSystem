@@ -518,10 +518,11 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
             if (iFrame.contentWindow.document.getElementsByClassName("PGML")[0]) {
                 if ($(".PGML")[0]) {
                     $(".PGML")[0].innerHTML = iFrame.contentWindow.document.getElementsByClassName("PGML")[0].innerHTML;
+                    return;
                 } else if ($("#problem-content")[0]) {
                     $("#problem-content")[0].innerHTML = iFrame.contentWindow.document.getElementsByClassName("PGML")[0].innerHTML;
+                    return;
                 }
-                return;
             } else if (iFrame.contentWindow.document.getElementById("problem-content")) {
                 $("#problem-content")[0].innerHTML = iFrame.contentWindow.document.getElementById("problem-content").innerHTML;
                 return;
