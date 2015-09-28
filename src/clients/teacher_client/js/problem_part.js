@@ -23,8 +23,10 @@ App.controller('ProblemPartCtrl', function($scope, $location, $window, $statePar
     $scope.hints = [];
     $scope.filtered_students = [];
     $scope.filtered_groups = [];
+    var user_id_for_problem_render = "pg_render";
+    var password_for_problem_render = "pgrender";
     $scope.user_webwork_url = 'http://'+APIHost+'/webwork2/'+course+'/'+set_id+
-        '/'+problem_id+'/?effectiveUser='+user_id;
+        '/'+problem_id+'/?user='+user_id_for_problem_render+'&passwd='+password_for_problem_render+'&effectiveUser='+user_id;
 
     WebworkService.answersByPart(course, set_id, problem_id).
         success(function(data){

@@ -18,8 +18,10 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $stateParams,
     $scope.attempting_student_list = {};
     $scope.completed_student_list = {};
     var user_id = $scope.user_id = Session.user_id;
+    var user_id_for_problem_render = "pg_render";
+    var password_for_problem_render = "pgrender";
     $scope.user_webwork_url = 'http://'+APIHost+'/webwork2/'+course+'/'+set_id+
-        '/'+problem_id+'/?effectiveUser='+user_id;
+        '/'+problem_id+'/?user='+user_id_for_problem_render+'&passwd='+password_for_problem_render+'&effectiveUser='+user_id;
 
     $scope.scrollTo = function($event) {
         $event.preventDefault();
