@@ -2,7 +2,7 @@ var App = angular.module('ta-console');
 
 App.controller('ProblemUserCtrl', function($scope, $location, $window, $stateParams,
                                            $sce, $interval, $timeout, Session,
-                                           WebworkService, SockJSService, HintsService, APIHost){
+                                           WebworkService, SockJSService, HintsService, APIHost, user_id_for_problem_render, password_for_problem_render){
     var course = $scope.course = $stateParams.course;
     var set_id = $scope.set_id = $stateParams.set_id;
     var problem_id = $scope.problem_id = $stateParams.problem_id;
@@ -14,8 +14,7 @@ App.controller('ProblemUserCtrl', function($scope, $location, $window, $statePar
     $scope.hints = [];
     $scope.box="";
     $scope.displayed_answers = [];
-    var user_id_for_problem_render = "pg_render";
-    var password_for_problem_render = "pgrender";
+    
     $scope.user_webwork_url = 'http://'+APIHost+'/webwork2/'+course+'/'+set_id+
         '/'+problem_id+'/?user='+user_id_for_problem_render+'&passwd='+password_for_problem_render+'&effectiveUser='+user_id;
     WebworkService.answersByPart(course, set_id, problem_id, user_id).
@@ -92,12 +91,12 @@ App.controller('ProblemUserCtrl', function($scope, $location, $window, $statePar
     $scope.checkIfIFrameLoaded = function() {
         var iFrame = $("#iFrameToRenderProblem")[0];
         if (iFrame && iFrame.contentDocument.readyState == "complete") {
-            if (iFrame.contentWindow.document.getElementsByClassName("PGML")[0]) {
+            if (iFrame.contentWindow.document.getElementsByClassName("problem-content")[0]) {
                 if ($(".PGML")[0]) {
-                    $(".PGML")[0].innerHTML = iFrame.contentWindow.document.getElementsByClassName("PGML")[0].innerHTML;
+                    $(".PGML")[0].innerHTML = iFrame.contentWindow.document.getElementsByClassName("problem-content")[0].innerHTML;
                     return;
                 } else if ($("#problem-content")[0]) {
-                    $("#problem-content")[0].innerHTML = iFrame.contentWindow.document.getElementsByClassName("PGML")[0].innerHTML;
+                    $("#problem-content")[0].innerHTML = iFrame.contentWindow.document.getElementsByClassName("problem-content")[0].innerHTML;
                     return;
                 }
             } else if (iFrame.contentWindow.document.getElementById("problem-content")) {
