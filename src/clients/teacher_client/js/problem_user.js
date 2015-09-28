@@ -84,4 +84,47 @@ App.controller('ProblemUserCtrl', function($scope, $location, $window, $statePar
         $scope.current_part = part;
     };
 
+    /**
+     * Wait for the iFrame to get loaded and then extract the problem rendered in webwork and copy it here
+     */
+    $scope.checkIfIFrameLoaded = function() {
+        var iFrame = $("#iFrameToRenderProblem")[0];
+        if (iFrame && iFrame.contentDocument.readyState == "complete") {
+            if (iFrame.contentWindow.document.getElementsByClassName("PGML")[0]) {
+                if ($(".PGML")[0]) {
+                    $(".PGML")[0].innerHTML = iFrame.contentWindow.document.getElementsByClassName("PGML")[0].innerHTML;
+                    return;
+                } else if ($("#problem-content")[0]) {
+                    $("#problem-content")[0].innerHTML = iFrame.contentWindow.document.getElementsByClassName("PGML")[0].innerHTML;
+                    return;
+                }
+            } else if (iFrame.contentWindow.document.getElementById("problem-content")) {
+                $("#problem-content")[0].innerHTML = iFrame.contentWindow.document.getElementById("problem-content").innerHTML;
+                return;
+            }
+        }
+        window.setTimeout(function() {
+            $scope.checkIfIFrameLoaded();
+        }, 250);
+    }
+
+    /**
+     * Open the problem from the webwork server from student POV. This enables to render the problem as its displayed for each student.
+     */
+    $scope.openProblemPageInIFrame = function() {
+        if ($("#iFrameToRenderProblem").length) {
+            $("#iFrameToRenderProblem")[0].parentNode.removeChild($("#iFrameToRenderProblem")[0]);
+        }
+        $("<iframe id='iFrameToRenderProblem' name='problemRender'>").appendTo("body");
+        $("#iFrameToRenderProblem").css("display", "none");
+
+        var srcUrl = $scope.user_webwork_url;
+        $("#iFrameToRenderProblem").attr("src", srcUrl);
+        $scope.checkIfIFrameLoaded();
+    }
+
+    window.setTimeout(function() {
+        $scope.openProblemPageInIFrame();
+    }, 250);
+
 });
