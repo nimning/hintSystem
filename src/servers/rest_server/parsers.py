@@ -259,9 +259,8 @@ class FilterAnswers(JSONRequestHandler, tornado.web.RequestHandler):
         if len(self.variables_df) == 0:
             logger.warn("No user variables saved for assignment %s, please run the save_answers script", set_id)
 
-        # Get the correct answer and generate a ptree and an etree for it.
+        # Get the answer from pg file
         self.part_answer = get_part_answer(pg_file, part_id)
-        self.answer_ptree, self.answer_etree = parse_eval(self.part_answer)
 
         # Get attempts by part
         if include_finished:
@@ -296,14 +295,20 @@ class FilterAnswers(JSONRequestHandler, tornado.web.RequestHandler):
         _hints=[]
         for a in answers:
             user_id = a['user_id']
+            attempt=a['answer_string']
+            ptree, etree = parse_eval(attempt)
             user_vars = self.variables_df
             if len(user_vars) > 0:
                 student_vars = dict(user_vars[user_vars['user_id']==user_id][['name', 'value']].values.tolist())
             else:
                 student_vars = {}
+            # Replace variable with values
+            for key in student_vars:
+                if key in self.part_answer:
+                    self.part_answer = self.part_answer.replace(key, str(student_vars[key]))
+            # Get the correct answer and generate a ptree and an etree for it.
+            self.answer_ptree, self.answer_etree = parse_eval(self.part_answer)
             ans = self.answer_for_student(user_id)
-            attempt=a['answer_string']
-            ptree, etree = parse_eval(attempt)
             if ptree and etree:
                 status,hint,output=a_filter_bank.exec_filter('answer_filter',(attempt, ptree, etree, self.part_answer, self.answer_ptree, self.answer_etree, student_vars))
                 if status:
