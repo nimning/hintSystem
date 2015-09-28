@@ -5,6 +5,9 @@ App.value('APIHost', 'webwork.cse.ucsd.edu');
 
 App.value('CurrentCourse', {name: 'Course'});
 
+App.value('user_id_for_problem_render', 'pg_render');
+App.value('password_for_problem_render', 'pgrender');
+
 App.constant(
     'HintFilterProperties', {
         regex_match_filter: {
