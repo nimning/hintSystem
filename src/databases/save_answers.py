@@ -86,7 +86,7 @@ def get_answers(problem_text, filename, seed, psvn, part_count, var_names):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="")
-    parser.add_argument('-c', '--course', help="Course", default="UCSD_CSE103")
+    parser.add_argument('-c', '--course', help="Course", default="CSE103_Fall2015")
     parser.add_argument('-s', '--set-id', help="Set ID", default="Week1")
     parser.add_argument('-b', '--base-dir', help="Webwork base directory", default="/opt/webwork/courses")
     args = parser.parse_args()

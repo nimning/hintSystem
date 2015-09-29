@@ -1,7 +1,9 @@
 #Files#
 
-* create_hint_databases.sh: Take in class name. Will create hint database tables for new class set.
-* save_answers.py: Run with 'python save_answers.py -c <course_name> -s <set_id>'. Create/Update two database tables, 'correct_answers' and 'user_variables'.
+* create_hint_databases.sh: Take in class name. Will create hint database tables for new class set. Needs to be run when creating a new homework set.
+* save_answers.py: Run with 'python save_answers.py -c <course_name> -s <set_id>'. Create/Update two database tables, 'correct_answers' and 'user_variables'. Needs to be run when a new set is created or new problems are added to problem set.
+* past_answer_to_answers_by_part.py: Create table 'answers_by_part' for CSE103_Fall2015. Needs to be running constantly to basically split up the answers per question into answers per part. This is controlled by an upstart init file at /etc/init/past-answer-daemon.conf on server.
+
 
 
 #Database Overview #
