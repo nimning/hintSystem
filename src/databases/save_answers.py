@@ -66,7 +66,8 @@ def get_answers(problem_text, filename, seed, psvn, part_count, var_names):
     while not res:
         try:
             res=server.WebworkXMLRPC.renderProblem(args)
-        except:
+        except Exception as e:
+	    print e
             continue
     part_answers = {}
     variables = {}
