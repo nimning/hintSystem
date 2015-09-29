@@ -71,7 +71,7 @@ class PastAnswerConverter(object):
             return []
 
     def loop(self):
-        pa = pd.read_sql_query('SELECT user_id, answer_id, answer_string, scores, problem_id, set_id, timestamp from {0}_past_answer WHERE answer_id >= {1};'.format(self.course, self.start_id), engine, parse_dates={'timestamp': {'unit': 's'}})
+        pa = pd.read_sql_query('SELECT user_id, answer_id, answer_string, scores, problem_id, set_id, timestamp from {0}_past_answer WHERE answer_id >= {1} LIMIT 1000;'.format(self.course, self.start_id), engine, parse_dates={'timestamp': {'unit': 's'}})
         if len(pa) == 0:
             return
         print 'Converting', len(pa), 'past answers'
