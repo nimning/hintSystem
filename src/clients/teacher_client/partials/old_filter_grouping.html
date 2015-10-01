@@ -1,3 +1,116 @@
+<script type="text/ng-template" id="hintSearchResult.html">
+  <a><span bind-html-unsafe="match.label | typeaheadHighlight:query"></span></a>
+  <div class="filter-select-match">
+    <div bind-html-unsafe="match.model.pg_text | typeaheadHighlight:query"></div>
+    <span>by <em bind-html-unsafe="match.model.author | typeaheadHighlight:query"></em></span>
+  </div>
+</script>
+
+<div class="row">
+
+  <div class="col-sm-10">
+
+    <section id="problem" style="padding-bottom:20px;">
+      <h3><a ui-sref="set({course: course, set_id: set_id})">{{set_id}}</a> <a ui-sref="problem({course: course, set_id: set_id, problem_id: problem_id})">Problem {{problem_id}}</a> Part {{part_id}}</h3>
+      <div id="problem" pg-file-preview pg-file="pg_file" seed="1234" show-hint-buttons="false"></div>
+    </section>
+    <section id="tmp-part-answers" ng-show="grouped_answers.length == 0">
+      <div ng-repeat="(k, v) in answer_counts">
+        {{k}} - {{v}} times
+      </div>
+    </section>
+    <section id="hint_stac" style="padding-bottom:20px;">
+      <h3>Hints Statistics</h3>
+      <!--header of the table-->
+      <div class="row  text-center" id="hint_statistics_table_header" style="border-bottom:2px solid #ccc;">
+        <div class="col-md-6">
+          <h5>Students Got No Hint</h5>
+          <div class="row">
+            <div class="col-md-6"><h5 style="margin-top:0px;">Students Attempting</h5></div>
+            <div class="col-md-6"><h5 style="margin-top:0px;">Students Struggling (>3 tries)</h5></div>
+          </div>
+        </div>
+        <div class="col-md-3 span2"><h5>Students Got Hints</h5></div>
+        <div class="col-md-3 span2"><h5>Students Completed After Hints</h5></div>
+      </div>
+      <!--loading img-->
+      <img src="ajax-loader.gif" ng-show="!grouped_answers"></img>
+      <!--table content-->
+      <div class="row text-center" id="hint_statistics_table_data">
+        <!-- students attempting -->
+        <div class="col-md-3">
+          <div class="row" ng-repeat="a in attempting_student_list" style="padding-left:15px;">
+            <a ui-sref="problem_user({course: course, set_id: set_id, problem_id: problem_id, user_id: a})">{{a}}</a>
+          </div>
+        </div>
+        <!-- students struggling -->
+        <div class="col-md-3">
+          <div class="row" ng-repeat="s in struggling_student_list" style="padding-left:15px;">
+            <a ui-sref="problem_user({course: course, set_id: set_id, problem_id: problem_id, user_id: s})">{{s}}</a>
+          </div>
+        </div>
+        <!-- student got hints -->
+        <div class="col-md-3">
+          <div class="row" ng-repeat="t in trying_student_list" style="padding-left:15px;">
+            <a ui-sref="problem_user({course: course, set_id: set_id, problem_id: problem_id, user_id: t})">{{t}}</a>
+          </div>
+        </div>
+        <!-- students completed after got hints -->
+        <div class="col-md-3">
+          <div class="row" ng-repeat="su in success_student_list" style="padding-left:15px;">
+            <a ui-sref="problem_user({course: course, set_id: set_id, problem_id: problem_id, user_id: su})">{{su}}</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <h3>Filter By Function
+      <button type="button" class="btn btn-primary" ng-click="toggle_filter_function()">
+        <span class="glyphicon" ng-class="{'glyphicon-chevron-right': !showFilterFunction, 'glyphicon-chevron-down': showFilterFunction}"></span>
+        Toggle
+      </button>
+    </h3>
+    <script type="text/ng-template" id="filterTemplate.html">
+      <a>
+        <span bind-html-unsafe="match.label | typeaheadHighlight:query"></span>
+        <div class="row filter-select-match">
+          <div class="col-md-6" bind-html-unsafe="match.model.set_id | typeaheadHighlight:query"></div>
+          <div class="col-md-6" bind-html-unsafe="match.model.author | typeaheadHighlight:query"></div>
+        </div>
+      </a>
+    </script>
+    <section id="filter_function" style="padding-bottom:20px;" collapse="!showFilterFunction">
+      <form class="form-inline">
+        <div class="form-group">
+          <label for="filter_function_name">Name</label>
+          <input type="text" id="filter_function_name" ng-model="filter_function.name" size="50" typeahead="filter.name for filter in filter_functions | filter:$viewValue | limitTo:8" typeahead-template-url="filterTemplate.html"></input>
+          <button type="button" class="btn btn-primary" ng-click="load_filter()"><span class="glyphicon glyphicon-folder-open"></span>  Load Filter</button>
+        </div>
+        <div ng-model="filter_function.code" ui-codemirror="" ui-codemirror-opts="editorOptions" ng-change="filterFunctionChanged();"></div>
+        <div class="row">
+          <button type="button" class="btn btn-success" ng-click="run_filter()"><span class="glyphicon glyphicon-play"></span> Run Filter</button>
+          <button type="button" class="btn btn-primary" ng-click="save_filter()" ng-disabled="!validFilterName() || !filter_function.dirty"><span class="glyphicon glyphicon-floppy-disk"></span> Save <span ng-show="filter_function.dirty">*</span></button>
+          <span>Hint ID <input type="text" style="width:30px;" ng-model="selected_hint_id" typeahead="hint.hint_id for hint in hints | filter:$viewValue | limitTo:8" typeahead-template-url="hintSearchResult.html"/></span>
+          <button type="button" class="btn btn-primary" ng-click="send_hint_to_matches()" ng-disabled="linkHintDisabled()"><span class="glyphicon glyphicon-send"></span> Link Hint and Send to {{filtered_students.length}} Matching Students</button>
+        </div>
+      </form>
+      <div id="filter_output">
+        <h4><a ng-click="showOutput = !showOutput">Filter Output</a></h4>
+        <pre class="pre-scrollable" collapse="!showOutput">{{filter_output}}</pre>
+      </div>
+      <div id="filtered_list">
+        <h4><a ng-click="showMatches = !showMatches">Matching Answers</a></h4>
+        <div class="filter_matched_answers" collapse="!showMatches">
+          <div class="row" ng-repeat="match in filtered_list">
+            <div class="col-md-2">{{match.user_id}}</div>
+            <div class="col-md-4">{{match.answer_string}}</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
     <h3>Group By Filter
       <button type="button" class="btn btn-primary" ng-click="toggle_filter_groups()">
         <span class="glyphicon" ng-class="{'glyphicon-chevron-right': !showFilterGroups, 'glyphicon-chevron-down': showFilterGroups}"></span>
@@ -114,7 +227,6 @@
           <!-- expandable answer list -->
           <div class="panel-heading" style="padding:0;">
             <a data-toggle="collapse" data-parent="#users_list" data-target="#collapse{{$index}}">
-              -->
             </a>
           </div>
           <div id ="collapse{{$index}}" class="panel-collapse collapse">

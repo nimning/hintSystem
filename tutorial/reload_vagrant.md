@@ -3,11 +3,12 @@
 vagrant reload
 vagrant provision
 ```
-## Restart Server ##
+## SSH into VM ##
 ```
 vagrant ssh
 ```
-Now you are inside the vagrant virtual machine, so some many commands (such as emacs) will not work.
+Now you are inside the vagrant virtual machine, so many commands (such as emacs) will not work.
+## Restart Server ##
 ```
 cd /vagrant/src/servers/init-scripts
 bash runall.sh

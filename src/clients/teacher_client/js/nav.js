@@ -2,7 +2,7 @@ var App = angular.module('ta-console');
 
 App.controller('NavBarCtrl', function ($scope, $rootScope, $http, $window,
                                        Session, CurrentCourse, AuthService, AUTH_EVENTS) {
-    $scope.courses = ["UCSD_CSE103", "CSE103_Fall14"];
+    $scope.courses = ["UCSD_CSE103", "CSE103_Fall14", "CSE103_Fall2015"];
 
     $scope.user_id = Session.user_id;
     $scope.current_course = CurrentCourse;

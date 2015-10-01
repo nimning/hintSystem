@@ -12,7 +12,7 @@
 
     <section id="problem" style="padding-bottom:20px;">
       <h3><a ui-sref="course({course: course})">{{course}}</a> / <a ui-sref="set({course: course, set_id: set_id})">{{set_id}}</a> / <a ui-sref="problem({course: course, set_id: set_id, problem_id: problem_id})">Problem {{problem_id}}</a> / Part {{part_id}}</h3>
-      <div id="problem" pg-file-preview pg-file="pg_file" seed="1234" show-hint-buttons="false"></div>
+      <div id="problem-content" pg-file-preview pg-file="pg_file" seed="1234" show-hint-buttons="false"></div>
     </section>
 
     <section id="hint_stac" style="padding-bottom:20px;">

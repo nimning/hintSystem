@@ -30,17 +30,32 @@ def ncr(n, r):
     denom = reduce(op.mul, xrange(1, r+1))
     return numer/denom
 
-def eval_parsed(e, variables = None):
+def find_common_values(e1,e2):
+    """ Find intersection of values in two eval trees.
+        If a value is found, all of the values in the subtree below it are ignored.
+
+    returns: common,only_in_1, only_in_2
+       Dicts of the form {value: (from,to) } where value is a float.
+       
+    """
+    
+
+def eval_parsed(e, label='R',variables = None):
     """ Evaluate a parsed expression, returns a tree, of the same form as the parse tree. Where each operator 
-        is replaced by a binary tuple: (operator,evaluation result)
+        is replaced by a tuple: (operator,evaluation result)
     
         Still need to write code to handle varibles, lists and sets.
     """
     if variables is None:
         variables = {}
     def get_number(ev):
-        if len(ev)==1: return ev[0]
-        else: return ev[0][1]
+        #print 'get_number got',ev
+        if len(ev)==4 and ev[0]=='X': 
+            return float(ev[1])
+        elif len(ev)==1:
+            return float(ev[0])
+        else: 
+            return float(ev[0][1])
         
     try:
         #print 'eval_parsed, e="',e,'"'
@@ -48,23 +63,26 @@ def eval_parsed(e, variables = None):
             return 0
         elif is_number(e)==1:
             return (float(e),)
-        elif type(e) == str: # Variable
-            if e in variables:
-                return (variables[e],)
-            else:
-                print "Couldn't find", e, "in",variables
-                return (e,) # Variables will cause things to break right now
+        # elif type(e) == str: # Variable
+        #     if e in variables:
+        #         return (variables[e],)
+        #     else:
+        #         print "Couldn't find", e, "in",variables
+        #         return (e,) # Variables will cause things to break right now
         elif len(e)==2:
-            ((f,span),op)=e
+            [[f,span],op]=e
 
             if f=='{}':
                 return e  # if element is a list, just return as is.
                           # might need to improve this if we want sets of expressions
 
-            ev=eval_parsed(op, variables)
+            ev=eval_parsed(op,label+'.0',variables)
             v=get_number(ev)
             
-            if f=='-':
+            if f=='X':  # X indicates a single number
+                ans=v
+                return [f,ans,span,label]
+            elif f=='-':
                 ans=-v
             elif f=='!':
                 ans=factorial(v)
@@ -72,15 +90,15 @@ def eval_parsed(e, variables = None):
                 ans= 1-norm.cdf(v)
             else:
                 raise Exception('unrecognized unary operator %s in %s'%(f,e))
-            return ((f,ans,span),ev)
+            return [[f,ans,span,label],ev]
         
         elif len(e)==3:
-            ((f,span),op1,op2)=e
-            ev1=eval_parsed(op1, variables)
+            [[f,span],op1,op2]=e
+            ev1=eval_parsed(op1, label+'.0',variables)
             v1=get_number(ev1)
-            ev2=eval_parsed(op2, variables)
+            ev2=eval_parsed(op2, label+'.1',variables)
             v2=get_number(ev2)
-            
+
             if f=='+':    ans= v1+v2
             elif f=='*':  ans= v1*v2
             elif f=='-':  ans= v1-v2
@@ -91,12 +109,15 @@ def eval_parsed(e, variables = None):
                 ans= ncr(int(v1), int(v2))
             else:
                 raise Exception('unrecognized binary operator %s in %s'%(f,e))
-            return ((f,ans,span),ev1,ev2)
+            return_value=[[f,ans,span,label],ev1,ev2]
+            #print 'returned value=',return_value
+            return return_value
         else:
             raise Exception('Unrecognized expression form: %s'%e)
     except Exception as ex:
         print 'Eval_parsed Exception:',ex
-        traceback.print_exc()
+        #traceback.print_exc()
+        traceback.print_exc(file=sys.stdout)
         return None
         #raise WebworkParseException(ex)
         # return ((e[0][0], None, e[0][1]),)
@@ -141,3 +162,11 @@ def parse_and_eval(string, variables=None):
             return (None, None)
     else:
         return (None, None)
+
+if __name__=="__main__":
+    string=sys.argv[1]
+    print 'input:::',string
+    tree=parse_webwork(string)
+    print 'output:::',tree
+    eval_tree=eval_parsed(tree)
+    print 'Eval_tree:::',eval_tree

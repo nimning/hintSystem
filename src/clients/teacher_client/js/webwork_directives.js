@@ -35,11 +35,12 @@ angular.module('ta-console.directives')
                       WebworkService.render($scope.pgFile, $scope.seed, $scope.psvn)
                           .success(function(data){
                               // Insert ng-model directive and disable the input
-                              var s = data.rendered_html.replace(/name=('|")(AnSwEr\d+)('|")/g, "$& ng-model='$2.answer_string' disabled='' ng-class='{correct: $2.is_correct, incorrect: $2.is_correct===false}'");
+                              //Commenting the rendering code since the problem will be rendered anyways from the webwork iFrame
+                              /*var s = data.rendered_html.replace(/name=('|")(AnSwEr\d+)('|")/g, "$& ng-model='$2.answer_string' disabled='' ng-class='{correct: $2.is_correct, incorrect: $2.is_correct===false}'");
                               s = '<div class="pg-file-rendered">'+$.trim(s)+'</div>';
                               var e = $compile(s)($scope);
                               element.children().remove();
-                              element.append(e);
+                              element.append(e);*/
                               if ($scope.showHintButtons !== "false" &&
                                   $(element).find('button').length === 0){
                                   $(element).find('input[name^=AnSwEr]').each(function(i,el){

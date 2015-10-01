@@ -36,7 +36,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # set up the root logger
-    logger = logging.getLogger(__name__)
+    logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
 
     formatter = logging.Formatter('%(asctime)s - %(name)s - '
