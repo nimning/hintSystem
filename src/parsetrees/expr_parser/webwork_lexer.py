@@ -1,5 +1,5 @@
 import ply.lex as lex
-import webwork_parser
+#import webwork_parser
 # from webwork_parser import WebworkParseException
 
 class WebworkLexer(object):

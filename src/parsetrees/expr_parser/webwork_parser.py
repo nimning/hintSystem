@@ -11,13 +11,11 @@ from webwork_lexer import WebworkLexer
 import logging
 
 logging.basicConfig(
+#    level = logging.DEBUG,
     level = logging.WARNING,
-    filename = "parselog.txt",
-    filemode = "w",
-    format = "%(filename)10s:%(lineno)4d:%(message)s"
+    format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
-log = logging.getLogger(__name__)
-log.setLevel(logging.WARNING)
+log=logging.getLogger(__name__)
 
 """
 Parsing webwork expressions
@@ -251,9 +249,9 @@ def p_nonempty_list(t):
     #print
 
     if len(t) == 3 and t[2] == ',':                #eg 1,
-        t[0] = ['list',(t[1],)]
+        t[0] = ['list',[t[1],]]
     elif len(t) == 4 or len(t) == 3:               #eg ...1, or ...1
-        t[0] = ['list',t[1] + (t[2],)]
+        t[0] = ['list',t[1] + [t[2],]]
     t[0]=add_header(t)
 
 def p_expression_number_variable(t):
@@ -302,9 +300,11 @@ def parse_webwork(expr):
             #print 'final_range=',final_range
         except  WebworkParseException as e:
             log.error('||%s|| %s', expr, e)
+            log.exception(e)
             parsed=None
         except Exception as e:
             log.error('||%s|| %s', expr, e)
+            log.exception(e)
             parsed = None
     return parsed
 
