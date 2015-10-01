@@ -25,19 +25,13 @@
 	- Re-run the provisioning `	vagrant provision`
 
 ## Config Development Environment
-1. Replace references to **webwork.cse.ucsd.edu** with **192.168.33.10** in:
-	- src/clients/teacher_client/js/constants.js
-	- src/servers/rest_server/scripts/checkanswer.pl
-	- src/servers/rest_server/scripts/renderPG.pl
-2. Set default database username and password in
-	- src/servers/rest_server/webwork_config.py
-	- username: webworkWrite
-	- password: webwork
-3. Alternatively to prforming 1,2 above manually you can run the script `bash rename.sh`
-4. Configure and run services by typing `vagrant ssh`
+1. cd into directory local_server and run the script rename.sh
+	- `cd local_server`
+	- `bash rename.sh`
+2. Configure and run services by typing `vagrant ssh`
 	- cd into directory /vagrant/src/servers/init-scripts
 	- run `bash runall.sh`
-5. Browse to [http://192.168.33.10/webwork2](http://192.168.33.10/webwork2), see if webwork runs
-6. Browse to [http://192.168.33.10/teacher](http://192.168.33.10/teacher), see if hint client works
+3. Browse to [http://192.168.33.10/webwork2](http://192.168.33.10/webwork2), see if webwork runs
+4. Browse to [http://192.168.33.10/teacher](http://192.168.33.10/teacher), see if hint client works
 
 ## Remember, do not push any of the change above to github.

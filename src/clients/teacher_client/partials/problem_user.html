@@ -1,6 +1,6 @@
-<h3><a ui-sref="set({course: course, set_id: set_id})">{{set_id}}</a> <a ui-sref="problem({course: course, set_id: set_id, problem_id: problem_id})">Problem {{problem_id}}</a> Student {{user_id}}</h3>
-<h4><a ng-href="{{user_webwork_url}}">View on Webwork</a></h4>
-<div pg-file-preview pg-file="pg_path" seed="problem_seed" student-data="studentData" box="box" psvn="psvn"></div>
+<h3><a ui-sref="course({course: course})">{{course}}</a> / <a ui-sref="set({course: course, set_id: set_id})">{{set_id}}</a> / <a ui-sref="problem({course: course, set_id: set_id, problem_id: problem_id})">Problem {{problem_id}}</a> / Student {{user_id}}</h3>
+<h4><a ng-href="{{user_webwork_url}}" target="_blank">View on Webwork</a></h4>
+<div id="problem-content" pg-file-preview pg-file="pg_path" seed="problem_seed" student-data="studentData" box="box" psvn="psvn"></div>
 
 <div class="row">
   <div class="col-md-12 panel panel-default" ng-repeat="(student, activity) in attempts">{{student}}, {{activity.length}} attempts

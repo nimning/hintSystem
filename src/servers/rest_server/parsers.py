@@ -21,10 +21,10 @@ import requests
 import re
 from auth import require_auth
 from multiprocessing import Process, Pipe, Queue, current_process
-from exec_filters import filtered_answers
+#from exec_filters import filtered_answers
 from pg_utils import get_source, get_part_answer
 
-From filter_bank import filter_bank
+from filter_bank import filter_bank
 
 import logging
 logger = logging.getLogger(__name__)
@@ -42,7 +42,7 @@ def parsed(string):
         return (None, None)
 
 def parse_eval(string):
-""" Given an expression, return it's parse tree and it's evaluation tree """
+    """ Given an expression, return it's parse tree and it's evaluation tree """
     expr = parse_webwork(string)
     if expr:
         try:
@@ -259,9 +259,8 @@ class FilterAnswers(JSONRequestHandler, tornado.web.RequestHandler):
         if len(self.variables_df) == 0:
             logger.warn("No user variables saved for assignment %s, please run the save_answers script", set_id)
 
-        # Get the correct answer and generate a ptree and an etree for it.
+        # Get the answer from pg file
         self.part_answer = get_part_answer(pg_file, part_id)
-        self.answer_ptree, self.answer_etree = parse_eval(self.part_answer)
 
         # Get attempts by part
         if include_finished:
@@ -296,15 +295,26 @@ class FilterAnswers(JSONRequestHandler, tornado.web.RequestHandler):
         _hints=[]
         for a in answers:
             user_id = a['user_id']
-            ans = self.answer_for_student(user_id)
             attempt=a['answer_string']
             ptree, etree = parse_eval(attempt)
+            user_vars = self.variables_df
+            if len(user_vars) > 0:
+                student_vars = dict(user_vars[user_vars['user_id']==user_id][['name', 'value']].values.tolist())
+            else:
+                student_vars = {}
+            # Replace variable with values
+            for key in student_vars:
+                if key in self.part_answer:
+                    self.part_answer = self.part_answer.replace(key, str(student_vars[key]))
+            # Get the correct answer and generate a ptree and an etree for it.
+            self.answer_ptree, self.answer_etree = parse_eval(self.part_answer)
+            ans = self.answer_for_student(user_id)
             if ptree and etree:
-                status,hint,output=exec_filter('answer_filter',(attempt, ptree,atree,self.part_answer, self.answer_ptree, self.answer_etree ,self.variables_df))
+                status,hint,output=a_filter_bank.exec_filter('answer_filter',(attempt, ptree, etree, self.part_answer, self.answer_ptree, self.answer_etree, student_vars))
                 if status:
                     logger.debug('exec_filter succeeded, attempt=%s,hint=%s,output=%s'%(attempt,hint,output))
                     _hints.append(hint)
-                    _stdout+=output
+                    _stdout += output
                 else:
                     logger.debug('exec_filter failed attempt=%s,error=%s output=%s'%(attempt,hint,output))
             else:
