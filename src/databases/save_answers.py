@@ -66,7 +66,8 @@ def get_answers(problem_text, filename, seed, psvn, part_count, var_names):
     while not res:
         try:
             res=server.WebworkXMLRPC.renderProblem(args)
-        except:
+        except Exception as e:
+	    print e
             continue
     part_answers = {}
     variables = {}
@@ -79,14 +80,17 @@ def get_answers(problem_text, filename, seed, psvn, part_count, var_names):
             try:
                 variables[var_names[part_id-part_count-1]] = value['correct_ans']
             except:
-                print "Could not find variable"
+                print "Could not find variable", var_names[part_id-part_count-1]
+                print key
+                print value
+                print res['answers'].keys()
     print '.',
     return part_answers, variables
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="")
-    parser.add_argument('-c', '--course', help="Course", default="UCSD_CSE103")
+    parser.add_argument('-c', '--course', help="Course", default="CSE103_Fall2015")
     parser.add_argument('-s', '--set-id', help="Set ID", default="Week1")
     parser.add_argument('-b', '--base-dir', help="Webwork base directory", default="/opt/webwork/courses")
     args = parser.parse_args()

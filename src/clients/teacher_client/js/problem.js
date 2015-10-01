@@ -2,7 +2,7 @@ var App = angular.module('ta-console');
 
 App.controller('ProblemCtrl', function($scope, $location, $window, $stateParams, $sce, $timeout, $interval, $anchorScroll,
                                        WebworkService, HintsService, SockJSService, APIHost,
-                                       DTOptionsBuilder, DTColumnDefBuilder){
+                                       DTOptionsBuilder, DTColumnDefBuilder, Session, user_id_for_problem_render, password_for_problem_render){
     var course = $scope.course = $stateParams.course;
     var set_id = $scope.set_id = $stateParams.set_id;
     var problem_id = $scope.problem_id = $stateParams.problem_id;
@@ -17,6 +17,10 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $stateParams,
     $scope.dtOptions['dom'] = 'rtip';
     $scope.attempting_student_list = {};
     $scope.completed_student_list = {};
+    var user_id = $scope.user_id = Session.user_id;
+    
+    $scope.user_webwork_url = 'http://'+APIHost+'/webwork2/'+course+'/'+set_id+
+        '/'+problem_id+'/?user='+user_id_for_problem_render+'&passwd='+password_for_problem_render+'&effectiveUser='+user_id;
 
     $scope.scrollTo = function($event) {
         $event.preventDefault();
@@ -214,5 +218,46 @@ App.controller('ProblemCtrl', function($scope, $location, $window, $stateParams,
         DTColumnDefBuilder.newColumnDef(2)
     ];/**/
 
+    /**
+     * Wait for the iFrame to get loaded and then extract the problem rendered in webwork and copy it here
+     */
+    $scope.checkIfIFrameLoaded = function() {
+        var iFrame = $("#iFrameToRenderProblem")[0];
+        if (iFrame && iFrame.contentDocument.readyState == "complete") {
+            if (iFrame.contentWindow.document.getElementsByClassName("problem-content")[0]) {
+                if ($(".PGML")[0]) {
+                    $(".PGML")[0].innerHTML = iFrame.contentWindow.document.getElementsByClassName("problem-content")[0].innerHTML;
+                    return;
+                } else if ($("#problem-content")[0]) {
+                    $("#problem-content")[0].innerHTML = iFrame.contentWindow.document.getElementsByClassName("problem-content")[0].innerHTML;
+                    return;
+                }
+            } else if (iFrame.contentWindow.document.getElementById("problem-content")) {
+                $("#problem-content")[0].innerHTML = iFrame.contentWindow.document.getElementById("problem-content").innerHTML;
+                return;
+            }
+        }
+        window.setTimeout(function() {
+            $scope.checkIfIFrameLoaded();
+        }, 250);
+    }
 
+    /**
+     * Open the problem from the webwork server from student POV. This enables to render the problem as its displayed for each student.
+     */
+    $scope.openProblemPageInIFrame = function() {
+        if ($("#iFrameToRenderProblem").length) {
+            $("#iFrameToRenderProblem")[0].parentNode.removeChild($("#iFrameToRenderProblem")[0]);
+        }
+        $("<iframe id='iFrameToRenderProblem' name='problemRender'>").appendTo("body");
+        $("#iFrameToRenderProblem").css("display", "none");
+
+        var srcUrl = $scope.user_webwork_url;
+        $("#iFrameToRenderProblem").attr("src", srcUrl);
+        $scope.checkIfIFrameLoaded();
+    }
+
+    window.setTimeout(function() {
+        $scope.openProblemPageInIFrame();
+    }, 250);
 });
