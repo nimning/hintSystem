@@ -1,1 +1,0 @@
-def Week2_13_1(answer, attemp)
